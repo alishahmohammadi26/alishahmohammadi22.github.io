@@ -611,6 +611,46 @@ code { color: var(--text); }
   color: var(--text-muted);
   font-style: italic;
 }
+a.blog-link {
+  color: var(--accent);
+  font-style: normal;
+  text-decoration: none;
+  transition: opacity var(--transition);
+}
+a.blog-link:hover { opacity: 0.75; text-decoration: underline; }
+
+.blog-published-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #3fb950;
+  background: rgba(63,185,80,0.12);
+  border: 1px solid rgba(63,185,80,0.28);
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  vertical-align: middle;
+}
+.blog-read-time {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  vertical-align: middle;
+  margin-left: 8px;
+}
+.blog-links-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  align-items: center;
+}
+.blog-topics {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
 
 /* ===========================
    Contact
