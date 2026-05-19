@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Building Agentic AI Systems for Ontology Curation in Drug R&D — Ali Shahmohammadi</title>
+  <meta name="description" content="How a four-agent LangGraph pipeline automates biomedical ontology curation — extracting entities, mapping to BioPortal/OLS, detecting conflicts, and routing governance decisions — while keeping humans in the loop." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --dark:       #06080F;
+      --light:      #FFFFFF;
+      --light-2:    #F5F5F7;
+      --light-3:    #FAFAF9;
+      --border:     #E8E8E5;
+      --text:       #1A1A1A;
+      --muted:      #6B6B68;
+      --accent:     #2563EB;
+      --accent-lt:  #EFF6FF;
+      --accent-mid: #BFDBFE;
+      --purple:     #7C3AED;
+      --purple-lt:  #F5F3FF;
+      --purple-mid: #DDD6FE;
+      --green:      #16A34A;
+      --green-bg:   #F0FDF4;
+      --green-bdr:  #BBF7D0;
+      --amber:      #D97706;
+      --amber-bg:   #FFFBEB;
+      --amber-bdr:  #FDE68A;
+      --r:          10px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--light-3); color: var(--text); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 16px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code, pre { font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+
+    /* ── Nav ── */
+    nav {
+      background: rgba(255,255,255,.92); backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100;
+    }
+    .nav-inner { max-width: 860px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; height: 58px; }
+    .nav-brand { font-size: .9rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: .4rem; }
+    .nav-back { font-size: .875rem; color: var(--muted); display: inline-flex; align-items: center; gap: .35rem; font-weight: 500; }
+    .nav-back:hover { color: var(--accent); text-decoration: none; }
+
+    /* ── Article layout ── */
+    .article-wrap { max-width: 860px; margin: 0 auto; padding: 0 2rem 6rem; }
+
+    /* ── Header ── */
+    .article-header { padding: 4rem 0 3rem; border-bottom: 1px solid var(--border); margin-bottom: 3rem; }
+    .article-meta { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .meta-cat { display: inline-flex; align-items: center; background: var(--accent-lt); color: var(--accent); border: 1px solid var(--accent-mid); font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: .22rem .65rem; border-radius: 99px; }
+    .meta-date { font-size: .82rem; color: var(--muted); }
+    .meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border); }
+    .meta-read { font-size: .82rem; color: var(--muted); }
+    .article-title { font-size: clamp(1.75rem, 4vw, 2.75rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.15; color: var(--text); margin-bottom: 1.25rem; }
+    .article-subtitle { font-size: 1.125rem; color: var(--muted); line-height: 1.7; max-width: 680px; }
+    .author-row { display: flex; align-items: center; gap: .75rem; margin-top: 2rem; }
+    .author-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: .85rem; font-weight: 700; flex-shrink: 0; }
+    .author-name { font-size: .9rem; font-weight: 600; }
+    .author-role { font-size: .8rem; color: var(--muted); }
+
+    /* ── TOC ── */
+    .toc { background: var(--light); border: 1px solid var(--border); border-radius: var(--r); padding: 1.5rem 1.75rem; margin-bottom: 3rem; }
+    .toc-head { font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: .85rem; }
+    .toc ol { list-style: none; display: flex; flex-direction: column; gap: .4rem; padding-left: 0; }
+    .toc li { font-size: .9rem; display: flex; align-items: baseline; gap: .5rem; }
+    .toc-num { font-size: .72rem; color: var(--muted); font-weight: 600; min-width: 1.5rem; }
+    .toc a { color: var(--text); font-weight: 500; }
+    .toc a:hover { color: var(--accent); text-decoration: none; }
+
+    /* ── Article body ── */
+    .article-body { display: grid; grid-template-columns: 1fr; gap: 0; }
+    .article-section { margin-bottom: 3.5rem; }
+    .article-section:last-child { margin-bottom: 0; }
+
+    h2.sec-h { font-size: 1.5rem; font-weight: 800; letter-spacing: -.025em; color: var(--text); margin-bottom: 1rem; margin-top: .25rem; }
+    h3.sec-h3 { font-size: 1.1rem; font-weight: 700; color: var(--text); margin: 1.75rem 0 .65rem; }
+    p { margin-bottom: 1.1rem; color: var(--text); }
+    p:last-child { margin-bottom: 0; }
+    strong { font-weight: 600; }
+    ul.prose-list, ol.prose-list { padding-left: 1.25rem; display: flex; flex-direction: column; gap: .45rem; margin-bottom: 1.1rem; }
+    ul.prose-list li, ol.prose-list li { color: var(--text); font-size: .975rem; line-height: 1.6; }
+
+    /* ── Callouts ── */
+    .callout { border-radius: var(--r); padding: 1.1rem 1.4rem; margin: 1.75rem 0; display: flex; gap: .85rem; align-items: flex-start; }
+    .callout-icon { flex-shrink: 0; margin-top: 2px; }
+    .callout-body { font-size: .93rem; line-height: 1.6; }
+    .callout-body strong { display: block; margin-bottom: .25rem; font-size: .95rem; }
+    .callout.info { background: var(--accent-lt); border: 1px solid var(--accent-mid); color: #1e3a5f; }
+    .callout.info .callout-icon { color: var(--accent); }
+    .callout.tip { background: var(--green-bg); border: 1px solid var(--green-bdr); color: #14532d; }
+    .callout.tip .callout-icon { color: var(--green); }
+    .callout.warn { background: var(--amber-bg); border: 1px solid var(--amber-bdr); color: #78350f; }
+    .callout.warn .callout-icon { color: var(--amber); }
+
+    /* ── Code blocks ── */
+    .code-wrap { border-radius: var(--r); overflow: hidden; border: 1px solid var(--border); margin: 1.75rem 0; }
+    .code-header { display: flex; align-items: center; gap: .75rem; padding: .65rem 1.1rem; background: var(--light-2); border-bottom: 1px solid var(--border); }
+    .code-dots { display: flex; gap: 5px; }
+    .code-dot { width: 11px; height: 11px; border-radius: 50%; }
+    .dot-r { background: #FF5F57; } .dot-y { background: #FEBC2E; } .dot-g { background: #28C840; }
+    .code-lang { font-size: .75rem; font-weight: 600; color: var(--muted); font-family: 'JetBrains Mono', monospace; margin: 0 auto; padding-right: 1.5rem; }
+    .code-wrap pre { background: var(--light); padding: 1.4rem 1.6rem; overflow-x: auto; font-size: .825rem; line-height: 1.85; color: var(--text); }
+    .kw  { color: #7C3AED; font-weight: 500; }
+    .st  { color: #16A34A; }
+    .cm  { color: #9CA3AF; font-style: italic; }
+    .fn  { color: #2563EB; }
+    .nm  { color: #B45309; }
+    .tp  { color: #0F766E; }
+    .dec { color: #D97706; }
+
+    /* ── Inline code ── */
+    .ic { font-size: .87em; background: var(--light-2); border: 1px solid var(--border); padding: .1rem .4rem; border-radius: 4px; color: var(--purple); }
+
+    /* ── Agent cards ── */
+    .agent-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.75rem 0; }
+    @media(max-width:640px) { .agent-grid { grid-template-columns: 1fr; } }
+    .agent-card { background: var(--light); border: 1px solid var(--border); border-radius: var(--r); padding: 1.25rem 1.4rem; }
+    .agent-card:hover { border-color: var(--accent-mid); }
+    .agent-num { font-size: .7rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin-bottom: .4rem; }
+    .agent-name { font-size: .95rem; font-weight: 700; color: var(--text); margin-bottom: .5rem; display: flex; align-items: center; gap: .5rem; }
+    .agent-name code { font-size: .8rem; font-weight: 500; color: var(--purple); background: var(--purple-lt); border: 1px solid var(--purple-mid); padding: .1rem .4rem; border-radius: 4px; }
+    .agent-desc { font-size: .875rem; color: var(--muted); line-height: 1.55; }
+    .agent-in-out { display: flex; gap: 1rem; margin-top: .85rem; flex-wrap: wrap; }
+    .agent-badge { font-size: .72rem; padding: .18rem .55rem; border-radius: 5px; font-weight: 600; }
+    .badge-in  { background: var(--accent-lt); color: var(--accent); border: 1px solid var(--accent-mid); }
+    .badge-out { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-bdr); }
+
+    /* ── Pipeline diagram ── */
+    .pipeline { background: var(--light); border: 1px solid var(--border); border-radius: var(--r); padding: 2rem; margin: 1.75rem 0; overflow-x: auto; }
+    .pipeline-inner { display: flex; align-items: center; gap: 0; min-width: 560px; }
+    .pipe-node { background: var(--accent-lt); border: 1.5px solid var(--accent-mid); border-radius: 8px; padding: .6rem .9rem; text-align: center; flex-shrink: 0; }
+    .pipe-node.start { background: var(--light-2); border-color: var(--border); }
+    .pipe-node.end { background: var(--green-bg); border-color: var(--green-bdr); }
+    .pipe-node.gate { background: var(--amber-bg); border-color: var(--amber-bdr); }
+    .pipe-label { font-size: .72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin-bottom: .2rem; }
+    .pipe-name { font-size: .82rem; font-weight: 700; color: var(--text); white-space: nowrap; }
+    .pipe-arrow { flex: 1; display: flex; align-items: center; gap: 0; padding: 0 .3rem; min-width: 24px; }
+    .pipe-line { flex: 1; height: 1.5px; background: var(--border); }
+    .pipe-arrowhead { color: var(--muted); flex-shrink: 0; }
+
+    /* ── Results grid ── */
+    .results-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; margin: 1.75rem 0; }
+    @media(max-width:580px) { .results-grid { grid-template-columns: 1fr; } }
+    .result-item { background: var(--light); padding: 1.5rem; text-align: center; }
+    .result-num { font-size: 2.25rem; font-weight: 800; color: var(--accent); letter-spacing: -.03em; line-height: 1; }
+    .result-label { font-size: .82rem; color: var(--muted); margin-top: .35rem; font-weight: 500; }
+
+    /* ── Section divider ── */
+    .sec-divider { height: 1px; background: var(--border); margin: 3.5rem 0; }
+
+    /* ── Footer ── */
+    .article-footer { border-top: 1px solid var(--border); padding-top: 2.5rem; margin-top: 4rem; display: flex; flex-wrap: wrap; gap: 2rem; justify-content: space-between; align-items: flex-start; }
+    .footer-author h4 { font-size: .95rem; font-weight: 700; margin-bottom: .3rem; }
+    .footer-author p { font-size: .875rem; color: var(--muted); max-width: 400px; }
+    .footer-links { display: flex; gap: .75rem; margin-top: .85rem; flex-wrap: wrap; }
+    .footer-link { display: inline-flex; align-items: center; gap: .35rem; font-size: .85rem; font-weight: 600; color: var(--accent); background: var(--accent-lt); border: 1px solid var(--accent-mid); padding: .4rem .9rem; border-radius: 99px; }
+    .footer-link:hover { background: var(--accent); color: #fff; text-decoration: none; }
+    .footer-nav { display: flex; flex-direction: column; gap: .4rem; align-items: flex-end; }
+    .footer-nav a { font-size: .85rem; color: var(--muted); font-weight: 500; }
+    .footer-nav a:hover { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+      Ali Shahmohammadi
+    </a>
+    <a href="/#blog" class="nav-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      All Articles
+    </a>
+  </div>
+</nav>
+
+<div class="article-wrap">
+
+  <!-- Header -->
+  <header class="article-header">
+    <div class="article-meta">
+      <span class="meta-cat">Agentic AI</span>
+      <span class="meta-dot"></span>
+      <span class="meta-date">May 19, 2026</span>
+      <span class="meta-dot"></span>
+      <span class="meta-read">14 min read</span>
+    </div>
+    <h1 class="article-title">Building Agentic AI Systems for Ontology Curation in Drug R&amp;D</h1>
+    <p class="article-subtitle">How a four-agent LangGraph pipeline automates biomedical term extraction, ontology mapping, conflict detection, and governance routing — while preserving human oversight at every critical decision point.</p>
+    <div class="author-row">
+      <div class="author-avatar">AS</div>
+      <div>
+        <div class="author-name">Ali Shahmohammadi, Ph.D.</div>
+        <div class="author-role">Associate Director, FAIR Data Strategy &middot; Takeda Pharmaceutical</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- TOC -->
+  <nav class="toc" aria-label="Table of contents">
+    <div class="toc-head">Contents</div>
+    <ol>
+      <li><span class="toc-num">1</span><a href="#s1">The Ontology Problem in Drug R&amp;D</a></li>
+      <li><span class="toc-num">2</span><a href="#s2">Why an Agentic Architecture?</a></li>
+      <li><span class="toc-num">3</span><a href="#s3">System Architecture: Four Agents, One Pipeline</a></li>
+      <li><span class="toc-num">4</span><a href="#s4">Agent 1 — EntityExtractorAgent</a></li>
+      <li><span class="toc-num">5</span><a href="#s5">Agent 2 — OntologyMapperAgent</a></li>
+      <li><span class="toc-num">6</span><a href="#s6">Agent 3 — ConflictDetectorAgent</a></li>
+      <li><span class="toc-num">7</span><a href="#s7">Agent 4 — GovernanceRouterAgent</a></li>
+      <li><span class="toc-num">8</span><a href="#s8">The LangGraph State Machine</a></li>
+      <li><span class="toc-num">9</span><a href="#s9">Human-in-the-Loop Governance</a></li>
+      <li><span class="toc-num">10</span><a href="#s10">Results and Impact</a></li>
+      <li><span class="toc-num">11</span><a href="#s11">Lessons Learned</a></li>
+    </ol>
+  </nav>
+
+  <div class="article-body">
+
+    <!-- Section 1 -->
+    <section class="article-section" id="s1">
+      <h2 class="sec-h">1. The Ontology Problem in Drug R&amp;D</h2>
+      <p>Walk through any pharmaceutical research organization and you will find the same terminology fragmentation problem everywhere. A process development scientist in San Diego writes "cell viability" in her ELN. Her counterpart in Osaka records the same measurement as "VIAB %". The LIMS in the clinical manufacturing facility in Switzerland stores it as "Viability_Score_Trypan". The regulatory submission uses the official ontology term <span class="ic">OBI:0001985</span> from the Ontology for Biomedical Investigations — but only because a data steward manually looked it up six weeks before the BLA submission deadline.</p>
+      <p>These four strings represent the same scientific concept. No machine knows that. No AI/ML model trained across these four systems will generalize correctly. The downstream cost is not merely inconvenient — it directly blocks the kind of cross-dataset meta-analysis and federated AI that could accelerate drug development by years.</p>
+
+      <div class="callout warn">
+        <svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <div class="callout-body">
+          <strong>The scale of the problem</strong>
+          A mid-size pharmaceutical company generates 3–5 million new data points per year across its R&amp;D estate. Industry surveys suggest that 60–70% of these contain unmapped or inconsistently mapped terminology. At that scale, manual curation by domain stewards — typically 2–4 FTEs per therapeutic area — is not a viable long-term strategy.
+        </div>
+      </div>
+
+      <p>Biomedical ontologies exist precisely to solve this. The Gene Ontology (GO), ChEBI, OBI, BAO, NCI Thesaurus, and dozens of other controlled vocabularies collectively cover the semantic space of pharmaceutical R&amp;D. The challenge is not the absence of ontologies — it is the cost and latency of mapping real-world data to them at scale.</p>
+      <p>Traditional approaches use keyword matching or simple string similarity. These fail on abbreviations, synonyms, assay variants, and domain-specific jargon. A probabilistic match of "VIAB %" to <span class="ic">OBI:0001985</span> requires understanding that "VIAB" is a context-specific abbreviation for "viability", that the "%" suffix is a unit annotation rather than part of the concept name, and that in the context of cell culture assays this specific OBI term is preferred over the more generic NCIT alternative.</p>
+      <p>This is exactly the kind of multi-step reasoning task that large language models, properly constrained and orchestrated, can now perform reliably.</p>
+    </section>
+
+    <div class="sec-divider"></div>
+
+    <!-- Section 2 -->
+    <section class="article-section" id="s2">
+      <h2 class="sec-h">2. Why an Agentic Architecture?</h2>
+      <p>The naive approach is a single LLM call: "Here is a data field label and some context — which ontology term does it map to?" This works surprisingly well for straightforward cases. It fails, predictably, at scale and at the edges.</p>
+      <p>The failure modes are instructive:</p>
+      <ul class="prose-list">
+        <li><strong>Hallucinated ontology identifiers.</strong> LLMs confidently generate plausible-looking but non-existent CURIEs. Without a verification step against a live ontology API, these errors propagate silently into the knowledge graph.</li>
+        <li><strong>Ambiguous mappings without confidence scoring.</strong> A single LLM call cannot surface the fact that "cell viability" maps plausibly to both <span class="ic">OBI:0001985</span> and <span class="ic">BAO:0002166</span> with different semantic precedence depending on assay context.</li>
+        <li><strong>No cross-dataset conflict detection.</strong> If dataset A maps "VIAB" to one term and dataset B maps "Cell Viability" to a different term, a single-call architecture has no mechanism to detect the inconsistency or escalate for resolution.</li>
+        <li><strong>No governance integration.</strong> Scientific terminology decisions in regulated environments require documented human approval. A single LLM call produces an answer but no audit trail, no routing, no approval workflow.</li>
+      </ul>
+
+      <p>An agentic architecture addresses each failure mode with a dedicated, specialized component. Each agent has a narrow, well-defined responsibility, uses only the tools relevant to its task, and passes structured state to the next stage. The orchestration layer — in this case LangGraph — manages state transitions, conditional routing, and the human-in-the-loop interrupts.</p>
+
+      <div class="callout info">
+        <svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div class="callout-body">
+          <strong>Design principle</strong>
+          The goal is not to replace domain stewards. It is to eliminate the 80% of curation work that is mechanical — term lookup, synonym matching, duplicate detection — so that stewards can focus on the 20% that requires scientific judgment.
+        </div>
+      </div>
+    </section>
+
+    <div class="sec-divider"></div>
+
+    <!-- Section 3 -->
+    <section class="article-section" id="s3">
+      <h2 class="sec-h">3. System Architecture: Four Agents, One Pipeline</h2>
+      <p>The OntoCurator system is built on four specialized agents orchestrated through a LangGraph state machine. Each agent is a self-contained LangChain Runnable with its own prompt template, tool bindings, output schema, and error handling.</p>
+
+      <!-- Agent cards -->
+      <div class="agent-grid">
+        <div class="agent-card">
+          <div class="agent-num">Agent 01</div>
+          <div class="agent-name"><span>EntityExtractorAgent</span></div>
+          <div class="agent-desc">Parses experimental protocols, assay definitions, and ELN entries using GPT to extract candidate scientific entities — measurement concepts, biological entities, reagents, and process parameters — as typed spans with provenance.</div>
+          <div class="agent-in-out">
+            <span class="agent-badge badge-in">In: raw document text</span>
+            <span class="agent-badge badge-out">Out: List[EntitySpan]</span>
+          </div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-num">Agent 02</div>
+          <div class="agent-name"><span>OntologyMapperAgent</span></div>
+          <div class="agent-desc">For each extracted entity, queries BioPortal and EBI OLS4 to retrieve candidate ontology terms. Ranks candidates by Information Content, semantic similarity score, and ontology precedence rules. Returns top-3 candidates with confidence scores.</div>
+          <div class="agent-in-out">
+            <span class="agent-badge badge-in">In: List[EntitySpan]</span>
+            <span class="agent-badge badge-out">Out: List[MappingCandidate]</span>
+          </div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-num">Agent 03</div>
+          <div class="agent-name"><span>ConflictDetectorAgent</span></div>
+          <div class="agent-desc">Compares new mappings against the existing registry to detect semantic conflicts — cases where the same concept is mapped to different terms, or where different concepts share the same term across datasets.</div>
+          <div class="agent-in-out">
+            <span class="agent-badge badge-in">In: List[MappingCandidate] + Registry</span>
+            <span class="agent-badge badge-out">Out: List[ConflictReport]</span>
+          </div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-num">Agent 04</div>
+          <div class="agent-name"><span>GovernanceRouterAgent</span></div>
+          <div class="agent-desc">Applies configurable routing rules to determine disposition: auto-approve high-confidence unambiguous mappings, route conflicts to named domain stewards, escalate novel entity types to the ontology governance board.</div>
+          <div class="agent-in-out">
+            <span class="agent-badge badge-in">In: List[ConflictReport]</span>
+            <span class="agent-badge badge-out">Out: GovernanceDecision</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pipeline diagram -->
+      <div class="pipeline">
+        <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:1.25rem;">Pipeline Flow</div>
+        <div class="pipeline-inner">
+          <div class="pipe-node start"><div class="pipe-label">Input</div><div class="pipe-name">Document</div></div>
+          <div class="pipe-arrow"><div class="pipe-line"></div><svg class="pipe-arrowhead" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>
+          <div class="pipe-node"><div class="pipe-label">Agent 1</div><div class="pipe-name">Extract</div></div>
+          <div class="pipe-arrow"><div class="pipe-line"></div><svg class="pipe-arrowhead" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>
+          <div class="pipe-node"><div class="pipe-label">Agent 2</div><div class="pipe-name">Map</div></div>
+          <div class="pipe-arrow"><div class="pipe-line"></div><svg class="pipe-arrowhead" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>
+          <div class="pipe-node"><div class="pipe-label">Agent 3</div><div class="pipe-name">Detect</div></div>
+          <div class="pipe-arrow"><div class="pipe-line"></div><svg class="pipe-arrowhead" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>
+          <div class="pipe-node gate"><div class="pipe-label">Agent 4</div><div class="pipe-name">Govern</div></div>
+          <div class="pipe-arrow"><div class="pipe-line"></div><svg class="pipe-arrowhead" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>
+          <div class="pipe-node end"><div class="pipe-label">Output</div><div class="pipe-name">Registry</div></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="sec-divider"></div>
+
+    <!-- Section 4 -->
+    <section class="article-section" id="s4">
+      <h2 class="sec-h">4. Agent 1 — EntityExtractorAgent</h2>
+      <p>The first agent is a GPT-powered named entity recognizer specialized for pharmaceutical R&amp;D documents. Unlike general biomedical NER models (e.g., BioBERT fine-tuned on CRAFT or BioNLP corpora), this agent is designed to handle the messy, contextual language found in internal ELN entries, process descriptions, and analytical method summaries.</p>
+      <p>The agent extracts entities across five semantic types: <strong>Measurement</strong> (e.g., cell viability, process yield), <strong>BiologicalEntity</strong> (cell lines, organisms, targets), <strong>ChemicalEntity</strong> (buffers, excipients, APIs), <strong>ProcessParameter</strong> (temperature, pH, agitation rate), and <strong>Assay</strong> (ELISA, flow cytometry, HPLC).</p>
+
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
+          <span class="code-lang">entity_extractor.py</span>
+        </div>
+        <pre><code><span class="kw">from</span> pydantic <span class="kw">import</span> BaseModel, Field
+<span class="kw">from</span> typing <span class="kw">import</span> List, Literal
+<span class="kw">from</span> langchain_core.prompts <span class="kw">import</span> ChatPromptTemplate
+<span class="kw">from</span> langchain_openai <span class="kw">import</span> ChatOpenAI
+
+<span class="kw">class</span> <span class="tp">EntitySpan</span>(BaseModel):
+    text: <span class="tp">str</span> = Field(description=<span class="st">"Exact text of the entity as it appears in the source"</span>)
+    normalized: <span class="tp">str</span> = Field(description=<span class="st">"Lowercase normalized form without units or suffixes"</span>)
+    entity_type: <span class="tp">Literal</span>[<span class="st">"Measurement"</span>, <span class="st">"BiologicalEntity"</span>, <span class="st">"ChemicalEntity"</span>,
+                                <span class="st">"ProcessParameter"</span>, <span class="st">"Assay"</span>]
+    confidence: <span class="tp">float</span> = Field(ge=<span class="nm">0.0</span>, le=<span class="nm">1.0</span>)
+    context_snippet: <span class="tp">str</span> = Field(description=<span class="st">"30-word window around the entity"</span>)
+    source_offset: <span class="tp">tuple</span>[<span class="tp">int</span>, <span class="tp">int</span>]
+
+<span class="kw">class</span> <span class="tp">ExtractionResult</span>(BaseModel):
+    entities: <span class="tp">List</span>[<span class="tp">EntitySpan</span>]
+    document_id: <span class="tp">str</span>
+    model_version: <span class="tp">str</span>
+
+<span class="kw">class</span> <span class="tp">EntityExtractorAgent</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, model: <span class="tp">str</span> = <span class="st">"gpt-4.1"</span>):
+        llm = ChatOpenAI(model=model, temperature=<span class="nm">0</span>)
+        prompt = ChatPromptTemplate.from_messages([
+            (<span class="st">"system"</span>, EXTRACTION_SYSTEM_PROMPT),
+            (<span class="st">"human"</span>, <span class="st">"Document ID: {doc_id}\n\nText:\n{text}"</span>)
+        ])
+        self.chain = prompt | llm.with_structured_output(<span class="tp">ExtractionResult</span>)
+
+    <span class="kw">def</span> <span class="fn">extract</span>(self, text: <span class="tp">str</span>, doc_id: <span class="tp">str</span>) -> <span class="tp">ExtractionResult</span>:
+        <span class="kw">return</span> self.chain.invoke({<span class="st">"text"</span>: text, <span class="st">"doc_id"</span>: doc_id})</code></pre>
+      </div>
+
+      <p>The key design decision here is the use of <span class="ic">with_structured_output()</span> to enforce Pydantic schema compliance. Raw LLM output is unreliable for downstream agents that expect typed data — structured output eliminates an entire class of parsing bugs. The <span class="ic">source_offset</span> field preserves provenance so that every mapping decision can be traced back to the exact position in the source document.</p>
+    </section>
+
+    <div class="sec-divider"></div>
+
+    <!-- Section 5 -->
+    <section class="article-section" id="s5">
+      <h2 class="sec-h">5. Agent 2 — OntologyMapperAgent</h2>
+      <p>The mapping agent is the most computationally intensive component. For each extracted entity, it performs three parallel operations: (1) a full-text search of BioPortal's annotator API across a curated subset of 12 ontologies relevant to pharmaceutical R&amp;D; (2) an OLS4 search via EBI's REST API; and (3) a semantic similarity ranking using sentence-transformer embeddings of ontology term definitions against the entity's context snippet.</p>
+
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
+          <span class="code-lang">ontology_mapper.py</span>
+        </div>
+        <pre><code><span class="kw">import</span> asyncio
+<span class="kw">from</span> dataclasses <span class="kw">import</span> dataclass
+<span class="kw">from</span> typing <span class="kw">import</span> List
+<span class="kw">from</span> sentence_transformers <span class="kw">import</span> SentenceTransformer, util
+
+<span class="dec">@dataclass</span>
+<span class="kw">class</span> <span class="tp">MappingCandidate</span>:
+    curie: <span class="tp">str</span>                 <span class="cm"># e.g. "OBI:0001985"</span>
+    label: <span class="tp">str</span>                 <span class="cm"># e.g. "cell viability assay"</span>
+    ontology: <span class="tp">str</span>              <span class="cm"># e.g. "OBI"</span>
+    ic_score: <span class="tp">float</span>            <span class="cm"># information content (0–1)</span>
+    semantic_sim: <span class="tp">float</span>        <span class="cm"># cosine similarity to entity context</span>
+    combined_score: <span class="tp">float</span>      <span class="cm"># weighted: 0.6*ic + 0.4*semantic_sim</span>
+    definition: <span class="tp">str</span>
+    source: <span class="tp">str</span>               <span class="cm"># "bioportal" | "ols4"</span>
+
+<span class="kw">class</span> <span class="tp">OntologyMapperAgent</span>:
+    PRIORITY_ONTOLOGIES = [<span class="st">"OBI"</span>, <span class="st">"BAO"</span>, <span class="st">"GO"</span>, <span class="st">"CHEBI"</span>, <span class="st">"NCIT"</span>, <span class="st">"HP"</span>,
+                           <span class="st">"EFO"</span>, <span class="st">"CLO"</span>, <span class="st">"IAO"</span>, <span class="st">"SBO"</span>, <span class="st">"UO"</span>, <span class="st">"PATO"</span>]
+
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self.embedder = SentenceTransformer(<span class="st">"pritamdeka/S-PubMedBert-MS-MARCO"</span>)
+
+    <span class="kw">async def</span> <span class="fn">map_entity</span>(self, entity: <span class="tp">EntitySpan</span>) -> <span class="tp">List</span>[<span class="tp">MappingCandidate</span>]:
+        <span class="cm"># Fire BioPortal and OLS4 searches concurrently</span>
+        bp_results, ols_results = <span class="kw">await</span> asyncio.gather(
+            self._search_bioportal(entity.normalized, entity.entity_type),
+            self._search_ols4(entity.normalized, entity.entity_type),
+        )
+        candidates = bp_results + ols_results
+        candidates = self._deduplicate_by_curie(candidates)
+        candidates = self._rank_by_semantic_similarity(candidates, entity.context_snippet)
+        <span class="kw">return</span> sorted(candidates, key=<span class="kw">lambda</span> c: c.combined_score, reverse=<span class="tp">True</span>)[:<span class="nm">3</span>]</code></pre>
+      </div>
+
+      <p>The ranking function deserves explanation. Information Content (IC) is a standard ontology metric that measures how specific a term is — a term with many children (like "biological process") has low IC; a leaf-node term has high IC. For curation purposes, we want the most specific correct term, so IC is the primary signal. Semantic similarity against the entity's context snippet (the 30-word window captured by the extractor) handles cases where the IC ranking would surface the technically-correct-but-contextually-wrong term.</p>
+
+      <div class="callout tip">
+        <svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <div class="callout-body">
+          <strong>Model choice matters</strong>
+          Generic sentence transformers (e.g., <code>all-MiniLM-L6-v2</code>) perform poorly on biomedical ontology matching because they lack domain vocabulary. <code>S-PubMedBert-MS-MARCO</code>, fine-tuned on PubMed text and the MS MARCO retrieval task, shows 18% higher precision@1 on the CRAFT corpus benchmark compared to the generic model.
+        </div>
+      </div>
+    </section>
+
+    <div class="sec-divider"></div>
+
+    <!-- Section 6 -->
+    <section class="article-section" id="s6">
+      <h2 class="sec-h">6. Agent 3 — ConflictDetectorAgent</h2>
+      <p>Conflict detection is the step that single-call architectures entirely miss. The ConflictDetectorAgent compares each new mapping proposal against the organization's existing ontology registry — a PostgreSQL-backed store of all previously approved term mappings, cross-referenced by dataset, system, and domain.</p>
+      <p>Two conflict types are detected:</p>
+      <ul class="prose-list">
+        <li><strong>Synonym conflict.</strong> Two different source strings (e.g., "VIAB %" and "Cell Viability") are proposed as mapping to two different CURIEs. One of them must be wrong, or a synonym relationship must be explicitly registered.</li>
+        <li><strong>Homonym conflict.</strong> The same source string is used in two different systems but refers to semantically distinct concepts (e.g., "yield" means molar yield in chemistry and process step yield in manufacturing).</li>
+      </ul>
+
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
+          <span class="code-lang">conflict_detector.py</span>
+        </div>
+        <pre><code><span class="kw">from</span> enum <span class="kw">import</span> Enum
+<span class="kw">from</span> dataclasses <span class="kw">import</span> dataclass, field
+<span class="kw">from</span> typing <span class="kw">import</span> List, Optional
+
+<span class="kw">class</span> <span class="tp">ConflictType</span>(Enum):
+    SYNONYM  = <span class="st">"synonym_conflict"</span>   <span class="cm"># same concept, different CURIEs</span>
+    HOMONYM  = <span class="st">"homonym_conflict"</span>   <span class="cm"># same string, different concepts</span>
+    ORPHAN   = <span class="st">"orphan"</span>             <span class="cm"># no existing registry entry — new term</span>
+    APPROVED = <span class="st">"pre_approved"</span>       <span class="cm"># exact match to approved mapping</span>
+
+<span class="dec">@dataclass</span>
+<span class="kw">class</span> <span class="tp">ConflictReport</span>:
+    entity: <span class="tp">EntitySpan</span>
+    proposed_mapping: <span class="tp">MappingCandidate</span>
+    conflict_type: <span class="tp">ConflictType</span>
+    existing_curie: <span class="tp">Optional</span>[<span class="tp">str</span>] = <span class="tp">None</span>
+    existing_dataset: <span class="tp">Optional</span>[<span class="tp">str</span>] = <span class="tp">None</span>
+    confidence: <span class="tp">float</span> = <span class="nm">1.0</span>
+    requires_human_review: <span class="tp">bool</span> = <span class="tp">False</span>
+    suggested_resolution: <span class="tp">str</span> = <span class="st">""</span>
+
+<span class="kw">class</span> <span class="tp">ConflictDetectorAgent</span>:
+    <span class="kw">def</span> <span class="fn">analyze</span>(self, candidates: <span class="tp">List</span>[<span class="tp">MappingCandidate</span>],
+                  entity: <span class="tp">EntitySpan</span>) -> <span class="tp">ConflictReport</span>:
+        existing = self.registry.lookup(entity.normalized, entity.entity_type)
+        best = candidates[<span class="nm">0</span>]
+
+        <span class="kw">if not</span> existing:
+            <span class="kw">return</span> <span class="tp">ConflictReport</span>(entity, best, <span class="tp">ConflictType</span>.ORPHAN,
+                requires_human_review=best.combined_score &lt; <span class="nm">0.85</span>)
+
+        <span class="kw">if</span> existing.curie == best.curie:
+            <span class="kw">return</span> <span class="tp">ConflictReport</span>(entity, best, <span class="tp">ConflictType</span>.APPROVED)
+
+        conflict = <span class="tp">ConflictType</span>.SYNONYM <span class="kw">if</span> \
+            self._same_concept(existing.curie, best.curie) <span class="kw">else</span> <span class="tp">ConflictType</span>.HOMONYM
+        <span class="kw">return</span> <span class="tp">ConflictReport</span>(entity, best, conflict,
+            existing_curie=existing.curie,
+            requires_human_review=<span class="tp">True</span>)</code></pre>
+      </div>
+
+      <p>The <span class="ic">_same_concept()</span> method uses OWL reasoning via a locally cached ontology graph (loaded with <span class="ic">owlready2</span>) to check whether two CURIEs are equivalent classes, subclass-of, or semantically disjoint. This distinguishes a synonym conflict — where the resolution is to register an alias — from a homonym conflict, which requires domain expert judgment.</p>
+    </section>
+
+    <div class="sec-divider"></div>
+
+    <!-- Section 7 -->
+    <section class="article-section" id="s7">
+      <h2 class="sec-h">7. Agent 4 — GovernanceRouterAgent</h2>
+      <p>The final agent implements the decision logic that determines the disposition of each mapping proposal. It applies a tiered routing policy:</p>
+      <ul class="prose-list">
+        <li><strong>Auto-approve</strong> — <span class="ic">ConflictType.APPROVED</span> (exact registry match) or <span class="ic">ConflictType.ORPHAN</span> with <span class="ic">combined_score &ge; 0.92</span> and a Priority 1 ontology. These are written directly to the registry with a <span class="ic">source=AUTO_APPROVED</span> tag.</li>
+        <li><strong>Steward review</strong> — All conflicts and orphans with <span class="ic">0.75 &le; score &lt; 0.92</span>. Routed to the named domain steward for the entity's scientific domain. The steward receives a structured review card with the proposed mapping, the top-3 alternatives, and the evidence chain.</li>
+        <li><strong>Board escalation</strong> — Novel entity types not covered by existing ontologies, or homonym conflicts involving core platform terminologies. These go to the ontology governance board for a formal vote.</li>
+      </ul>
+
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
+          <span class="code-lang">governance_router.py</span>
+        </div>
+        <pre><code><span class="kw">from</span> enum <span class="kw">import</span> Enum
+
+<span class="kw">class</span> <span class="tp">Disposition</span>(Enum):
+    AUTO_APPROVED   = <span class="st">"auto_approved"</span>
+    STEWARD_REVIEW  = <span class="st">"steward_review"</span>
+    BOARD_ESCALATED = <span class="st">"board_escalated"</span>
+    REJECTED        = <span class="st">"rejected"</span>
+
+<span class="kw">class</span> <span class="tp">GovernanceRouterAgent</span>:
+    <span class="kw">def</span> <span class="fn">route</span>(self, report: <span class="tp">ConflictReport</span>) -> <span class="tp">GovernanceDecision</span>:
+        <span class="cm"># Tier 1: auto-approve</span>
+        <span class="kw">if</span> report.conflict_type == <span class="tp">ConflictType</span>.APPROVED:
+            <span class="kw">return</span> <span class="tp">GovernanceDecision</span>(<span class="tp">Disposition</span>.AUTO_APPROVED, report)
+
+        <span class="kw">if</span> (report.conflict_type == <span class="tp">ConflictType</span>.ORPHAN
+                <span class="kw">and not</span> report.requires_human_review
+                <span class="kw">and</span> report.proposed_mapping.ontology <span class="kw">in</span> self.PRIORITY_ONTOLOGIES):
+            <span class="kw">return</span> <span class="tp">GovernanceDecision</span>(<span class="tp">Disposition</span>.AUTO_APPROVED, report)
+
+        <span class="cm"># Tier 2: steward review for all conflicts and low-confidence orphans</span>
+        steward = self.steward_registry.get(report.entity.entity_type,
+                                             domain=report.proposed_mapping.ontology)
+        <span class="kw">if</span> steward <span class="kw">and</span> report.conflict_type != <span class="tp">ConflictType</span>.HOMONYM:
+            <span class="kw">return</span> <span class="tp">GovernanceDecision</span>(<span class="tp">Disposition</span>.STEWARD_REVIEW, report,
+                                        assigned_to=steward.email,
+                                        due_date=self._sla_date(hours=<span class="nm">72</span>))
+
+        <span class="cm"># Tier 3: board escalation</span>
+        <span class="kw">return</span> <span class="tp">GovernanceDecision</span>(<span class="tp">Disposition</span>.BOARD_ESCALATED, report)</code></pre>
+      </div>
+    </section>
+
+    <div class="sec-divider"></div>
+
+    <!-- Section 8 -->
+    <section class="article-section" id="s8">
+      <h2 class="sec-h">8. The LangGraph State Machine</h2>
+      <p>LangGraph provides the orchestration layer that connects the four agents into a coherent pipeline. The core design is a typed state object (<span class="ic">CurationState</span>) that flows through the graph, accumulating results at each node. Conditional edges implement the routing logic.</p>
+
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
+          <span class="code-lang">pipeline.py</span>
+        </div>
+        <pre><code><span class="kw">from</span> langgraph.graph <span class="kw">import</span> StateGraph, END
+<span class="kw">from</span> langgraph.checkpoint.postgres <span class="kw">import</span> PostgresSaver
+<span class="kw">from</span> typing <span class="kw">import</span> TypedDict, List, Optional
+
+<span class="kw">class</span> <span class="tp">CurationState</span>(TypedDict):
+    document_id: <span class="tp">str</span>
+    raw_text: <span class="tp">str</span>
+    entities: <span class="tp">List</span>[<span class="tp">EntitySpan</span>]
+    candidates: <span class="tp">List</span>[<span class="tp">MappingCandidate</span>]
+    conflicts: <span class="tp">List</span>[<span class="tp">ConflictReport</span>]
+    decisions: <span class="tp">List</span>[<span class="tp">GovernanceDecision</span>]
+    requires_interrupt: <span class="tp">bool</span>
+    steward_feedback: <span class="tp">Optional</span>[<span class="tp">str</span>]
+
+<span class="kw">def</span> <span class="fn">build_graph</span>(checkpointer) -> <span class="tp">StateGraph</span>:
+    graph = <span class="tp">StateGraph</span>(<span class="tp">CurationState</span>)
+
+    graph.add_node(<span class="st">"extract"</span>,   extractor_node)
+    graph.add_node(<span class="st">"map"</span>,       mapper_node)
+    graph.add_node(<span class="st">"detect"</span>,    conflict_node)
+    graph.add_node(<span class="st">"govern"</span>,    governance_node)
+    graph.add_node(<span class="st">"interrupt"</span>, human_review_node)   <span class="cm"># HITL gate</span>
+    graph.add_node(<span class="st">"commit"</span>,    registry_write_node)
+
+    graph.set_entry_point(<span class="st">"extract"</span>)
+    graph.add_edge(<span class="st">"extract"</span>, <span class="st">"map"</span>)
+    graph.add_edge(<span class="st">"map"</span>,     <span class="st">"detect"</span>)
+    graph.add_edge(<span class="st">"detect"</span>,  <span class="st">"govern"</span>)
+
+    <span class="cm"># Conditional: interrupt for human review or commit directly</span>
+    graph.add_conditional_edges(<span class="st">"govern"</span>, route_after_governance,
+        {<span class="st">"human_review"</span>: <span class="st">"interrupt"</span>, <span class="st">"auto"</span>: <span class="st">"commit"</span>})
+    graph.add_edge(<span class="st">"interrupt"</span>, <span class="st">"commit"</span>)
+    graph.add_edge(<span class="st">"commit"</span>,   END)
+
+    <span class="kw">return</span> graph.compile(checkpointer=checkpointer,
+                          interrupt_before=[<span class="st">"interrupt"</span>])</code></pre>
+      </div>
+
+      <p>The <span class="ic">interrupt_before=["interrupt"]</span> parameter is the key to human-in-the-loop integration. When the graph reaches the <span class="ic">interrupt</span> node, execution suspends and persists its state to the PostgreSQL checkpointer. The steward receives a notification, reviews the proposal in the governance UI, and resumes the graph with their decision. The full audit trail — every state transition, every agent's reasoning, the steward's rationale — is stored in the checkpoint database.</p>
+    </section>
+
+    <div class="sec-divider"></div>
+
+    <!-- Section 9 -->
+    <section class="article-section" id="s9">
+      <h2 class="sec-h">9. Human-in-the-Loop Governance</h2>
+      <p>The governance layer is not an afterthought — it is the primary differentiator of this architecture from a fully-automated pipeline. Pharmaceutical R&amp;D operates under regulatory oversight; terminology decisions that affect clinical data or regulatory submissions require documented human approval. The system is designed so that a steward's decision is never implicit — it is always an explicit, time-stamped action tied to a named individual.</p>
+      <p>The governance UI presents each review item as a structured decision card containing:</p>
+      <ul class="prose-list">
+        <li>The source document context (the 30-word snippet with the entity highlighted)</li>
+        <li>The proposed mapping with its confidence breakdown (IC score + semantic similarity)</li>
+        <li>The top-3 alternatives ranked by combined score</li>
+        <li>The conflict description with the conflicting existing mapping</li>
+        <li>A free-text rationale field (required for board-escalated items)</li>
+        <li>Approve / Reject / Request-Synonym / Escalate action buttons</li>
+      </ul>
+
+      <div class="callout info">
+        <svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div class="callout-body">
+          <strong>Governance as a first-class product feature</strong>
+          Early prototypes treated human review as a fallback for low-confidence cases. User research with domain stewards revealed that they wanted to see the agent's reasoning for <em>all</em> decisions, not just the uncertain ones — because the auto-approved cases were the ones most likely to propagate errors silently. The production system now sends a weekly digest of all auto-approved mappings to relevant stewards, with a 7-day window to flag exceptions.
+        </div>
+      </div>
+    </section>
+
+    <div class="sec-divider"></div>
+
+    <!-- Section 10 -->
+    <section class="article-section" id="s10">
+      <h2 class="sec-h">10. Results and Impact</h2>
+      <p>The system was piloted on three years of historical assay data across two therapeutic areas. The comparison baseline was the previous manual curation workflow: a Jira-based process where scientists submitted terminology proposals and stewards reviewed them asynchronously, with an average resolution time of 18 days.</p>
+
+      <div class="results-grid">
+        <div class="result-item">
+          <div class="result-num">83%</div>
+          <div class="result-label">Auto-approval rate on production data</div>
+        </div>
+        <div class="result-item">
+          <div class="result-num">4 hr</div>
+          <div class="result-label">Mean resolution time (vs 18 days baseline)</div>
+        </div>
+        <div class="result-item">
+          <div class="result-num">96%</div>
+          <div class="result-label">Steward agreement with agent's top-1 proposal</div>
+        </div>
+      </div>
+
+      <p>The 83% auto-approval rate means that domain stewards now only actively review one in six incoming terminology proposals. Of the reviewed cases, 96% result in the steward selecting the agent's top-ranked candidate — confirming that the mapping quality is high enough to warrant the confidence threshold.</p>
+      <p>The most significant impact is the elimination of the backlog effect. Under the manual workflow, curation bottlenecks caused new dataset ingestions to be delayed by 2–6 weeks while terminologies were resolved. The agentic pipeline removes this bottleneck entirely for the 83% of auto-approved cases; even the human-reviewed cases resolve within hours rather than weeks because the steward receives a pre-analyzed decision card rather than a raw proposal.</p>
+    </section>
+
+    <div class="sec-divider"></div>
+
+    <!-- Section 11 -->
+    <section class="article-section" id="s11">
+      <h2 class="sec-h">11. Lessons Learned</h2>
+
+      <h3 class="sec-h3">Start with the governance workflow, not the AI</h3>
+      <p>The most important early decision was to design the human review workflow before writing any AI code. Understanding exactly what a steward needs to see in order to make a confident decision shaped every data structure in the system — the context snippet, the confidence breakdown, the conflict report format. Systems that add governance as an afterthought end up with UIs that provide insufficient context for good decisions.</p>
+
+      <h3 class="sec-h3">Structured output is not optional</h3>
+      <p>Using <span class="ic">with_structured_output()</span> throughout the pipeline eliminated an entire class of integration bugs. Agents that return free text require fragile parsing logic in every downstream component. With Pydantic schemas enforced at the LLM output boundary, the graph state is always well-typed and the failure mode for a bad LLM response is a clean validation error rather than a silent data corruption.</p>
+
+      <h3 class="sec-h3">The BioPortal rate limit is your bottleneck</h3>
+      <p>BioPortal's free API tier allows 15 requests per second. For bulk curation of historical datasets, this becomes the dominant constraint. The production system uses an aggressive local caching layer (Redis, TTL 30 days for stable ontologies) that satisfies ~70% of lookups from cache, reducing API calls to a manageable rate. For high-volume deployments, the NCBO team offers an on-premise BioPortal instance.</p>
+
+      <h3 class="sec-h3">Conflict detection is where the value is</h3>
+      <p>The extraction and mapping steps are well-served by existing tools. The genuine novel contribution of this architecture is the cross-dataset conflict detector. In evaluations, this component surfaced 14 terminology conflicts in the historical data that had existed for 2–3 years without being detected — inconsistencies that were silently corrupting cross-study analytics.</p>
+
+      <h3 class="sec-h3">LangGraph checkpointing enables forensic debugging</h3>
+      <p>The PostgreSQL checkpointer stores the full graph state at every node, for every run. When a steward disagrees with an auto-approved mapping, the complete reasoning chain — which documents were ingested, what context was captured, what BioPortal candidates were returned and their scores — is available for retrospective review. This forensic capability was essential for building steward trust in the system.</p>
+
+      <div class="callout tip">
+        <svg class="callout-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <div class="callout-body">
+          <strong>What's next</strong>
+          The next version of OntoCurator will add a <strong>ProvenanceTraceAgent</strong> that generates PROV-O compatible lineage graphs for each mapping decision — enabling downstream FAIR assessors to score metadata interoperability (RDA indicator <span class="ic">RDA-I3-01M</span>) automatically by reading the provenance graph rather than relying on manual evidence documentation.
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="article-footer">
+      <div class="footer-author">
+        <h4>Ali Shahmohammadi, Ph.D.</h4>
+        <p>Associate Director, FAIR Data Strategy &amp; Digital Connectivity at Takeda Pharmaceutical. Building enterprise AI systems at the intersection of Agentic AI, scientific ML, and pharmaceutical R&amp;D.</p>
+        <div class="footer-links">
+          <a href="https://github.com/alishahmohammadi22/onto-curator-agent" target="_blank" rel="noopener" class="footer-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            OntoCurator on GitHub
+          </a>
+          <a href="https://alishahmohammadi22.github.io/onto-curator-agent" target="_blank" rel="noopener" class="footer-link">
+            Project Page
+          </a>
+        </div>
+      </div>
+      <div class="footer-nav">
+        <a href="/">Portfolio</a>
+        <a href="/#projects">Projects</a>
+        <a href="/#blog">All Articles</a>
+        <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </footer>
+
+  </div><!-- /article-body -->
+</div><!-- /article-wrap -->
+
+</body>
+</html>
