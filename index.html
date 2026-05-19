@@ -38,32 +38,24 @@
     /* ── Navigation ── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-      transition: background .3s, backdrop-filter .3s, border-color .3s;
-      border-bottom: 1px solid transparent;
-    }
-    nav.scrolled {
-      background: rgba(255,255,255,.88);
+      background: rgba(255,255,255,.92);
       backdrop-filter: blur(24px) saturate(180%);
       -webkit-backdrop-filter: blur(24px) saturate(180%);
-      border-bottom-color: var(--border);
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow .3s;
     }
+    nav.scrolled { box-shadow: 0 1px 16px rgba(0,0,0,.07); }
     .nav-inner {
       max-width: 1200px; margin: 0 auto; padding: 0 2.5rem;
       display: flex; justify-content: space-between; align-items: center; height: 64px;
     }
-    .nav-brand {
-      font-size: .95rem; font-weight: 700; color: #fff; letter-spacing: -.01em;
-      transition: color .3s;
-    }
-    nav.scrolled .nav-brand { color: var(--text); }
+    .nav-brand { font-size: .95rem; font-weight: 700; color: var(--text); letter-spacing: -.01em; }
     .nav-links { display: flex; gap: .15rem; list-style: none; align-items: center; }
     .nav-links a {
-      color: rgba(255,255,255,.72); font-size: .875rem; font-weight: 500;
+      color: var(--muted); font-size: .875rem; font-weight: 500;
       padding: .45rem .85rem; border-radius: 8px; transition: all .2s;
     }
-    nav.scrolled .nav-links a { color: var(--muted); }
-    .nav-links a:hover { color: #fff; background: rgba(255,255,255,.1); }
-    nav.scrolled .nav-links a:hover { color: var(--text); background: var(--light-2); }
+    .nav-links a:hover { color: var(--text); background: var(--light-2); }
     .nav-cta {
       background: var(--accent) !important; color: #fff !important;
       border-radius: 8px !important; padding: .42rem 1.1rem !important;
@@ -89,54 +81,64 @@
     .section-p-dark { color: rgba(255,255,255,.55); }
 
     /* ── Hero ── */
-    .hero {
-      min-height: 100svh; background: var(--dark);
-      background-image: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(37,99,235,.22), transparent);
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      text-align: center; padding: 8rem 2.5rem 5rem; position: relative; overflow: hidden;
+    .hero { background: var(--light); border-bottom: 1px solid var(--border); padding: 9rem 0 6rem; }
+    .hero-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 2.5rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
     }
-    .hero::before {
-      content: ''; position: absolute; inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.025'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      pointer-events: none;
-    }
+    @media(max-width:900px) { .hero-inner { grid-template-columns: 1fr; } }
     .hero-eyebrow {
       display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--accent-lt); color: var(--accent); border: 1px solid var(--accent-mid);
       font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-      color: rgba(255,255,255,.45); margin-bottom: 2rem;
+      padding: .3rem .85rem; border-radius: 99px; margin-bottom: 1.5rem;
     }
-    .hero-eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+    .hero-eyebrow-dot { display: none; }
     .hero h1 {
-      font-size: clamp(3.2rem, 7vw, 6rem); font-weight: 900; letter-spacing: -.04em;
-      line-height: 1.0; color: #fff; margin-bottom: 1.75rem;
+      font-size: clamp(2.6rem, 4.5vw, 4rem); font-weight: 900; letter-spacing: -.04em;
+      line-height: 1.05; color: var(--text); margin-bottom: 1.5rem;
     }
-    .hero h1 .line2 { display: block; color: rgba(255,255,255,.38); font-weight: 300; font-size: .75em; letter-spacing: -.02em; margin-top: .15em; }
+    .hero h1 .line2 { display: block; color: var(--accent); font-weight: 900; font-size: 1em; letter-spacing: -.04em; }
     .hero-sub {
-      font-size: clamp(.975rem, 1.8vw, 1.175rem); color: rgba(255,255,255,.52); line-height: 1.7;
-      max-width: 540px; margin: 0 auto 3rem; font-weight: 400;
+      font-size: 1.05rem; color: var(--muted); line-height: 1.7;
+      max-width: 480px; margin-bottom: 2.5rem;
     }
-    .hero-sub strong { color: rgba(255,255,255,.82); font-weight: 600; }
-    .hero-cta { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 5rem; }
+    .hero-sub strong { color: var(--text); font-weight: 600; }
+    .hero-cta { display: flex; gap: .85rem; flex-wrap: wrap; margin-bottom: 2rem; }
     .btn { display: inline-flex; align-items: center; gap: .45rem; padding: .75rem 1.6rem; border-radius: 99px; font-size: .9rem; font-weight: 600; transition: all .2s; cursor: pointer; border: none; white-space: nowrap; text-decoration: none; }
-    .btn-white { background: #fff; color: var(--dark); }
-    .btn-white:hover { background: var(--light-2); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,.18); }
-    .btn-ghost { background: rgba(255,255,255,.08); color: rgba(255,255,255,.9); border: 1px solid rgba(255,255,255,.14); }
-    .btn-ghost:hover { background: rgba(255,255,255,.14); transform: translateY(-1px); }
+    .btn-white { background: var(--dark); color: #fff; }
+    .btn-white:hover { opacity: .88; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,.18); }
+    .btn-ghost { background: transparent; color: var(--text); border: 1.5px solid var(--border); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
     .btn-accent { background: var(--accent); color: #fff; }
     .btn-accent:hover { background: #1D4ED8; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(37,99,235,.4); }
     .btn-outline-dark { background: transparent; color: var(--text); border: 1.5px solid var(--border); border-radius: 99px; }
     .btn-outline-dark:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
-    .hero-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: .5rem; }
     .hero-tag {
-      font-size: .75rem; font-weight: 500; letter-spacing: .03em;
-      color: rgba(255,255,255,.38); border: 1px solid rgba(255,255,255,.1);
-      padding: .28rem .75rem; border-radius: 99px;
+      font-size: .75rem; font-weight: 500; letter-spacing: .02em;
+      color: var(--muted); border: 1px solid var(--border);
+      padding: .28rem .75rem; border-radius: 99px; background: var(--light-2);
     }
-    .hero-scroll {
-      position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
-      color: rgba(255,255,255,.25); animation: bounce 2s infinite;
+    /* ── Hero code window ── */
+    .hero-code {
+      background: var(--light); border: 1px solid var(--border); border-radius: 14px;
+      overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,.09), 0 4px 16px rgba(0,0,0,.05);
     }
-    @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+    .code-titlebar {
+      display: flex; align-items: center; padding: .85rem 1.25rem;
+      border-bottom: 1px solid var(--border); background: var(--light-2); gap: .75rem;
+    }
+    .code-dots { display: flex; gap: 5px; }
+    .code-dot { width: 11px; height: 11px; border-radius: 50%; }
+    .dot-r { background: #FF5F57; } .dot-y { background: #FEBC2E; } .dot-g { background: #28C840; }
+    .code-fname { font-size: .78rem; font-weight: 600; color: var(--muted); font-family: 'JetBrains Mono', monospace; margin: 0 auto; }
+    .hero-code pre { padding: 1.5rem 1.75rem; font-size: .82rem; line-height: 1.85; background: var(--light); overflow-x: auto; }
+    .kw { color: #7C3AED; font-weight: 500; }
+    .st { color: #16A34A; }
+    .cm { color: #9CA3AF; font-style: italic; }
+    .fn { color: #2563EB; }
+    .nm { color: #B45309; }
 
     /* ── Stats bar ── */
     .stats-bar {
@@ -348,38 +350,69 @@
 
 <!-- ── Hero ── -->
 <section class="hero" id="home">
-  <div class="hero-eyebrow">
-    <span class="hero-eyebrow-dot"></span>
-    Strategic Digital Leader &nbsp;&middot;&nbsp; Pharmaceutical R&amp;D
-  </div>
-  <h1>
-    Ali Shahmohammadi
-    <span class="line2">Ph.D.</span>
-  </h1>
-  <p class="hero-sub">
-    Building <strong>enterprise-scale AI systems</strong> and <strong>FAIR data platforms</strong>
-    at the intersection of data science, Agentic AI, and pharmaceutical R&amp;D.
-  </p>
-  <div class="hero-cta">
-    <a href="#projects" class="btn btn-white">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      View Projects
-    </a>
-    <a href="#blog" class="btn btn-ghost">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-      Read Articles
-    </a>
-  </div>
-  <div class="hero-tags">
-    <span class="hero-tag">Agentic AI</span>
-    <span class="hero-tag">Scientific ML</span>
-    <span class="hero-tag">FAIR Data</span>
-    <span class="hero-tag">Digital CMC</span>
-    <span class="hero-tag">PINNs</span>
-    <span class="hero-tag">Drug Discovery</span>
-  </div>
-  <div class="hero-scroll">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+  <div class="hero-inner">
+
+    <!-- Left: text content -->
+    <div class="hero-text">
+      <div class="hero-eyebrow">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg>
+        Strategic Digital Leader &nbsp;&middot;&nbsp; Pharmaceutical R&amp;D
+      </div>
+      <h1>
+        Ali Shahmohammadi
+        <span class="line2">Ph.D.</span>
+      </h1>
+      <p class="hero-sub">
+        Building <strong>enterprise-scale AI systems</strong> and <strong>FAIR data platforms</strong>
+        at the intersection of data science, Agentic AI, and pharmaceutical R&amp;D.
+      </p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-white">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          View Projects
+        </a>
+        <a href="resume.html" class="btn btn-ghost">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          View Resume
+        </a>
+      </div>
+      <div class="hero-tags">
+        <span class="hero-tag">Agentic AI</span>
+        <span class="hero-tag">Scientific ML</span>
+        <span class="hero-tag">FAIR Data</span>
+        <span class="hero-tag">Digital CMC</span>
+        <span class="hero-tag">PINNs</span>
+        <span class="hero-tag">Drug Discovery</span>
+      </div>
+    </div>
+
+    <!-- Right: code window -->
+    <div class="hero-code">
+      <div class="code-titlebar">
+        <div class="code-dots">
+          <div class="code-dot dot-r"></div>
+          <div class="code-dot dot-y"></div>
+          <div class="code-dot dot-g"></div>
+        </div>
+        <span class="code-fname">agentic_ai.py</span>
+      </div>
+      <pre><code><span class="kw">from</span> agents <span class="kw">import</span> OntologyCurator, FAIRValidator
+<span class="kw">from</span> sciml <span class="kw">import</span> PINN, MechanisticModel
+
+<span class="cm"># Agentic AI for ontology curation</span>
+curator = OntologyCurator(
+    strategy=<span class="st">"human_in_the_loop"</span>,
+    governance=<span class="st">"FAIR_Studio"</span>
+)
+
+<span class="cm"># Scientific ML for process development</span>
+model = PINN(
+    physics=MechanisticModel(<span class="st">"continuous_mfg"</span>),
+    data=process_data
+)
+result = model.train(epochs=<span class="nm">1000</span>)</code></pre>
+    </div>
+
   </div>
 </section>
 
