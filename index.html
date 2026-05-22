@@ -324,6 +324,17 @@
     .footer-links a { font-size: .82rem; color: rgba(255,255,255,.35); transition: color .15s; }
     .footer-links a:hover { color: rgba(255,255,255,.8); }
 
+    /* ── Governance visual in About ── */
+    .gov-visual { background: var(--light); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
+    .gov-header { background: var(--accent); color: #fff; padding: .9rem 1.25rem; display: flex; align-items: center; gap: .55rem; font-size: .8rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+    .gov-stack { padding: 1rem; display: flex; flex-direction: column; }
+    .gov-layer { border-radius: 8px; padding: .75rem .9rem; }
+    .gov-layer-name { font-size: .82rem; font-weight: 700; margin-bottom: .3rem; }
+    .gov-layer-tags { font-size: .72rem; color: var(--muted); line-height: 1.45; }
+    .gov-arrow { display: flex; align-items: center; gap: .5rem; padding: .18rem 0 .18rem .9rem; }
+    .gov-arrow-line { width: 1px; height: 16px; background: var(--border); }
+    .gov-arrow-lbl { font-size: .63rem; color: var(--accent); font-weight: 600; letter-spacing: .04em; background: var(--accent-lt); border: 1px solid var(--accent-mid); padding: .1rem .48rem; border-radius: 99px; white-space: nowrap; }
+
     /* ── Code block ── */
     .code-block { background: #0D1117; border: 1px solid rgba(255,255,255,.08); border-radius: var(--r); overflow: hidden; }
     .code-hdr { display: flex; align-items: center; justify-content: space-between; padding: .65rem 1rem; border-bottom: 1px solid rgba(255,255,255,.06); }
@@ -505,21 +516,39 @@
         </div>
       </div>
       <div class="about-right">
-        <div class="about-stat-card">
-          <div class="about-stat-big"><span>10</span>+ Years</div>
-          <div class="about-stat-desc">Spanning pharmaceutical R&amp;D, data science, and enterprise AI systems</div>
-        </div>
-        <div class="about-stat-card">
-          <div class="about-stat-big">3 Roles</div>
-          <div class="about-stat-desc">Takeda Pharmaceutical &middot; Moderna &middot; University of Texas at Austin</div>
-        </div>
-        <div class="about-stat-card">
-          <div class="about-stat-big">4 Partners</div>
-          <div class="about-stat-desc">Academic collaborations: MIT, BYU, Brown University, Purdue &mdash; PINNs &amp; in-silico development</div>
-        </div>
-        <div class="about-stat-card">
-          <div class="about-stat-big">Ph.D.</div>
-          <div class="about-stat-desc">Chemical Process Engineering, Queen&rsquo;s University, GPA 3.98&thinsp;/&thinsp;4.0</div>
+        <div class="gov-visual">
+          <div class="gov-header">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            AI Strategy &amp; Data Governance
+          </div>
+          <div class="gov-stack">
+            <div class="gov-layer" style="background:#FFFBEB;border:1px solid #FDE68A;">
+              <div class="gov-layer-name" style="color:#D97706;">Governed AI Pipelines</div>
+              <div class="gov-layer-tags">LangGraph &middot; Multi-Agent Systems &middot; RAG &middot; AI Evaluation</div>
+            </div>
+            <div class="gov-arrow">
+              <div class="gov-arrow-line"></div>
+              <span class="gov-arrow-lbl">Agentic Curator &middot; Human-in-the-Loop</span>
+            </div>
+            <div class="gov-layer" style="background:#F5F3FF;border:1px solid #DDD6FE;">
+              <div class="gov-layer-name" style="color:#7C3AED;">Master Data &amp; Knowledge Graph</div>
+              <div class="gov-layer-tags">MDM &middot; Ontology Engineering &middot; SPARQL &middot; Neo4j &middot; AWS Neptune</div>
+            </div>
+            <div class="gov-arrow">
+              <div class="gov-arrow-line"></div>
+            </div>
+            <div class="gov-layer" style="background:var(--accent-lt);border:1px solid var(--accent-mid);">
+              <div class="gov-layer-name" style="color:var(--accent);">Data Catalog &amp; Governance</div>
+              <div class="gov-layer-tags">FAIR Studio &middot; Data Lineage &middot; DCAT &middot; ISO/IEC 23894 &middot; AI Governance</div>
+            </div>
+            <div class="gov-arrow">
+              <div class="gov-arrow-line"></div>
+            </div>
+            <div class="gov-layer" style="background:var(--light-2);border:1px solid var(--border);">
+              <div class="gov-layer-name" style="color:var(--muted);">Source Systems</div>
+              <div class="gov-layer-tags">ELN &middot; LIMS &middot; MES &middot; Clinical Data &middot; Compound Registration</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
