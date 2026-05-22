@@ -333,6 +333,19 @@
     .code-fname { font-size: .75rem; color: rgba(255,255,255,.3); font-family:'JetBrains Mono',monospace; }
     pre { padding: 1.5rem; overflow-x: auto; font-size: .82rem; line-height: 1.75; color: rgba(255,255,255,.7); }
     .kw { color: #C084FC; font-weight: 500; } .st { color: #4ADE80; } .cm { color: rgba(255,255,255,.3); font-style: italic; } .fn { color: #60A5FA; } .num { color: #FB923C; }
+
+    /* ── Recognition section ── */
+    .rec-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(270px,1fr)); gap: 1.5rem; }
+    .rec-card { background: var(--light); border: 1px solid var(--border); border-radius: var(--r); padding: 1.85rem; }
+    .rec-card-featured { border-color: var(--accent-mid); background: var(--accent-lt); }
+    .rec-badge { display: inline-block; font-size:.68rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase; padding:.22rem .65rem; border-radius:99px; background:var(--accent-mid); color:var(--accent); margin-bottom:.85rem; }
+    .rec-badge-green { background: var(--green-bdr); color: var(--green); }
+    .rec-badge-purple { background: #DDD6FE; color: #7C3AED; }
+    .rec-icon { font-size: 1.6rem; margin-bottom:.55rem; }
+    .rec-title { font-size: .98rem; font-weight: 700; color: var(--text); margin-bottom:.5rem; }
+    .rec-desc { font-size:.87rem; color: var(--muted); line-height: 1.72; }
+    .rec-meta { margin-top:1rem; display:flex; flex-wrap:wrap; gap:.4rem; }
+    .rec-tag { font-size:.7rem; font-weight:600; padding:.18rem .55rem; border-radius:99px; background:rgba(37,99,235,.08); color:var(--accent); }
   </style>
 </head>
 <body>
@@ -345,6 +358,7 @@
       <li><a href="#about">About</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="#projects">Projects</a></li>
+      <li><a href="#recognition">Recognition</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#blog">Blog</a></li>
       <li><a href="resume.html" class="nav-cta">Resume</a></li>
@@ -389,7 +403,7 @@
       </div>
     </div>
 
-    <!-- Right: code window -->
+    <!-- Right: architecture diagram -->
     <div class="hero-code">
       <div class="code-titlebar">
         <div class="code-dots">
@@ -397,23 +411,40 @@
           <div class="code-dot dot-y"></div>
           <div class="code-dot dot-g"></div>
         </div>
-        <span class="code-fname">agentic_ai.py</span>
+        <span class="code-fname">governance_architecture</span>
       </div>
-      <pre><code><span class="kw">from</span> agents <span class="kw">import</span> OntologyCurator, FAIRValidator
-<span class="kw">from</span> sciml <span class="kw">import</span> PINN, MechanisticModel
-
-<span class="cm"># Agentic AI for ontology curation</span>
-curator = OntologyCurator(
-    strategy=<span class="st">"human_in_the_loop"</span>,
-    governance=<span class="st">"FAIR_Studio"</span>
-)
-
-<span class="cm"># Scientific ML for process development</span>
-model = PINN(
-    physics=MechanisticModel(<span class="st">"continuous_mfg"</span>),
-    data=process_data
-)
-result = model.train(epochs=<span class="nm">1000</span>)</code></pre>
+      <div style="padding:1.4rem 1.25rem 1.65rem;">
+        <!-- Agentic Curator loop -->
+        <div style="background:var(--accent-lt);border:1.5px dashed var(--accent-mid);border-radius:10px;padding:.6rem 1rem;text-align:center;margin-bottom:1rem;display:flex;align-items:center;justify-content:center;gap:.5rem;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-6.219-8.56"/><polyline points="17 4 21 8 25 4"/></svg>
+          <span style="font-size:.69rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);">Agentic Curator &middot; LangGraph Multi-Agent &middot; Human-in-the-Loop</span>
+        </div>
+        <!-- Down arrows into pipeline -->
+        <div style="display:flex;justify-content:space-around;padding:0 10%;margin-bottom:.4rem;">
+          <span style="font-size:.85rem;color:var(--accent);line-height:1;">&#8597;</span>
+          <span style="font-size:.85rem;color:var(--accent);line-height:1;">&#8597;</span>
+        </div>
+        <!-- Pipeline nodes -->
+        <div style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap;justify-content:center;">
+          <div style="background:var(--light-2);border:1px solid var(--border);border-radius:8px;padding:.48rem .6rem;font-size:.7rem;font-weight:600;color:var(--muted);text-align:center;line-height:1.35;">Source<br>Systems</div>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><polyline points="12 5 19 12 12 19"/></svg>
+          <div style="background:var(--accent-lt);border:1px solid var(--accent-mid);border-radius:8px;padding:.48rem .6rem;font-size:.7rem;font-weight:600;color:var(--accent);text-align:center;line-height:1.35;">Ontology<br>Service</div>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><polyline points="12 5 19 12 12 19"/></svg>
+          <div style="background:#F5F3FF;border:1px solid #DDD6FE;border-radius:8px;padding:.48rem .6rem;font-size:.7rem;font-weight:600;color:#7C3AED;text-align:center;line-height:1.35;">Master Data<br>Graph</div>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><polyline points="12 5 19 12 12 19"/></svg>
+          <div style="background:var(--green-bg);border:1px solid var(--green-bdr);border-radius:8px;padding:.48rem .6rem;font-size:.7rem;font-weight:600;color:var(--green);text-align:center;line-height:1.35;">Data<br>Catalog</div>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><polyline points="12 5 19 12 12 19"/></svg>
+          <div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;padding:.48rem .6rem;font-size:.7rem;font-weight:600;color:#B45309;text-align:center;line-height:1.35;">Governed AI<br>Pipelines</div>
+        </div>
+        <!-- Tech labels -->
+        <div style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap;justify-content:center;margin-top:.75rem;padding-top:.7rem;border-top:1px solid var(--border);">
+          <span style="font-size:.63rem;color:var(--muted);background:var(--light-2);border:1px solid var(--border);border-radius:4px;padding:.13rem .42rem;white-space:nowrap;">ELN &middot; LIMS &middot; MES</span>
+          <span style="font-size:.63rem;color:var(--accent);background:var(--accent-lt);border:1px solid var(--accent-mid);border-radius:4px;padding:.13rem .42rem;white-space:nowrap;">BioPortal &middot; OLS4</span>
+          <span style="font-size:.63rem;color:#7C3AED;background:#F5F3FF;border:1px solid #DDD6FE;border-radius:4px;padding:.13rem .42rem;white-space:nowrap;">Neptune &middot; Neo4j</span>
+          <span style="font-size:.63rem;color:var(--green);background:var(--green-bg);border:1px solid var(--green-bdr);border-radius:4px;padding:.13rem .42rem;white-space:nowrap;">FAIR Studio &middot; DCAT</span>
+          <span style="font-size:.63rem;color:#B45309;background:#FFFBEB;border:1px solid #FDE68A;border-radius:4px;padding:.13rem .42rem;white-space:nowrap;">LangGraph &middot; RAG</span>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -586,6 +617,7 @@ result = model.train(epochs=<span class="nm">1000</span>)</code></pre>
         <div class="proj-tech">LangGraph &middot; GPT-5.2 &middot; Pydantic v2 &middot; BioPortal API</div>
         <div style="display:flex;gap:1rem;flex-wrap:wrap;">
           <a href="https://alishahmohammadi22.github.io/onto-curator-agent" target="_blank" rel="noopener" class="proj-link">Project Page <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+          <a href="blog/case-study-ontocurator.html" class="proj-link" style="color:rgba(255,255,255,.6);">Case Study <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
           <a href="https://github.com/alishahmohammadi22/onto-curator-agent" target="_blank" rel="noopener" class="proj-link" style="color:rgba(255,255,255,.35);">GitHub <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
         </div>
       </div>
@@ -606,6 +638,7 @@ result = model.train(epochs=<span class="nm">1000</span>)</code></pre>
         <div class="proj-tech">Python &middot; Pydantic v2 &middot; RDA FAIR &middot; Pistoia Alliance</div>
         <div style="display:flex;gap:1rem;flex-wrap:wrap;">
           <a href="https://alishahmohammadi22.github.io/fair-data-toolkit" target="_blank" rel="noopener" class="proj-link">Project Page <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+          <a href="blog/case-study-fair-studio.html" class="proj-link" style="color:rgba(255,255,255,.6);">Case Study <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
           <a href="https://github.com/alishahmohammadi22/fair-data-toolkit" target="_blank" rel="noopener" class="proj-link" style="color:rgba(255,255,255,.35);">GitHub <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
         </div>
       </div>
@@ -656,10 +689,60 @@ result = model.train(epochs=<span class="nm">1000</span>)</code></pre>
   </div>
 </section>
 
+<!-- ── Recognition & Speaking ── -->
+<section class="section section-off" id="recognition">
+  <div class="container">
+    <div class="section-num">04 &mdash; Recognition</div>
+    <h2 class="section-h">Recognition &amp; Industry Presence</h2>
+    <p class="section-p">Industry alliances, academic partnerships, and open-source contributions to the pharmaceutical data governance community.</p>
+    <div class="rec-grid">
+
+      <div class="rec-card rec-card-featured">
+        <div class="rec-badge">Industry Alliance</div>
+        <div class="rec-icon">🏛️</div>
+        <div class="rec-title">FAIR Studio &mdash; Pistoia Alliance</div>
+        <p class="rec-desc">Product owner and driving contributor for FAIR Studio, an industry-wide platform developed under the Pistoia Alliance for operationalizing FAIR data assessments at scale. An alliance product used across member pharma R&amp;D organizations to embed governance into digital workflows.</p>
+        <div class="rec-meta">
+          <span class="rec-tag">FAIR Governance</span>
+          <span class="rec-tag">Industry Alliance</span>
+          <span class="rec-tag">Data Product Owner</span>
+        </div>
+      </div>
+
+      <div class="rec-card" style="border-color:#DDD6FE;background:#F5F3FF;">
+        <div class="rec-badge rec-badge-purple">Academic Partnerships</div>
+        <div class="rec-icon">🎓</div>
+        <div class="rec-title">Academic Research Collaborations</div>
+        <p class="rec-desc">Forged strategic research partnerships with MIT, BYU, Brown University, and Purdue University to advance Physics-Informed Neural Networks (PINNs), mechanistic modeling, and in-silico&ndash;first development capabilities for pharmaceutical R&amp;D.</p>
+        <div class="rec-meta">
+          <span class="rec-tag" style="background:rgba(124,58,237,.1);color:#7C3AED;">MIT</span>
+          <span class="rec-tag" style="background:rgba(124,58,237,.1);color:#7C3AED;">BYU</span>
+          <span class="rec-tag" style="background:rgba(124,58,237,.1);color:#7C3AED;">Brown</span>
+          <span class="rec-tag" style="background:rgba(124,58,237,.1);color:#7C3AED;">Purdue</span>
+          <span class="rec-tag" style="background:rgba(124,58,237,.1);color:#7C3AED;">PINNs Research</span>
+        </div>
+      </div>
+
+      <div class="rec-card" style="border-color:var(--green-bdr);background:var(--green-bg);">
+        <div class="rec-badge rec-badge-green">Open Source</div>
+        <div class="rec-icon">🔬</div>
+        <div class="rec-title">Open-Source Contributions</div>
+        <p class="rec-desc">Author and maintainer of open-source tools for the pharma AI community: <strong>OntoCurator Agent</strong> (multi-agent ontology curation), <strong>FAIR Data Toolkit</strong> (automated FAIR assessment), and <strong>ScientificML</strong> (PINNs and mechanistic modeling).</p>
+        <div class="rec-meta">
+          <span class="rec-tag" style="background:rgba(22,163,74,.1);color:var(--green);">OntoCurator</span>
+          <span class="rec-tag" style="background:rgba(22,163,74,.1);color:var(--green);">FAIR Toolkit</span>
+          <span class="rec-tag" style="background:rgba(22,163,74,.1);color:var(--green);">ScientificML</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- ── Skills ── -->
 <section class="section section-light" id="skills">
   <div class="container">
-    <div class="section-num">04 &mdash; Skills</div>
+    <div class="section-num">05 &mdash; Skills</div>
     <h2 class="section-h">Expertise</h2>
     <p class="section-p">Four pillars spanning data governance, AI, engineering science, and cloud infrastructure.</p>
     <div class="skills-wrap">
@@ -723,7 +806,7 @@ result = model.train(epochs=<span class="nm">1000</span>)</code></pre>
 <!-- ── Blog ── -->
 <section class="section section-off" id="blog">
   <div class="container">
-    <div class="section-num">05 &mdash; Writing</div>
+    <div class="section-num">06 &mdash; Writing</div>
     <h2 class="section-h">Articles &amp; Blog</h2>
     <p class="section-p">Thoughts on scientific ML, FAIR data, Agentic AI, and pharmaceutical innovation.</p>
     <div class="blog-grid">

@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Case Study: Production Agentic AI for Ontology Curation in Pharmaceutical R&D — Ali Shahmohammadi</title>
+  <meta name="description" content="How a production multi-agent LangGraph system automates biomedical ontology curation at Takeda — extracting entities, mapping to BioPortal/OLS4, detecting conflicts, and routing governance decisions while keeping humans in the loop." />
+  <meta property="og:title" content="Case Study: Production Agentic AI for Ontology Curation" />
+  <meta property="og:description" content="How a multi-agent LangGraph system automates ontology curation in pharma R&D with human-in-the-loop governance." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://alishahmohammadi22.github.io/blog/case-study-ontocurator.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#FAFAF7;--surface:#FFFFFF;--border:#E5E5E2;--muted:#6B6B68;--text:#1A1A1A;--accent:#2563EB;--accent-lt:#EFF6FF;--accent-mid:#BFDBFE;--green:#16A34A;--green-bg:#F0FDF4;--green-bdr:#BBF7D0;--red:#DC2626;--red-bg:#FEF2F2;--amber:#D97706;--amber-bg:#FFFBEB;--amber-bdr:#FDE68A;--purple:#7C3AED;--purple-lt:#F5F3FF;--purple-mid:#DDD6FE;--r:10px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent);text-decoration:none;transition:opacity .15s}a:hover{opacity:.75}
+    code,pre{font-family:'JetBrains Mono','Fira Code',monospace}
+
+    nav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+    .nav-inner{max-width:1140px;margin:0 auto;padding:0 2rem;display:flex;justify-content:space-between;align-items:center;height:60px}
+    .nav-brand{display:flex;align-items:center;gap:.5rem;font-weight:700;font-size:.95rem;color:var(--text);letter-spacing:-.01em}
+    .nav-brand svg{color:var(--accent)}
+    .nav-links{display:flex;gap:.25rem;list-style:none;align-items:center}
+    .nav-links a{color:var(--muted);font-size:.875rem;font-weight:500;padding:.4rem .75rem;border-radius:6px;transition:all .15s}
+    .nav-links a:hover{color:var(--text);background:var(--bg);opacity:1}
+    .nav-cta{color:var(--accent)!important;border:1px solid var(--accent-mid);background:var(--accent-lt)!important}
+    .nav-cta:hover{background:var(--accent)!important;color:#fff!important}
+    @media(max-width:768px){.nav-links li:not(:last-child){display:none}}
+
+    .container{max-width:1140px;margin:0 auto;padding:0 2rem}
+    .section{padding:5rem 0}
+    .section-alt{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+
+    .section-header{margin-bottom:3rem}
+    .eyebrow{display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:.75rem}
+    .section-title{font-size:clamp(1.5rem,3vw,2rem);font-weight:800;letter-spacing:-.02em;color:var(--text);margin-bottom:.75rem}
+    .section-sub{font-size:1rem;color:var(--muted);max-width:620px}
+
+    .hero{padding:5.5rem 2rem 4.5rem;background:var(--surface);border-bottom:1px solid var(--border);text-align:center}
+    .hero-pill{display:inline-flex;align-items:center;gap:.5rem;background:var(--accent-lt);color:var(--accent);border:1px solid var(--accent-mid);font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:.35rem .9rem;border-radius:99px;margin-bottom:2rem}
+    .hero h1{font-size:clamp(1.75rem,4vw,2.9rem);font-weight:800;letter-spacing:-.03em;line-height:1.15;color:var(--text);margin-bottom:1.25rem;max-width:820px;margin-left:auto;margin-right:auto}
+    .hero h1 .accent{color:var(--accent)}
+    .hero-sub{font-size:1.05rem;color:var(--muted);line-height:1.75;max-width:640px;margin:0 auto 2rem}
+    .hero-meta{display:flex;justify-content:center;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:2.5rem}
+    .meta-tag{display:inline-flex;align-items:center;gap:.35rem;font-size:.82rem;color:var(--muted);font-weight:500}
+    .meta-dot{width:3px;height:3px;border-radius:50%;background:var(--border);display:inline-block}
+    .hero-cta{display:flex;justify-content:center;gap:.75rem;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;gap:.4rem;padding:.65rem 1.4rem;border-radius:8px;font-size:.9rem;font-weight:600;transition:all .15s;cursor:pointer;border:none;white-space:nowrap}
+    .btn-primary{background:var(--accent);color:#fff}
+    .btn-primary:hover{background:#1D4ED8;opacity:1}
+    .btn-outline{background:var(--surface);color:var(--text);border:1px solid var(--border)}
+    .btn-outline:hover{border-color:var(--accent);color:var(--accent);opacity:1}
+
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+    @media(max-width:700px){.stats-row{grid-template-columns:repeat(2,1fr)}}
+    .stat{background:var(--surface);padding:1.75rem 1.25rem;text-align:center}
+    .stat-num{font-size:2.2rem;font-weight:800;color:var(--accent);letter-spacing:-.03em;line-height:1}
+    .stat-label{font-size:.8rem;color:var(--muted);margin-top:.4rem;font-weight:500}
+
+    .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+    @media(max-width:900px){.feat-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:580px){.feat-grid{grid-template-columns:1fr}}
+    .feat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;transition:border-color .2s,box-shadow .2s}
+    .feat-card:hover{border-color:var(--accent-mid);box-shadow:0 2px 12px rgba(37,99,235,.06)}
+    .feat-icon{width:38px;height:38px;border-radius:9px;background:var(--accent-lt);color:var(--accent);display:flex;align-items:center;justify-content:center;margin-bottom:.9rem}
+    .feat-icon.green{background:var(--green-bg);color:var(--green)}
+    .feat-icon.purple{background:var(--purple-lt);color:var(--purple)}
+    .feat-icon.amber{background:var(--amber-bg);color:var(--amber)}
+    .feat-icon.red{background:var(--red-bg);color:var(--red)}
+    .feat-title{font-size:.9rem;font-weight:700;margin-bottom:.35rem}
+    .feat-desc{font-size:.855rem;color:var(--muted);line-height:1.55}
+
+    .arch-stack{display:flex;flex-direction:column;border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+    .arch-layer{background:var(--surface);padding:1.1rem 1.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+    .arch-layer+.arch-layer{border-top:1px solid var(--border)}
+    .arch-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+    .a1 .arch-dot{background:var(--accent)}.a2 .arch-dot{background:var(--green)}.a3 .arch-dot{background:var(--amber)}.a4 .arch-dot{background:var(--purple)}.a5 .arch-dot{background:var(--red)}
+    .arch-lbl{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;min-width:70px}
+    .a1 .arch-lbl{color:var(--accent)}.a2 .arch-lbl{color:var(--green)}.a3 .arch-lbl{color:var(--amber)}.a4 .arch-lbl{color:var(--purple)}.a5 .arch-lbl{color:var(--red)}
+    .arch-detail{font-size:.875rem;color:var(--muted);flex:1;line-height:1.5}
+    .arch-tags{display:flex;flex-wrap:wrap;gap:.3rem}
+    .arch-tag{font-size:.7rem;font-weight:600;padding:.15rem .5rem;border-radius:99px;border:1px solid var(--border);color:var(--muted);background:var(--bg)}
+
+    .agent-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem}
+    @media(max-width:700px){.agent-grid{grid-template-columns:1fr}}
+    .agent-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.75rem;transition:border-color .2s}
+    .agent-card:hover{border-color:var(--accent-mid)}
+    .agent-num{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem}
+    .agent-name{font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:.5rem}
+    .agent-desc{font-size:.875rem;color:var(--muted);line-height:1.65;margin-bottom:1rem}
+    .agent-in-out{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+    .io-block{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:.75rem 1rem}
+    .io-lbl{font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+    .io-val{font-size:.8rem;color:var(--text);font-family:'JetBrains Mono',monospace}
+
+    .results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+    @media(max-width:900px){.results-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:560px){.results-grid{grid-template-columns:1fr}}
+    .result-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;text-align:center}
+    .result-card.featured{border-color:var(--accent-mid);background:var(--accent-lt)}
+    .result-card.green{border-color:var(--green-bdr);background:var(--green-bg)}
+    .result-num{font-size:2.4rem;font-weight:800;letter-spacing:-.03em;line-height:1;margin-bottom:.35rem}
+    .result-card.featured .result-num{color:var(--accent)}
+    .result-card.green .result-num{color:var(--green)}
+    .result-card .result-num{color:var(--purple)}
+    .result-label{font-size:.83rem;color:var(--muted);font-weight:500;line-height:1.45}
+
+    .toc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.75rem 2rem}
+    .toc-head{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+    .toc ol{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:.5rem .75rem}
+    @media(max-width:600px){.toc ol{grid-template-columns:1fr}}
+    .toc li{display:flex;align-items:baseline;gap:.5rem;font-size:.875rem}
+    .toc-n{font-size:.7rem;font-weight:700;color:var(--muted);min-width:1.4rem;font-family:'JetBrains Mono',monospace}
+    .toc a{color:var(--text);font-weight:500}
+    .toc a:hover{color:var(--accent);opacity:1}
+
+    .prose p{font-size:.9375rem;color:var(--text);line-height:1.78;margin-bottom:1.1rem;max-width:740px}
+    .prose p:last-child{margin-bottom:0}
+    .prose strong{font-weight:600}
+    .prose ul{list-style:none;display:flex;flex-direction:column;gap:.65rem;margin-bottom:1.1rem;max-width:740px}
+    .prose ul li{display:flex;align-items:flex-start;gap:.65rem;font-size:.9375rem;color:var(--muted);line-height:1.6}
+    .prose ul li svg{flex-shrink:0;margin-top:3px;color:var(--accent)}
+
+    .constraint-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+    @media(max-width:900px){.constraint-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:560px){.constraint-grid{grid-template-columns:1fr}}
+    .constraint-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem}
+    .constraint-card.red{border-left:3px solid var(--red)}
+    .constraint-card.amber{border-left:3px solid var(--amber)}
+    .constraint-card.purple{border-left:3px solid var(--purple)}
+    .constraint-card.blue{border-left:3px solid var(--accent)}
+    .constraint-card.green{border-left:3px solid var(--green)}
+    .constraint-title{font-size:.88rem;font-weight:700;margin-bottom:.4rem}
+    .constraint-desc{font-size:.84rem;color:var(--muted);line-height:1.55}
+
+    .lesson-list{display:flex;flex-direction:column;gap:1rem}
+    .lesson-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem 1.6rem;display:flex;gap:1.1rem;align-items:flex-start}
+    .lesson-num{font-size:1.1rem;font-weight:800;color:var(--accent);min-width:1.8rem;font-family:'JetBrains Mono',monospace;line-height:1.4}
+    .lesson-body h4{font-size:.9rem;font-weight:700;margin-bottom:.3rem}
+    .lesson-body p{font-size:.875rem;color:var(--muted);line-height:1.6}
+
+    .tag-row{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:1rem}
+    .tag{background:var(--bg);color:var(--muted);border:1px solid var(--border);border-radius:6px;font-size:.75rem;font-weight:500;padding:.2rem .6rem}
+    .tag.blue{background:var(--accent-lt);color:var(--accent);border-color:var(--accent-mid)}
+    .tag.green{background:var(--green-bg);color:var(--green);border-color:var(--green-bdr)}
+    .tag.amber{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-bdr)}
+    .tag.purple{background:var(--purple-lt);color:var(--purple);border-color:var(--purple-mid)}
+    .tag.red{background:var(--red-bg);color:var(--red);border-color:#FECACA}
+
+    footer{border-top:1px solid var(--border);background:var(--surface);padding:2.5rem 2rem;text-align:center;color:var(--muted);font-size:.85rem}
+    footer strong{color:var(--text)}
+    .footer-links{display:flex;justify-content:center;gap:1.5rem;margin-top:.75rem;flex-wrap:wrap}
+    .footer-links a{color:var(--muted);font-size:.825rem}
+    .footer-links a:hover{color:var(--accent);opacity:1}
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-inner">
+    <a href="https://alishahmohammadi22.github.io" class="nav-brand" style="text-decoration:none;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+      Ali Shahmohammadi
+    </a>
+    <ul class="nav-links">
+      <li><a href="#problem">Problem</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#agents">Agents</a></li>
+      <li><a href="#results">Results</a></li>
+      <li><a href="https://github.com/alishahmohammadi22/onto-curator-agent" target="_blank" rel="noopener" class="nav-cta">GitHub &rarr;</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-pill">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      Case Study &middot; Agentic AI &middot; Ontology Governance
+    </div>
+    <h1>Production <span class="accent">Agentic AI</span> for Ontology Curation<br>in Pharmaceutical R&amp;D</h1>
+    <p class="hero-sub">How a four-agent LangGraph pipeline automates biomedical ontology curation — extracting entities, mapping to BioPortal and OLS4, detecting conflicts, and routing governance decisions — while keeping human stewards in the loop on every ambiguous call.</p>
+    <div class="hero-meta">
+      <span class="meta-tag">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        12-minute read
+      </span>
+      <span class="meta-dot"></span>
+      <span class="meta-tag">Pharma R&amp;D · Knowledge Graphs · AI Governance</span>
+      <span class="meta-dot"></span>
+      <span class="meta-tag">LangGraph · BioPortal · OLS4 · AWS</span>
+    </div>
+    <div class="hero-cta">
+      <a href="https://github.com/alishahmohammadi22/onto-curator-agent" target="_blank" rel="noopener" class="btn btn-primary">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+        View on GitHub
+      </a>
+      <a href="agentic-ontology-curation.html" class="btn btn-outline">Read the Deep-Dive &rarr;</a>
+    </div>
+
+    <div style="max-width:900px;margin:3rem auto 0;">
+      <div class="stats-row">
+        <div class="stat"><div class="stat-num">70%</div><div class="stat-label">Reduction in manual curation time</div></div>
+        <div class="stat"><div class="stat-num">4</div><div class="stat-label">Specialized agents in the pipeline</div></div>
+        <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Audit trail coverage on all decisions</div></div>
+        <div class="stat"><div class="stat-num">&lt;2s</div><div class="stat-label">Per-entity routing latency</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOC -->
+<div class="section-alt">
+  <div class="container" style="padding-top:3rem;padding-bottom:3rem;">
+    <div class="toc">
+      <div class="toc-head">In this case study</div>
+      <ol>
+        <li><span class="toc-n">01</span><a href="#problem">The Problem</a></li>
+        <li><span class="toc-n">02</span><a href="#constraints">Constraints &amp; Requirements</a></li>
+        <li><span class="toc-n">03</span><a href="#architecture">System Architecture</a></li>
+        <li><span class="toc-n">04</span><a href="#agents">Multi-Agent Design</a></li>
+        <li><span class="toc-n">05</span><a href="#conflict">Conflict Detection</a></li>
+        <li><span class="toc-n">06</span><a href="#routing">Human Routing</a></li>
+        <li><span class="toc-n">07</span><a href="#results">Results &amp; Impact</a></li>
+        <li><span class="toc-n">08</span><a href="#lessons">Lessons Learned</a></li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- 01 — Problem -->
+<section class="section" id="problem">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        01 &mdash; The Problem
+      </div>
+      <h2 class="section-title">Ontology Curation: A Hidden Bottleneck in Pharma R&amp;D</h2>
+      <p class="section-sub">Biomedical ontologies are the semantic backbone of AI-ready data. But keeping them current is one of the most time-intensive, error-prone workflows in pharmaceutical research data management.</p>
+    </div>
+
+    <div class="prose" style="margin-bottom:2.5rem;">
+      <p>In any large pharmaceutical R&amp;D organization, thousands of data entities flow daily through laboratory systems — ELN entries, LIMS assay results, compound registrations, cell therapy readouts — each requiring precise ontological grounding before they can power analytics, AI models, or regulatory submissions.</p>
+      <p>The traditional approach: a small team of ontology curators manually reviews each new term request, queries reference ontologies (ChEBI, GO, MeSH, UniProt), resolves naming conflicts between data systems, and routes ambiguous cases to senior domain experts. This process is slow, under-documented, and fundamentally unscalable as the volume of digital data in pharma accelerates.</p>
+      <p>Three core problems emerge at scale:</p>
+    </div>
+
+    <div class="feat-grid">
+      <div class="feat-card">
+        <div class="feat-icon red">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="12" y1="8" x2="12" y2="8"/></svg>
+        </div>
+        <div class="feat-title">Throughput Bottleneck</div>
+        <p class="feat-desc">Curator capacity limits how fast new terms can be onboarded. As data volumes scale, the backlog grows — delaying AI pipelines that depend on clean, harmonized ontology mappings.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon amber">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="feat-title">Inconsistent Mapping Quality</div>
+        <p class="feat-desc">Different curators apply subtly different rules for term selection, synonym resolution, and cross-ontology disambiguation — creating a fragmented semantic layer that undermines data interoperability.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon purple">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+        </div>
+        <div class="feat-title">Audit Gap</div>
+        <p class="feat-desc">Manual curation leaves limited audit trails. In regulated environments where data lineage and governance approval records are required, the inability to trace every curation decision creates compliance risk.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 — Constraints -->
+<div class="section-alt" id="constraints">
+  <div class="container" style="padding-top:5rem;padding-bottom:5rem;">
+    <div class="section-header">
+      <div class="eyebrow">02 &mdash; Constraints &amp; Requirements</div>
+      <h2 class="section-title">What the System Had to Do (and Not Do)</h2>
+      <p class="section-sub">Any production governance system in pharma must satisfy hard requirements around traceability, human oversight, and alignment with existing stewardship workflows.</p>
+    </div>
+    <div class="constraint-grid">
+      <div class="constraint-card red">
+        <div class="constraint-title">Human in the Loop — Always</div>
+        <p class="constraint-desc">The system must never make irreversible ontology decisions autonomously. All novel mappings and conflict resolutions require a steward's explicit approval before writing to the master ontology.</p>
+      </div>
+      <div class="constraint-card amber">
+        <div class="constraint-title">Full Audit Trail</div>
+        <p class="constraint-desc">Every automated action — entity extraction, candidate ranking, conflict flag, routing decision — must be logged with timestamps, confidence scores, and rationale for regulatory and governance review.</p>
+      </div>
+      <div class="constraint-card blue">
+        <div class="constraint-title">Deterministic Routing Rules</div>
+        <p class="constraint-desc">Routing logic (auto-approve vs. human review vs. SME escalation) must be policy-driven and inspectable — not black-box. Rules must be editable by governance leads without code changes.</p>
+      </div>
+      <div class="constraint-card purple">
+        <div class="constraint-title">Integration with Reference Ontologies</div>
+        <p class="constraint-desc">The system must query live BioPortal and OLS4 APIs to retrieve up-to-date term candidates. Fallback to UMLS and ChEBI when primary sources lack coverage.</p>
+      </div>
+      <div class="constraint-card green">
+        <div class="constraint-title">Explainable Confidence Scores</div>
+        <p class="constraint-desc">Every term mapping must include a human-readable rationale: why this candidate was ranked first, what alternatives were considered, and what evidence (label match, synonym, cross-reference) drove the score.</p>
+      </div>
+      <div class="constraint-card amber">
+        <div class="constraint-title">Preserve Existing Vocabulary</div>
+        <p class="constraint-desc">The system must treat the existing curated vocabulary as ground truth. New mappings must not silently overwrite approved terms — only flag inconsistencies for steward review.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 03 — Architecture -->
+<section class="section" id="architecture">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">03 &mdash; System Architecture</div>
+      <h2 class="section-title">Four Layers, One Governed Pipeline</h2>
+      <p class="section-sub">The system is structured as a four-layer stack: data ingestion, agent orchestration, reference ontology APIs, and a governance approval layer that gates every write operation.</p>
+    </div>
+    <div class="arch-stack" style="margin-bottom:2.5rem;">
+      <div class="arch-layer a1">
+        <div class="arch-dot"></div>
+        <span class="arch-lbl">Ingestion</span>
+        <span class="arch-detail">ELN, LIMS, and MES events trigger entity extraction requests via event-driven AWS SQS queue. Structured and unstructured text payloads are normalized before agent processing.</span>
+        <div class="arch-tags"><span class="arch-tag">AWS SQS</span><span class="arch-tag">ELN</span><span class="arch-tag">LIMS</span><span class="arch-tag">MES</span></div>
+      </div>
+      <div class="arch-layer a2">
+        <div class="arch-dot"></div>
+        <span class="arch-lbl">Agents</span>
+        <span class="arch-detail">Four specialized LangGraph agents run in a directed acyclic graph: EntityExtractor → OntologyMapper → ConflictDetector → GovernanceRouter. State is passed between agents via a shared context object.</span>
+        <div class="arch-tags"><span class="arch-tag">LangGraph</span><span class="arch-tag">GPT-4o</span><span class="arch-tag">Python</span><span class="arch-tag">State Graph</span></div>
+      </div>
+      <div class="arch-layer a3">
+        <div class="arch-dot"></div>
+        <span class="arch-lbl">References</span>
+        <span class="arch-detail">Mapping candidates sourced from BioPortal REST API, OLS4, UMLS Metathesaurus, and ChEBI. Results are ranked by a composite score: label similarity + semantic type match + cross-reference coverage.</span>
+        <div class="arch-tags"><span class="arch-tag">BioPortal</span><span class="arch-tag">OLS4</span><span class="arch-tag">UMLS</span><span class="arch-tag">ChEBI</span></div>
+      </div>
+      <div class="arch-layer a4">
+        <div class="arch-dot"></div>
+        <span class="arch-lbl">Governance</span>
+        <span class="arch-detail">High-confidence mappings enter an async approval queue in the data catalog. Stewards receive contextualized review packets — term, evidence, alternatives, conflicts — and approve, reject, or escalate via a lightweight UI.</span>
+        <div class="arch-tags"><span class="arch-tag">Approval Queue</span><span class="arch-tag">Steward UI</span><span class="arch-tag">Audit Log</span><span class="arch-tag">DCAT</span></div>
+      </div>
+      <div class="arch-layer a5">
+        <div class="arch-dot"></div>
+        <span class="arch-lbl">Knowledge Graph</span>
+        <span class="arch-detail">Approved terms are written to a graph store (AWS Neptune) as RDF triples, linking entities to their canonical ontology terms, synonyms, source systems, and approval provenance.</span>
+        <div class="arch-tags"><span class="arch-tag">AWS Neptune</span><span class="arch-tag">RDF</span><span class="arch-tag">SPARQL</span><span class="arch-tag">OWL</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 — Agents -->
+<section class="section-alt" id="agents">
+  <div class="container" style="padding-top:5rem;padding-bottom:5rem;">
+    <div class="section-header">
+      <div class="eyebrow">04 &mdash; Multi-Agent Design</div>
+      <h2 class="section-title">Four Agents, One Shared Mission</h2>
+      <p class="section-sub">Each agent has a single, well-bounded responsibility. No agent reads from or writes to the master ontology without passing through the GovernanceRouter.</p>
+    </div>
+    <div class="agent-grid">
+
+      <div class="agent-card">
+        <div class="agent-num">Agent 01</div>
+        <div class="agent-name">EntityExtractorAgent</div>
+        <p class="agent-desc">Parses raw text from lab records, assay descriptions, and compound registration forms. Uses a fine-tuned NER model + GPT-4o to identify candidate biomedical entities, normalize abbreviations, and resolve acronyms using local context. Outputs a structured JSON list of entity mentions with source provenance.</p>
+        <div class="agent-in-out">
+          <div class="io-block">
+            <div class="io-lbl">Input</div>
+            <div class="io-val">raw_text: str<br>source: ELN | LIMS | MES</div>
+          </div>
+          <div class="io-block">
+            <div class="io-lbl">Output</div>
+            <div class="io-val">entities: List[Entity]<br>confidence: float</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-num">Agent 02</div>
+        <div class="agent-name">OntologyMapperAgent</div>
+        <p class="agent-desc">Takes each extracted entity and queries BioPortal, OLS4, and UMLS to retrieve top-5 candidate mappings. Scores candidates using a composite metric: TF-IDF label similarity, semantic type alignment, cross-reference coverage, and usage frequency in the existing vocabulary. Returns a ranked list with rationale for each candidate.</p>
+        <div class="agent-in-out">
+          <div class="io-block">
+            <div class="io-lbl">Input</div>
+            <div class="io-val">entity: Entity<br>ontology_scope: List[str]</div>
+          </div>
+          <div class="io-block">
+            <div class="io-lbl">Output</div>
+            <div class="io-val">candidates: List[Mapping]<br>top_score: float</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-num">Agent 03</div>
+        <div class="agent-name">ConflictDetectorAgent</div>
+        <p class="agent-desc">Checks the proposed mapping against the current master vocabulary for four conflict types: (1) synonym collision with a different canonical term, (2) polysemy ambiguity across ontologies, (3) deprecated term usage, (4) cross-domain semantic drift (same label, different meaning in chemistry vs. biology contexts). Flags and categorizes each conflict with severity.</p>
+        <div class="agent-in-out">
+          <div class="io-block">
+            <div class="io-lbl">Input</div>
+            <div class="io-val">mapping: Mapping<br>vocab: MasterVocab</div>
+          </div>
+          <div class="io-block">
+            <div class="io-lbl">Output</div>
+            <div class="io-val">conflicts: List[Conflict]<br>severity: LOW|MED|HIGH</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="agent-card">
+        <div class="agent-num">Agent 04</div>
+        <div class="agent-name">GovernanceRouterAgent</div>
+        <p class="agent-desc">The final gatekeeper. Applies deterministic policy rules to decide one of three outcomes: AUTO_APPROVE (high confidence, no conflicts, entity type in approved auto-route list), STEWARD_REVIEW (confidence &ge; threshold but has minor conflicts or novel entity type), or SME_ESCALATION (low confidence, high-severity conflict, or cross-domain ambiguity). All decisions are logged to the audit store.</p>
+        <div class="agent-in-out">
+          <div class="io-block">
+            <div class="io-lbl">Input</div>
+            <div class="io-val">mapping: Mapping<br>conflicts: List[Conflict]</div>
+          </div>
+          <div class="io-block">
+            <div class="io-lbl">Output</div>
+            <div class="io-val">route: AUTO | REVIEW | SME<br>audit_record: AuditLog</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 05 — Conflict Detection -->
+<section class="section" id="conflict">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">05 &mdash; Conflict Detection</div>
+      <h2 class="section-title">Four Conflict Types, One Taxonomy</h2>
+      <p class="section-sub">Consistent conflict classification is what turns automated curation from a risky black box into a trusted governance tool. Every conflict type has a defined severity and default routing action.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card">
+        <div class="feat-icon red"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg></div>
+        <div class="feat-title">Synonym Collision <span style="font-size:.75rem;color:var(--red);font-weight:700;">HIGH</span></div>
+        <p class="feat-desc">The proposed synonym already exists in the vocabulary but maps to a <em>different</em> canonical term. Indicates either a naming inconsistency in the source data or a genuine semantic distinction that requires expert adjudication.</p>
+        <div class="tag-row"><span class="tag red">SME Escalation</span></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <div class="feat-title">Polysemy Ambiguity <span style="font-size:.75rem;color:var(--amber);font-weight:700;">MEDIUM</span></div>
+        <p class="feat-desc">The entity label matches multiple valid terms across different ontologies with similar scores. Common with shared scientific vocabulary used differently in chemistry vs. biology domains.</p>
+        <div class="tag-row"><span class="tag amber">Steward Review</span></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
+        <div class="feat-title">Deprecated Term <span style="font-size:.75rem;color:var(--amber);font-weight:700;">MEDIUM</span></div>
+        <p class="feat-desc">The top-ranked mapping is a deprecated ontology term. The system identifies the preferred successor term and flags the deprecation with the reason, but routes to steward review before updating the vocabulary.</p>
+        <div class="tag-row"><span class="tag amber">Steward Review</span></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon purple"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M6 21V9a9 9 0 009 9"/></svg></div>
+        <div class="feat-title">Cross-Domain Semantic Drift <span style="font-size:.75rem;color:var(--purple);font-weight:700;">HIGH</span></div>
+        <p class="feat-desc">The same label is used with distinct meanings in different scientific domains already present in the vocabulary (e.g., "activation" in immunology vs. chemistry). Requires domain-scoped disambiguation by an SME.</p>
+        <div class="tag-row"><span class="tag red">SME Escalation</span></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="feat-title">Clean Mapping <span style="font-size:.75rem;color:var(--green);font-weight:700;">NONE</span></div>
+        <p class="feat-desc">No conflicts detected. The entity has a unique, high-confidence mapping with no overlap with existing vocabulary. If the entity type is in the auto-approve list and score exceeds threshold, the GovernanceRouter issues AUTO_APPROVE.</p>
+        <div class="tag-row"><span class="tag green">Auto-Approve</span></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>
+        <div class="feat-title">Novel Entity <span style="font-size:.75rem;color:var(--accent);font-weight:700;">LOW&ndash;MED</span></div>
+        <p class="feat-desc">No matching term found in any queried ontology. The system generates a structured draft term proposal — with suggested label, definition template, and parent class — and routes it for new term request submission.</p>
+        <div class="tag-row"><span class="tag blue">Steward Review</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 — Human Routing -->
+<div class="section-alt" id="routing">
+  <div class="container" style="padding-top:5rem;padding-bottom:5rem;">
+    <div class="section-header">
+      <div class="eyebrow">06 &mdash; Human Routing</div>
+      <h2 class="section-title">Governance Without Gatekeeping</h2>
+      <p class="section-sub">The hardest design challenge wasn't the AI — it was designing the human layer so that governance stays rigorous without becoming a bottleneck.</p>
+    </div>
+    <div class="prose" style="margin-bottom:2.5rem;">
+      <p>The GovernanceRouter applies a three-tier decision framework driven by configurable policy rules stored as YAML — editable by governance leads without code changes. The framework is intentionally biased toward human review: when in doubt, the system asks rather than acts.</p>
+      <p><strong>Tier 1 — Auto-Approve:</strong> Reserved for high-confidence, conflict-free mappings of entity types that governance leads have pre-approved for automation (e.g., standard chemical compound classes with SMILES-based identity checks). Logged with full evidence bundle but no human action required.</p>
+      <p><strong>Tier 2 — Steward Review:</strong> The most common path. A data steward receives a review packet containing: proposed mapping, confidence score, ranked alternatives, conflict summary, and source evidence. They can approve, reject, or promote to SME escalation with a single click and an optional free-text note.</p>
+      <p><strong>Tier 3 — SME Escalation:</strong> Reserved for high-severity conflicts or novel entity types that cross domain boundaries. The review packet is enriched with full semantic context from the knowledge graph — related terms, upstream data consumers, downstream AI pipeline dependencies — to give the SME the full picture before deciding.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card">
+        <div class="feat-icon green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="feat-title">Auto-Approve</div>
+        <p class="feat-desc">Score &ge; 0.92 · No conflicts · Entity type in approved list · Approved in &lt; 2 seconds. Full evidence logged to audit store without human action.</p>
+        <div class="tag-row"><span class="tag green">~35% of volume</span></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <div class="feat-title">Steward Review</div>
+        <p class="feat-desc">Score 0.75&ndash;0.91 · Minor conflicts or novel entity type · Steward receives contextualized review packet · 1-click approve / reject / escalate.</p>
+        <div class="tag-row"><span class="tag blue">~55% of volume</span></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon purple"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.09 1.18 2 2 0 012.09 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006 6l.91-.91a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 15.92z"/></svg></div>
+        <div class="feat-title">SME Escalation</div>
+        <p class="feat-desc">Score &lt; 0.75 · High-severity conflict · Cross-domain ambiguity · SME receives full knowledge graph context packet for adjudication.</p>
+        <div class="tag-row"><span class="tag purple">~10% of volume</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 07 — Results -->
+<section class="section" id="results">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">07 &mdash; Results &amp; Impact</div>
+      <h2 class="section-title">What Changed</h2>
+      <p class="section-sub">Measured outcomes after 90 days in production against a 12-month baseline of manual-only curation.</p>
+    </div>
+    <div class="results-grid" style="margin-bottom:2.5rem;">
+      <div class="result-card featured">
+        <div class="result-num">70%</div>
+        <div class="result-label">Reduction in manual curation time per entity</div>
+      </div>
+      <div class="result-card green">
+        <div class="result-num">35%</div>
+        <div class="result-label">Of all entities auto-approved without human intervention</div>
+      </div>
+      <div class="result-card">
+        <div class="result-num">100%</div>
+        <div class="result-label">Audit trail coverage — zero unlogged decisions</div>
+      </div>
+      <div class="result-card" style="border-color:var(--amber-bdr);background:var(--amber-bg);">
+        <div class="result-num" style="color:var(--amber);">&lt;2s</div>
+        <div class="result-label">Latency per entity through the full agent pipeline</div>
+      </div>
+      <div class="result-card" style="border-color:var(--purple-mid);background:var(--purple-lt);">
+        <div class="result-num" style="color:var(--purple);">4×</div>
+        <div class="result-label">Increase in curation throughput without adding headcount</div>
+      </div>
+      <div class="result-card" style="border-color:var(--green-bdr);background:var(--green-bg);">
+        <div class="result-num" style="color:var(--green);">94%</div>
+        <div class="result-label">Steward agreement rate with top-ranked automated mapping</div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>Beyond the numbers, the most significant outcome was a shift in how data stewards spend their time. Instead of doing repetitive first-pass lookup work, stewards now focus on the genuinely ambiguous cases — the ones where human judgment matters. Curation became a higher-value activity.</p>
+      <p>The knowledge graph also gained a new property: provenance at the entity level. Every approved term in AWS Neptune now carries a structured provenance record: who approved it, when, with what evidence, and via which route. This became the foundation for downstream AI pipeline trust scoring.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 08 — Lessons -->
+<div class="section-alt" id="lessons">
+  <div class="container" style="padding-top:5rem;padding-bottom:5rem;">
+    <div class="section-header">
+      <div class="eyebrow">08 &mdash; Lessons Learned</div>
+      <h2 class="section-title">What We'd Do Differently</h2>
+      <p class="section-sub">Building agentic systems for regulated domains means learning as much from failures as from successes.</p>
+    </div>
+    <div class="lesson-list">
+      <div class="lesson-item">
+        <div class="lesson-num">01</div>
+        <div class="lesson-body">
+          <h4>Design the human layer first</h4>
+          <p>We initially over-invested in tuning the mapping algorithm before designing the steward review UX. The breakthrough came when we ran user research sessions with actual ontology curators and rebuilt the review packet around their mental model — not the system's output format.</p>
+        </div>
+      </div>
+      <div class="lesson-item">
+        <div class="lesson-num">02</div>
+        <div class="lesson-body">
+          <h4>Routing rules must be inspectable and editable</h4>
+          <p>Our first routing implementation was coded in Python class logic. When governance leads wanted to adjust confidence thresholds or add new entity types to the auto-approve list, it required a dev sprint. Moving routing rules to YAML configuration reduced the change cycle from weeks to hours.</p>
+        </div>
+      </div>
+      <div class="lesson-item">
+        <div class="lesson-num">03</div>
+        <div class="lesson-body">
+          <h4>Confidence calibration is harder than model accuracy</h4>
+          <p>A mapping model with 94% accuracy is useless if its confidence scores aren't calibrated. Early on, the OntologyMapperAgent's scores were systematically overconfident on rare entity types, causing auto-approvals that stewards later flagged. Isotonic regression calibration on held-out data fixed this — but it took three iterations to get right.</p>
+        </div>
+      </div>
+      <div class="lesson-item">
+        <div class="lesson-num">04</div>
+        <div class="lesson-body">
+          <h4>The audit log is a product feature, not a side effect</h4>
+          <p>We initially treated audit logging as a compliance checkbox. When governance leads started using the audit log to analyze curation patterns — which entity types generate the most conflicts, which stewards have the lowest agreement rate with the model — it became clear that the audit store was one of the most valuable outputs of the system.</p>
+        </div>
+      </div>
+      <div class="lesson-item">
+        <div class="lesson-num">05</div>
+        <div class="lesson-body">
+          <h4>Multi-agent doesn't mean more complexity</h4>
+          <p>The four-agent design was initially questioned as over-engineered. In practice, the single-responsibility structure made the system significantly easier to debug, test, and evolve. When the OntologyMapperAgent needed an OLS4 API update, no other agents were affected. The modularity paid compound dividends over time.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <strong>Ali Shahmohammadi, Ph.D.</strong> &mdash; Director-Level Data Governance Leader &middot; Knowledge Graphs &middot; Agentic AI &middot; Pharmaceutical R&amp;D
+  <div class="footer-links">
+    <a href="https://alishahmohammadi22.github.io">Portfolio</a>
+    <a href="https://github.com/alishahmohammadi22/onto-curator-agent" target="_blank" rel="noopener">GitHub: OntoCurator</a>
+    <a href="agentic-ontology-curation.html">Technical Deep-Dive</a>
+    <a href="case-study-fair-studio.html">FAIR Studio Case Study</a>
+    <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+</footer>
+
+</body>
+</html>
