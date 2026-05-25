@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Mastering Across R&D-to-Commercial: Why Knowledge Graphs Beat Traditional MDM — Ali Shahmohammadi</title>
+  <meta name="description" content="A practitioner's view on why the row-and-column gold record breaks down for medicinal products across the R&D-to-commercial lifecycle — and what to build instead with knowledge graphs, ontologies, and agentic AI." />
+  <meta property="og:title" content="Product Mastering: Why Knowledge Graphs Beat Traditional MDM" />
+  <meta property="og:description" content="Why hub-and-spoke MDM breaks down for pharma product mastering — and how knowledge graphs, ISO IDMP, and agentic AI fix it." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://alishahmohammadi22.github.io/blog/product-mastering-knowledge-graphs-vs-mdm.html" />
+  <meta property="og:image" content="https://alishahmohammadi22.github.io/assets/images/og-preview.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://alishahmohammadi22.github.io/assets/images/og-preview.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#FAFAF7;--surface:#FFFFFF;--border:#E5E5E2;--muted:#6B6B68;--text:#1A1A1A;--accent:#2563EB;--accent-lt:#EFF6FF;--accent-mid:#BFDBFE;--green:#16A34A;--green-bg:#F0FDF4;--green-bdr:#BBF7D0;--red:#DC2626;--red-bg:#FEF2F2;--red-bdr:#FECACA;--amber:#D97706;--amber-bg:#FFFBEB;--amber-bdr:#FDE68A;--purple:#7C3AED;--purple-lt:#F5F3FF;--purple-mid:#DDD6FE;--r:10px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent);text-decoration:none;transition:opacity .15s}a:hover{opacity:.75}
+    code,pre{font-family:'JetBrains Mono','Fira Code',monospace}
+
+    nav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+    .nav-inner{max-width:1140px;margin:0 auto;padding:0 2rem;display:flex;justify-content:space-between;align-items:center;height:60px}
+    .nav-brand{display:flex;align-items:center;gap:.5rem;font-weight:700;font-size:.95rem;color:var(--text);letter-spacing:-.01em}
+    .nav-brand svg{color:var(--accent)}
+    .nav-links{display:flex;gap:.25rem;list-style:none;align-items:center}
+    .nav-links a{color:var(--muted);font-size:.875rem;font-weight:500;padding:.4rem .75rem;border-radius:6px;transition:all .15s}
+    .nav-links a:hover{color:var(--text);background:var(--bg);opacity:1}
+    .nav-cta{color:var(--accent)!important;border:1px solid var(--accent-mid);background:var(--accent-lt)!important}
+    .nav-cta:hover{background:var(--accent)!important;color:#fff!important}
+    @media(max-width:768px){.nav-links li:not(:last-child){display:none}}
+
+    .container{max-width:1140px;margin:0 auto;padding:0 2rem}
+    .section{padding:4.5rem 0}
+    .section-alt{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+
+    .section-header{margin-bottom:2.5rem}
+    .eyebrow{display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:.6rem}
+    .eyebrow.green{color:var(--green)}
+    .eyebrow.purple{color:var(--purple)}
+    .eyebrow.amber{color:var(--amber)}
+    .eyebrow.red{color:var(--red)}
+    .section-title{font-size:clamp(1.4rem,2.8vw,1.85rem);font-weight:800;letter-spacing:-.02em;color:var(--text);margin-bottom:.6rem}
+    .section-sub{font-size:.9375rem;color:var(--muted);max-width:660px;line-height:1.7}
+
+    .hero{padding:5.5rem 2rem 4.5rem;background:var(--surface);border-bottom:1px solid var(--border);text-align:center}
+    .hero-pill{display:inline-flex;align-items:center;gap:.5rem;background:var(--purple-lt);color:var(--purple);border:1px solid var(--purple-mid);font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:.35rem .9rem;border-radius:99px;margin-bottom:2rem}
+    .hero h1{font-size:clamp(1.85rem,4vw,3rem);font-weight:800;letter-spacing:-.03em;line-height:1.15;color:var(--text);margin-bottom:1.25rem}
+    .hero h1 .accent{color:var(--accent)}
+    .hero h1 .accent-purple{color:var(--purple)}
+    .hero-sub{font-size:1.05rem;color:var(--muted);line-height:1.75;max-width:680px;margin:0 auto 2rem}
+    .hero-meta{display:flex;justify-content:center;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:2.5rem}
+    .meta-tag{display:inline-flex;align-items:center;gap:.35rem;font-size:.82rem;color:var(--muted);font-weight:500}
+    .meta-dot{width:3px;height:3px;border-radius:50%;background:var(--border);display:inline-block}
+    .hero-cta{display:flex;justify-content:center;gap:.75rem;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;gap:.4rem;padding:.65rem 1.4rem;border-radius:8px;font-size:.9rem;font-weight:600;transition:all .15s;cursor:pointer;border:none;white-space:nowrap}
+    .btn-primary{background:var(--accent);color:#fff}
+    .btn-primary:hover{background:#1D4ED8;opacity:1}
+    .btn-outline{background:var(--surface);color:var(--text);border:1px solid var(--border)}
+    .btn-outline:hover{border-color:var(--accent);color:var(--accent);opacity:1}
+
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+    @media(max-width:700px){.stats-row{grid-template-columns:repeat(2,1fr)}}
+    .stat{background:var(--surface);padding:1.75rem 1.5rem;text-align:center}
+    .stat-num{font-size:2.2rem;font-weight:800;color:var(--accent);letter-spacing:-.03em;line-height:1}
+    .stat-num.purple{color:var(--purple)}
+    .stat-num.green{color:var(--green)}
+    .stat-num.amber{color:var(--amber)}
+    .stat-label{font-size:.8rem;color:var(--muted);margin-top:.4rem;font-weight:500;line-height:1.4}
+
+    /* ── Identity trajectory ── */
+    .trajectory{display:flex;align-items:stretch;gap:0;overflow-x:auto;border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+    .traj-stage{flex:1;min-width:130px;padding:1.25rem 1rem;border-right:1px solid var(--border);background:var(--surface)}
+    .traj-stage:last-child{border-right:none}
+    .traj-label{font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.6rem}
+    .traj-id{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted);margin-bottom:.2rem;line-height:1.5}
+    .traj-arrow{display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--border);padding:0 .25rem;background:var(--bg);border-right:1px solid var(--border);flex-shrink:0}
+    .stage-discovery{border-top:3px solid var(--accent)}
+    .stage-dev{border-top:3px solid var(--purple)}
+    .stage-clinical{border-top:3px solid var(--amber)}
+    .stage-regulatory{border-top:3px solid var(--green)}
+    .stage-commercial{border-top:3px solid var(--red)}
+    .stage-discovery .traj-label{color:var(--accent)}
+    .stage-dev .traj-label{color:var(--purple)}
+    .stage-clinical .traj-label{color:var(--amber)}
+    .stage-regulatory .traj-label{color:var(--green)}
+    .stage-commercial .traj-label{color:var(--red)}
+
+    /* ── Failure cards ── */
+    .fail-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+    @media(max-width:700px){.fail-grid{grid-template-columns:1fr}}
+    .fail-card{background:var(--surface);border:1px solid var(--red-bdr);border-left:4px solid var(--red);border-radius:var(--r);padding:1.5rem}
+    .fail-title{font-size:.9rem;font-weight:700;color:var(--red);margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+    .fail-desc{font-size:.875rem;color:var(--muted);line-height:1.6}
+    .fail-desc strong{color:var(--text)}
+
+    /* ── KG property cards ── */
+    .kg-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+    @media(max-width:700px){.kg-grid{grid-template-columns:1fr}}
+    .kg-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;transition:border-color .2s}
+    .kg-card:hover{border-color:var(--accent-mid)}
+    .kg-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:.85rem;flex-shrink:0}
+    .kg-icon.blue{background:var(--accent-lt);color:var(--accent)}
+    .kg-icon.purple{background:var(--purple-lt);color:var(--purple)}
+    .kg-icon.green{background:var(--green-bg);color:var(--green)}
+    .kg-icon.amber{background:var(--amber-bg);color:var(--amber)}
+    .kg-title{font-size:.95rem;font-weight:700;margin-bottom:.4rem}
+    .kg-desc{font-size:.875rem;color:var(--muted);line-height:1.6}
+    .kg-desc strong{color:var(--text);font-weight:600}
+
+    /* ── Ontology table ── */
+    .onto-table{width:100%;border-collapse:collapse;font-size:.875rem}
+    .onto-table th{background:var(--bg);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:.75rem 1rem;border-bottom:2px solid var(--border);text-align:left}
+    .onto-table td{padding:.8rem 1rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.5;background:var(--surface)}
+    .onto-table tr:last-child td{border-bottom:none}
+    .onto-table tr:hover td{background:var(--bg)}
+    .onto-badge{display:inline-flex;align-items:center;gap:.3rem;font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:600;padding:.18rem .55rem;border-radius:5px;white-space:nowrap}
+    .ob-blue{background:var(--accent-lt);color:var(--accent);border:1px solid var(--accent-mid)}
+    .ob-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bdr)}
+    .ob-purple{background:var(--purple-lt);color:var(--purple);border:1px solid var(--purple-mid)}
+    .ob-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bdr)}
+    .ob-gray{background:var(--bg);color:var(--muted);border:1px solid var(--border)}
+
+    /* ── Architecture diagram (SVG wrapper) ── */
+    .arch-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;padding:0}
+    .arch-wrap svg{display:block;width:100%;height:auto}
+
+    /* ── Agentic workflow ── */
+    .flow-row{display:flex;align-items:stretch;gap:0;overflow-x:auto}
+    .flow-step{flex:1;min-width:150px;padding:1.25rem 1rem;background:var(--surface);border:1px solid var(--border);border-right:none;position:relative}
+    .flow-step:first-child{border-radius:var(--r) 0 0 var(--r)}
+    .flow-step:last-child{border-right:1px solid var(--border);border-radius:0 var(--r) var(--r) 0}
+    .flow-num{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:var(--muted);margin-bottom:.5rem}
+    .flow-title{font-size:.85rem;font-weight:700;margin-bottom:.35rem}
+    .flow-desc{font-size:.78rem;color:var(--muted);line-height:1.5}
+    .flow-arrow{position:absolute;right:-12px;top:50%;transform:translateY(-50%);width:24px;height:24px;background:var(--bg);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;color:var(--muted);z-index:1;flex-shrink:0}
+    @media(max-width:700px){.flow-row{flex-direction:column}.flow-step{border-right:1px solid var(--border);border-bottom:none}.flow-step:last-child{border-bottom:1px solid var(--border)}.flow-step:first-child{border-radius:var(--r) var(--r) 0 0}.flow-step:last-child{border-radius:0 0 var(--r) var(--r)}.flow-arrow{display:none}}
+
+    /* ── Regulatory callouts ── */
+    .reg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+    @media(max-width:800px){.reg-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:500px){.reg-grid{grid-template-columns:1fr}}
+    .reg-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem}
+    .reg-agency{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem}
+    .reg-card.ema .reg-agency{color:var(--accent)}
+    .reg-card.fda .reg-agency{color:var(--red)}
+    .reg-card.ich .reg-agency{color:var(--green)}
+    .reg-title{font-size:.9rem;font-weight:700;margin-bottom:.4rem}
+    .reg-desc{font-size:.85rem;color:var(--muted);line-height:1.6}
+    .reg-date{font-size:.75rem;font-family:'JetBrains Mono',monospace;color:var(--muted);margin-top:.6rem}
+
+    /* ── Roadmap phases ── */
+    .roadmap{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+    .phase-row{display:grid;grid-template-columns:7rem 1fr;gap:0;background:var(--surface);transition:background .15s}
+    .phase-row:hover{background:var(--bg)}
+    .phase-label{padding:1.5rem 1.25rem;border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+    .phase-num{font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem}
+    .phase-name{font-size:.8rem;font-weight:700;color:var(--text);line-height:1.3}
+    .phase-body{padding:1.25rem 1.5rem}
+    .phase-title{font-size:.9rem;font-weight:700;margin-bottom:.3rem}
+    .phase-desc{font-size:.86rem;color:var(--muted);line-height:1.6}
+    .phase-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.65rem}
+    .phase-tag{font-size:.7rem;font-weight:500;padding:.18rem .55rem;border-radius:5px;background:var(--bg);color:var(--muted);border:1px solid var(--border)}
+    .phase-0 .phase-name,.phase-0 .phase-title{color:var(--muted)}
+    .phase-1 .phase-name,.phase-1 .phase-title{color:var(--accent)}
+    .phase-2 .phase-name,.phase-2 .phase-title{color:var(--purple)}
+    .phase-3 .phase-name,.phase-3 .phase-title{color:var(--green)}
+    .phase-4 .phase-name,.phase-4 .phase-title{color:var(--amber)}
+    .phase-5 .phase-name,.phase-5 .phase-title{color:var(--red)}
+    @media(max-width:600px){.phase-row{grid-template-columns:1fr}.phase-label{border-right:none;border-bottom:1px solid var(--border);flex-direction:row;gap:.5rem;text-align:left;padding:1rem 1.25rem}}
+
+    /* ── Inline callout/blockquote ── */
+    .callout{border-radius:var(--r);padding:1.25rem 1.5rem;margin:1.5rem 0}
+    .callout.blue{background:var(--accent-lt);border:1px solid var(--accent-mid)}
+    .callout.green{background:var(--green-bg);border:1px solid var(--green-bdr)}
+    .callout.purple{background:var(--purple-lt);border:1px solid var(--purple-mid)}
+    .callout.amber{background:var(--amber-bg);border:1px solid var(--amber-bdr)}
+    .callout p{font-size:.9rem;color:var(--text);line-height:1.7;margin:0}
+    .callout strong{font-weight:700}
+    .callout.blue strong{color:var(--accent)}
+    .callout.green strong{color:var(--green)}
+    .callout.purple strong{color:var(--purple)}
+    .callout.amber strong{color:var(--amber)}
+
+    /* ── Prose ── */
+    .prose p{font-size:.9375rem;color:var(--text);line-height:1.78;margin-bottom:1rem;max-width:730px}
+    .prose p:last-child{margin-bottom:0}
+    .prose strong{font-weight:600}
+
+    /* ── Triple example box ── */
+    .triple-box{background:#0D1117;border:1px solid rgba(255,255,255,.1);border-radius:var(--r);padding:1.25rem 1.5rem;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.9;overflow-x:auto}
+    .triple-cmt{color:rgba(255,255,255,.3);font-style:italic}
+    .triple-subj{color:#60A5FA}
+    .triple-pred{color:#C084FC}
+    .triple-obj{color:#4ADE80}
+    .triple-meta{color:#FB923C}
+
+    /* ── References ── */
+    .refs-list{list-style:none;display:flex;flex-direction:column;gap:.6rem;counter-reset:ref-counter}
+    .refs-list li{display:flex;align-items:baseline;gap:.75rem;font-size:.84rem;color:var(--muted);line-height:1.6;counter-increment:ref-counter}
+    .ref-num{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:var(--accent);background:var(--accent-lt);border:1px solid var(--accent-mid);border-radius:4px;padding:.1rem .4rem;flex-shrink:0;min-width:2.2rem;text-align:center}
+    .refs-list a{color:var(--accent)}
+
+    /* ── TOC ── */
+    .toc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.75rem 2rem}
+    .toc-head{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+    .toc ol{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:.45rem .75rem}
+    @media(max-width:600px){.toc ol{grid-template-columns:1fr}}
+    .toc li{display:flex;align-items:baseline;gap:.5rem;font-size:.875rem}
+    .toc-n{font-size:.7rem;font-weight:700;color:var(--muted);min-width:1.4rem;font-family:'JetBrains Mono',monospace}
+    .toc a{color:var(--text);font-weight:500}
+    .toc a:hover{color:var(--accent);opacity:1}
+
+    footer{border-top:1px solid var(--border);background:var(--surface);padding:2.5rem 2rem;text-align:center;color:var(--muted);font-size:.85rem}
+    footer strong{color:var(--text)}
+    .footer-links{display:flex;justify-content:center;gap:1.5rem;margin-top:.75rem;flex-wrap:wrap}
+    .footer-links a{color:var(--muted);font-size:.825rem}
+    .footer-links a:hover{color:var(--accent);opacity:1}
+  </style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<nav>
+  <div class="nav-inner">
+    <a href="https://alishahmohammadi22.github.io" class="nav-brand" style="text-decoration:none;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+      Ali Shahmohammadi
+    </a>
+    <ul class="nav-links">
+      <li><a href="#problem">Problem</a></li>
+      <li><a href="#mdm-failures">MDM Failures</a></li>
+      <li><a href="#kg-alternative">KG Alternative</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#roadmap">Roadmap</a></li>
+      <li><a href="https://alishahmohammadi22.github.io" class="nav-cta">Portfolio &rarr;</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="hero-pill">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><ellipse cx="12" cy="12" rx="10" ry="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+    Master Data &nbsp;&middot;&nbsp; Knowledge Graphs &nbsp;&middot;&nbsp; Pharma R&amp;D
+  </div>
+  <h1>Product Mastering Across the<br><span class="accent-purple">R&amp;D-to-Commercial Lifecycle:</span><br>Why Knowledge Graphs Beat Traditional MDM</h1>
+  <p class="hero-sub">A practitioner&rsquo;s view on why the row-and-column gold record breaks down for medicinal products &mdash; and what to build instead. Covers ISO IDMP, IDMP-O, bitemporal graphs, agentic entity resolution, and a deployable reference architecture.</p>
+  <div class="hero-meta">
+    <span class="meta-tag">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      May 25, 2026
+    </span>
+    <span class="meta-dot"></span>
+    <span class="meta-tag">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      ~25 min read
+    </span>
+    <span class="meta-dot"></span>
+    <span class="meta-tag">Ali Shahmohammadi, Ph.D.</span>
+  </div>
+  <div class="hero-cta">
+    <a href="#problem" class="btn btn-primary">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      Read Article
+    </a>
+    <a href="https://pistoiaalliance.org/project/idmp-o/" target="_blank" rel="noopener" class="btn btn-outline">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      IDMP-O Project
+    </a>
+  </div>
+</section>
+
+<!-- ── Key stats ── -->
+<div class="container" style="margin:3rem auto;">
+  <div class="stats-row">
+    <div class="stat">
+      <div class="stat-num">11</div>
+      <div class="stat-label">Major pharma companies co-building IDMP-O to replace hub MDM</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num purple">5</div>
+      <div class="stat-label">ISO IDMP standards forming a graph, not a table</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num green">118M+</div>
+      <div class="stat-label">Edges in AstraZeneca&rsquo;s production knowledge graph (BIKG)</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num amber">0</div>
+      <div class="stat-label">Survivorship rules needed when the ontology is the master</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Table of Contents ── -->
+<div class="container" style="margin-bottom:3rem;">
+  <div class="toc">
+    <div class="toc-head">Table of Contents</div>
+    <ol>
+      <li><span class="toc-n">01</span><a href="#problem">The Product Mastering Problem</a></li>
+      <li><span class="toc-n">02</span><a href="#mdm-failures">Why Hub-and-Spoke MDM Breaks Down</a></li>
+      <li><span class="toc-n">03</span><a href="#kg-alternative">The Knowledge Graph Alternative</a></li>
+      <li><span class="toc-n">04</span><a href="#ontology-stack">Connecting MDM to Ontologies</a></li>
+      <li><span class="toc-n">05</span><a href="#architecture">Reference Architecture</a></li>
+      <li><span class="toc-n">06</span><a href="#agentic-ai">Agentic AI for First-Pass Mastering</a></li>
+      <li><span class="toc-n">07</span><a href="#regulatory">AI-Readiness &amp; Regulatory Submissions</a></li>
+      <li><span class="toc-n">08</span><a href="#roadmap">Implementation Roadmap</a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- §1 — Problem                          -->
+<!-- ══════════════════════════════════════ -->
+<section class="section" id="problem">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        01 — The Problem
+      </div>
+      <h2 class="section-title">The Product Mastering Problem in Pharma</h2>
+      <p class="section-sub">In most industries, &ldquo;product&rdquo; is a stable thing. Pharma does not fit that world &mdash; the entity is not a thing, it is a <strong>trajectory</strong>.</p>
+    </div>
+
+    <div class="prose" style="margin-bottom:2.5rem;">
+      <p>Master Data Management was designed for the world of washing machines: a SKU, a price, a manufacturer, and a few attributes that change slowly. Gartner defines it as the discipline that ensures &ldquo;uniformity, accuracy, stewardship, semantic consistency and accountability of the enterprise&rsquo;s official shared master data assets.&rdquo;<sup><a href="#ref-1">1</a></sup> That world assumes a stable entity with a single identity. Pharma has neither.</p>
+      <p>The same scientific entity moves through a dozen identity transformations before it reaches a patient. The right answer to any master data question depends on <em>which point in the lifecycle the asker stands at</em>. There is no single gold record because there is no single business question a one-row record would answer correctly.</p>
+    </div>
+
+    <!-- Identity trajectory visual -->
+    <div class="trajectory" style="margin-bottom:1.5rem;">
+      <div class="traj-stage stage-discovery">
+        <div class="traj-label">Discovery</div>
+        <div class="traj-id">Structure hash</div>
+        <div class="traj-id">ChEMBL ID</div>
+        <div class="traj-id">Internal code</div>
+      </div>
+      <div class="traj-arrow">&#8594;</div>
+      <div class="traj-stage stage-dev">
+        <div class="traj-label">Preclinical</div>
+        <div class="traj-id">UNII (FDA GSRS)</div>
+        <div class="traj-id">INN (WHO)</div>
+        <div class="traj-id">ISO 11238 substance</div>
+      </div>
+      <div class="traj-arrow">&#8594;</div>
+      <div class="traj-stage stage-clinical">
+        <div class="traj-label">Clinical</div>
+        <div class="traj-id">IND / EudraCT</div>
+        <div class="traj-id">Protocol product</div>
+        <div class="traj-id">Dose form + route</div>
+      </div>
+      <div class="traj-arrow">&#8594;</div>
+      <div class="traj-stage stage-regulatory">
+        <div class="traj-label">Regulatory</div>
+        <div class="traj-id">MPID (ISO 11615)</div>
+        <div class="traj-id">PhPID (ISO 11616)</div>
+        <div class="traj-id">Marketing Auth.</div>
+      </div>
+      <div class="traj-arrow">&#8594;</div>
+      <div class="traj-stage stage-commercial">
+        <div class="traj-label">Commercial</div>
+        <div class="traj-id">NDC (US)</div>
+        <div class="traj-id">GTIN</div>
+        <div class="traj-id">Brand + label</div>
+      </div>
+    </div>
+    <p style="font-size:.8rem;color:var(--muted);margin-bottom:2rem;">Each stage is authoritative for its own identifiers. No single row captures all of them correctly at every point in time.</p>
+
+    <div class="callout purple">
+      <p><strong>The core insight:</strong> A single asset accumulates identifiers across discovery, development, manufacturing, regulatory, supply chain, and commercial systems &mdash; each with its own authoritative source and its own update cadence. The entity is not a thing. It is a <strong>trajectory</strong>. Stop trying to flatten it into a row.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- §2 — MDM Failures                     -->
+<!-- ══════════════════════════════════════ -->
+<section class="section section-alt" id="mdm-failures">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow red">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+        02 — Why MDM Fails
+      </div>
+      <h2 class="section-title">Why Hub-and-Spoke MDM Breaks Down</h2>
+      <p class="section-sub">Classical MDM&rsquo;s four implementation styles &mdash; registry, consolidation, coexistence, centralized &mdash; all assume the same primitive: a denormalized &ldquo;golden&rdquo; row chosen by survivorship rules. When the entity is relational and evolving, they all fail in the same ways.</p>
+    </div>
+
+    <div class="fail-grid">
+      <div class="fail-card">
+        <div class="fail-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          Lossy denormalization of multi-cardinality
+        </div>
+        <p class="fail-desc">An MPID maps to multiple PhPIDs (strengths/forms), each PhPID to multiple substances, each substance to multiple specified-substance variants. Forcing this into a flat hub schema either <strong>explodes row counts</strong> or hides cardinality in a JSON blob the stewardship workflow can&rsquo;t reason over. ISO IDMP is structurally a network — a graph published as five interlocking standards.<sup><a href="#ref-3">3</a></sup></p>
+      </div>
+
+      <div class="fail-card">
+        <div class="fail-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          The &ldquo;single source of truth&rdquo; misdiagnosis
+        </div>
+        <p class="fail-desc">The problem is not that pharma has too many sources of truth &mdash; it is that <strong>each is authoritative for a different facet at a different time</strong>. The LIMS is authoritative for structure. The regulatory system is authoritative for MPID assignment. Survivorship rules cannot capture &ldquo;authoritative for attribute X only after milestone Y.&rdquo;</p>
+      </div>
+
+      <div class="fail-card">
+        <div class="fail-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          Stewardship assumes a single entity owner
+        </div>
+        <p class="fail-desc">In R&amp;D-to-commercial, ownership transitions hand-off-by-hand-off: chemistry &rarr; CMC &rarr; clinical &rarr; regulatory &rarr; commercial. Each handoff is itself a piece of master data. Hub MDM has no native primitive for this; it gets encoded as a status column that <strong>inevitably drifts from the actual SOP</strong>.</p>
+      </div>
+
+      <div class="fail-card">
+        <div class="fail-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          Historical truth &amp; bitemporality
+        </div>
+        <p class="fail-desc">An adverse event on a 2018 batch of a 2014 formulation must trace to the <em>specific</em> substance, site, and product information that existed at that time &mdash; not the current golden record. Most MDM hubs implement temporality as effective-dated rows. <strong>Pharmacovigilance requires bitemporality</strong> (when the fact was true &times; when we knew it), which hub MDM architecturally cannot offer.</p>
+      </div>
+    </div>
+
+    <div class="callout amber" style="margin-top:2rem;">
+      <p><strong>Industry signal:</strong> The Pistoia Alliance&rsquo;s IDMP-O project &mdash; built jointly by 11 pharmaceutical companies (Bayer, Novartis, GSK, Roche, Merck KGaA, Boehringer Ingelheim, J&amp;J, AstraZeneca, Amgen, AbbVie, and Pfizer) &mdash; exists <em>because</em> relational MDM implementations of ISO IDMP have produced diverging, non-interoperable outputs across jurisdictions.<sup><a href="#ref-5">5</a></sup> When eleven major pharma companies pool funding to build an ontology rather than another hub, that&rsquo;s a signal worth reading.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- §3 — KG Alternative                   -->
+<!-- ══════════════════════════════════════ -->
+<section class="section" id="kg-alternative">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow green">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        03 — The Alternative
+      </div>
+      <h2 class="section-title">The Knowledge Graph Alternative</h2>
+      <p class="section-sub">A knowledge graph inverts the MDM primitive. Instead of a denormalized row, the unit of mastering is the <strong>triple</strong>: (subject, predicate, object). Four properties of the graph model do real work that MDM cannot.</p>
+    </div>
+
+    <!-- Triple example -->
+    <div class="triple-box" style="margin-bottom:2rem;">
+      <span class="triple-cmt"># Example: lifecycle transition as a typed edge with provenance</span><br/>
+      <span class="triple-subj">compound:CHEMBL1234</span>  <span class="triple-pred">:nominatedAs</span>  <span class="triple-obj">devCandidate:DC-2017-44</span>  .<br/>
+      <span class="triple-subj">devCandidate:DC-2017-44</span>  <span class="triple-pred">:effectiveDate</span>  <span class="triple-obj">"2017-06-12"^^xsd:date</span>  .<br/>
+      <span class="triple-subj">devCandidate:DC-2017-44</span>  <span class="triple-pred">:assertedBy</span>  <span class="triple-meta">agentRun:OntoCurator-v2.1-20170612</span>  .<br/>
+      <span class="triple-subj">devCandidate:DC-2017-44</span>  <span class="triple-pred">:assertedAt</span>  <span class="triple-meta">"2017-06-12T14:22:01Z"^^xsd:dateTime</span>  .<br/>
+      <br/>
+      <span class="triple-cmt"># Both identities survive — nothing is overwritten</span><br/>
+      <span class="triple-subj">compound:CHEMBL1234</span>  <span class="triple-pred">owl:sameAs</span>  <span class="triple-obj">unii:ABCD1234EF</span>  .<br/>
+    </div>
+
+    <div class="kg-grid">
+      <div class="kg-card">
+        <div class="kg-icon blue">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="kg-title">Entities are persistent across lifecycle states</div>
+        <p class="kg-desc">A discovery compound and the marketed substance are <strong>linked by an edge</strong> — not collapsed into one row. Both identities survive. A pharmacovigilance query in 2030 can resolve the 2014 entity exactly as it stood, because nothing was overwritten.</p>
+      </div>
+
+      <div class="kg-card">
+        <div class="kg-icon purple">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><line x1="3" y1="3" x2="12" y2="12"/><line x1="21" y1="3" x2="12" y2="12"/><line x1="12" y1="12" x2="12" y2="21"/></svg>
+        </div>
+        <div class="kg-title">Lifecycle transitions are edges, not status columns</div>
+        <p class="kg-desc">&ldquo;Compound X was nominated as development candidate on 2017-06-12 under decision D-2017-44&rdquo; becomes a <strong>typed edge with provenance and an effective interval</strong>. The graph encodes the <em>event</em> of transition — which is precisely what ICH E6(R3) audit trails require.<sup><a href="#ref-7">7</a></sup></p>
+      </div>
+
+      <div class="kg-card">
+        <div class="kg-icon green">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="kg-title">Semantic versioning replaces survivorship</div>
+        <p class="kg-desc">Each fact is asserted by a named source graph with a version and validity interval. The same property can hold different values for different consumers simultaneously — clinical ops reads the protocol-locked definition while commercial reads the current marketed config, <strong>from the same graph</strong>, by selecting the appropriate named graph or VALID-AT timestamp.</p>
+      </div>
+
+      <div class="kg-card">
+        <div class="kg-icon amber">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+        <div class="kg-title">Reasoning is compositional</div>
+        <p class="kg-desc">Because ontology classes carry formal semantics (subClass, equivalentClass, disjointWith), queries can ask <strong>&ldquo;every marketed product whose active moiety is a JAK inhibitor manufactured at site S&rdquo;</strong> without anyone hard-coding &ldquo;JAK inhibitor&rdquo; into a hub attribute. The classification lives in ChEBI or the relevant drug ontology, not the master data system.</p>
+      </div>
+    </div>
+
+    <div class="callout green" style="margin-top:2rem;">
+      <p><strong>Industrial evidence:</strong> AstraZeneca&rsquo;s Biological Insights Knowledge Graph (BIKG) contains approximately 10.9 million nodes (22 types) and over 118 million edges (59 types), built from 39+ internal and public datasets for target identification and drug repurposing.<sup><a href="#ref-9">9</a></sup> Open Targets, Hetionet, and dozens of peer-reviewed KGs document the same pattern across the industry.<sup><a href="#ref-10">10</a><a href="#ref-11">11</a></sup></p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- §4 — Ontology Stack                   -->
+<!-- ══════════════════════════════════════ -->
+<section class="section section-alt" id="ontology-stack">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow purple">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        04 — Ontology Stack
+      </div>
+      <h2 class="section-title">Connecting MDM to Ontologies</h2>
+      <p class="section-sub">The right pattern is to let the ontologies become the master, and have what used to be MDM serve as the operational read model for systems that still need a flat view.</p>
+    </div>
+
+    <div style="overflow-x:auto;border:1px solid var(--border);border-radius:var(--r);margin-bottom:2rem;">
+      <table class="onto-table">
+        <thead>
+          <tr>
+            <th>Layer</th>
+            <th>Ontology / Standard</th>
+            <th>Role in Product KG</th>
+            <th>Key IDs</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Chemical structure &amp; moiety</strong></td>
+            <td><span class="onto-badge ob-blue">ChEBI</span></td>
+            <td>Classifies substances by structure and biological role; supports active-moiety reasoning across ingredient ↔ drug class ↔ mechanism</td>
+            <td style="font-family:'JetBrains Mono',monospace;font-size:.78rem;">CHEBI:xxxxxx</td>
+          </tr>
+          <tr>
+            <td><strong>Drug product semantics</strong></td>
+            <td><span class="onto-badge ob-green">DrON</span></td>
+            <td>OBO-Foundry drug ontology aligning RxNorm-derived clinical concepts with formal class semantics; bridges chemical and clinical views</td>
+            <td style="font-family:'JetBrains Mono',monospace;font-size:.78rem;">DRON:xxxxxxxx</td>
+          </tr>
+          <tr>
+            <td><strong>Substance identity (regulatory)</strong></td>
+            <td><span class="onto-badge ob-blue">UNII / GSRS</span> <span class="onto-badge ob-gray">ISO 11238</span></td>
+            <td>Globally unique substance identifiers and the substance-definition standard; required for all FDA submissions</td>
+            <td style="font-family:'JetBrains Mono',monospace;font-size:.78rem;">UNII: 10-char</td>
+          </tr>
+          <tr>
+            <td><strong>Clinical drug normalization</strong></td>
+            <td><span class="onto-badge ob-green">RxNorm</span></td>
+            <td>NLM-maintained normalized names linking ingredient ↔ strength ↔ dose form ↔ brand; the standard interface to EMR/EHR systems</td>
+            <td style="font-family:'JetBrains Mono',monospace;font-size:.78rem;">RxCUI: xxxxxxx</td>
+          </tr>
+          <tr>
+            <td><strong>Adverse events &amp; indications</strong></td>
+            <td><span class="onto-badge ob-amber">MedDRA</span></td>
+            <td>ICH-maintained terminology required for regulatory safety reporting globally; maps to FAERS, EudraVigilance, VigiBase</td>
+            <td style="font-family:'JetBrains Mono',monospace;font-size:.78rem;">MedDRA PT code</td>
+          </tr>
+          <tr>
+            <td><strong>Oncology / mechanism / anatomy</strong></td>
+            <td><span class="onto-badge ob-purple">NCIt</span></td>
+            <td>NCI Enterprise Vocabulary used widely in regulatory submissions; covers drug, disease, anatomy, and procedure hierarchies</td>
+            <td style="font-family:'JetBrains Mono',monospace;font-size:.78rem;">C xxxxxxx</td>
+          </tr>
+          <tr>
+            <td><strong>End-to-end product identity</strong></td>
+            <td><span class="onto-badge ob-purple">IDMP-O</span> (Pistoia)</td>
+            <td>The <em>integrating layer</em> — realizes ISO 11238/11239/11240/11615/11616/21090 in OWL; engineered to bridge chemistry ontologies upstream and regulatory identifiers downstream<sup><a href="#ref-5">5</a></sup></td>
+            <td style="font-family:'JetBrains Mono',monospace;font-size:.78rem;">MPID / PhPID</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p>What makes this stack work &mdash; rather than just a list &mdash; is <strong>alignment</strong>: each ontology declares equivalent classes and properties where they overlap, so a SPARQL query about an &ldquo;active moiety&rdquo; can resolve across ChEBI, UNII, and RxNorm consistently.</p>
+      <p>The MDM-style flat record doesn&rsquo;t disappear in this architecture &mdash; it becomes a <strong>materialized projection</strong> of the graph, generated for systems that need a denormalized API. Crucially, the projection is derivable and reproducible from a version of the graph, which means data lineage is intrinsic rather than bolted on.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- §5 — Architecture                     -->
+<!-- ══════════════════════════════════════ -->
+<section class="section" id="architecture">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/><line x1="15" y1="9" x2="15" y2="21"/></svg>
+        05 — Reference Architecture
+      </div>
+      <h2 class="section-title">A Reference Architecture</h2>
+      <p class="section-sub">The shape that emerges in practice &mdash; across discovery, development, regulatory, and commercial &mdash; with three architectural choices that distinguish it from &ldquo;another KG on top of the data lake.&rdquo;</p>
+    </div>
+
+    <!-- Architecture SVG -->
+    <div class="arch-wrap" style="margin-bottom:2rem;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" style="font-family:Inter,-apple-system,sans-serif;">
+        <defs>
+          <marker id="arr" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#94A3B8"/>
+          </marker>
+          <marker id="arr-blue" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#2563EB"/>
+          </marker>
+        </defs>
+
+        <!-- Background -->
+        <rect width="900" height="520" fill="#FAFAF7"/>
+
+        <!-- ── Layer 1: Ontology (top) ── -->
+        <rect x="40" y="20" width="820" height="80" rx="8" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+        <text x="54" y="44" font-size="9" font-weight="700" letter-spacing="1.5" fill="#2563EB" text-transform="uppercase">ONTOLOGY LAYER (versioned, FAIR)</text>
+        <text x="54" y="60" font-size="10.5" fill="#1E40AF" font-weight="500">ChEBI</text>
+        <text x="110" y="60" font-size="10" fill="#64748B">│</text>
+        <text x="122" y="60" font-size="10.5" fill="#1E40AF" font-weight="500">DrON</text>
+        <text x="168" y="60" font-size="10" fill="#64748B">│</text>
+        <text x="180" y="60" font-size="10.5" fill="#1E40AF" font-weight="500">RxNorm</text>
+        <text x="238" y="60" font-size="10" fill="#64748B">│</text>
+        <text x="250" y="60" font-size="10.5" fill="#1E40AF" font-weight="500">MedDRA</text>
+        <text x="310" y="60" font-size="10" fill="#64748B">│</text>
+        <text x="322" y="60" font-size="10.5" fill="#1E40AF" font-weight="500">NCIt</text>
+        <text x="358" y="60" font-size="10" fill="#64748B">│</text>
+        <text x="370" y="60" font-size="10.5" fill="#1E40AF" font-weight="500">UNII / GSRS</text>
+        <text x="454" y="60" font-size="10" fill="#64748B">│</text>
+        <text x="466" y="60" font-size="10.5" fill="#7C3AED" font-weight="700">IDMP-O (Pistoia Alliance)</text>
+        <text x="54" y="78" font-size="9.5" fill="#6B6B68">subClassOf · equivalentClass · sameAs · alignedWith</text>
+
+        <!-- Down arrow: Ontology → KG -->
+        <line x1="450" y1="100" x2="450" y2="128" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arr)" stroke-dasharray="4,3"/>
+
+        <!-- ── Layer 2: Product Knowledge Graph ── -->
+        <rect x="40" y="130" width="820" height="120" rx="8" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+        <text x="54" y="152" font-size="9" font-weight="700" letter-spacing="1.5" fill="#7C3AED">PRODUCT KNOWLEDGE GRAPH (RDF / LPG)</text>
+        <!-- Entities row -->
+        <text x="54" y="170" font-size="9.5" fill="#6B6B68" font-weight="600">Entities:</text>
+        <text x="110" y="170" font-size="9.5" fill="#1A1A1A">Compound · Substance · PharmaceuticalProduct · MedicinalProduct · PackagedProduct</text>
+        <text x="110" y="184" font-size="9.5" fill="#1A1A1A">Indication · Organization · MarketingAuthorization · ClinicalStudy · Batch</text>
+        <!-- Edges row -->
+        <text x="54" y="200" font-size="9.5" fill="#6B6B68" font-weight="600">Edges:</text>
+        <text x="110" y="200" font-size="9.5" fill="#1A1A1A">evolvedInto · activeMoietyOf · authorizedAs · manufacturedAt · indicatedFor · supersededBy</text>
+        <!-- Named graphs row -->
+        <rect x="54" y="210" width="118" height="18" rx="4" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1"/>
+        <text x="61" y="222" font-size="8.5" fill="#2563EB" font-weight="600">Named graphs: discovery</text>
+        <rect x="180" y="210" width="72" height="18" rx="4" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1"/>
+        <text x="187" y="222" font-size="8.5" fill="#D97706" font-weight="600">clinical</text>
+        <rect x="260" y="210" width="78" height="18" rx="4" fill="#F0FDF4" stroke="#BBF7D0" stroke-width="1"/>
+        <text x="267" y="222" font-size="8.5" fill="#16A34A" font-weight="600">regulatory</text>
+        <rect x="346" y="210" width="80" height="18" rx="4" fill="#FEF2F2" stroke="#FECACA" stroke-width="1"/>
+        <text x="353" y="222" font-size="8.5" fill="#DC2626" font-weight="600">commercial</text>
+        <rect x="435" y="210" width="165" height="18" rx="4" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1"/>
+        <text x="442" y="222" font-size="8.5" fill="#7C3AED" font-weight="600">Bitemporal: validAt × assertedAt</text>
+
+        <!-- Three arrows down from KG -->
+        <line x1="175" y1="250" x2="175" y2="295" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arr)"/>
+        <text x="87" y="272" font-size="8.5" fill="#6B6B68">ingest + reconcile</text>
+        <line x1="450" y1="250" x2="450" y2="295" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arr)"/>
+        <text x="395" y="272" font-size="8.5" fill="#6B6B68">steward + version</text>
+        <line x1="730" y1="250" x2="730" y2="295" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arr)"/>
+        <text x="680" y="272" font-size="8.5" fill="#6B6B68">project</text>
+
+        <!-- ── Layer 3: Three pillars ── -->
+        <!-- Agentic AI -->
+        <rect x="40" y="297" width="250" height="100" rx="8" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+        <text x="56" y="318" font-size="9" font-weight="700" letter-spacing="1.2" fill="#2563EB">AGENTIC AI</text>
+        <text x="56" y="334" font-size="9.5" fill="#1A1A1A">· Entity matching &amp; resolution</text>
+        <text x="56" y="348" font-size="9.5" fill="#1A1A1A">· Schema mapping</text>
+        <text x="56" y="362" font-size="9.5" fill="#1A1A1A">· Link prediction</text>
+        <text x="56" y="376" font-size="9.5" fill="#1A1A1A">· Provenance on every triple</text>
+
+        <!-- Human Stewards -->
+        <rect x="325" y="297" width="250" height="100" rx="8" fill="#F0FDF4" stroke="#BBF7D0" stroke-width="1.5"/>
+        <text x="341" y="318" font-size="9" font-weight="700" letter-spacing="1.2" fill="#16A34A">HUMAN STEWARDS</text>
+        <text x="341" y="334" font-size="9.5" fill="#1A1A1A">· Exception review queue</text>
+        <text x="341" y="348" font-size="9.5" fill="#1A1A1A">· Ontology curation decisions</text>
+        <text x="341" y="362" font-size="9.5" fill="#1A1A1A">· Policy &amp; governance approvals</text>
+        <text x="341" y="376" font-size="9.5" fill="#1A1A1A">· Human-in-the-loop sign-off</text>
+
+        <!-- Materialized Read Models -->
+        <rect x="610" y="297" width="250" height="100" rx="8" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1.5"/>
+        <text x="626" y="318" font-size="9" font-weight="700" letter-spacing="1.2" fill="#D97706">MATERIALIZED READ MODELS</text>
+        <text x="626" y="334" font-size="9.5" fill="#1A1A1A">· Flat MDM views (legacy systems)</text>
+        <text x="626" y="348" font-size="9.5" fill="#1A1A1A">· IDMP submission XML</text>
+        <text x="626" y="362" font-size="9.5" fill="#1A1A1A">· Pharmacovigilance line listings</text>
+        <text x="626" y="376" font-size="9.5" fill="#1A1A1A">· Commercial product hierarchy</text>
+
+        <!-- Up arrow from Agentic AI back to KG (feedback loop) -->
+        <line x1="150" y1="297" x2="150" y2="252" stroke="#2563EB" stroke-width="1.5" marker-end="url(#arr-blue)" stroke-dasharray="3,2"/>
+
+        <!-- Arrow from Source up to Agentic AI -->
+        <line x1="175" y1="460" x2="175" y2="400" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arr)"/>
+        <line x1="450" y1="460" x2="450" y2="400" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arr)"/>
+        <line x1="730" y1="460" x2="730" y2="400" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arr)"/>
+
+        <!-- ── Layer 4: Source Systems ── -->
+        <rect x="40" y="462" width="820" height="44" rx="8" fill="#F5F5F7" stroke="#E8E8E5" stroke-width="1.5"/>
+        <text x="54" y="481" font-size="9" font-weight="700" letter-spacing="1.5" fill="#6B6B68">SOURCE SYSTEMS</text>
+        <text x="54" y="496" font-size="10" fill="#6B6B68">ELN &nbsp;·&nbsp; LIMS &nbsp;·&nbsp; CTMS &nbsp;·&nbsp; Regulatory submission systems &nbsp;·&nbsp; MES &nbsp;·&nbsp; ERP &nbsp;·&nbsp; Safety / Pharmacovigilance &nbsp;·&nbsp; CRM / Commercial</text>
+      </svg>
+    </div>
+
+    <div class="kg-grid" style="margin-bottom:1.5rem;">
+      <div class="kg-card">
+        <div class="kg-icon blue"><span style="font-weight:800;font-size:.95rem;">1</span></div>
+        <div class="kg-title">Ontology layer is governed independently</div>
+        <p class="kg-desc">Ontology releases are versioned (SemVer) and the graph carries <code>usedOntologyVersion</code> provenance on every assertion. A MedDRA v27.0 → v27.1 upgrade does not silently change historical safety queries — it produces a new named graph the consumer can opt into.</p>
+      </div>
+      <div class="kg-card">
+        <div class="kg-icon purple"><span style="font-weight:800;font-size:.95rem;">2</span></div>
+        <div class="kg-title">Named graphs partition the lifecycle</div>
+        <p class="kg-desc">Discovery, clinical, regulatory, and commercial facts each live in their own named graph with explicit cross-graph edges. This makes &ldquo;authoritative for attribute X only after milestone Y&rdquo; expressible <em>declaratively</em> — not as a status column.</p>
+      </div>
+      <div class="kg-card">
+        <div class="kg-icon amber"><span style="font-weight:800;font-size:.95rem;">3</span></div>
+        <div class="kg-title">Materialized read models are deliverables, not the master</div>
+        <p class="kg-desc">IDMP submission XML, the safety data warehouse, the commercial product hierarchy — all <strong>generated from the graph by query</strong>, all reproducible from a graph snapshot. The MDM hub, where one still exists, becomes a cache.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- §6 — Agentic AI                       -->
+<!-- ══════════════════════════════════════ -->
+<section class="section section-alt" id="agentic-ai">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/><path d="M22 2 12 12"/></svg>
+        06 — Agentic AI
+      </div>
+      <h2 class="section-title">Agentic AI for First-Pass Mastering, Human-in-the-Loop for the Rest</h2>
+      <p class="section-sub">Foundation models change the economics of entity resolution. Three peer-reviewed results carry the load &mdash; and the workable pattern is agentic first-pass with structured handoff.</p>
+    </div>
+
+    <!-- Evidence callout -->
+    <div class="callout blue" style="margin-bottom:2rem;">
+      <p><strong>Research foundation:</strong> Narayan et al. (Stanford, PVLDB 2022) showed foundation models match or exceed task-specific SOTA on five data wrangling tasks including entity matching and schema matching — accessed only via in-context learning.<sup><a href="#ref-18">18</a></sup> Peeters &amp; Bizer (Mannheim, 2023) confirmed ChatGPT reaches fine-tuned model performance on entity-matching benchmarks <em>without any task-specific training data</em>.<sup><a href="#ref-19">19</a></sup> Fernandez et al. (Chicago, PVLDB 2023) grounded the broader thesis: LLMs have &ldquo;unprecedented ability to ground database tuples, schemas, and queries in real-world concepts.&rdquo;<sup><a href="#ref-20">20</a></sup></p>
+    </div>
+
+    <!-- Agentic workflow -->
+    <div class="flow-row" style="margin-bottom:2rem;">
+      <div class="flow-step" style="border-top:3px solid var(--accent);">
+        <div class="flow-num">Step 01</div>
+        <div class="flow-title">Source Ingestion</div>
+        <p class="flow-desc">Agent extracts entities from ELN, LIMS, regulatory source with structural identifiers and raw text context</p>
+        <div class="flow-arrow">&#8594;</div>
+      </div>
+      <div class="flow-step" style="border-top:3px solid var(--purple);">
+        <div class="flow-num">Step 02</div>
+        <div class="flow-title">Candidate Matching</div>
+        <p class="flow-desc">LLM proposes candidate matches with calibrated confidence, grounded citations (ontology class, regulatory record, structural ID)</p>
+        <div class="flow-arrow">&#8594;</div>
+      </div>
+      <div class="flow-step" style="border-top:3px solid var(--green);">
+        <div class="flow-num">Step 03</div>
+        <div class="flow-title">High-Confidence Path</div>
+        <p class="flow-desc">Proposals above domain threshold auto-asserted into <em>staging</em> named graph with provenance pointing to agent run and model version</p>
+        <div class="flow-arrow">&#8594;</div>
+      </div>
+      <div class="flow-step" style="border-top:3px solid var(--amber);">
+        <div class="flow-num">Step 04</div>
+        <div class="flow-title">Human Review Queue</div>
+        <p class="flow-desc">Low-confidence or policy-sensitive proposals (marketed products, registered substances, safety signals) routed to stewards with agent&rsquo;s reasoning attached</p>
+        <div class="flow-arrow">&#8594;</div>
+      </div>
+      <div class="flow-step" style="border-top:3px solid var(--red);">
+        <div class="flow-num">Step 05</div>
+        <div class="flow-title">Feedback Loop</div>
+        <p class="flow-desc">Steward decisions feed back into the agent&rsquo;s few-shot context for the next batch — a closed loop that compounds quality over time</p>
+      </div>
+    </div>
+
+    <div class="callout amber">
+      <p><strong>The non-negotiable constraint is provenance on every asserted triple.</strong> Without it, the system fails inspection. With it, the agent becomes auditable: every assertion has a <em>who</em> (agent run + model version), a <em>why</em> (evidence), and a <em>when</em> (assertedAt timestamp). Any triple can be retracted without disturbing unrelated facts. This is something MDM survivorship architecturally cannot offer.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- §7 — AI-Readiness & Regulatory        -->
+<!-- ══════════════════════════════════════ -->
+<section class="section" id="regulatory">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow green">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        07 — AI-Readiness &amp; Regulatory
+      </div>
+      <h2 class="section-title">What This Means for AI-Readiness and Regulatory Submissions</h2>
+      <p class="section-sub">Two regulatory currents are converging on the same conclusion: product data needs to be machine-processable, traceable, and FAIR. The harder half of &ldquo;AI-readiness&rdquo; is data-side, not model-side.</p>
+    </div>
+
+    <div class="reg-grid" style="margin-bottom:2rem;">
+      <div class="reg-card ema">
+        <div class="reg-agency">EMA</div>
+        <div class="reg-title">Reflection Paper on AI in the Medicinal Product Lifecycle</div>
+        <p class="reg-desc">CHMP/CVMP adoption September 2024. Covers AI use across discovery, non-clinical, clinical trials, manufacturing, and post-authorization. Explicitly emphasizes risk management of <strong>data quality, traceability, and human oversight</strong> throughout the lifecycle.<sup><a href="#ref-21">21</a></sup></p>
+        <div class="reg-date">EMA/CHMP/CVMP/83833/2023 · Sep 2024</div>
+      </div>
+
+      <div class="reg-card fda">
+        <div class="reg-agency">FDA</div>
+        <div class="reg-title">AI/ML in Drug Development Discussion Paper</div>
+        <p class="reg-desc">FDA&rsquo;s 2023 counterpart to the EMA reflection paper. Sets expectations for transparency, validation, and data provenance in AI-assisted drug development workflows. Presupposes <strong>well-mastered, traceable source data</strong>.<sup><a href="#ref-22">22</a></sup></p>
+        <div class="reg-date">FDA Discussion Paper · 2023</div>
+      </div>
+
+      <div class="reg-card ich">
+        <div class="reg-agency">ICH</div>
+        <div class="reg-title">E6(R3) Good Clinical Practice</div>
+        <p class="reg-desc">Adopted January 2025, EMA effective July 2025. Modernizes GCP for decentralized trials, electronic sources, and quality-by-design. All of which presuppose <strong>well-mastered protocol and product metadata</strong>.<sup><a href="#ref-7">7</a></sup></p>
+        <div class="reg-date">Adopted 6 Jan 2025 · EMA effective Jul 2025</div>
+      </div>
+    </div>
+
+    <div class="callout purple" style="margin-bottom:1.5rem;">
+      <p><strong>IDMP as a query, not a project:</strong> If your product mastering is a row-shaped hub, generating IDMP-conformant XML at the cardinality and bitemporality the standard demands is a <em>recurring engineering project</em>, every submission. If your product mastering is graph-shaped and aligned to IDMP-O, IDMP becomes a <strong>SPARQL query</strong>. The same is true for pharmacovigilance line listings, label content management, and structured product labeling.</p>
+    </div>
+
+    <div class="callout blue">
+      <p><strong>&ldquo;AI-readiness&rdquo; is often discussed as a model-side concern</strong> (GPUs, MLOps, vector DBs). The harder, less glamorous half is data-side: an LLM that has to ground &ldquo;is this the same product as the one in the 2019 BLA&rdquo; in a brittle MDM gold record will hallucinate. One that can query a typed, versioned, provenance-rich knowledge graph won&rsquo;t have to. The FAIR Guiding Principles<sup><a href="#ref-23">23</a></sup> are, almost word-for-word, a description of a properly governed knowledge graph: globally unique persistent identifiers, retrieval by standardized protocol, formal knowledge representation, rich provenance.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- §8 — Roadmap                          -->
+<!-- ══════════════════════════════════════ -->
+<section class="section section-alt" id="roadmap">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow amber">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        08 — Implementation Roadmap
+      </div>
+      <h2 class="section-title">Implementation Roadmap</h2>
+      <p class="section-sub">A staged path that has survived contact with reality. Workable budget for phases 0–2: a core team of 4–6 engineers, 1–2 ontologists, 1–2 stewards per domain, and 9–12 months.</p>
+    </div>
+
+    <div class="callout amber" style="margin-bottom:1.75rem;">
+      <p><strong>The most common failure mode is not technical</strong> — it&rsquo;s treating the ontology as an IT artifact instead of a regulated piece of master data with its own governance. <strong>Fund the ontologists.</strong></p>
+    </div>
+
+    <div class="roadmap">
+      <div class="phase-row phase-0">
+        <div class="phase-label">
+          <div class="phase-num">Phase</div>
+          <div class="phase-name">0</div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-title">Pick One Transition, Not the Whole Lifecycle</div>
+          <p class="phase-desc">The candidate-nomination → IND filing transition, or the marketing-authorization → first-commercial-launch transition. Both are bounded enough to ship in a quarter and consequential enough to fund the next phase. Avoid the &ldquo;we&rsquo;ll boil the ocean&rdquo; KG that maps every system on day one.</p>
+          <div class="phase-tags">
+            <span class="phase-tag">Scope scoping</span>
+            <span class="phase-tag">Stakeholder alignment</span>
+            <span class="phase-tag">~1 month</span>
+          </div>
+        </div>
+      </div>
+      <div class="phase-row phase-1">
+        <div class="phase-label">
+          <div class="phase-num">Phase</div>
+          <div class="phase-name">1</div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-title">Stand Up the Ontology and Graph in Parallel</div>
+          <p class="phase-desc">Adopt IDMP-O as the spine; pull in ChEBI, RxNorm, MedDRA, NCIt, and UNII as needed for the chosen transition. Define internal extensions explicitly in a versioned namespace you control, with documented alignments to public ontologies.</p>
+          <div class="phase-tags">
+            <span class="phase-tag">IDMP-O</span>
+            <span class="phase-tag">ChEBI · RxNorm · MedDRA</span>
+            <span class="phase-tag">Neptune or Neo4j</span>
+            <span class="phase-tag">~2–3 months</span>
+          </div>
+        </div>
+      </div>
+      <div class="phase-row phase-2">
+        <div class="phase-label">
+          <div class="phase-num">Phase</div>
+          <div class="phase-name">2</div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-title">Wire In Two Source Systems, End to End</div>
+          <p class="phase-desc">One discovery-side (LIMS or ELN), one regulatory-side (the system holding MPID assignments). Build the agentic mastering loop with human-in-the-loop review on everything that touches a regulatory identifier. Measure: % triples with grounded provenance, steward override rate, round-trip latency from source change to graph assertion.</p>
+          <div class="phase-tags">
+            <span class="phase-tag">Agentic entity matching</span>
+            <span class="phase-tag">Human review queue</span>
+            <span class="phase-tag">Provenance on every triple</span>
+            <span class="phase-tag">~3–4 months</span>
+          </div>
+        </div>
+      </div>
+      <div class="phase-row phase-3">
+        <div class="phase-label">
+          <div class="phase-num">Phase</div>
+          <div class="phase-name">3</div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-title">Generate the First Downstream Deliverable from the Graph</div>
+          <p class="phase-desc">Pick one — IDMP submission XML, a pharmacovigilance line listing, or a commercial product hierarchy — and replace its existing pipeline with a query against the graph. This is the moment that proves the architecture commercially and funds the remaining phases.</p>
+          <div class="phase-tags">
+            <span class="phase-tag">SPARQL / Cypher query</span>
+            <span class="phase-tag">IDMP XML generation</span>
+            <span class="phase-tag">Phv line listing</span>
+            <span class="phase-tag">~2 months</span>
+          </div>
+        </div>
+      </div>
+      <div class="phase-row phase-4">
+        <div class="phase-label">
+          <div class="phase-num">Phase</div>
+          <div class="phase-name">4</div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-title">Reduce the MDM Hub to a Read Model</div>
+          <p class="phase-desc">Existing hubs do not need to die. They become projections, refreshed from the graph, serving systems that still want a flat API. New systems read the graph directly. The hub&rsquo;s stewardship workflows retire one domain at a time.</p>
+          <div class="phase-tags">
+            <span class="phase-tag">Materialized views</span>
+            <span class="phase-tag">Legacy system bridging</span>
+            <span class="phase-tag">Stewardship migration</span>
+          </div>
+        </div>
+      </div>
+      <div class="phase-row phase-5">
+        <div class="phase-label">
+          <div class="phase-num">Phase</div>
+          <div class="phase-name">5</div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-title">Expand Transitions and Named Graphs</div>
+          <p class="phase-desc">Each subsequent lifecycle transition adds a named graph and a small number of typed edges. The cost of adding the <em>n</em>+1th transition is sublinear in <em>n</em> — the architectural payoff that hub-and-spoke MDM never delivered. Scale the agentic mastering loop across all source domains.</p>
+          <div class="phase-tags">
+            <span class="phase-tag">Named graph expansion</span>
+            <span class="phase-tag">Cross-lifecycle edges</span>
+            <span class="phase-tag">Sublinear marginal cost</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- Closing                               -->
+<!-- ══════════════════════════════════════ -->
+<section class="section" style="padding-bottom:5rem;">
+  <div class="container" style="max-width:760px;">
+    <div class="eyebrow" style="margin-bottom:.75rem;">Closing Thought</div>
+    <h2 class="section-title" style="margin-bottom:1.25rem;">The Trajectory Is Not a Row</h2>
+    <div class="prose">
+      <p>The interesting question is no longer <em>whether</em> graphs will replace traditional MDM for pharma product mastering — the regulators, the standards bodies, and eleven of the top twenty pharma companies have already answered that with IDMP-O. The interesting question is whether your organization will treat the next IDMP wave, the next AI regulation, and the next R&amp;D-to-commercial handoff as another point fix to the hub — or as the moment to invest in the architecture the next decade of pharma data already presupposes.</p>
+      <p><strong>The trajectory is not a row. Stop trying to flatten it.</strong></p>
+    </div>
+    <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--border);display:flex;gap:1rem;flex-wrap:wrap;">
+      <a href="https://alishahmohammadi22.github.io" class="btn btn-primary">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Back to Portfolio
+      </a>
+      <a href="https://pistoiaalliance.org/project/idmp-o/" target="_blank" rel="noopener" class="btn btn-outline">IDMP-O Project &rarr;</a>
+      <a href="https://alishahmohammadi22.github.io/blog/fair-data-principles.html" class="btn btn-outline">Related: FAIR Data Principles &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ -->
+<!-- References                            -->
+<!-- ══════════════════════════════════════ -->
+<section class="section section-alt" id="references">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">References</div>
+      <h2 class="section-title">24 References</h2>
+    </div>
+    <ol class="refs-list">
+      <li id="ref-1"><span class="ref-num">1</span>Gartner. <em>Master Data Management (MDM)</em>, IT Glossary. <a href="https://www.gartner.com/en/information-technology/glossary/master-data-management-mdm" target="_blank" rel="noopener">gartner.com</a></li>
+      <li id="ref-2"><span class="ref-num">2</span>U.S. Food and Drug Administration. <em>FDA&rsquo;s Global Substance Registration System (GSRS) / UNII</em>. <a href="https://gsrs.ncats.nih.gov/" target="_blank" rel="noopener">gsrs.ncats.nih.gov</a></li>
+      <li id="ref-3"><span class="ref-num">3</span>International Organization for Standardization. <em>ISO 11615:2017 — Identification of medicinal products</em>. <a href="https://www.iso.org/standard/70150.html" target="_blank" rel="noopener">iso.org</a></li>
+      <li id="ref-4"><span class="ref-num">4</span>European Medicines Agency. <em>Data on medicines (ISO IDMP standards): overview</em>. <a href="https://www.ema.europa.eu/en/human-regulatory-overview/data-medicines-iso-idmp-standards-overview" target="_blank" rel="noopener">ema.europa.eu</a></li>
+      <li id="ref-5"><span class="ref-num">5</span>Pistoia Alliance. <em>IDMP-O — IDMP Ontology project page</em>. <a href="https://pistoiaalliance.org/project/idmp-o/" target="_blank" rel="noopener">pistoiaalliance.org</a></li>
+      <li id="ref-6"><span class="ref-num">6</span>Pistoia Alliance Ontologies. <em>IDMP-O GitHub repository</em>. <a href="https://github.com/Pistoia-Alliance-Inc/Pistoia-Alliance-Ontologies/tree/main/IDMP-O" target="_blank" rel="noopener">github.com</a></li>
+      <li id="ref-7"><span class="ref-num">7</span>ICH. <em>E6(R3) Good Clinical Practice — Final Guideline</em>, adopted 6 January 2025. <a href="https://database.ich.org/sites/default/files/ICH_E6%28R3%29_Step4_FinalGuideline_2025_0106.pdf" target="_blank" rel="noopener">ich.org</a></li>
+      <li id="ref-8"><span class="ref-num">8</span>EMBL-EBI. <em>ChEBI — Chemical Entities of Biological Interest</em>. <a href="https://www.ebi.ac.uk/chebi/" target="_blank" rel="noopener">ebi.ac.uk/chebi</a></li>
+      <li id="ref-9"><span class="ref-num">9</span>Geleta D., Nikolov A., et al. (AstraZeneca). <em>Biological Insights Knowledge Graph: an integrated knowledge graph to support drug development</em>. bioRxiv 2021. <a href="https://doi.org/10.1101/2021.10.28.466262" target="_blank" rel="noopener">doi.org</a></li>
+      <li id="ref-10"><span class="ref-num">10</span>Ochoa D., et al. <em>Open Targets Platform: supporting systematic drug-target identification and prioritisation</em>. Nucleic Acids Research, 2020. <a href="https://doi.org/10.1093/nar/gkaa1027" target="_blank" rel="noopener">doi.org</a></li>
+      <li id="ref-11"><span class="ref-num">11</span>Himmelstein D.S., et al. <em>Systematic integration of biomedical knowledge prioritizes drugs for repurposing (Hetionet)</em>. eLife, 2017. <a href="https://doi.org/10.7554/eLife.26726" target="_blank" rel="noopener">doi.org</a></li>
+      <li id="ref-12"><span class="ref-num">12</span>MacLean F. <em>Knowledge graphs and their applications in drug discovery</em>. Expert Opinion on Drug Discovery, 2021. <a href="https://doi.org/10.1080/17460441.2021.1910673" target="_blank" rel="noopener">doi.org</a></li>
+      <li id="ref-13"><span class="ref-num">13</span>Bonner S., et al. <em>A Review of Biomedical Datasets Relating to Drug Discovery: A Knowledge Graph Perspective</em>. Briefings in Bioinformatics, 2022. <a href="https://doi.org/10.1093/bib/bbac404" target="_blank" rel="noopener">doi.org</a></li>
+      <li id="ref-14"><span class="ref-num">14</span>Hanna J., et al. <em>Building a drug ontology based on RxNorm and other sources (DrON)</em>. Journal of Biomedical Semantics 4:44, 2013. <a href="https://doi.org/10.1186/2041-1480-4-44" target="_blank" rel="noopener">doi.org</a></li>
+      <li id="ref-15"><span class="ref-num">15</span>U.S. National Library of Medicine. <em>RxNorm</em>. <a href="https://www.nlm.nih.gov/research/umls/rxnorm/index.html" target="_blank" rel="noopener">nlm.nih.gov</a></li>
+      <li id="ref-16"><span class="ref-num">16</span>ICH MSSO. <em>MedDRA — Medical Dictionary for Regulatory Activities</em>. <a href="https://www.meddra.org/" target="_blank" rel="noopener">meddra.org</a></li>
+      <li id="ref-17"><span class="ref-num">17</span>National Cancer Institute. <em>NCI Thesaurus (NCIt)</em>. <a href="https://ncit.nci.nih.gov/ncitbrowser/" target="_blank" rel="noopener">ncit.nci.nih.gov</a></li>
+      <li id="ref-18"><span class="ref-num">18</span>Narayan A., et al. <em>Can Foundation Models Wrangle Your Data?</em> PVLDB Vol. 16, 2022. <a href="https://arxiv.org/abs/2205.09911" target="_blank" rel="noopener">arxiv.org</a></li>
+      <li id="ref-19"><span class="ref-num">19</span>Peeters R., Bizer C. <em>Using ChatGPT for Entity Matching</em>. ADBIS 2023. <a href="https://arxiv.org/abs/2305.03423" target="_blank" rel="noopener">arxiv.org</a></li>
+      <li id="ref-20"><span class="ref-num">20</span>Fernandez R.C., et al. <em>How Large Language Models Will Disrupt Data Management</em>. PVLDB 16(11), 2023. <a href="https://doi.org/10.14778/3611479.3611527" target="_blank" rel="noopener">doi.org</a></li>
+      <li id="ref-21"><span class="ref-num">21</span>EMA. <em>Reflection paper on the use of AI in the medicinal product lifecycle</em>. EMA/CHMP/CVMP/83833/2023, Sep 2024. <a href="https://www.ema.europa.eu/en/documents/scientific-guideline/reflection-paper-use-artificial-intelligence-ai-medicinal-product-lifecycle_en.pdf" target="_blank" rel="noopener">ema.europa.eu</a></li>
+      <li id="ref-22"><span class="ref-num">22</span>FDA. <em>AI/ML in Drug Development — Discussion Paper</em>, 2023. <a href="https://www.fda.gov/science-research/science-and-research-special-topics/artificial-intelligence-and-machine-learning-aiml-drug-development" target="_blank" rel="noopener">fda.gov</a></li>
+      <li id="ref-23"><span class="ref-num">23</span>Wilkinson M.D., et al. <em>The FAIR Guiding Principles for scientific data management and stewardship</em>. Scientific Data 3:160018, 2016. <a href="https://doi.org/10.1038/sdata.2016.18" target="_blank" rel="noopener">doi.org</a></li>
+      <li id="ref-24"><span class="ref-num">24</span>Yeh I. <em>Unified Under a Universal Language: The Pistoia Alliance&rsquo;s IDMP Ontology</em>. Bio-IT World, 25 June 2024. <a href="https://www.bio-itworld.com/news/2024/06/25/unified-under-a-universal-language-the-pistoia-alliance-s-idmp-ontology" target="_blank" rel="noopener">bio-itworld.com</a></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <strong>Ali Shahmohammadi, Ph.D.</strong> &nbsp;&middot;&nbsp; Director, Data Governance &amp; AI Strategy
+  <div class="footer-links">
+    <a href="https://alishahmohammadi22.github.io">Portfolio</a>
+    <a href="https://alishahmohammadi22.github.io/resume.html">Resume</a>
+    <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://alishahmohammadi22.github.io/blog/fair-data-principles.html">FAIR Data Principles</a>
+  </div>
+</footer>
+
+</body>
+</html>
