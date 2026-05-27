@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agentic AI for Data Governance: A Production Pattern for First-Pass Curation — Ali Shahmohammadi</title>
+  <meta name="description" content="A production pattern for agentic AI in pharma data governance: agents propose, stewards adjudicate, and provenance binds every decision. Covers PROV-O, Article 14 oversight, GAMP 5 v2, AI RMF, and a deployable first-pass curation architecture." />
+  <meta property="og:title" content="Agentic AI for Data Governance in Pharma" />
+  <meta property="og:description" content="How to design agent-augmented data governance in pharma with human oversight, calibrated confidence, semantic provenance, and audit-ready controls." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://alishahmohammadi22.github.io/blog/agentic-ai-data-governance-pharma.html" />
+  <meta property="og:image" content="https://alishahmohammadi22.github.io/assets/images/og-preview.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://alishahmohammadi22.github.io/assets/images/og-preview.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#fafaf7;--surface:#fff;--border:#e5e5e2;--muted:#6b6b68;--text:#1a1a1a;--accent:#2563eb;--accent-lt:#eff6ff;--accent-mid:#bfdbfe;--green:#16a34a;--green-bg:#f0fdf4;--green-bdr:#bbf7d0;--amber:#d97706;--amber-bg:#fffbeb;--amber-bdr:#fde68a;--purple:#7c3aed;--purple-lt:#f5f3ff;--purple-mid:#ddd6fe;--red:#dc2626;--red-bg:#fef2f2;--red-bdr:#fecaca;--r:10px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent);text-decoration:none;transition:opacity .15s}
+    a:hover{opacity:.8}
+    code,pre{font-family:'JetBrains Mono','Fira Code',monospace}
+    nav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+    .nav-inner{max-width:1140px;margin:0 auto;padding:0 2rem;display:flex;justify-content:space-between;align-items:center;height:60px}
+    .nav-brand{display:flex;align-items:center;gap:.5rem;font-weight:700;font-size:.95rem;color:var(--text);letter-spacing:-.01em}
+    .nav-brand svg{color:var(--accent)}
+    .nav-links{display:flex;gap:.25rem;list-style:none;align-items:center}
+    .nav-links a{color:var(--muted);font-size:.875rem;font-weight:500;padding:.4rem .75rem;border-radius:6px;transition:all .15s}
+    .nav-links a:hover{color:var(--text);background:var(--bg);opacity:1}
+    .nav-cta{color:var(--accent)!important;border:1px solid var(--accent-mid);background:var(--accent-lt)!important}
+    .nav-cta:hover{background:var(--accent)!important;color:#fff!important}
+    @media(max-width:768px){.nav-links li:not(:last-child){display:none}}
+    .container{max-width:1140px;margin:0 auto;padding:0 2rem}
+    .section{padding:4.75rem 0}
+    .section-alt{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .section-header{margin-bottom:2.5rem}
+    .eyebrow{display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:.7rem}
+    .eyebrow.green{color:var(--green)}
+    .eyebrow.amber{color:var(--amber)}
+    .eyebrow.purple{color:var(--purple)}
+    .eyebrow.red{color:var(--red)}
+    .section-title{font-size:clamp(1.45rem,3vw,2rem);font-weight:800;letter-spacing:-.02em;color:var(--text);margin-bottom:.6rem}
+    .section-sub{font-size:.97rem;color:var(--muted);max-width:680px;line-height:1.7}
+    .hero{padding:5.5rem 2rem 4.5rem;background:var(--surface);border-bottom:1px solid var(--border);text-align:center}
+    .hero-pill{display:inline-flex;align-items:center;gap:.5rem;background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bdr);font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.35rem .9rem;border-radius:99px;margin-bottom:2rem}
+    .hero h1{font-size:clamp(1.9rem,4vw,3.1rem);font-weight:800;letter-spacing:-.03em;line-height:1.15;color:var(--text);margin-bottom:1.15rem}
+    .hero h1 .accent{color:var(--accent)}
+    .hero h1 .accent-green{color:var(--green)}
+    .hero h1 .accent-amber{color:var(--amber)}
+    .hero-sub{font-size:1.05rem;color:var(--muted);line-height:1.75;max-width:760px;margin:0 auto 2rem}
+    .hero-meta{display:flex;justify-content:center;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:2.25rem}
+    .meta-tag{display:inline-flex;align-items:center;gap:.35rem;font-size:.82rem;color:var(--muted);font-weight:500}
+    .meta-dot{width:3px;height:3px;border-radius:50%;background:var(--border);display:inline-block}
+    .hero-cta{display:flex;justify-content:center;gap:.75rem;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;gap:.4rem;padding:.65rem 1.35rem;border-radius:8px;font-size:.9rem;font-weight:600;transition:all .15s;cursor:pointer;border:none;white-space:nowrap}
+    .btn-primary{background:var(--accent);color:#fff}
+    .btn-primary:hover{background:#1d4ed8;opacity:1}
+    .btn-outline{background:var(--surface);color:var(--text);border:1px solid var(--border)}
+    .btn-outline:hover{border-color:var(--accent);color:var(--accent);opacity:1}
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+    @media(max-width:700px){.stats-row{grid-template-columns:repeat(2,1fr)}}
+    .stat{background:var(--surface);padding:1.7rem 1.35rem;text-align:center}
+    .stat-num{font-size:2.1rem;font-weight:800;color:var(--accent);letter-spacing:-.03em;line-height:1}
+    .stat-num.green{color:var(--green)}
+    .stat-num.amber{color:var(--amber)}
+    .stat-num.purple{color:var(--purple)}
+    .stat-label{font-size:.8rem;color:var(--muted);margin-top:.45rem;font-weight:500;line-height:1.45}
+    .toc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem 1.75rem}
+    .toc-head{font-size:.9rem;font-weight:700;margin-bottom:1rem}
+    .toc ol{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:.75rem 1.25rem}
+    @media(max-width:760px){.toc ol{grid-template-columns:1fr}}
+    .toc li{display:flex;gap:.7rem;font-size:.9rem;line-height:1.45}
+    .toc-n{font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:.78rem;min-width:1.8rem}
+    .prose{max-width:760px}
+    .prose p{margin-bottom:1rem;color:var(--muted);line-height:1.8}
+    .prose strong{color:var(--text)}
+    .prose em{color:var(--text)}
+    .quote{border-left:3px solid var(--accent);padding:1rem 1.25rem;background:var(--accent-lt);border-radius:0 var(--r) var(--r) 0;color:var(--text);margin:1.5rem 0}
+    .callout{border:1px solid var(--border);border-radius:var(--r);padding:1.2rem 1.35rem;background:var(--surface)}
+    .callout.blue{background:var(--accent-lt);border-color:var(--accent-mid)}
+    .callout.green{background:var(--green-bg);border-color:var(--green-bdr)}
+    .callout.amber{background:var(--amber-bg);border-color:var(--amber-bdr)}
+    .callout.red{background:var(--red-bg);border-color:var(--red-bdr)}
+    .callout p{color:var(--text);line-height:1.7}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem}
+    @media(max-width:900px){.grid-3,.grid-4,.grid-2{grid-template-columns:1fr}}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem 1.45rem}
+    .card h3{font-size:.98rem;font-weight:700;margin-bottom:.45rem}
+    .card p{font-size:.89rem;color:var(--muted);line-height:1.65}
+    .card .mini{font-size:.74rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.55rem}
+    .card.blue .mini{color:var(--accent)}
+    .card.green .mini{color:var(--green)}
+    .card.amber .mini{color:var(--amber)}
+    .card.purple .mini{color:var(--purple)}
+    .card.red .mini{color:var(--red)}
+    .code-block{background:#f8f8f5;border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+    .code-header{display:flex;align-items:center;justify-content:space-between;padding:.65rem 1rem;border-bottom:1px solid var(--border);background:var(--surface)}
+    .code-title{font-size:.78rem;font-weight:600;color:var(--muted)}
+    .code-dots{display:flex;gap:5px}
+    .code-dot{width:10px;height:10px;border-radius:50%}
+    .dot-r{background:#fc8181}.dot-y{background:#f6c90e}.dot-g{background:#68d391}
+    pre{padding:1.25rem 1.4rem;overflow-x:auto;font-size:.8rem;line-height:1.7;color:var(--text)}
+    .tag-row{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1rem}
+    .tag{display:inline-flex;align-items:center;padding:.2rem .55rem;border-radius:6px;font-size:.74rem;font-weight:600;border:1px solid var(--border);background:var(--bg);color:var(--muted)}
+    .tag.blue{background:var(--accent-lt);border-color:var(--accent-mid);color:var(--accent)}
+    .tag.green{background:var(--green-bg);border-color:var(--green-bdr);color:var(--green)}
+    .tag.amber{background:var(--amber-bg);border-color:var(--amber-bdr);color:var(--amber)}
+    .tag.purple{background:var(--purple-lt);border-color:var(--purple-mid);color:var(--purple)}
+    .refs-list{list-style:none;display:flex;flex-direction:column;gap:1rem;max-width:980px}
+    .refs-list li{display:grid;grid-template-columns:2.5rem 1fr;gap:.75rem;align-items:start;font-size:.9rem;color:var(--muted);line-height:1.65}
+    .ref-num{display:inline-flex;align-items:center;justify-content:center;width:2rem;height:2rem;border-radius:50%;background:var(--surface);border:1px solid var(--border);font-size:.8rem;font-weight:700;color:var(--text)}
+    footer{padding:2.5rem 2rem 3.5rem;text-align:center;color:var(--muted);font-size:.9rem}
+    .footer-links{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:.9rem}
+    .footer-links a{color:var(--muted)}
+  </style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a href="https://alishahmohammadi22.github.io" class="nav-brand">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      Ali Shahmohammadi
+    </a>
+    <ul class="nav-links">
+      <li><a href="https://alishahmohammadi22.github.io/#blog">Writing</a></li>
+      <li><a href="https://alishahmohammadi22.github.io/resume.html">Resume</a></li>
+      <li><a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="https://alishahmohammadi22.github.io" class="nav-cta">Back to Portfolio</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-pill">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    Agentic AI &nbsp;&middot;&nbsp; Data Governance &nbsp;&middot;&nbsp; Pharma
+  </div>
+  <h1>Agentic AI for <span class="accent">Data Governance</span>:<br><span class="accent-green">A Production Pattern</span> for First-Pass Curation</h1>
+  <p class="hero-sub">Why the next operating model for pharma data governance is not “AI replaces stewards” but “agents propose, stewards adjudicate, provenance binds them” — and what that pattern has to look like to survive regulatory scrutiny.</p>
+  <div class="hero-meta">
+    <span class="meta-tag">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      May 2026
+    </span>
+    <span class="meta-dot"></span>
+    <span class="meta-tag">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      ~22 min read
+    </span>
+    <span class="meta-dot"></span>
+    <span class="meta-tag">Ali Shahmohammadi, Ph.D.</span>
+    <span class="meta-dot"></span>
+    <span class="meta-tag">32 references</span>
+  </div>
+  <div class="hero-cta">
+    <a href="#governance-backlog" class="btn btn-primary">Read Article</a>
+    <a href="https://www.w3.org/TR/prov-o/" target="_blank" rel="noopener" class="btn btn-outline">PROV-O (W3C)</a>
+  </div>
+</section>
+
+<div class="container" style="margin:3rem auto;">
+  <div class="stats-row">
+    <div class="stat">
+      <div class="stat-num">10x</div>
+      <div class="stat-label">The leverage gain stewardship teams need if governance backlogs are going to stop compounding</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num green">3</div>
+      <div class="stat-label">Core commitments in the production pattern: calibrated confidence, structured human review, semantic provenance</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num amber">Aug 2026</div>
+      <div class="stat-label">EU AI Act Article 14 oversight obligations apply to high-risk systems from 2 August 2026</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num purple">32</div>
+      <div class="stat-label">References spanning agent architecture, pharma regulation, governance standards, and production exemplars</div>
+    </div>
+  </div>
+</div>
+
+<div class="container" style="margin-bottom:3rem;">
+  <div class="toc">
+    <div class="toc-head">Table of Contents</div>
+    <ol>
+      <li><span class="toc-n">01</span><a href="#governance-backlog">The Governance Backlog Nobody Wants to Talk About</a></li>
+      <li><span class="toc-n">02</span><a href="#workflows-vs-agents">Workflows vs. Agents</a></li>
+      <li><span class="toc-n">03</span><a href="#production-pattern">Agents Propose, Stewards Adjudicate, Provenance Binds</a></li>
+      <li><span class="toc-n">04</span><a href="#pipeline">The Pipeline, Concretely</a></li>
+      <li><span class="toc-n">05</span><a href="#vendor-tools">What the Vendor Tools Actually Bring</a></li>
+      <li><span class="toc-n">06</span><a href="#regulatory-frame">The Regulatory Frame Has Already Closed</a></li>
+      <li><span class="toc-n">07</span><a href="#standards-stack">The Standards Stack Underneath</a></li>
+      <li><span class="toc-n">08</span><a href="#pharma-exemplars">What the Pharma Exemplars Actually Show</a></li>
+      <li><span class="toc-n">09</span><a href="#operating-model">Operating Model Decisions Worth Getting Right</a></li>
+      <li><span class="toc-n">10</span><a href="#next-two-years">Where the Next Two Years Go</a></li>
+    </ol>
+  </div>
+</div>
+
+<section class="section" id="governance-backlog">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow red">01 — The Governance Backlog</div>
+      <h2 class="section-title">The Governance Backlog Nobody Wants to Talk About</h2>
+      <p class="section-sub">The real problem is not whether the catalog exists. It is whether the flow of human judgment can keep up with the inflow of governance work.</p>
+    </div>
+    <div class="prose">
+      <p>In most large pharma data offices, the visible tooling story looks healthy: a catalog platform is licensed, a glossary exists, stewardship roles are named, and governance roadmaps are in flight. Behind that visible layer sits the real operational condition: thousands of unmapped attributes, policy assignments waiting on review, lineage gaps, and domain definitions that accumulate faster than steward teams can process them.</p>
+      <p>The issue is structural, not cultural. Data governance is still a piecework discipline. Each new dataset, field, policy, and ownership decision requires a small unit of expert judgment. The supply of that judgment is finite. The demand is rising because IDMP, AI oversight, cloud migration, and cross-domain analytics each add more assets and more review obligations.</p>
+      <p>This is why agentic AI is attractive in governance settings. The promise is not full automation. The promise is that the first pass can be done by machine, so humans adjudicate only the contested or risky residue. That promise is directionally correct. The failure mode is treating the first pass as if it were equivalent to final authority.</p>
+    </div>
+    <div class="callout red" style="margin-top:1.5rem;">
+      <p><strong>The framing that survives scrutiny:</strong> not “AI replaces stewards,” but “agents make bounded proposals, humans make accountable decisions, and the system preserves evidence for every step.”</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="workflows-vs-agents">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow amber">02 — Workflow Design</div>
+      <h2 class="section-title">Workflows vs. Agents: A Definition Worth Holding</h2>
+      <p class="section-sub">Most governance use cases should start as controlled workflows and only use full agent autonomy at the open-ended edge cases.</p>
+    </div>
+    <div class="prose">
+      <p>Anthropic’s engineering distinction is the cleanest useful definition in this space: workflows are systems where LLMs and tools run through predefined code paths; agents are systems where the model dynamically chooses its own sequence of actions.<sup><a href="#ref-1">1</a></sup></p>
+      <div class="quote">“Workflows are systems where LLMs and tools are orchestrated through predefined code paths. Agents, on the other hand, are systems where LLMs dynamically direct their own processes and tool usage.”</div>
+      <p>That distinction matters because governance risk sits in the control surface. A workflow is testable, structurally deterministic, and easier to validate. A true agent can solve more open-ended problems, but it is harder to constrain and creates a more complex audit trail. For first-pass curation in pharma, the right default is workflow-first, agent-second.</p>
+      <p>Schema mapping, glossary suggestion, classification, PII tagging, and lineage stitching are structured enough to fit controlled workflows. Reserve autonomous looping for the residue: cross-system reconciliation, novel ontology alignment, and multi-hop evidence discovery. Even then, keep the tool surface narrow and the human checkpoint explicit.</p>
+    </div>
+    <div class="grid-3" style="margin-top:2rem;">
+      <div class="card blue">
+        <div class="mini">Reason + Act</div>
+        <h3>ReAct</h3>
+        <p>The canonical loop for interleaving reasoning and tool use. Useful when governance tasks need evidence lookup before proposing an assertion.<sup><a href="#ref-2">2</a></sup></p>
+      </div>
+      <div class="card purple">
+        <div class="mini">Tool Use</div>
+        <h3>Toolformer</h3>
+        <p>Shows the value of explicit tool calling instead of treating the model as a closed box. Governance agents should call systems, not hallucinate them.<sup><a href="#ref-3">3</a></sup></p>
+      </div>
+      <div class="card green">
+        <div class="mini">Reflection</div>
+        <h3>Reflexion</h3>
+        <p>Improvement over time through verbal feedback loops. In governance, steward overrides are the strongest candidate signal for this pattern.<sup><a href="#ref-4">4</a></sup></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="production-pattern">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow green">03 — The Pattern</div>
+      <h2 class="section-title">Agents Propose, Stewards Adjudicate, Provenance Binds Them</h2>
+      <p class="section-sub">A production-ready governance architecture differs from a demo in three ways: it measures uncertainty, it routes humans deliberately, and it records provenance semantically.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card blue">
+        <div class="mini">Commitment 1</div>
+        <h3>Confidence is a first-class signal</h3>
+        <p>Every proposal needs a calibrated confidence and a structured citation. Selective classification and calibrated abstention matter more than raw answer rate because abstention is a valid control outcome in regulated governance.<sup><a href="#ref-7">7</a></sup><sup><a href="#ref-8">8</a></sup><sup><a href="#ref-9">9</a></sup><sup><a href="#ref-10">10</a></sup></p>
+      </div>
+      <div class="card amber">
+        <div class="mini">Commitment 2</div>
+        <h3>Human review is a routing problem</h3>
+        <p>Human-in-the-loop is not a courtesy step. It is a policy-enforced route for low-confidence cases, regulated identifiers, cross-domain conflicts, and assets whose failure cost is unacceptable.<sup><a href="#ref-11">11</a></sup></p>
+      </div>
+      <div class="card purple">
+        <div class="mini">Commitment 3</div>
+        <h3>Provenance is semantic and queryable</h3>
+        <p>PROV-O gives the vocabulary for who generated what, when, with which evidence, and under whose review. That turns auditability into a data model instead of an afterthought.<sup><a href="#ref-12">12</a></sup></p>
+      </div>
+    </div>
+    <div class="callout blue" style="margin-top:1.5rem;">
+      <p><strong>The design principle:</strong> every assertion needs a who, why, when, and on-what-evidence. Every override becomes a reusable labeled signal. Every change to prompt, model, or tool surface becomes versioned configuration.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="pipeline">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">04 — Pipeline</div>
+      <h2 class="section-title">The Pipeline, Concretely</h2>
+      <p class="section-sub">The critical separation is between proposals and production. Agents write to staging. Policy and humans determine promotion.</p>
+    </div>
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-title">agentic-governance-pipeline.txt</div>
+        <div class="code-dots"><span class="code-dot dot-r"></span><span class="code-dot dot-y"></span><span class="code-dot dot-g"></span></div>
+      </div>
+      <pre>CATALOG / KNOWLEDGE GRAPH
+  glossary | classifications | lineage | policies | owners
+  provenance graph on every assertion
+
+AGENT PROPOSALS (staging graph)
+  - classification
+  - glossary link
+  - lineage edge
+  - policy tag
+  - confidence
+  - citation
+
+STEWARD ADJUDICATION
+  approve | override | escalate
+
+POLICY ENGINE
+  - confidence floors
+  - regulated-asset rules
+  - domain ownership rules
+  - audit policies
+
+SOURCE METADATA
+  cataloged systems | lineage events | samples | glossary | ontologies</pre>
+    </div>
+    <div class="grid-3" style="margin-top:1.5rem;">
+      <div class="card green">
+        <div class="mini">Boundary 1</div>
+        <h3>Proposals do not write directly to production</h3>
+        <p>Automatic promotion is allowed only when confidence clears policy thresholds and the asset is not in a protected class.</p>
+      </div>
+      <div class="card amber">
+        <div class="mini">Boundary 2</div>
+        <h3>The policy engine sits upstream</h3>
+        <p>The system decides which tasks the agent may attempt before the agent runs, not after it has already acted.</p>
+      </div>
+      <div class="card purple">
+        <div class="mini">Boundary 3</div>
+        <h3>Provenance is its own first-class store</h3>
+        <p>You need one-query answers to questions like which model version touched a regulated substance during a specific period.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="vendor-tools">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow amber">05 — Vendor Reality</div>
+      <h2 class="section-title">What the Vendor Tools Actually Bring</h2>
+      <p class="section-sub">The useful evaluation question is not whether a catalog vendor has AI. It is whether the AI’s behavior can be governed to pharma-grade standards.</p>
+    </div>
+    <div class="grid-4">
+      <div class="card blue">
+        <div class="mini">Collibra</div>
+        <h3>AI Governance as control plane</h3>
+        <p>Positioned around use-case registration, risk controls, and auditability across the AI lifecycle.<sup><a href="#ref-13">13</a></sup></p>
+      </div>
+      <div class="card green">
+        <div class="mini">Atlan</div>
+        <h3>Metadata-first AI governance</h3>
+        <p>The catalog remains the substrate; AI is treated as both consumer and contributor of active metadata.<sup><a href="#ref-14">14</a></sup></p>
+      </div>
+      <div class="card purple">
+        <div class="mini">Alation</div>
+        <h3>Embedded curation assistance</h3>
+        <p>ALLIE AI focuses on catalog curation, glossary generation, and stewardship workflows inside the existing platform.<sup><a href="#ref-15">15</a></sup></p>
+      </div>
+      <div class="card amber">
+        <div class="mini">Informatica</div>
+        <h3>CLAIRE as agent-capable layer</h3>
+        <p>Metadata understanding, classification, and rule recommendations framed inside the broader IDMC platform.<sup><a href="#ref-16">16</a></sup></p>
+      </div>
+    </div>
+    <div class="callout amber" style="margin-top:1.5rem;">
+      <p><strong>The buying question:</strong> where does the agent write, what confidence and provenance accompany each assertion, and how is the policy engine enforced for regulated assets? Product marketing is secondary to those controls.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="regulatory-frame">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow red">06 — Regulation</div>
+      <h2 class="section-title">The Regulatory Frame Has Already Closed</h2>
+      <p class="section-sub">In pharma, oversight, audit trails, validation, and AI risk management are design inputs. They are not optional add-ons.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card red">
+        <div class="mini">EU AI Act</div>
+        <h3>Article 14 human oversight</h3>
+        <p>High-risk AI systems must be built so natural persons can understand capabilities and limits, interpret outputs, override decisions, and stop the system. The production pattern maps directly to that requirement.<sup><a href="#ref-17">17</a></sup></p>
+      </div>
+      <div class="card blue">
+        <div class="mini">GxP Controls</div>
+        <h3>21 CFR Part 11 and Annex 11</h3>
+        <p>Electronic records rules demand audit trails, accountability, and validated computerized systems. Agentic curation touching GxP-adjacent data needs ALCOA+ provenance by construction.<sup><a href="#ref-18">18</a></sup><sup><a href="#ref-19">19</a></sup></p>
+      </div>
+      <div class="card green">
+        <div class="mini">Validation</div>
+        <h3>GAMP 5 Second Edition</h3>
+        <p>The current practical validation framework for AI-enabled computerized systems in regulated pharma, especially where iterative change and service providers are involved.<sup><a href="#ref-20">20</a></sup></p>
+      </div>
+      <div class="card purple">
+        <div class="mini">Risk Management</div>
+        <h3>NIST AI RMF + GenAI Profile</h3>
+        <p>Govern, Map, Measure, and Manage provide the cleanest non-binding structure for organizing explainability, accountability, resilience, and generative-AI-specific risks.<sup><a href="#ref-21">21</a></sup><sup><a href="#ref-22">22</a></sup></p>
+      </div>
+    </div>
+    <div class="callout red" style="margin-top:1.5rem;">
+      <p><strong>Architectural conclusion:</strong> there is no plausible 2026 deployment of agentic curation in a pharma data office that survives audit without Article-14-grade oversight, ALCOA+ evidence trails, GAMP-grade validation, and AI-RMF-aligned governance documentation.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="standards-stack">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow purple">07 — Standards</div>
+      <h2 class="section-title">The Standards Stack Underneath</h2>
+      <p class="section-sub">Production governance needs both semantic standards and operating-model standards. One set defines the facts; the other defines how the organization controls them.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card purple">
+        <div class="mini">Semantic Provenance</div>
+        <h3>W3C PROV-O</h3>
+        <p>The only standard in this stack that directly makes who, what, when, and why queryable across agent runs, catalog assertions, and steward review.<sup><a href="#ref-12">12</a></sup></p>
+        <div class="tag-row"><span class="tag purple">Entity</span><span class="tag purple">Activity</span><span class="tag purple">Agent</span></div>
+      </div>
+      <div class="card blue">
+        <div class="mini">Governance Vocabulary</div>
+        <h3>DAMA-DMBOK 2 + ISO data governance</h3>
+        <p>DMBOK, ISO 8000-1, and ISO/IEC 38505-1 give shared language for data quality and governance structure across functions and control forums.<sup><a href="#ref-23">23</a></sup><sup><a href="#ref-24">24</a></sup><sup><a href="#ref-25">25</a></sup></p>
+      </div>
+      <div class="card green">
+        <div class="mini">Lineage</div>
+        <h3>OpenLineage + Marquez</h3>
+        <p>Useful for pipeline-level events and run metadata. Combined with PROV-O, it gives both operational lineage and semantic accountability.<sup><a href="#ref-26">26</a></sup><sup><a href="#ref-27">27</a></sup></p>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-top:1.25rem;">
+      <div class="card amber">
+        <div class="mini">Cloud Controls</div>
+        <h3>EDM Council CDMC</h3>
+        <p>Provides a practical scoring rubric for whether sensitive data in cloud and hybrid-cloud environments is governed tightly enough for agentic curation to operate safely.<sup><a href="#ref-28">28</a></sup></p>
+      </div>
+      <div class="card amber">
+        <div class="mini">Capability Maturity</div>
+        <h3>EDM Council DCAM</h3>
+        <p>Useful for determining whether a domain is mature enough to adopt agent-augmented governance before the pilot starts, rather than after it fails.<sup><a href="#ref-29">29</a></sup></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="pharma-exemplars">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow green">08 — Pharma Signals</div>
+      <h2 class="section-title">What the Pharma Exemplars Actually Show — and Don’t</h2>
+      <p class="section-sub">The strongest public signal is that pharma is treating agentic governance as a standards-and-architecture problem. What is still missing is a mature peer-reviewed case study of full production-scale LLM agents running governance loops.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card green">
+        <div class="mini">Pistoia Alliance</div>
+        <h3>Agentic AI initiative</h3>
+        <p>The clearest cross-industry sign that pharma sees agentic AI as a standards problem, not just a vendor feature race.<sup><a href="#ref-30">30</a></sup></p>
+      </div>
+      <div class="card blue">
+        <div class="mini">AstraZeneca</div>
+        <h3>Knowledge graphs as R&amp;D infrastructure</h3>
+        <p>AZ publicly describes graph-based semantic infrastructure across genomic, disease, drug, clinical, and safety data, which is the closest public analogue to the substrate needed for governed agentic curation.<sup><a href="#ref-31">31</a></sup><sup><a href="#ref-32">32</a></sup></p>
+      </div>
+      <div class="card red">
+        <div class="mini">Current gap</div>
+        <h3>No mature public benchmark yet</h3>
+        <p>What the public record still lacks is a full-scale, peer-reviewed pharma deployment where LLM agents own governance control flow in production at enterprise scale.</p>
+      </div>
+    </div>
+    <div class="callout green" style="margin-top:1.5rem;">
+      <p><strong>The practical reading:</strong> the architecture is established, the controls are specified, the vendors are converging, and the first exemplars are imminent rather than historical. Teams building now are likely to define the reference pattern others adopt later.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="operating-model">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow amber">09 — Operating Model</div>
+      <h2 class="section-title">The Operating Model Decisions Worth Getting Right</h2>
+      <p class="section-sub">Most pilot failures come from weak operating decisions, not weak model capability.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card amber">
+        <div class="mini">Configuration Control</div>
+        <h3>Treat prompts and tools as regulated configuration</h3>
+        <p>Prompt changes, tool additions, and model upgrades should all trigger review, versioning, and regression checks against steward-labeled data.</p>
+      </div>
+      <div class="card green">
+        <div class="mini">Human Capacity</div>
+        <h3>Fund the steward side of the loop</h3>
+        <p>Agentic curation increases proposal volume. Without enough steward review capacity, the queue still grows, just faster and with more machine-generated work.</p>
+      </div>
+      <div class="card purple">
+        <div class="mini">Policy Visibility</div>
+        <h3>Make the policy engine human-readable</h3>
+        <p>Rules like “regulated identifiers always require review” should be expressible in declarative policy, not buried in prompt text.</p>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-top:1.25rem;">
+      <div class="card blue">
+        <div class="mini">Measurement</div>
+        <h3>Calibrate before you trust</h3>
+        <p>Reliability diagrams, selective accuracy, and expected calibration error on the real workload matter more than generic benchmark confidence claims.</p>
+      </div>
+      <div class="card red">
+        <div class="mini">Learning Loop</div>
+        <h3>Treat human override as signal, not noise</h3>
+        <p>Every steward override should feed the next cycle as labeled evidence. Otherwise the system repeats the same failure modes every quarter.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="next-two-years">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">10 — The Next Two Years</div>
+      <h2 class="section-title">Where the Next Two Years Go</h2>
+      <p class="section-sub">Three forces are converging quickly enough to make 2026–2027 the inflection window for agent-augmented governance in pharma.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card blue">
+        <div class="mini">Regulatory deadlines</div>
+        <h3>Oversight becomes enforceable</h3>
+        <p>Article 14 timing, Annex 11 direction, and modernized GxP expectations make retrofit a weaker option every quarter.</p>
+      </div>
+      <div class="card green">
+        <div class="mini">Vendor maturity</div>
+        <h3>Product capability catches up</h3>
+        <p>The conversation is shifting from “does it have an agent?” to “can it be governed to GxP standards?” That is the right inflection point.</p>
+      </div>
+      <div class="card purple">
+        <div class="mini">Industry coordination</div>
+        <h3>Standards work opens up</h3>
+        <p>Pistoia Alliance’s initiative creates a focal point for vocabularies and controls that vendors and pharmas will likely converge around.</p>
+      </div>
+    </div>
+    <div class="callout blue" style="margin-top:1.5rem;">
+      <p><strong>The architectural conclusion:</strong> the governance layer of the next pharma data stack is an agent-augmented stewardship loop with semantic provenance, policy-gated autonomy, and human review designed in from the start. The opportunity is not replacing governance. It is giving governance the leverage it has been missing.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-bottom:5rem;">
+  <div class="container" style="max-width:760px;">
+    <div class="eyebrow" style="margin-bottom:.75rem;">Closing Thought</div>
+    <h2 class="section-title" style="margin-bottom:1.25rem;">Agents Propose. Stewards Adjudicate. Provenance Binds Them.</h2>
+    <div class="prose">
+      <p>Data governance has always been finite humans facing effectively infinite work. Catalog tooling, stewardship communities, and glossary programs improved the surface, but they did not close the judgment gap. The curve kept widening.</p>
+      <p>What changes the curve is not an agent pretending to be a steward. It is an agent that knows when to abstain, surfaces evidence when it does act, and operates inside a policy and provenance framework the auditor can actually inspect. That system is buildable now with stable W3C standards, current governance frameworks, and vendor platforms that are finally approaching the right control surface.</p>
+      <p><strong>Agents propose. Stewards adjudicate. Provenance binds them.</strong></p>
+    </div>
+    <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--border);display:flex;gap:1rem;flex-wrap:wrap;">
+      <a href="https://alishahmohammadi22.github.io" class="btn btn-primary">Back to Portfolio</a>
+      <a href="https://alishahmohammadi22.github.io/blog/semantic-layer-replacing-mdm-pharma.html" class="btn btn-outline">Related: Semantic Layers &rarr;</a>
+      <a href="https://alishahmohammadi22.github.io/blog/agentic-ontology-curation.html" class="btn btn-outline">Related: Ontology Curation &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="references">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">References</div>
+      <h2 class="section-title">32 References</h2>
+    </div>
+    <ol class="refs-list">
+      <li id="ref-1"><span class="ref-num">1</span><span>Schluntz, E., Zhang, B. <em>Building effective agents.</em> Anthropic Engineering, 19 December 2024. <a href="https://www.anthropic.com/research/building-effective-agents" target="_blank" rel="noopener">anthropic.com</a></span></li>
+      <li id="ref-2"><span class="ref-num">2</span><span>Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K., Cao, Y. <em>ReAct: Synergizing Reasoning and Acting in Language Models.</em> ICLR 2023. <a href="https://arxiv.org/abs/2210.03629" target="_blank" rel="noopener">arxiv.org</a></span></li>
+      <li id="ref-3"><span class="ref-num">3</span><span>Schick, T., Dwivedi-Yu, J., Dessì, R., et al. <em>Toolformer: Language Models Can Teach Themselves to Use Tools.</em> NeurIPS 2023. <a href="https://arxiv.org/abs/2302.04761" target="_blank" rel="noopener">arxiv.org</a></span></li>
+      <li id="ref-4"><span class="ref-num">4</span><span>Shinn, N., Cassano, F., Berman, E., et al. <em>Reflexion: Language Agents with Verbal Reinforcement Learning.</em> NeurIPS 2023. <a href="https://arxiv.org/abs/2303.11366" target="_blank" rel="noopener">arxiv.org</a></span></li>
+      <li id="ref-5"><span class="ref-num">5</span><span>Wang, L., Ma, C., Feng, X., et al. <em>A Survey on Large Language Model based Autonomous Agents.</em> Frontiers of Computer Science, 2024. <a href="https://arxiv.org/abs/2308.11432" target="_blank" rel="noopener">arxiv.org</a></span></li>
+      <li id="ref-6"><span class="ref-num">6</span><span>Weng, L. <em>LLM Powered Autonomous Agents.</em> Lil'Log, 23 June 2023. <a href="https://lilianweng.github.io/posts/2023-06-23-agent/" target="_blank" rel="noopener">lilianweng.github.io</a></span></li>
+      <li id="ref-7"><span class="ref-num">7</span><span>Geifman, Y., El-Yaniv, R. <em>Selective Classification for Deep Neural Networks.</em> NeurIPS 2017. <a href="https://arxiv.org/abs/1705.08500" target="_blank" rel="noopener">arxiv.org</a></span></li>
+      <li id="ref-8"><span class="ref-num">8</span><span>Kamath, A., Jia, R., Liang, P. <em>Selective Question Answering under Domain Shift.</em> ACL 2020. <a href="https://aclanthology.org/2020.acl-main.503/" target="_blank" rel="noopener">aclanthology.org</a></span></li>
+      <li id="ref-9"><span class="ref-num">9</span><span>Lin, S., Hilton, J., Evans, O. <em>Teaching Models to Express Their Uncertainty in Words.</em> TMLR, 2022. <a href="https://arxiv.org/abs/2205.14334" target="_blank" rel="noopener">arxiv.org</a></span></li>
+      <li id="ref-10"><span class="ref-num">10</span><span>Kadavath, S., Conerly, T., Askell, A., et al. <em>Language Models (Mostly) Know What They Know.</em> <a href="https://arxiv.org/abs/2207.05221" target="_blank" rel="noopener">arxiv.org</a></span></li>
+      <li id="ref-11"><span class="ref-num">11</span><span>Settles, B. <em>Active Learning Literature Survey.</em> University of Wisconsin-Madison. <a href="https://burrsettles.com/pub/settles.activelearning.pdf" target="_blank" rel="noopener">burrsettles.com</a></span></li>
+      <li id="ref-12"><span class="ref-num">12</span><span>W3C. <em>PROV-O: The PROV Ontology.</em> W3C Recommendation, 30 April 2013. <a href="https://www.w3.org/TR/prov-o/" target="_blank" rel="noopener">w3.org</a></span></li>
+      <li id="ref-13"><span class="ref-num">13</span><span>Collibra. <em>AI Governance.</em> <a href="https://www.collibra.com/us/en/products/ai-governance" target="_blank" rel="noopener">collibra.com</a></span></li>
+      <li id="ref-14"><span class="ref-num">14</span><span>Atlan. <em>AI Governance.</em> <a href="https://atlan.com/ai-governance/" target="_blank" rel="noopener">atlan.com</a></span></li>
+      <li id="ref-15"><span class="ref-num">15</span><span>Alation. <em>ALLIE AI.</em> <a href="https://www.alation.com/product/allie-ai/" target="_blank" rel="noopener">alation.com</a></span></li>
+      <li id="ref-16"><span class="ref-num">16</span><span>Informatica. <em>CLAIRE AI.</em> <a href="https://www.informatica.com/platform/claire-ai.html" target="_blank" rel="noopener">informatica.com</a></span></li>
+      <li id="ref-17"><span class="ref-num">17</span><span>European Union. <em>Regulation (EU) 2024/1689.</em> <a href="https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng" target="_blank" rel="noopener">eur-lex.europa.eu</a></span></li>
+      <li id="ref-18"><span class="ref-num">18</span><span>U.S. FDA. <em>21 CFR Part 11 — Electronic Records; Electronic Signatures.</em> <a href="https://www.ecfr.gov/current/title-21/chapter-I/subchapter-A/part-11" target="_blank" rel="noopener">ecfr.gov</a></span></li>
+      <li id="ref-19"><span class="ref-num">19</span><span>European Commission. <em>EudraLex Volume 4, Annex 11: Computerised Systems.</em> <a href="https://health.ec.europa.eu/system/files/2016-11/annex11_01-2011_en_0.pdf" target="_blank" rel="noopener">ec.europa.eu</a></span></li>
+      <li id="ref-20"><span class="ref-num">20</span><span>ISPE. <em>GAMP 5 Second Edition.</em> <a href="https://ispe.org/publications/guidance-documents/gamp-5-guide-2nd-edition" target="_blank" rel="noopener">ispe.org</a></span></li>
+      <li id="ref-21"><span class="ref-num">21</span><span>NIST. <em>AI RMF 1.0.</em> <a href="https://doi.org/10.6028/NIST.AI.100-1" target="_blank" rel="noopener">doi.org</a></span></li>
+      <li id="ref-22"><span class="ref-num">22</span><span>NIST. <em>Generative Artificial Intelligence Profile.</em> <a href="https://doi.org/10.6028/NIST.AI.600-1" target="_blank" rel="noopener">doi.org</a></span></li>
+      <li id="ref-23"><span class="ref-num">23</span><span>DAMA International. <em>DAMA-DMBOK 2.</em> <a href="https://www.dama.org/cpages/body-of-knowledge" target="_blank" rel="noopener">dama.org</a></span></li>
+      <li id="ref-24"><span class="ref-num">24</span><span>ISO. <em>ISO 8000-1:2022 — Data quality — Part 1: Overview.</em> <a href="https://www.iso.org/standard/81745.html" target="_blank" rel="noopener">iso.org</a></span></li>
+      <li id="ref-25"><span class="ref-num">25</span><span>ISO. <em>ISO/IEC 38505-1:2017 — Governance of data.</em> <a href="https://www.iso.org/standard/56639.html" target="_blank" rel="noopener">iso.org</a></span></li>
+      <li id="ref-26"><span class="ref-num">26</span><span>OpenLineage. <em>An Open Standard for Lineage Data Collection.</em> <a href="https://openlineage.io/" target="_blank" rel="noopener">openlineage.io</a></span></li>
+      <li id="ref-27"><span class="ref-num">27</span><span>Marquez Project. <em>Marquez.</em> <a href="https://marquezproject.ai/" target="_blank" rel="noopener">marquezproject.ai</a></span></li>
+      <li id="ref-28"><span class="ref-num">28</span><span>EDM Council. <em>Cloud Data Management Capabilities (CDMC).</em> <a href="https://edmcouncil.org/frameworks/cdmc/" target="_blank" rel="noopener">edmcouncil.org</a></span></li>
+      <li id="ref-29"><span class="ref-num">29</span><span>EDM Council. <em>Data Management Capability Assessment Model (DCAM).</em> <a href="https://edmcouncil.org/frameworks/dcam/" target="_blank" rel="noopener">edmcouncil.org</a></span></li>
+      <li id="ref-30"><span class="ref-num">30</span><span>Pistoia Alliance. <em>Agentic AI initiative.</em> <a href="https://pistoiaalliance.org/ai/pistoia-alliance-unveils-agentic-ai-initiative-and-seeks-industry-funding-to-drive-safe-adoption/" target="_blank" rel="noopener">pistoiaalliance.org</a></span></li>
+      <li id="ref-31"><span class="ref-num">31</span><span>AstraZeneca. <em>Data Science &amp; AI.</em> <a href="https://www.astrazeneca.com/r-d/data-science-and-ai.html" target="_blank" rel="noopener">astrazeneca.com</a></span></li>
+      <li id="ref-32"><span class="ref-num">32</span><span>Graphwise. <em>AstraZeneca: Enabling new medicines through semantic knowledge graphs.</em> <a href="https://graphwise.ai/blog/astrazeneca-enabling-new-medicines-through-semantic-knowledge-graphs/" target="_blank" rel="noopener">graphwise.ai</a></span></li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <strong>Ali Shahmohammadi, Ph.D.</strong> &nbsp;&middot;&nbsp; Director, Data Governance &amp; AI Strategy
+  <div class="footer-links">
+    <a href="https://alishahmohammadi22.github.io">Portfolio</a>
+    <a href="https://alishahmohammadi22.github.io/resume.html">Resume</a>
+    <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://alishahmohammadi22.github.io/blog/semantic-layer-replacing-mdm-pharma.html">Semantic Layers</a>
+    <a href="https://alishahmohammadi22.github.io/blog/agentic-ontology-curation.html">Ontology Curation</a>
+  </div>
+</footer>
+</body>
+</html>
