@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Governance Without the Theater: Operationalizing ISO/IEC 23894 in Pharmaceutical R&D — Ali Shahmohammadi</title>
+  <meta name="description" content="How to operationalize ISO/IEC 23894 in pharma R&D using ICH Q9(R1), ISO 42001, NIST AI RMF mapping, FAIR infrastructure, and ontology curation controls." />
+  <meta property="og:title" content="Operationalizing ISO/IEC 23894 in Pharma R&D" />
+  <meta property="og:description" content="A practical operating model for AI risk in pharma R&D: ISO/IEC 23894 as backbone, 42001 as wrapper, and FAIR plus ontology governance as substrate." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://alishahmohammadi22.github.io/blog/iso-23894-pharma-rd.html" />
+  <meta property="og:image" content="https://alishahmohammadi22.github.io/assets/images/og-preview.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://alishahmohammadi22.github.io/assets/images/og-preview.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#fafaf7;--surface:#fff;--border:#e5e5e2;--muted:#6b6b68;--text:#1a1a1a;--accent:#2563eb;--accent-lt:#eff6ff;--accent-mid:#bfdbfe;--green:#16a34a;--green-bg:#f0fdf4;--green-bdr:#bbf7d0;--amber:#d97706;--amber-bg:#fffbeb;--amber-bdr:#fde68a;--purple:#7c3aed;--purple-lt:#f5f3ff;--purple-mid:#ddd6fe;--red:#dc2626;--red-bg:#fef2f2;--red-bdr:#fecaca;--r:10px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{opacity:.82}
+    nav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+    .nav-inner{max-width:1140px;margin:0 auto;padding:0 2rem;display:flex;justify-content:space-between;align-items:center;height:60px}
+    .nav-brand{display:flex;align-items:center;gap:.5rem;font-weight:700;font-size:.95rem;color:var(--text)}
+    .nav-links{display:flex;gap:.25rem;list-style:none;align-items:center}
+    .nav-links a{color:var(--muted);font-size:.875rem;font-weight:500;padding:.4rem .75rem;border-radius:6px}
+    .nav-links a:hover{color:var(--text);background:var(--bg);opacity:1}
+    .nav-cta{color:var(--accent)!important;border:1px solid var(--accent-mid);background:var(--accent-lt)!important}
+    .nav-cta:hover{background:var(--accent)!important;color:#fff!important}
+    @media(max-width:768px){.nav-links li:not(:last-child){display:none}}
+    .container{max-width:1140px;margin:0 auto;padding:0 2rem}
+    .section{padding:4.5rem 0}
+    .section-alt{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .hero{padding:5.25rem 2rem 4.25rem;background:var(--surface);border-bottom:1px solid var(--border);text-align:center}
+    .hero-pill{display:inline-flex;align-items:center;gap:.5rem;background:var(--purple-lt);color:var(--purple);border:1px solid var(--purple-mid);font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.35rem .9rem;border-radius:99px;margin-bottom:1.6rem}
+    .hero h1{font-size:clamp(1.85rem,4vw,3rem);font-weight:800;letter-spacing:-.03em;line-height:1.15;color:var(--text);margin-bottom:1.1rem}
+    .hero-sub{font-size:1.03rem;color:var(--muted);line-height:1.75;max-width:760px;margin:0 auto 1.85rem}
+    .hero-meta{display:flex;justify-content:center;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:2rem}
+    .meta-tag{display:inline-flex;align-items:center;gap:.35rem;font-size:.82rem;color:var(--muted);font-weight:500}
+    .meta-dot{width:3px;height:3px;border-radius:50%;background:var(--border);display:inline-block}
+    .hero-cta{display:flex;justify-content:center;gap:.75rem;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;gap:.4rem;padding:.65rem 1.4rem;border-radius:8px;font-size:.9rem;font-weight:600;border:none}
+    .btn-primary{background:var(--accent);color:#fff}
+    .btn-outline{background:var(--surface);color:var(--text);border:1px solid var(--border)}
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+    @media(max-width:760px){.stats-row{grid-template-columns:repeat(2,1fr)}}
+    .stat{background:var(--surface);padding:1.7rem 1.2rem;text-align:center}
+    .stat-num{font-size:2rem;font-weight:800;line-height:1;color:var(--accent)}
+    .stat-label{font-size:.79rem;color:var(--muted);margin-top:.45rem;line-height:1.45}
+    .toc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem 1.6rem}
+    .toc-head{font-size:.9rem;font-weight:700;margin-bottom:.85rem}
+    .toc ol{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:.65rem 1.25rem}
+    @media(max-width:760px){.toc ol{grid-template-columns:1fr}}
+    .toc li{display:flex;gap:.65rem;font-size:.9rem;line-height:1.4}
+    .toc-n{font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:.76rem;min-width:1.8rem}
+    .section-header{margin-bottom:2rem}
+    .eyebrow{display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:.6rem}
+    .section-title{font-size:clamp(1.4rem,2.8vw,1.95rem);font-weight:800;letter-spacing:-.02em;color:var(--text);margin-bottom:.5rem}
+    .section-sub{font-size:.95rem;color:var(--muted);max-width:760px;line-height:1.65}
+    .prose{max-width:790px}
+    .prose p{margin-bottom:1rem;color:var(--muted);line-height:1.8}
+    .prose strong{color:var(--text)}
+    .quote{border-left:3px solid var(--accent);background:var(--accent-lt);padding:1rem 1.2rem;border-radius:0 var(--r) var(--r) 0;color:var(--text);margin:1rem 0 1.2rem}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+    @media(max-width:900px){.grid-2,.grid-3{grid-template-columns:1fr}}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem 1.35rem}
+    .card h3{font-size:.95rem;font-weight:700;margin-bottom:.4rem}
+    .card p{font-size:.88rem;color:var(--muted);line-height:1.62}
+    .mini{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.5rem;color:var(--accent)}
+    .callout{border:1px solid var(--border);border-radius:var(--r);padding:1.1rem 1.2rem;background:var(--surface)}
+    .callout p{color:var(--text);line-height:1.7}
+    .callout.green{background:var(--green-bg);border-color:var(--green-bdr)}
+    .callout.amber{background:var(--amber-bg);border-color:var(--amber-bdr)}
+    .callout.red{background:var(--red-bg);border-color:var(--red-bdr)}
+    .refs-list{list-style:none;display:flex;flex-direction:column;gap:.9rem;max-width:980px}
+    .refs-list li{display:grid;grid-template-columns:2.4rem 1fr;gap:.7rem;align-items:start;font-size:.9rem;color:var(--muted);line-height:1.6}
+    .ref-num{display:inline-flex;align-items:center;justify-content:center;width:2rem;height:2rem;border-radius:50%;background:var(--surface);border:1px solid var(--border);font-size:.8rem;font-weight:700;color:var(--text)}
+    footer{padding:2.3rem 2rem 3.2rem;text-align:center;color:var(--muted);font-size:.9rem}
+    .footer-links{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:.9rem}
+    .footer-links a{color:var(--muted)}
+  </style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a href="https://alishahmohammadi22.github.io" class="nav-brand">Ali Shahmohammadi</a>
+    <ul class="nav-links">
+      <li><a href="https://alishahmohammadi22.github.io/#blog">Writing</a></li>
+      <li><a href="https://alishahmohammadi22.github.io/resume.html">Resume</a></li>
+      <li><a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="https://alishahmohammadi22.github.io" class="nav-cta">Back to Portfolio</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-pill">AI Governance · ISO/IEC 23894 · Pharma R&amp;D</div>
+  <h1>AI Governance Without the Theater:<br>Operationalizing ISO/IEC 23894 in Pharmaceutical R&amp;D</h1>
+  <p class="hero-sub">Why the most useful AI-governance standard for pharma is the one that plugs directly into quality risk management, FAIR infrastructure, and ontology curation operations.</p>
+  <div class="hero-meta">
+    <span class="meta-tag">May 2026</span><span class="meta-dot"></span>
+    <span class="meta-tag">~28 min read</span><span class="meta-dot"></span>
+    <span class="meta-tag">Ali Shahmohammadi, Ph.D.</span><span class="meta-dot"></span>
+    <span class="meta-tag">31 references</span>
+  </div>
+  <div class="hero-cta">
+    <a href="#theater" class="btn btn-primary">Read Article</a>
+    <a href="https://www.iso.org/standard/77304.html" target="_blank" rel="noopener" class="btn btn-outline">ISO/IEC 23894</a>
+  </div>
+</section>
+
+<div class="container" style="margin:2.6rem auto;">
+  <div class="stats-row">
+    <div class="stat"><div class="stat-num">26</div><div class="stat-label">Pages in ISO/IEC 23894 guidance</div></div>
+    <div class="stat"><div class="stat-num">2005</div><div class="stat-label">Year ICH Q9 process language entered pharma operations</div></div>
+    <div class="stat"><div class="stat-num">2023</div><div class="stat-label">Release year for both ISO/IEC 23894 and ISO/IEC 42001</div></div>
+    <div class="stat"><div class="stat-num">2028</div><div class="stat-label">EMA network workplan horizon for data and AI in medicines regulation</div></div>
+  </div>
+</div>
+
+<div class="container" style="margin-bottom:2.6rem;">
+  <div class="toc">
+    <div class="toc-head">Table of Contents</div>
+    <ol>
+      <li><span class="toc-n">01</span><a href="#theater">The Theater Problem</a></li>
+      <li><span class="toc-n">02</span><a href="#what-is-23894">What ISO/IEC 23894 Actually Is</a></li>
+      <li><span class="toc-n">03</span><a href="#q9-bridge">The Bridge Pharma Already Has: ICH Q9(R1)</a></li>
+      <li><span class="toc-n">04</span><a href="#iso-stack">The ISO Ecosystem That Makes 23894 Operational</a></li>
+      <li><span class="toc-n">05</span><a href="#mapping">Mapping to NIST AI RMF and the EU AI Act</a></li>
+      <li><span class="toc-n">06</span><a href="#annex-iii">A Pharma R&amp;D Annex III Reality Check</a></li>
+      <li><span class="toc-n">07</span><a href="#regulator-facing">The Regulator-Facing Half: FDA Jan 2025 and EMA NDSG</a></li>
+      <li><span class="toc-n">08</span><a href="#gxp-edge">The GxP Edge: PIC/S Annex 22</a></li>
+      <li><span class="toc-n">09</span><a href="#fair-wiring">Wiring 23894 into FAIR Data</a></li>
+      <li><span class="toc-n">10</span><a href="#operating-model">Six Operating Decisions to Get Right</a></li>
+      <li><span class="toc-n">11</span><a href="#next-24">What This Looks Like in 24 Months</a></li>
+    </ol>
+  </div>
+</div>
+
+<section class="section" id="theater">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">01 — The Problem</div>
+      <h2 class="section-title">The Theater Problem</h2>
+      <p class="section-sub">In pharma AI governance, visible artifacts often outpace operational controls.</p>
+    </div>
+    <div class="prose">
+      <p>Many organizations can show governance theater: committees, principles posters, and readiness decks. Fewer can show the operational chain from risk identification to risk treatment to monitoring evidence.</p>
+      <p>The central argument of this article is that ISO/IEC 23894 provides the best practical backbone for pharma AI risk because it extends a process language the quality function already operates. The work is not framework selection theater. The work is integration into real systems.</p>
+      <div class="quote">Operational credibility in regulated AI comes from repeatable risk process, not from principle statements alone.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="what-is-23894">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">02 — Standard Scope</div>
+      <h2 class="section-title">What ISO/IEC 23894 Actually Is</h2>
+      <p class="section-sub">A guidance standard that extends ISO 31000 risk management for AI-specific characteristics.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card"><div class="mini">Principles</div><h3>Clause 4 alignment</h3><p>Integration, structure, adaptation, inclusion, and continual improvement remain intact, but are interpreted for probabilistic systems.</p></div>
+      <div class="card"><div class="mini">Framework</div><h3>Clause 5 operationalization</h3><p>Leadership, integration, and evaluation become AI-specific through controls around data lineage, drift handling, and oversight roles.</p></div>
+      <div class="card"><div class="mini">Process</div><h3>Clause 6 execution</h3><p>Communication, context, assessment, treatment, monitoring, and reporting are extended for model lifecycle, explainability, and bias considerations.</p></div>
+    </div>
+    <div class="callout amber" style="margin-top:1.2rem;"><p><strong>Key point:</strong> 23894 does not replace ISO 31000 logic. It adds AI-specific depth where organizations typically fail in implementation.</p></div>
+  </div>
+</section>
+
+<section class="section" id="q9-bridge">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">03 — Pharma Bridge</div>
+      <h2 class="section-title">The Bridge Pharma Already Has: ICH Q9(R1)</h2>
+      <p class="section-sub">Q9(R1) and ISO 31000 are process-isomorphic enough that 23894 can be adopted as an extension, not a replacement.</p>
+    </div>
+    <div class="prose">
+      <p>Pharma quality teams already run risk structures with hazard identification, analysis, evaluation, control, communication, and review. ISO/IEC 23894 can be anchored into that same machinery rather than creating parallel governance tracks.</p>
+      <p>In practice, this means AI risk owners, escalation paths, and review cadences should sit in the same enterprise risk workflow already used for GxP-adjacent quality risk.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="iso-stack">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">04 — ISO Stack</div>
+      <h2 class="section-title">The ISO Ecosystem That Makes 23894 Operational</h2>
+      <p class="section-sub">23894 becomes practical when paired with terminology, lifecycle, and auditable management-system standards.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card"><div class="mini">Vocabulary + Architecture</div><h3>ISO/IEC 22989 and 23053</h3><p>Shared AI terminology and system framing prevent ambiguity in risk discussions and control scope.</p></div>
+      <div class="card"><div class="mini">Lifecycle</div><h3>ISO/IEC 5338</h3><p>Defines where lifecycle-stage risk controls should attach from planning through operation and retirement.</p></div>
+      <div class="card"><div class="mini">Risk Guidance</div><h3>ISO/IEC 23894</h3><p>Provides the risk-management backbone for AI-specific concerns such as drift, uncertainty, and human oversight.</p></div>
+      <div class="card"><div class="mini">Auditable Wrapper</div><h3>ISO/IEC 42001</h3><p>Turns risk and governance intent into management-system requirements organizations can audit and certify.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="mapping">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">05 — Crosswalk Logic</div>
+      <h2 class="section-title">Mapping to NIST AI RMF and the EU AI Act, Without Picking a Winner</h2>
+      <p class="section-sub">These frameworks are complementary when used as communication and compliance layers over a single risk process.</p>
+    </div>
+    <div class="prose">
+      <p>NIST AI RMF provides organizing functions. ISO/IEC 23894 provides process depth. ISO/IEC 42001 provides auditable management-system structure. EU AI Act requirements inform treatment and oversight design where legally in scope.</p>
+      <p>The scalable pattern is one backbone, many projections: 23894 for process execution, 42001 for governance wrapper, NIST RMF for US-facing communication, and EU AI Act obligations wired into controls for applicable systems.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="annex-iii">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">06 — Scope Check</div>
+      <h2 class="section-title">A Pharma R&amp;D Annex III Reality Check</h2>
+      <p class="section-sub">Most pharma R&amp;D AI systems are not automatically Annex III high-risk systems under the EU AI Act.</p>
+    </div>
+    <div class="prose">
+      <p>Assuming all pharma R&amp;D AI is Annex III high-risk often leads to over-broad controls in low-impact contexts and under-preparation where domain-specific controls actually matter.</p>
+      <p>Even where Annex III does not automatically apply, using Article 14-style oversight patterns in design is still a robust operational choice for regulated environments.</p>
+    </div>
+    <div class="callout green"><p><strong>Practical posture:</strong> treat high-risk oversight as a design default for critical R&amp;D contexts, while keeping legal classification precise.</p></div>
+  </div>
+</section>
+
+<section class="section" id="regulator-facing">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">07 — Submission Evidence</div>
+      <h2 class="section-title">The Regulator-Facing Half: FDA Jan 2025 and EMA NDSG</h2>
+      <p class="section-sub">The direction of travel is consistent: regulators want structured, context-specific AI credibility evidence.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card"><div class="mini">FDA</div><h3>Context-of-use credibility model</h3><p>The January 2025 draft guidance describes risk-based AI credibility assessments by context of use across drug development activities.</p></div>
+      <div class="card"><div class="mini">EMA/HMA</div><h3>Data and AI workplan through 2028</h3><p>The NDSG workplan emphasizes AI literacy and structured capability development across the medicines regulatory network.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="gxp-edge">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">08 — GxP Signal</div>
+      <h2 class="section-title">The GxP Edge: PIC/S Annex 22 and What It Forecloses</h2>
+      <p class="section-sub">Draft language points toward strict controls in GMP-critical contexts, reinforcing the need for pre-wired risk evidence.</p>
+    </div>
+    <div class="prose">
+      <p>The consultation direction indicates strong constraints around model behavior and validation expectations in critical applications affecting patient safety, product quality, or data integrity.</p>
+      <p>Organizations that already run AI systems through a 23894-style risk process are structurally better prepared for any final GMP-facing AI requirements.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="fair-wiring">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">09 — FAIR Integration</div>
+      <h2 class="section-title">Wiring 23894 into FAIR Data and Ontology Curation</h2>
+      <p class="section-sub">The strongest implementation pattern is to land risk controls in the same FAIR and ontology systems already supporting R&amp;D data products.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card"><div class="mini">Scope/Context</div><h3>FAIR plans and maturity indicators</h3><p>Use FAIR DMP and maturity instrumentation to ground context and acceptance criteria for AI risk decisions.</p></div>
+      <div class="card"><div class="mini">Risk Identification</div><h3>FAIRsharing standards registry</h3><p>Detect divergence from binding standards early by anchoring asset-level risk checks to standards metadata.</p></div>
+      <div class="card"><div class="mini">Risk Treatment</div><h3>OBO Foundry and ontology QA</h3><p>Use established ontology governance principles and pitfall scanning to treat semantic drift and control quality risk.</p></div>
+    </div>
+    <div class="callout amber" style="margin-top:1.2rem;"><p><strong>Outcome:</strong> when FAIR, ontology, and provenance are first-class, ISO/IEC 23894 reporting becomes queryable evidence, not manual evidence assembly.</p></div>
+  </div>
+</section>
+
+<section class="section section-alt" id="operating-model">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">10 — Operating Model</div>
+      <h2 class="section-title">Six Decisions Worth Getting Right</h2>
+      <p class="section-sub">Successful rollouts treat 23894 as operating design, not policy decoration.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card"><h3>1. Anchor to existing Q9 register</h3><p>Avoid parallel AI-only risk tracks. Extend the existing enterprise quality risk mechanism.</p></div>
+      <div class="card"><h3>2. Start with one context of use</h3><p>Run one complete evidence pack end-to-end before scaling portfolio-wide.</p></div>
+      <div class="card"><h3>3. Use 42001 as wrapper</h3><p>Adopt management-system structure early, even before certification milestones.</p></div>
+      <div class="card"><h3>4. Use ATLAS for threat cataloging</h3><p>Ground AI threat identification in a maintained adversarial taxonomy.</p></div>
+      <div class="card"><h3>5. Treat soft-law as design input</h3><p>Use OECD and WHO guidance to harden risk-acceptance criteria in health-adjacent contexts.</p></div>
+      <div class="card"><h3>6. Fund capability development</h3><p>Competence and role design determine whether governance remains operational after year one.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="next-24">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">11 — Next 24 Months</div>
+      <h2 class="section-title">What This Looks Like in 24 Months</h2>
+      <p class="section-sub">The standards, regulator direction, and FAIR substrate are converging into one implementable governance architecture.</p>
+    </div>
+    <div class="prose">
+      <p>The practical endpoint is a coherent stack where AI risk evidence is generated continuously as systems run: context-of-use aligned, lifecycle-aware, ontology-stable, FAIR-backed, and governance-auditable.</p>
+      <p>Teams that build this integration now will treat inspections and submissions as projection and query problems. Teams that do not will keep rebuilding evidence manually per project.</p>
+    </div>
+    <div class="callout green"><p><strong>Closing thought:</strong> stop performing AI governance. Operationalize it where the data and models actually live.</p></div>
+    <div style="margin-top:1.8rem;display:flex;gap:.75rem;flex-wrap:wrap;">
+      <a href="https://alishahmohammadi22.github.io" class="btn btn-primary">Back to Portfolio</a>
+      <a href="https://alishahmohammadi22.github.io/blog/agentic-ai-data-governance-pharma.html" class="btn btn-outline">Related: Agentic Governance</a>
+      <a href="https://alishahmohammadi22.github.io/blog/semantic-layer-replacing-mdm-pharma.html" class="btn btn-outline">Related: Semantic Layers</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="references">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">References</div>
+      <h2 class="section-title">31 References</h2>
+      <p class="section-sub">Sources include ISO/IEC standards, ICH/FDA/EMA guidance, FAIR and ontology governance literature, and security/risk frameworks.</p>
+    </div>
+    <ol class="refs-list">
+      <li><span class="ref-num">1</span><span>ISO/IEC 23894:2023. <a href="https://www.iso.org/standard/77304.html" target="_blank" rel="noopener">iso.org</a></span></li>
+      <li><span class="ref-num">2</span><span>ISO 31000:2018. <a href="https://www.iso.org/standard/65694.html" target="_blank" rel="noopener">iso.org</a></span></li>
+      <li><span class="ref-num">3</span><span>ICH Q9(R1) resources via EMA and ICH. <a href="https://www.ema.europa.eu/en/ich-q9-quality-risk-management-scientific-guideline" target="_blank" rel="noopener">ema.europa.eu</a></span></li>
+      <li><span class="ref-num">4</span><span>FDA Q9(R1) overview presentation. <a href="https://www.fda.gov/media/177720/download" target="_blank" rel="noopener">fda.gov</a></span></li>
+      <li><span class="ref-num">5</span><span>ISO/IEC 22989:2022. <a href="https://www.iso.org/standard/74296.html" target="_blank" rel="noopener">iso.org</a></span></li>
+      <li><span class="ref-num">6</span><span>ISO/IEC 23053:2022. <a href="https://www.iso.org/standard/74438.html" target="_blank" rel="noopener">iso.org</a></span></li>
+      <li><span class="ref-num">7</span><span>ISO/IEC 5338:2023. <a href="https://www.iso.org/obp/ui/#iso:std:iso-iec:5338:ed-1:v1:en" target="_blank" rel="noopener">iso.org</a></span></li>
+      <li><span class="ref-num">8</span><span>ISO/IEC 42001:2023. <a href="https://www.iso.org/standard/42001" target="_blank" rel="noopener">iso.org</a></span></li>
+      <li><span class="ref-num">9</span><span>ISO/IEC TR 24028:2020. <a href="https://www.iso.org/standard/77608.html" target="_blank" rel="noopener">iso.org</a></span></li>
+      <li><span class="ref-num">10</span><span>ISO/IEC TR 24027:2021. <a href="https://www.iso.org/standard/77607.html" target="_blank" rel="noopener">iso.org</a></span></li>
+      <li><span class="ref-num">11</span><span>ISO/IEC TS 25058:2024. <a href="https://www.iso.org/standard/82570.html" target="_blank" rel="noopener">iso.org</a></span></li>
+      <li><span class="ref-num">12</span><span>ISO/IEC 24029-2:2023. <a href="https://www.iso.org/standard/79804.html" target="_blank" rel="noopener">iso.org</a></span></li>
+      <li><span class="ref-num">13</span><span>NIST AI RMF resource center. <a href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">nist.gov</a></span></li>
+      <li><span class="ref-num">14</span><span>NIST AI RMF crosswalk documents. <a href="https://airc.nist.gov/airmf-resources/crosswalks/" target="_blank" rel="noopener">airc.nist.gov</a></span></li>
+      <li><span class="ref-num">15</span><span>EU AI Act (Regulation EU 2024/1689). <a href="https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng" target="_blank" rel="noopener">eur-lex.europa.eu</a></span></li>
+      <li><span class="ref-num">16</span><span>AI Act Annex III explainer. <a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/annex-3" target="_blank" rel="noopener">ai-act-service-desk.ec.europa.eu</a></span></li>
+      <li><span class="ref-num">17</span><span>FDA draft guidance on AI in regulatory decision-making. <a href="https://www.fda.gov/regulatory-information/search-fda-guidance-documents/considerations-use-artificial-intelligence-support-regulatory-decision-making-drug-and-biological" target="_blank" rel="noopener">fda.gov</a></span></li>
+      <li><span class="ref-num">18</span><span>HMA/EMA data and AI workplan to 2028. <a href="https://www.hma.eu/about-hma/working-groups/hma/ema-joint-big-data-steering-group/hma/ema-joint-big-data-steering-group.html" target="_blank" rel="noopener">hma.eu</a></span></li>
+      <li><span class="ref-num">19</span><span>PIC/S Annex 22 consultation draft. <a href="https://picscheme.org/docview/9715" target="_blank" rel="noopener">picscheme.org</a></span></li>
+      <li><span class="ref-num">20</span><span>FAIR Cookbook. <a href="https://faircookbook.elixir-europe.org/content/home.html" target="_blank" rel="noopener">faircookbook.elixir-europe.org</a></span></li>
+      <li><span class="ref-num">21</span><span>FAIR maturity evaluation framework (Scientific Data, 2019). <a href="https://www.nature.com/articles/s41597-019-0184-5" target="_blank" rel="noopener">nature.com</a></span></li>
+      <li><span class="ref-num">22</span><span>FAIRsharing registry and publication. <a href="https://fairsharing.org/" target="_blank" rel="noopener">fairsharing.org</a></span></li>
+      <li><span class="ref-num">23</span><span>OBO Foundry principles and operationalization. <a href="https://obofoundry.org/principles/fp-000-summary.html" target="_blank" rel="noopener">obofoundry.org</a></span></li>
+      <li><span class="ref-num">24</span><span>OOPS! ontology pitfall scanner. <a href="https://oops.linkeddata.es/" target="_blank" rel="noopener">oops.linkeddata.es</a></span></li>
+      <li><span class="ref-num">25</span><span>MITRE ATLAS. <a href="https://atlas.mitre.org/" target="_blank" rel="noopener">atlas.mitre.org</a></span></li>
+      <li><span class="ref-num">26</span><span>NIST AI 100-2 E2023 adversarial ML taxonomy. <a href="https://csrc.nist.gov/pubs/ai/100/2/e2023/final" target="_blank" rel="noopener">csrc.nist.gov</a></span></li>
+      <li><span class="ref-num">27</span><span>OECD AI Principles. <a href="https://oecd.ai/en/ai-principles" target="_blank" rel="noopener">oecd.ai</a></span></li>
+      <li><span class="ref-num">28</span><span>WHO AI ethics and governance for health (2021). <a href="https://www.who.int/publications/i/item/9789240029200" target="_blank" rel="noopener">who.int</a></span></li>
+      <li><span class="ref-num">29</span><span>WHO guidance on large multi-modal models in health (2024). <a href="https://www.who.int/news/item/18-01-2024-who-releases-ai-ethics-and-governance-guidance-for-large-multi-modal-models" target="_blank" rel="noopener">who.int</a></span></li>
+      <li><span class="ref-num">30</span><span>Common Regulatory Capacity for AI, Alan Turing Institute. <a href="https://www.turing.ac.uk/sites/default/files/2022-07/common_regulatory_capacity_for_ai_the_alan_turing_institute.pdf" target="_blank" rel="noopener">turing.ac.uk</a></span></li>
+      <li><span class="ref-num">31</span><span>NeOn methodology for ontology engineering. <a href="https://link.springer.com/chapter/10.1007/978-3-642-24794-1_2" target="_blank" rel="noopener">springer.com</a></span></li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <strong>Ali Shahmohammadi, Ph.D.</strong> &nbsp;&middot;&nbsp; Director, Data Governance &amp; AI Strategy
+  <div class="footer-links">
+    <a href="https://alishahmohammadi22.github.io">Portfolio</a>
+    <a href="https://alishahmohammadi22.github.io/resume.html">Resume</a>
+    <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://alishahmohammadi22.github.io/blog/agentic-ai-data-governance-pharma.html">Agentic Governance</a>
+    <a href="https://alishahmohammadi22.github.io/blog/semantic-layer-replacing-mdm-pharma.html">Semantic Layers</a>
+  </div>
+</footer>
+</body>
+</html>
