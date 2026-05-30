@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A 90-Day Maturity Assessment for Pharmaceutical R&amp;D Data Catalogs — Ali Shahmohammadi</title>
+  <meta name="description" content="A practical 90-day playbook for pharma R&D data catalog maturity: diagnose in 30 days, measure in 30, ship in 30, and commit to a defensible roadmap." />
+  <meta property="og:title" content="A 90-Day Maturity Assessment for Pharmaceutical R&D Data Catalogs" />
+  <meta property="og:description" content="How to establish a defensible FAIR maturity baseline, deliver one quick win, and ship a 12-month roadmap before the first quarterly review." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://alishahmohammadi22.github.io/blog/90-day-pharma-catalog-maturity.html" />
+  <meta property="og:image" content="https://alishahmohammadi22.github.io/assets/images/og-preview.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://alishahmohammadi22.github.io/assets/images/og-preview.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#fafaf7;--surface:#fff;--border:#e5e5e2;--muted:#6b6b68;--text:#1a1a1a;--accent:#2563eb;--accent-lt:#eff6ff;--accent-mid:#bfdbfe;--green:#16a34a;--green-bg:#f0fdf4;--green-bdr:#bbf7d0;--amber:#d97706;--amber-bg:#fffbeb;--amber-bdr:#fde68a;--purple:#7c3aed;--purple-lt:#f5f3ff;--purple-mid:#ddd6fe;--r:10px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{opacity:.82}
+    nav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+    .nav-inner{max-width:1140px;margin:0 auto;padding:0 2rem;display:flex;justify-content:space-between;align-items:center;height:60px}
+    .nav-brand{font-weight:700;font-size:.95rem;color:var(--text)}
+    .nav-links{display:flex;gap:.25rem;list-style:none;align-items:center}
+    .nav-links a{color:var(--muted);font-size:.875rem;font-weight:500;padding:.4rem .75rem;border-radius:6px}
+    .nav-links a:hover{color:var(--text);background:var(--bg);opacity:1}
+    .nav-cta{color:var(--accent)!important;border:1px solid var(--accent-mid);background:var(--accent-lt)!important}
+    @media(max-width:768px){.nav-links li:not(:last-child){display:none}}
+    .container{max-width:1140px;margin:0 auto;padding:0 2rem}
+    .section{padding:4.5rem 0}
+    .section-alt{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .hero{padding:5.25rem 2rem 4.25rem;background:var(--surface);border-bottom:1px solid var(--border);text-align:center}
+    .hero-pill{display:inline-flex;align-items:center;gap:.5rem;background:var(--green-bg);color:var(--green);border:1px solid var(--green-bdr);font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.35rem .9rem;border-radius:99px;margin-bottom:1.6rem}
+    .hero h1{font-size:clamp(1.85rem,4vw,3rem);font-weight:800;letter-spacing:-.03em;line-height:1.15;color:var(--text);margin-bottom:1.1rem}
+    .hero-sub{font-size:1.03rem;color:var(--muted);line-height:1.75;max-width:780px;margin:0 auto 1.85rem}
+    .hero-meta{display:flex;justify-content:center;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:2rem}
+    .meta-tag{display:inline-flex;align-items:center;gap:.35rem;font-size:.82rem;color:var(--muted);font-weight:500}
+    .meta-dot{width:3px;height:3px;border-radius:50%;background:var(--border);display:inline-block}
+    .hero-cta{display:flex;justify-content:center;gap:.75rem;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;gap:.4rem;padding:.65rem 1.4rem;border-radius:8px;font-size:.9rem;font-weight:600;border:none}
+    .btn-primary{background:var(--accent);color:#fff}
+    .btn-outline{background:var(--surface);color:var(--text);border:1px solid var(--border)}
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+    @media(max-width:760px){.stats-row{grid-template-columns:repeat(2,1fr)}}
+    .stat{background:var(--surface);padding:1.7rem 1.2rem;text-align:center}
+    .stat-num{font-size:2rem;font-weight:800;line-height:1;color:var(--accent)}
+    .stat-label{font-size:.79rem;color:var(--muted);margin-top:.45rem;line-height:1.45}
+    .toc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem 1.6rem}
+    .toc-head{font-size:.9rem;font-weight:700;margin-bottom:.85rem}
+    .toc ol{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:.65rem 1.25rem}
+    @media(max-width:760px){.toc ol{grid-template-columns:1fr}}
+    .toc li{display:flex;gap:.65rem;font-size:.9rem;line-height:1.4}
+    .toc-n{font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:.76rem;min-width:1.8rem}
+    .section-header{margin-bottom:2rem}
+    .eyebrow{display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:.6rem}
+    .section-title{font-size:clamp(1.4rem,2.8vw,1.95rem);font-weight:800;letter-spacing:-.02em;color:var(--text);margin-bottom:.5rem}
+    .section-sub{font-size:.95rem;color:var(--muted);max-width:780px;line-height:1.65}
+    .prose{max-width:790px}
+    .prose p{margin-bottom:1rem;color:var(--muted);line-height:1.8}
+    .prose strong{color:var(--text)}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem}
+    @media(max-width:900px){.grid-3,.grid-2{grid-template-columns:1fr}}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem 1.35rem}
+    .card h3{font-size:.95rem;font-weight:700;margin-bottom:.4rem}
+    .card p{font-size:.88rem;color:var(--muted);line-height:1.62}
+    .mini{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.5rem;color:var(--accent)}
+    .callout{border:1px solid var(--border);border-radius:var(--r);padding:1.1rem 1.2rem;background:var(--surface)}
+    .callout p{color:var(--text);line-height:1.7}
+    .callout.amber{background:var(--amber-bg);border-color:var(--amber-bdr)}
+    .refs-list{list-style:none;display:flex;flex-direction:column;gap:.9rem;max-width:980px}
+    .refs-list li{display:grid;grid-template-columns:2.4rem 1fr;gap:.7rem;align-items:start;font-size:.9rem;color:var(--muted);line-height:1.6}
+    .ref-num{display:inline-flex;align-items:center;justify-content:center;width:2rem;height:2rem;border-radius:50%;background:var(--surface);border:1px solid var(--border);font-size:.8rem;font-weight:700;color:var(--text)}
+    footer{padding:2.3rem 2rem 3.2rem;text-align:center;color:var(--muted);font-size:.9rem}
+    .footer-links{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:.9rem}
+    .footer-links a{color:var(--muted)}
+  </style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a href="https://alishahmohammadi22.github.io" class="nav-brand">Ali Shahmohammadi</a>
+    <ul class="nav-links">
+      <li><a href="https://alishahmohammadi22.github.io/#blog">Writing</a></li>
+      <li><a href="https://alishahmohammadi22.github.io/resume.html">Resume</a></li>
+      <li><a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="https://alishahmohammadi22.github.io" class="nav-cta">Back to Portfolio</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-pill">Data Catalog · FAIR Maturity · Pharma R&amp;D</div>
+  <h1>A 90-Day Maturity Assessment for<br>Pharmaceutical R&amp;D Data Catalogs</h1>
+  <p class="hero-sub">A practical playbook for leaders who need a defensible baseline, one shipped quick win, and a 12-month roadmap before the first quarterly review.</p>
+  <div class="hero-meta">
+    <span class="meta-tag">May 2026</span><span class="meta-dot"></span>
+    <span class="meta-tag">~24 min read</span><span class="meta-dot"></span>
+    <span class="meta-tag">Ali Shahmohammadi, Ph.D.</span><span class="meta-dot"></span>
+    <span class="meta-tag">13 references</span>
+  </div>
+  <div class="hero-cta">
+    <a href="#shape" class="btn btn-primary">Read Article</a>
+    <a href="https://www.nature.com/articles/s41597-019-0184-5" target="_blank" rel="noopener" class="btn btn-outline">FAIR Maturity Indicators</a>
+  </div>
+</section>
+
+<div class="container" style="margin:2.6rem auto;">
+  <div class="stats-row">
+    <div class="stat"><div class="stat-num">90</div><div class="stat-label">Days to baseline, quick win, and roadmap</div></div>
+    <div class="stat"><div class="stat-num">30</div><div class="stat-label">Days for inventory and triage</div></div>
+    <div class="stat"><div class="stat-num">30</div><div class="stat-label">Days for FAIR maturity measurement</div></div>
+    <div class="stat"><div class="stat-num">30</div><div class="stat-label">Days for roadmap and shipped quick win</div></div>
+  </div>
+</div>
+
+<div class="container" style="margin-bottom:2.6rem;">
+  <div class="toc">
+    <div class="toc-head">Table of Contents</div>
+    <ol>
+      <li><span class="toc-n">01</span><a href="#why-90">Why 90 Days Works</a></li>
+      <li><span class="toc-n">02</span><a href="#methodology">Methodology Spine: FAIR Maturity Indicators</a></li>
+      <li><span class="toc-n">03</span><a href="#shape">The 90-Day Shape</a></li>
+      <li><span class="toc-n">04</span><a href="#days-1-30">Days 1–30: Inventory and Triage</a></li>
+      <li><span class="toc-n">05</span><a href="#days-31-60">Days 31–60: Measure Maturity</a></li>
+      <li><span class="toc-n">06</span><a href="#days-61-90">Days 61–90: Roadmap and Quick Win</a></li>
+      <li><span class="toc-n">07</span><a href="#antipatterns">Anti-Patterns to Avoid</a></li>
+      <li><span class="toc-n">08</span><a href="#after-90">After Day 90</a></li>
+      <li><span class="toc-n">09</span><a href="#closing">Closing Thought</a></li>
+    </ol>
+  </div>
+</div>
+
+<section class="section" id="why-90">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">01 — Framing</div>
+      <h2 class="section-title">Why "First 90 Days" Beats "Boil the Ocean"</h2>
+      <p class="section-sub">The organization plans and funds on quarterly cadence, so your assessment must deliver on quarterly cadence.</p>
+    </div>
+    <div class="prose">
+      <p>A comprehensive enterprise discovery can always consume nine months. Most pharma R&amp;D sponsors cannot wait nine months to make portfolio decisions. The 90-day frame turns assessment into decision support instead of open-ended research.</p>
+      <p>The core signal is not speed for its own sake. The signal is the ability to translate limited leadership attention into defendable evidence and fundable next actions.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="methodology">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">02 — Method</div>
+      <h2 class="section-title">Methodology: FAIR Maturity as the Spine</h2>
+      <p class="section-sub">Use existing community-governed frameworks instead of inventing custom rubrics.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card"><div class="mini">Measurement</div><h3>FAIR Maturity Indicators</h3><p>Automatable, reproducible checks move maturity discussion from opinion to evidence.</p></div>
+      <div class="card"><div class="mini">Portfolio Scoring</div><h3>Pistoia FAIR Maturity Matrix</h3><p>Pharma-tested rollup instrument for asset and portfolio-level maturity views.</p></div>
+      <div class="card"><div class="mini">Execution Recipes</div><h3>FAIR Cookbook</h3><p>Operational guidance to convert gap findings into concrete treatments.</p></div>
+    </div>
+    <div class="callout amber" style="margin-top:1.2rem;"><p><strong>Rule:</strong> every maturity score should trace to a test result or a structured steward interview, not a subjective rating workshop.</p></div>
+  </div>
+</section>
+
+<section class="section" id="shape">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">03 — Shape</div>
+      <h2 class="section-title">The 90-Day Shape</h2>
+      <p class="section-sub">Three 30-day phases, each with one sponsor-facing deliverable and one explicit hand-off.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card"><div class="mini">Days 1–30</div><h3>Inventory &amp; Triage</h3><p>Portfolio heat map, stewardship map, and 10–20% priority subset.</p></div>
+      <div class="card"><div class="mini">Days 31–60</div><h3>Measure Maturity</h3><p>FAIR scorecard by asset and dimension, plus ranked gap register.</p></div>
+      <div class="card"><div class="mini">Days 61–90</div><h3>Roadmap &amp; Quick Win</h3><p>12-month dependency-sequenced roadmap and one shipped treatment.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="days-1-30">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">04 — Phase 1</div>
+      <h2 class="section-title">Days 1–30: Inventory and Triage</h2>
+      <p class="section-sub">Build a working register across discovery, translational, clinical, regulatory, safety, and CMC domains.</p>
+    </div>
+    <div class="prose">
+      <p>Capture minimum metadata for each asset: owner, system, primary use, downstream consumers, and regulatory binding. Then map the decision reality: system owner, data owner, and funder are usually different people.</p>
+      <p>Deliver a heat map that surfaces trade-offs. The heat map is the first sponsor artifact and determines which assets enter Phase 2 measurement scope.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="days-31-60">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">05 — Phase 2</div>
+      <h2 class="section-title">Days 31–60: Measure Maturity</h2>
+      <p class="section-sub">Run automation where possible, then add structured steward interviews for what automation cannot capture.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card"><div class="mini">Automation</div><h3>FAIR Evaluator pass</h3><p>Generate objective maturity signals for resolvable assets and identify weakest sub-principles at scale.</p></div>
+      <div class="card"><div class="mini">Human Signal</div><h3>Structured steward interviews</h3><p>Capture license clarity, provenance detail, and community-standard conformance gaps in a fixed template.</p></div>
+      <div class="card"><div class="mini">Regulatory Overlay</div><h3>Binding-aware scoring</h3><p>Layer CDISC, IDMP, MedDRA, RxNorm, UNII and GxP relevance to prioritize fundable treatments.</p></div>
+      <div class="card"><div class="mini">Output</div><h3>Scorecard + Gap Register</h3><p>Per-asset scores, per-dimension portfolio metrics, and ranked remediation backlog with cost bands.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="days-61-90">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">06 — Phase 3</div>
+      <h2 class="section-title">Days 61–90: Roadmap and Quick Win</h2>
+      <p class="section-sub">Sequence by dependency, not by largest score gap, and ship one treatment before Day 90 closes.</p>
+    </div>
+    <div class="prose">
+      <p>Start with enablers: persistent identifiers, controlled vocabularies, and provenance substrate. Then scale catalog ingestion and conformance treatment. This order compounds value and avoids local optimizations that do not travel.</p>
+      <p>Quick wins should be treatment artifacts, not dashboards. A promoted priority asset, remediated ontology criticals, or a live identifier resolver all qualify.</p>
+    </div>
+    <div class="callout"><p><strong>Deliverable standard:</strong> by Day 90, the sponsor should have a scorecard, gap register, roadmap, quick-win artifact, and governance recommendation.</p></div>
+  </div>
+</section>
+
+<section class="section" id="antipatterns">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">07 — Risks</div>
+      <h2 class="section-title">Anti-Patterns That Sink 90-Day Assessments</h2>
+      <p class="section-sub">Most failures come from scope and operating mistakes, not from framework choice.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card"><h3>Boil-the-ocean scope</h3><p>Trying to score every asset before shipping anything guarantees a Day-90 miss.</p></div>
+      <div class="card"><h3>Tool-first sequencing</h3><p>Selecting catalog tooling before gap definition creates licenses without content strategy.</p></div>
+      <div class="card"><h3>Dashboard theater</h3><p>Visualizing maturity without shipping treatment does not improve maturity.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="after-90">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">08 — Continuation</div>
+      <h2 class="section-title">After Day 90: How the Architecture Sequence Begins</h2>
+      <p class="section-sub">The 90-day assessment is the input to product mastering, semantic layer rollout, agentic curation, and ISO/IEC 23894 operationalization.</p>
+    </div>
+    <div class="prose">
+      <p>The maturity baseline determines sequencing across your next architecture phases. What changes after Day 90 is not the need for assessment; it is the shift from diagnosis to compounding treatment.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="closing" style="padding-bottom:5rem;">
+  <div class="container" style="max-width:760px;">
+    <div class="eyebrow" style="margin-bottom:.75rem;">Closing Thought</div>
+    <h2 class="section-title" style="margin-bottom:1.25rem;">Diagnose in 30. Measure in 30. Ship in 30.</h2>
+    <div class="prose">
+      <p>The value of a 90-day playbook is discipline: every claim traceable, every score reproducible, every roadmap line linked to evidence, and one concrete treatment shipped before the first quarterly review.</p>
+      <p><strong>Diagnose in 30. Measure in 30. Ship in 30. Then the architecture.</strong></p>
+    </div>
+    <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--border);display:flex;gap:1rem;flex-wrap:wrap;">
+      <a href="https://alishahmohammadi22.github.io" class="btn btn-primary">Back to Portfolio</a>
+      <a href="https://alishahmohammadi22.github.io/blog/iso-23894-pharma-rd.html" class="btn btn-outline">Related: ISO/IEC 23894 in Pharma R&amp;D</a>
+      <a href="https://alishahmohammadi22.github.io/blog/agentic-ai-data-governance-pharma.html" class="btn btn-outline">Related: Agentic Data Governance</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="references">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">References</div>
+      <h2 class="section-title">13 References</h2>
+      <p class="section-sub">Core sources include FAIR maturity frameworks, ontology governance, pharma quality risk guidance, and catalog operating standards.</p>
+    </div>
+    <ol class="refs-list">
+      <li><span class="ref-num">1</span><span>Watkins, M. <em>The First 90 Days.</em> HBR Press. <a href="https://store.hbr.org/product/the-first-90-days-updated-and-expanded-proven-strategies-for-getting-up-to-speed-faster-and-smarter/10070" target="_blank" rel="noopener">hbr.org</a></span></li>
+      <li><span class="ref-num">2</span><span>Wilkinson et al. FAIR maturity framework (2019). <a href="https://www.nature.com/articles/s41597-019-0184-5" target="_blank" rel="noopener">nature.com</a></span></li>
+      <li><span class="ref-num">3</span><span>FAIR Cookbook resource. <a href="https://faircookbook.elixir-europe.org/content/home.html" target="_blank" rel="noopener">faircookbook.elixir-europe.org</a></span></li>
+      <li><span class="ref-num">4</span><span>Pistoia FAIR Maturity Matrix. <a href="https://pistoiaalliance.github.io/FAIRMaturityMatrix/" target="_blank" rel="noopener">pistoiaalliance.github.io</a></span></li>
+      <li><span class="ref-num">5</span><span>OBO Foundry principles and operations. <a href="https://obofoundry.org/principles/fp-000-summary.html" target="_blank" rel="noopener">obofoundry.org</a></span></li>
+      <li><span class="ref-num">6</span><span>OOPS ontology pitfall scanner. <a href="https://oops.linkeddata.es/" target="_blank" rel="noopener">oops.linkeddata.es</a></span></li>
+      <li><span class="ref-num">7</span><span>FAIR Guiding Principles (2016). <a href="https://doi.org/10.1038/sdata.2016.18" target="_blank" rel="noopener">doi.org</a></span></li>
+      <li><span class="ref-num">8</span><span>CDISC foundational standards. <a href="https://www.cdisc.org/standards/foundational" target="_blank" rel="noopener">cdisc.org</a></span></li>
+      <li><span class="ref-num">9</span><span>W3C PROV-O and OpenLineage resources. <a href="https://www.w3.org/TR/prov-o/" target="_blank" rel="noopener">w3.org</a></span></li>
+      <li><span class="ref-num">10</span><span>ICH Q9(R1) and EMA scientific guideline. <a href="https://www.ema.europa.eu/en/ich-q9-quality-risk-management-scientific-guideline" target="_blank" rel="noopener">ema.europa.eu</a></span></li>
+      <li><span class="ref-num">11</span><span>FDA draft guidance on AI in regulatory decisions (Jan 2025). <a href="https://www.fda.gov/regulatory-information/search-fda-guidance-documents/considerations-use-artificial-intelligence-support-regulatory-decision-making-drug-and-biological" target="_blank" rel="noopener">fda.gov</a></span></li>
+      <li><span class="ref-num">12</span><span>ISPE GAMP 5 (2nd ed.). <a href="https://ispe.org/publications/guidance-documents/gamp-5-guide-2nd-edition" target="_blank" rel="noopener">ispe.org</a></span></li>
+      <li><span class="ref-num">13</span><span>EDM Council DCAM framework. <a href="https://edmcouncil.org/frameworks/dcam/" target="_blank" rel="noopener">edmcouncil.org</a></span></li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <strong>Ali Shahmohammadi, Ph.D.</strong> &nbsp;&middot;&nbsp; Director, Data Governance &amp; AI Strategy
+  <div class="footer-links">
+    <a href="https://alishahmohammadi22.github.io">Portfolio</a>
+    <a href="https://alishahmohammadi22.github.io/resume.html">Resume</a>
+    <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://alishahmohammadi22.github.io/blog/iso-23894-pharma-rd.html">ISO/IEC 23894</a>
+    <a href="https://alishahmohammadi22.github.io/blog/agentic-ai-data-governance-pharma.html">Agentic Governance</a>
+  </div>
+</footer>
+</body>
+</html>
