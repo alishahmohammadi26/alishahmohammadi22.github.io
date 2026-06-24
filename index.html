@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ali Shahmohammadi, Ph.D. &mdash; Director, Data Governance &amp; AI Strategy</title>
-  <meta name="description" content="Ali Shahmohammadi PhD &mdash; Director-level data leader building enterprise master data, ontology, and Agentic AI governance systems for regulated R&D. FAIR strategy, knowledge graphs, AI-ready data products across the discovery-to-commercial lifecycle." />
-  <meta property="og:title" content="Ali Shahmohammadi, Ph.D. &mdash; Director, Data Governance &amp; AI Strategy" />
-  <meta property="og:description" content="Director-level data leader building enterprise master data, ontology, and Agentic AI governance systems for regulated pharmaceutical R&D." />
+  <title>Ali Shahmohammadi, Ph.D. &mdash; AI Strategy &amp; Agentic Systems for Regulated R&amp;D</title>
+  <meta name="description" content="AI strategist and Agentic AI architect with a decade in pharmaceutical R&D. I build agentic systems, knowledge graphs, and the data/AI governance that makes enterprise AI trustworthy &mdash; from discovery to commercial." />
+  <meta property="og:title" content="Ali Shahmohammadi, Ph.D. &mdash; AI Strategy &amp; Agentic Systems for Regulated R&amp;D" />
+  <meta property="og:description" content="AI strategist and Agentic AI architect with a decade in pharmaceutical R&amp;D. I build agentic systems, knowledge graphs, and the governance that makes enterprise AI trustworthy." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://alishahmohammadi22.github.io" />
   <meta property="og:image" content="https://alishahmohammadi22.github.io/assets/images/og-preview.png" />
@@ -19,6 +19,26 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Ali Shahmohammadi",
+    "honorificSuffix": "Ph.D.",
+    "jobTitle": "AI Strategist · Agentic AI & Data Governance",
+    "url": "https://alishahmohammadi22.github.io",
+    "sameAs": [
+      "https://linkedin.com/in/alishahmohammadi",
+      "https://github.com/alishahmohammadi22"
+    ],
+    "knowsAbout": ["Agentic AI","Knowledge Graphs","Data Governance","FAIR Data","Ontology Engineering","AI Governance","Pharmaceutical R&D","Master Data Management"],
+    "alumniOf": [
+      {"@type":"CollegeOrUniversity","name":"Queen's University"},
+      {"@type":"CollegeOrUniversity","name":"University of Texas at Austin"}
+    ]
+  }
+  </script>
+  <script defer data-domain="alishahmohammadi22.github.io" src="https://plausible.io/js/script.js"></script>
   <style>
     :root {
       --dark:       #06080F;
@@ -37,8 +57,70 @@
       --green:      #16A34A;
       --green-bg:   #F0FDF4;
       --green-bdr:  #BBF7D0;
+      --purple:     #7C3AED;
+      --purple-lt:  #F5F3FF;
+      --purple-mid: #DDD6FE;
+      --amber:      #D97706;
+      --amber-bg:   #FFFBEB;
+      --amber-bdr:  #FDE68A;
       --r:          12px;
     }
+
+    /* ── Dark mode ── */
+    .theme-toggle {
+      display: flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px; border-radius: 8px;
+      background: transparent; border: 1.5px solid var(--border);
+      color: var(--muted); cursor: pointer; transition: all .2s;
+      flex-shrink: 0; margin-left: .5rem;
+    }
+    .theme-toggle:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-lt); }
+    .theme-toggle svg { pointer-events: none; }
+    .icon-sun { display: none; }
+    .icon-moon { display: block; }
+    [data-theme="dark"] .icon-sun { display: block; }
+    [data-theme="dark"] .icon-moon { display: none; }
+    [data-theme="dark"] {
+      --light:       #0D1117;
+      --light-2:     #161B22;
+      --light-3:     #1C2128;
+      --border:      rgba(255,255,255,.1);
+      --text:        #E6EDF3;
+      --muted:       rgba(205,205,205,.65);
+      --accent-lt:   rgba(37,99,235,.18);
+      --accent-mid:  rgba(37,99,235,.32);
+      --green-bg:    rgba(22,163,74,.15);
+      --green-bdr:   rgba(22,163,74,.28);
+      --purple-lt:   rgba(124,58,237,.18);
+      --purple-mid:  rgba(124,58,237,.32);
+      --amber-bg:    rgba(217,119,6,.18);
+      --amber-bdr:   rgba(217,119,6,.3);
+    }
+    [data-theme="dark"] nav { background: rgba(13,17,23,.92) !important; }
+    [data-theme="dark"] .hero { background: var(--light); }
+    [data-theme="dark"] .hero-code { background: #161B22 !important; border-color: rgba(255,255,255,.1) !important; }
+    [data-theme="dark"] .hero-code .code-titlebar { background: #0D1117 !important; border-color: rgba(255,255,255,.08) !important; }
+    [data-theme="dark"] .hero-code pre { background: #161B22 !important; }
+    [data-theme="dark"] .hero-tag { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.1); color: rgba(255,255,255,.6); }
+    [data-theme="dark"] .blog-topics { background: rgba(255,255,255,.05) !important; border-color: rgba(255,255,255,.1) !important; }
+    [data-theme="dark"] .rec-card { background: var(--light-2) !important; border-color: var(--border) !important; }
+    [data-theme="dark"] .rec-card-featured { background: rgba(37,99,235,.18) !important; }
+    [data-theme="dark"] .gov-visual { border-color: var(--border) !important; }
+    [data-theme="dark"] .gov-layer { filter: brightness(.75) saturate(.8); }
+    [data-theme="dark"] .link-pill { border-color: rgba(255,255,255,.12); color: rgba(255,255,255,.65); }
+    [data-theme="dark"] .link-pill:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-lt); }
+    /* ── Project filter pills ── */
+    .proj-filter {
+      background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14);
+      color: rgba(255,255,255,.5); border-radius: 99px;
+      font-size: .78rem; font-weight: 600; padding: .38rem 1.05rem;
+      cursor: pointer; transition: all .2s; letter-spacing: .01em;
+    }
+    .proj-filter:hover { border-color: rgba(255,255,255,.3); color: rgba(255,255,255,.85); }
+    .proj-filter.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    [data-theme="dark"] .proj-filter { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.1); }
+    [data-theme="dark"] .proj-filter.active { background: var(--accent); color: #fff; }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body { background: var(--light); color: var(--text); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
@@ -376,11 +458,15 @@
       <li><a href="#about">About</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="#projects">Projects</a></li>
-      <li><a href="#recognition">Recognition</a></li>
+      <li><a href="#blog">Writing</a></li>
       <li><a href="#skills">Skills</a></li>
-      <li><a href="#blog">Blog</a></li>
+      <li><a href="#contact">Contact</a></li>
       <li><a href="resume.html" class="nav-cta">Resume</a></li>
     </ul>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" title="Toggle light/dark mode">
+      <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
   </div>
 </nav>
 
@@ -392,14 +478,14 @@
     <div class="hero-text">
       <div class="hero-eyebrow">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg>
-        Strategic Digital Leader &nbsp;&middot;&nbsp; Pharmaceutical R&amp;D
+        AI Strategist &nbsp;&middot;&nbsp; Agentic Systems &nbsp;&middot;&nbsp; Pharma R&amp;D
       </div>
       <h1>
         Ali Shahmohammadi
         <span class="line2">Ph.D.</span>
       </h1>
       <p class="hero-sub">
-        Director-level data leader building <strong>enterprise master data, ontology, and Agentic AI governance systems</strong> for regulated R&amp;D. From FAIR strategy and knowledge graphs to AI-ready data products across the <strong>discovery-to-commercial lifecycle</strong>.
+        I build <strong>Agentic AI systems</strong> and the governance that makes them trustworthy. AI strategist with a decade in regulated pharmaceutical R&amp;D &mdash; multi-agent pipelines, knowledge graphs, and the data governance that lets enterprises actually deploy frontier AI.
       </p>
       <div class="hero-cta">
         <a href="#projects" class="btn btn-white">
@@ -412,12 +498,12 @@
         </a>
       </div>
       <div class="hero-tags">
-        <span class="hero-tag">Master Data Management</span>
-        <span class="hero-tag">Knowledge Graphs</span>
         <span class="hero-tag">Agentic AI</span>
-        <span class="hero-tag">FAIR Governance</span>
-        <span class="hero-tag">AI-Ready Data</span>
-        <span class="hero-tag">Pharma R&amp;D Data Products</span>
+        <span class="hero-tag">Knowledge Graphs</span>
+        <span class="hero-tag">AI Governance</span>
+        <span class="hero-tag">FAIR Data</span>
+        <span class="hero-tag">Master Data Management</span>
+        <span class="hero-tag">Pharma R&amp;D</span>
       </div>
     </div>
 
@@ -471,10 +557,10 @@
 <!-- ── Stats bar ── -->
 <div class="stats-bar">
   <div class="stats-bar-inner">
-    <div class="stat-item"><div class="stat-num">15+</div><div class="stat-label">Years across pharma R&amp;D, data science &amp; enterprise AI</div></div>
-    <div class="stat-item"><div class="stat-num">12+</div><div class="stat-label">Production data systems deployed &mdash; governance, MDM, catalog, AI</div></div>
-    <div class="stat-item"><div class="stat-num">1</div><div class="stat-label">Industry-alliance product owned &mdash; FAIR Studio, Pistoia Alliance</div></div>
-    <div class="stat-item"><div class="stat-num">Ph.D.</div><div class="stat-label">Chemical Process Engineering, Queen&rsquo;s University</div></div>
+    <div class="stat-item"><div class="stat-num">15+</div><div class="stat-label">Years bridging science, ML, and enterprise AI in regulated R&amp;D</div></div>
+    <div class="stat-item"><div class="stat-num">12+</div><div class="stat-label">Production AI &amp; governance systems shipped &mdash; KG, Agentic AI, MDM, catalog</div></div>
+    <div class="stat-item"><div class="stat-num">1</div><div class="stat-label">Industry-alliance product &mdash; FAIR Studio, Pistoia Alliance</div></div>
+    <div class="stat-item"><div class="stat-num">Ph.D.</div><div class="stat-label">Chemical Engineering &mdash; the science foundation that makes the AI credible</div></div>
   </div>
 </div>
 
@@ -484,11 +570,9 @@
     <div class="section-num">01 &mdash; About</div>
     <div class="about-grid">
       <div>
-        <h2 class="section-h" style="margin-bottom:1.75rem;">Data Governance Leader.<br>Knowledge Graph Builder.<br>Agentic AI Architect.</h2>
+        <h2 class="section-h" style="margin-bottom:1.75rem;">AI Strategist.<br>Knowledge Graph Builder.<br>Agentic AI Architect.</h2>
         <p class="about-lede">
-          I&rsquo;m a <strong>Chemical Engineer turned digital leader</strong> with a Ph.D. from
-          Queen&rsquo;s University and 10+ years bridging pharmaceutical R&amp;D, data science,
-          and enterprise AI.
+          I&rsquo;m an <strong>AI strategist</strong> who came up through hard science &mdash; a Ph.D. in chemical engineering, then a decade turning models into deployed systems across pharmaceutical R&amp;D. I now focus on <strong>Agentic AI, knowledge graphs, and AI governance</strong>: building the systems <em>and</em> the guardrails that let regulated enterprises adopt frontier AI without losing auditability.
         </p>
         <p class="about-body">
           I lead <strong style="color:var(--text)">FAIR Data Strategy and Digital Connectivity</strong> at
@@ -503,6 +587,14 @@
           trustworthy in regulated environments. That means master data management, semantic layers,
           governance frameworks, and the Agentic AI systems that keep them current and auditable at scale.
         </p>
+        <div style="margin-top:1.5rem;border:1px solid var(--border);border-radius:var(--r);padding:1.25rem 1.5rem;background:var(--light-2);">
+          <div style="font-size:.72rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:.9rem;">What I do now</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:.65rem;">
+            <li style="display:flex;align-items:flex-start;gap:.65rem;font-size:.9rem;color:var(--text);line-height:1.55;"><span style="width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:.48rem;display:inline-block;"></span><span><strong>Design agentic systems</strong> &mdash; multi-agent pipelines (LangGraph) with human-in-the-loop governance, deployed in regulated workflows.</span></li>
+            <li style="display:flex;align-items:flex-start;gap:.65rem;font-size:.9rem;color:var(--text);line-height:1.55;"><span style="width:6px;height:6px;border-radius:50%;background:#7C3AED;flex-shrink:0;margin-top:.48rem;display:inline-block;"></span><span><strong>Engineer knowledge graphs</strong> &mdash; ontology-driven semantic layers that make enterprise data AI-ready.</span></li>
+            <li style="display:flex;align-items:flex-start;gap:.65rem;font-size:.9rem;color:var(--text);line-height:1.55;"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;margin-top:.48rem;display:inline-block;"></span><span><strong>Operationalize AI governance</strong> &mdash; FAIR, ISO/IEC&nbsp;23894, ISO/IEC&nbsp;42001 turned into running controls, not slideware.</span></li>
+          </ul>
+        </div>
         <div class="about-links">
           <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener" class="link-pill">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
@@ -635,10 +727,19 @@
   <div class="container">
     <div class="section-num section-num-dark">03 &mdash; Open Source</div>
     <h2 class="section-h section-h-dark">Projects</h2>
-    <p class="section-p section-p-dark" style="margin-bottom:3.5rem;">Public repositories focused on scientific ML, drug discovery, and pharmaceutical AI.</p>
+    <p class="section-p section-p-dark" style="margin-bottom:2rem;">Open-source systems across Agentic AI, knowledge graphs, AI governance, and scientific ML for regulated pharmaceutical R&amp;D.</p>
+
+    <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2.75rem;">
+      <button class="proj-filter active" data-filter="all">All</button>
+      <button class="proj-filter" data-filter="agentic-ai">Agentic AI</button>
+      <button class="proj-filter" data-filter="knowledge-graphs">Knowledge Graphs</button>
+      <button class="proj-filter" data-filter="ai-governance">AI Governance</button>
+      <button class="proj-filter" data-filter="scientific-ml">Scientific ML</button>
+      <button class="proj-filter" data-filter="rag-llm">RAG / LLM Apps</button>
+    </div>
 
     <div class="proj-featured">
-      <div class="proj-card">
+      <div class="proj-card" data-cat="agentic-ai knowledge-graphs">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;">
           <div class="proj-icon">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
@@ -682,7 +783,7 @@
     </div>
 
     <div class="proj-grid-4">
-      <div class="proj-card small">
+      <div class="proj-card small" data-cat="scientific-ml">
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <div class="proj-icon" style="width:36px;height:36px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg></div>
           <div class="proj-badges"><span class="badge badge-py">Python</span><span class="badge badge-jp">Jupyter</span></div>
@@ -692,9 +793,9 @@
         <div class="proj-tech">PyTorch &middot; JAX &middot; NumPy &middot; SciPy</div>
         <a href="https://github.com/alishahmohammadi22/ScientificML" target="_blank" rel="noopener" class="proj-link">GitHub <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       </div>
-      <div class="proj-card small">
+      <div class="proj-card small" data-cat="scientific-ml">
         <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div class="proj-icon" style="width:36px;height:36px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4"/><path d="M18 3h3v3"/><path d="m11 12 9-9"/></svg></div>
+          <div class="proj-icon" style="width:36px;height:36px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h-4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4"/><path d="M18 3h3v3"/><path d="m11 12 9-9"/></svg></div>
           <div class="proj-badges"><span class="badge badge-py">Python</span><span class="badge badge-jp">Jupyter</span></div>
         </div>
         <div class="proj-title">Chemoinformatics</div>
@@ -702,7 +803,7 @@
         <div class="proj-tech">RDKit &middot; DeepChem &middot; PyTorch Geometric</div>
         <a href="https://github.com/alishahmohammadi22/chemoinformatics" target="_blank" rel="noopener" class="proj-link">GitHub <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       </div>
-      <div class="proj-card small">
+      <div class="proj-card small" data-cat="rag-llm scientific-ml">
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <div class="proj-icon" style="width:36px;height:36px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
           <div class="proj-badges"><span class="badge badge-py">Python</span></div>
@@ -712,7 +813,7 @@
         <div class="proj-tech">HuggingFace &middot; Transformers &middot; PyTorch</div>
         <a href="https://github.com/alishahmohammadi22/NLP-to-BERT" target="_blank" rel="noopener" class="proj-link">GitHub <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       </div>
-      <div class="proj-card small">
+      <div class="proj-card small" data-cat="rag-llm">
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <div class="proj-icon" style="width:36px;height:36px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
           <div class="proj-badges"><span class="badge badge-jp">Jupyter</span></div>
@@ -729,7 +830,7 @@
 <!-- ── Recognition & Speaking ── -->
 <section class="section section-off" id="recognition">
   <div class="container">
-    <div class="section-num">04 &mdash; Recognition</div>
+    <div class="section-num">05 &mdash; Recognition</div>
     <h2 class="section-h">Recognition &amp; Industry Presence</h2>
     <p class="section-p">Industry alliances, academic partnerships, and open-source contributions to the pharmaceutical data governance community.</p>
     <div class="rec-grid">
@@ -779,10 +880,24 @@
 <!-- ── Skills ── -->
 <section class="section section-light" id="skills">
   <div class="container">
-    <div class="section-num">05 &mdash; Skills</div>
+    <div class="section-num">06 &mdash; Skills</div>
     <h2 class="section-h">Expertise</h2>
     <p class="section-p">Four pillars spanning data governance, AI, engineering science, and cloud infrastructure.</p>
     <div class="skills-wrap">
+      <div class="skill-card">
+        <div class="skill-head">
+          <div class="skill-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg></div>
+          <span class="skill-title">Agentic AI &amp; Machine Learning</span>
+        </div>
+        <div class="skill-tags">
+          <span class="skill-tag">Agentic AI</span><span class="skill-tag">AI Strategy</span>
+          <span class="skill-tag">LangGraph</span><span class="skill-tag">Multi-Agent Systems</span>
+          <span class="skill-tag">LLMs &amp; RAG</span><span class="skill-tag">Human-in-the-Loop</span>
+          <span class="skill-tag">AI Evaluation</span><span class="skill-tag">Physics-Informed Neural Networks</span>
+          <span class="skill-tag">PyTorch</span><span class="skill-tag">JAX</span>
+          <span class="skill-tag">Graph Neural Networks</span><span class="skill-tag">Scikit-learn</span>
+        </div>
+      </div>
       <div class="skill-card">
         <div class="skill-head">
           <div class="skill-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18"/></svg></div>
@@ -795,19 +910,6 @@
           <span class="skill-tag">FAIR Maturity Assessment</span><span class="skill-tag">AI Governance</span>
           <span class="skill-tag">ISO/IEC 23894</span><span class="skill-tag">Semantic Interoperability</span>
           <span class="skill-tag">SQL</span><span class="skill-tag">Statistical Process Control</span>
-        </div>
-      </div>
-      <div class="skill-card">
-        <div class="skill-head">
-          <div class="skill-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg></div>
-          <span class="skill-title">AI &amp; Machine Learning</span>
-        </div>
-        <div class="skill-tags">
-          <span class="skill-tag">Agentic AI</span><span class="skill-tag">LangGraph</span>
-          <span class="skill-tag">Multi-Agent Systems</span><span class="skill-tag">LLMs &amp; RAG</span>
-          <span class="skill-tag">AI Evaluation</span><span class="skill-tag">Physics-Informed Neural Networks</span>
-          <span class="skill-tag">PyTorch</span><span class="skill-tag">JAX</span>
-          <span class="skill-tag">Graph Neural Networks</span><span class="skill-tag">Scikit-learn</span>
         </div>
       </div>
       <div class="skill-card">
@@ -843,7 +945,7 @@
 <!-- ── Blog ── -->
 <section class="section section-off" id="blog">
   <div class="container">
-    <div class="section-num">06 &mdash; Writing</div>
+    <div class="section-num">04 &mdash; Writing</div>
     <h2 class="section-h">Articles &amp; Blog</h2>
     <p class="section-p">Thoughts on master data, knowledge graphs, FAIR data, Agentic AI, and pharmaceutical R&amp;D data strategy.</p>
     <div class="blog-grid">
@@ -1004,7 +1106,8 @@
 <div class="contact-section" id="contact">
   <div class="contact-inner">
     <h2 class="contact-h">Let&rsquo;s Work<br>Together.</h2>
-    <p class="contact-sub">Open to collaboration on scientific ML, Agentic AI, and pharmaceutical data science projects.</p>
+    <p class="contact-sub">Open to advisory, speaking, and collaboration on Agentic AI systems, knowledge graphs, and AI governance for regulated industries.</p>
+    <p style="font-size:.85rem;color:rgba(255,255,255,.35);margin-top:-1.75rem;margin-bottom:2.5rem;font-style:italic;">Currently available for advisory &amp; speaking engagements on Agentic AI governance</p>
     <div class="contact-links">
       <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener" class="contact-link primary">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
@@ -1034,11 +1137,62 @@
 </footer>
 
 <script>
+  // ── Nav scroll shadow ──
   (function(){
     var nav = document.getElementById('nav');
     function update(){ nav.classList.toggle('scrolled', window.scrollY > 40); }
     window.addEventListener('scroll', update, {passive:true});
     update();
+  })();
+
+  // ── Dark / light mode toggle ──
+  (function(){
+    var btn = document.getElementById('themeToggle');
+    var html = document.documentElement;
+    var saved = localStorage.getItem('theme');
+    if (saved === 'dark') html.setAttribute('data-theme', 'dark');
+    if (btn) {
+      btn.addEventListener('click', function(){
+        var isDark = html.getAttribute('data-theme') === 'dark';
+        if (isDark) {
+          html.removeAttribute('data-theme');
+          localStorage.setItem('theme', 'light');
+        } else {
+          html.setAttribute('data-theme', 'dark');
+          localStorage.setItem('theme', 'dark');
+        }
+      });
+    }
+  })();
+
+  // ── Move blog section after projects for better flow ──
+  (function(){
+    var blog = document.getElementById('blog');
+    var projects = document.getElementById('projects');
+    if (blog && projects && projects.nextElementSibling !== blog) {
+      projects.insertAdjacentElement('afterend', blog);
+    }
+  })();
+
+  // ── Project filter pills ──
+  (function(){
+    var filters = document.querySelectorAll('.proj-filter');
+    var cards   = document.querySelectorAll('[data-cat]');
+    filters.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        filters.forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        var f = btn.getAttribute('data-filter');
+        cards.forEach(function(card){
+          if (f === 'all') {
+            card.style.display = '';
+          } else {
+            var cats = (card.getAttribute('data-cat') || '').split(' ');
+            card.style.display = cats.indexOf(f) !== -1 ? '' : 'none';
+          }
+        });
+      });
+    });
   })();
 </script>
 </body>
