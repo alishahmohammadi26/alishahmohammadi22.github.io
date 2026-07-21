@@ -457,7 +457,6 @@
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#experience">Experience</a></li>
-      <li><a href="#projects">Projects</a></li>
       <li><a href="#blog">Writing</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#contact">Contact</a></li>
@@ -488,9 +487,9 @@
         I build <strong>MCP servers, agentic pipelines, and evaluation harnesses</strong> that make scientific data trustworthy for AI. Applied AI engineer with a decade in pharmaceutical R&amp;D &mdash; shipping production connectors, agent tools, and the deterministic foundations that let frontier AI do real, correct science in regulated environments.
       </p>
       <div class="hero-cta">
-        <a href="#projects" class="btn btn-white">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-          View Projects
+        <a href="#blog" class="btn btn-white">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          View Writing
         </a>
         <a href="resume.html" class="btn btn-ghost">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
@@ -748,204 +747,11 @@
   </div>
 </section>
 
-<!-- ── Projects (dark) ── -->
-<section class="section section-dark" id="projects">
-  <div class="container">
-    <div class="section-num section-num-dark">03 &mdash; Open Source</div>
-    <h2 class="section-h section-h-dark">Projects</h2>
-    <p class="section-p section-p-dark" style="margin-bottom:2rem;">Production tools and open-source systems across applied AI engineering &mdash; MCP servers, agentic pipelines, evaluation harnesses, and the trustworthy data connectors that make frontier AI reliable in regulated life sciences.</p>
-
-    <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2.75rem;">
-      <button class="proj-filter active" data-filter="all">All</button>
-      <button class="proj-filter" data-filter="mcp-servers">MCP Servers</button>
-      <button class="proj-filter" data-filter="agentic-ai">Agentic AI</button>
-      <button class="proj-filter" data-filter="eval-harness">Eval Harnesses</button>
-      <button class="proj-filter" data-filter="knowledge-graphs">Knowledge Graphs</button>
-      <button class="proj-filter" data-filter="scientific-ml">Scientific ML</button>
-      <button class="proj-filter" data-filter="rag-llm">RAG / LLM Apps</button>
-    </div>
-
-    <!-- Phase 1-3 flagship projects -->
-    <div class="proj-featured" style="margin-bottom:1.5rem;">
-
-      <!-- MCP Scientific Data Server -->
-      <div class="proj-card" data-cat="mcp-servers agentic-ai">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="proj-icon" style="background:rgba(37,99,235,.25);color:#93C5FD;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-          </div>
-          <div class="proj-badges">
-            <span class="badge badge-py">Python</span>
-            <span class="badge" style="background:rgba(37,99,235,.2);color:#93C5FD;">MCP</span>
-            <span class="badge" style="background:rgba(217,119,6,.2);color:#FCD34D;border:1px solid rgba(217,119,6,.3);">In Development</span>
-          </div>
-        </div>
-        <div class="proj-title">MCP Scientific Data Server</div>
-        <p class="proj-desc"><strong style="color:rgba(255,255,255,.75);">Problem:</strong> Scientific datasets are locked in siloed formats &mdash; inaccessible to AI agents. <strong style="color:rgba(255,255,255,.75);">Built:</strong> An MCP server exposing a curated scientific dataset (ChEMBL/assay slice) to Claude as deterministic, callable tools &mdash; search, retrieval, provenance, and unit normalization. <strong style="color:rgba(255,255,255,.75);">Result:</strong> Agent-callable scientific data with full lineage &mdash; the trustworthy foundation beneath every downstream agent.</p>
-        <div class="proj-tech">Python &middot; MCP SDK &middot; Claude API &middot; Pydantic v2 &middot; pytest &middot; GitHub Actions</div>
-        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
-          <span class="proj-link" style="color:rgba(255,255,255,.35);cursor:default;">Repo shipping soon &mdash; Phase 1</span>
-        </div>
-      </div>
-
-      <!-- Agent + Eval Harness -->
-      <div class="proj-card" data-cat="agentic-ai eval-harness">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="proj-icon" style="background:rgba(124,58,237,.25);color:#C4B5FD;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          </div>
-          <div class="proj-badges">
-            <span class="badge badge-py">Python</span>
-            <span class="badge" style="background:rgba(124,58,237,.2);color:#C4B5FD;">Eval</span>
-            <span class="badge" style="background:rgba(217,119,6,.2);color:#FCD34D;border:1px solid rgba(217,119,6,.3);">In Development</span>
-          </div>
-        </div>
-        <div class="proj-title">Agent + Evaluation Harness</div>
-        <p class="proj-desc"><strong style="color:rgba(255,255,255,.75);">Problem:</strong> A plausible-looking answer that&rsquo;s subtly wrong can be worse than no answer. <strong style="color:rgba(255,255,255,.75);">Built:</strong> An agent over the MCP server plus an eval suite &mdash; 50 labeled Q&amp;A pairs, automated correctness/hallucination scoring, and a &ldquo;refuse rather than guess&rdquo; behavior measured against ground truth. <strong style="color:rgba(255,255,255,.75);">Result:</strong> A reproducible eval report holding the agent to a research-grade bar.</p>
-        <div class="proj-tech">LangGraph &middot; Claude API &middot; LLM-as-Judge &middot; Pydantic v2 &middot; pytest &middot; RAG</div>
-        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
-          <span class="proj-link" style="color:rgba(255,255,255,.35);cursor:default;">Repo shipping soon &mdash; Phase 2</span>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- More project cards -->
-    <div class="proj-featured" style="margin-bottom:1.5rem;">
-
-      <!-- Messy-Data Connector -->
-      <div class="proj-card" data-cat="mcp-servers eval-harness">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="proj-icon" style="background:rgba(22,163,74,.2);color:#4ADE80;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h10"/><path d="M18 15l2 2 4-4"/></svg>
-          </div>
-          <div class="proj-badges">
-            <span class="badge badge-py">Python</span>
-            <span class="badge" style="background:rgba(22,163,74,.2);color:#4ADE80;">Data Eng</span>
-            <span class="badge" style="background:rgba(217,119,6,.2);color:#FCD34D;border:1px solid rgba(217,119,6,.3);">In Development</span>
-          </div>
-        </div>
-        <div class="proj-title">Messy-Data Connector</div>
-        <p class="proj-desc"><strong style="color:rgba(255,255,255,.75);">Problem:</strong> A single wrong record can change a scientific conclusion. <strong style="color:rgba(255,255,255,.75);">Built:</strong> A validation connector that ingests messy multi-format scientific data (mixed units, missing metadata, inconsistent schemas) and produces a clean, quality-gated, agent-ready dataset &mdash; with a data-quality report flagging every bad record. <strong style="color:rgba(255,255,255,.75);">Result:</strong> Before/after: raw mess &rarr; validated inputs the MCP server trusts.</p>
-        <div class="proj-tech">Python &middot; Pydantic v2 &middot; Pandera &middot; pytest &middot; GitHub Actions CI</div>
-        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
-          <span class="proj-link" style="color:rgba(255,255,255,.35);cursor:default;">Repo shipping soon &mdash; Phase 3</span>
-        </div>
-      </div>
-
-      <!-- DATAPiper / CECDM -->
-      <div class="proj-card" data-cat="agentic-ai knowledge-graphs">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="proj-icon" style="background:rgba(217,119,6,.2);color:#FCD34D;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-          </div>
-          <div class="proj-badges">
-            <span class="badge" style="background:rgba(217,119,6,.2);color:#FCD34D;">Founder</span>
-            <span class="badge badge-py">Python</span>
-            <span class="badge badge-feat">CRO Platform</span>
-          </div>
-        </div>
-        <div class="proj-title">DATAPiper / CECDM</div>
-        <p class="proj-desc"><strong style="color:rgba(255,255,255,.75);">Problem:</strong> CRO data is siloed across formats with no standard handoff for AI pipelines. <strong style="color:rgba(255,255,255,.75);">Built:</strong> A founder-built CRO data platform (CECDM standard) integrating external study data into a validated, agent-ready knowledge graph &mdash; with provenance, lineage, and automated quality gates. <strong style="color:rgba(255,255,255,.75);">Result:</strong> Trustworthy scientific data backbone for AI-driven R&amp;D decision-making at the CRO-sponsor boundary.</p>
-        <div class="proj-tech">Python &middot; CDISC CECDM &middot; Knowledge Graph &middot; Provenance &middot; AWS</div>
-        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
-          <span class="proj-link" style="color:rgba(255,255,255,.35);cursor:default;">Proprietary &mdash; available on request</span>
-        </div>
-      </div>
-
-    </div>
-      <div class="proj-card" data-cat="agentic-ai knowledge-graphs">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="proj-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
-          </div>
-          <div class="proj-badges">
-            <span class="badge badge-py">Python</span>
-            <span class="badge badge-jp">Jupyter</span>
-            <span class="badge badge-feat">Featured</span>
-          </div>
-        </div>
-        <div class="proj-title">OntoCurator Agent</div>
-        <p class="proj-desc">A 4-agent LangGraph pipeline that autonomously curates biomedical ontology terms from pharmaceutical R&amp;D documents. Extracts named entities with GPT-5.2, maps them across 10 ontologies (BioPortal + EBI OLS4), detects conflicts, and routes governance decisions to named domain stewards.</p>
-        <div class="proj-tech">LangGraph &middot; GPT-5.2 &middot; Pydantic v2 &middot; BioPortal API</div>
-        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
-          <a href="https://alishahmohammadi22.github.io/onto-curator-agent" target="_blank" rel="noopener" class="proj-link">Project Page <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-          <a href="blog/case-study-ontocurator.html" class="proj-link" style="color:rgba(255,255,255,.6);">Case Study <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-          <a href="https://github.com/alishahmohammadi22/onto-curator-agent" target="_blank" rel="noopener" class="proj-link" style="color:rgba(255,255,255,.35);">GitHub <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-        </div>
-      </div>
-
-      <div class="proj-card">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="proj-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18"/></svg>
-          </div>
-          <div class="proj-badges">
-            <span class="badge badge-py">Python</span>
-            <span class="badge badge-jp">Jupyter</span>
-            <span class="badge badge-feat">Featured</span>
-          </div>
-        </div>
-        <div class="proj-title">FAIR Data Toolkit</div>
-        <p class="proj-desc">Python package and 5-article series implementing the RDA FAIR Maturity Model (41 indicators) and Pistoia Alliance FAIR Maturity Matrix (L0&ndash;L5 &times; 7 dimensions) for pharmaceutical R&amp;D. Includes manual assessment, gap analysis, and remediation roadmaps.</p>
-        <div class="proj-tech">Python &middot; Pydantic v2 &middot; RDA FAIR &middot; Pistoia Alliance</div>
-        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
-          <a href="https://alishahmohammadi22.github.io/fair-data-toolkit" target="_blank" rel="noopener" class="proj-link">Project Page <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-          <a href="blog/case-study-fair-studio.html" class="proj-link" style="color:rgba(255,255,255,.6);">Case Study <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-          <a href="https://github.com/alishahmohammadi22/fair-data-toolkit" target="_blank" rel="noopener" class="proj-link" style="color:rgba(255,255,255,.35);">GitHub <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-        </div>
-      </div>
-    </div>
-
-    <div class="proj-grid-4">
-      <div class="proj-card small" data-cat="scientific-ml">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div class="proj-icon" style="width:36px;height:36px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg></div>
-          <div class="proj-badges"><span class="badge badge-py">Python</span><span class="badge badge-jp">Jupyter</span></div>
-        </div>
-        <div class="proj-title">ScientificML</div>
-        <p class="proj-desc">PINNs, data-driven dynamics, hybrid physics-ML models, and uncertainty quantification for biopharmaceutical process development.</p>
-        <div class="proj-tech">PyTorch &middot; JAX &middot; NumPy &middot; SciPy</div>
-        <a href="https://github.com/alishahmohammadi22/ScientificML" target="_blank" rel="noopener" class="proj-link">GitHub <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-      </div>
-      <div class="proj-card small" data-cat="scientific-ml">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div class="proj-icon" style="width:36px;height:36px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h-4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4"/><path d="M18 3h3v3"/><path d="m11 12 9-9"/></svg></div>
-          <div class="proj-badges"><span class="badge badge-py">Python</span><span class="badge badge-jp">Jupyter</span></div>
-        </div>
-        <div class="proj-title">Chemoinformatics</div>
-        <p class="proj-desc">AI-powered drug discovery: molecular property prediction, SMILES encoding, and graph neural networks for molecular design.</p>
-        <div class="proj-tech">RDKit &middot; DeepChem &middot; PyTorch Geometric</div>
-        <a href="https://github.com/alishahmohammadi22/chemoinformatics" target="_blank" rel="noopener" class="proj-link">GitHub <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-      </div>
-      <div class="proj-card small" data-cat="rag-llm scientific-ml">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div class="proj-icon" style="width:36px;height:36px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-          <div class="proj-badges"><span class="badge badge-py">Python</span></div>
-        </div>
-        <div class="proj-title">NLP to BERT</div>
-        <p class="proj-desc">NLP fundamentals to fine-tuned BERT models on scientific text, with applications in pharmaceutical literature mining.</p>
-        <div class="proj-tech">HuggingFace &middot; Transformers &middot; PyTorch</div>
-        <a href="https://github.com/alishahmohammadi22/NLP-to-BERT" target="_blank" rel="noopener" class="proj-link">GitHub <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-      </div>
-      <div class="proj-card small" data-cat="rag-llm">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div class="proj-icon" style="width:36px;height:36px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
-          <div class="proj-badges"><span class="badge badge-jp">Jupyter</span></div>
-        </div>
-        <div class="proj-title">PDF Querying</div>
-        <p class="proj-desc">LangChain-powered system for summarizing and querying multiple PDFs &mdash; applicable to regulatory document analysis.</p>
-        <div class="proj-tech">LangChain &middot; OpenAI &middot; FAISS</div>
-        <a href="https://github.com/alishahmohammadi22/summarizing_and_querying_multiple_pdfs_with_langchain" target="_blank" rel="noopener" class="proj-link">GitHub <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- ── Recognition & Speaking ── -->
-<section class="section section-off" id="recognition">
+<section class="section section-light" id="recognition">
   <div class="container">
-    <div class="section-num">05 &mdash; Recognition</div>
+    <div class="section-num">03 &mdash; Recognition</div>
     <h2 class="section-h">Recognition &amp; Industry Presence</h2>
     <p class="section-p">Industry alliances, academic partnerships, and open-source contributions to the pharmaceutical data governance community.</p>
     <div class="rec-grid">
@@ -993,9 +799,9 @@
 </section>
 
 <!-- ── Skills ── -->
-<section class="section section-light" id="skills">
+<section class="section section-off" id="skills">
   <div class="container">
-    <div class="section-num">06 &mdash; Skills</div>
+    <div class="section-num">04 &mdash; Skills</div>
     <h2 class="section-h">Expertise</h2>
     <p class="section-p">Four pillars spanning data governance, AI, engineering science, and cloud infrastructure.</p>
     <div class="skills-wrap">
@@ -1058,9 +864,9 @@
 </section>
 
 <!-- ── Blog ── -->
-<section class="section section-off" id="blog">
+<section class="section section-light" id="blog">
   <div class="container">
-    <div class="section-num">04 &mdash; Writing</div>
+    <div class="section-num">05 &mdash; Writing</div>
     <h2 class="section-h">Articles &amp; Blog</h2>
     <p class="section-p">Technical writing on applied AI engineering, agentic systems, trustworthy scientific data, and deploying frontier AI in regulated life sciences &mdash; from architecture patterns to eval results.</p>
     <div class="blog-grid">
@@ -1290,35 +1096,7 @@
     }
   })();
 
-  // ── Move blog section after projects for better flow ──
-  (function(){
-    var blog = document.getElementById('blog');
-    var projects = document.getElementById('projects');
-    if (blog && projects && projects.nextElementSibling !== blog) {
-      projects.insertAdjacentElement('afterend', blog);
-    }
-  })();
 
-  // ── Project filter pills ──
-  (function(){
-    var filters = document.querySelectorAll('.proj-filter');
-    var cards   = document.querySelectorAll('[data-cat]');
-    filters.forEach(function(btn){
-      btn.addEventListener('click', function(){
-        filters.forEach(function(b){ b.classList.remove('active'); });
-        btn.classList.add('active');
-        var f = btn.getAttribute('data-filter');
-        cards.forEach(function(card){
-          if (f === 'all') {
-            card.style.display = '';
-          } else {
-            var cats = (card.getAttribute('data-cat') || '').split(' ');
-            card.style.display = cats.indexOf(f) !== -1 ? '' : 'none';
-          }
-        });
-      });
-    });
-  })();
 </script>
 </body>
 </html>
