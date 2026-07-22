@@ -109,6 +109,12 @@
     .infographic{margin:2.5rem 0;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--surface)}
     .infographic img{width:100%;display:block}
     .infographic-caption{padding:.75rem 1.25rem;font-size:.8rem;color:var(--muted);border-top:1px solid var(--border);background:var(--bg);line-height:1.55}
+    @media(max-width:700px){
+      .infographic [style*="grid-template-columns:repeat(4"]{grid-template-columns:repeat(2,1fr)!important}
+      .infographic [style*="grid-template-columns:repeat(3"]{grid-template-columns:1fr!important}
+      .infographic [style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important}
+      .infographic [style*="grid-template-columns:1fr auto"]{grid-template-columns:1fr!important}
+    }
     /* ── Code ── */
     .code-block{background:#f8f8f5;border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
     .code-header{display:flex;align-items:center;justify-content:space-between;padding:.65rem 1rem;border-bottom:1px solid var(--border);background:var(--surface)}
@@ -286,9 +292,60 @@
       </div>
     </div>
 
+    <!-- Infographic 1: Pharma's Hidden Data Tax -->
     <div class="infographic">
-      <img src="../assets/images/blog/ai-harmonization/1_data_tax.png" alt="Pharma's Hidden Data Tax: 80% of a data scientist's time is spent finding, cleaning and organizing data. Four consequences: reduced discoverability, excessive curation, poor AI readiness, regulatory risk." loading="lazy" />
-      <div class="infographic-caption"><strong>Figure 1</strong> &mdash; The consequences of fragmented pharmaceutical data. Many AI initiatives fail not because of model limitations, but because of data quality and interoperability. | Data-prep estimate: widely cited 80/20 rule in data science (Pragmatic Institute; Anaconda).</div>
+      <div style="background:#f8fafc;padding:2.5rem 2.5rem 2rem;">
+
+        <!-- Header -->
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:2rem;">
+          <div style="width:4px;height:2.5rem;background:var(--teal);border-radius:2px;flex-shrink:0;"></div>
+          <div>
+            <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:.15rem;">The Challenge</div>
+            <div style="font-size:1.35rem;font-weight:800;color:#0f172a;letter-spacing:-.02em;">Pharma&rsquo;s Hidden Data Tax</div>
+          </div>
+        </div>
+
+        <!-- Big stat -->
+        <div style="background:#0f172a;border-radius:12px;padding:1.75rem 2rem;margin-bottom:2rem;display:flex;align-items:center;gap:2rem;flex-wrap:wrap;">
+          <div style="flex-shrink:0;">
+            <span style="font-size:4rem;font-weight:900;color:#fff;letter-spacing:-.04em;line-height:1;">80%</span>
+          </div>
+          <div style="flex:1;min-width:220px;">
+            <p style="font-size:1.05rem;color:rgba(255,255,255,.85);line-height:1.6;margin:0;">of a data scientist&rsquo;s time is spent <strong style="color:#fff;">finding, cleaning &amp; organizing data</strong> &mdash; not analyzing it.</p>
+          </div>
+        </div>
+
+        <!-- 4 consequence cards -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;">
+          <div style="background:#fff;border:1px solid #e2e8f0;border-top:3px solid var(--teal);border-radius:10px;padding:1.25rem 1rem;">
+            <div style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);margin-bottom:.65rem;">Discoverability</div>
+            <div style="font-size:.98rem;font-weight:700;color:#0f172a;margin-bottom:.5rem;line-height:1.3;">Reduced discoverability</div>
+            <div style="font-size:.82rem;color:#64748b;line-height:1.55;">Teams can&rsquo;t find data that already exists.</div>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-top:3px solid var(--amber);border-radius:10px;padding:1.25rem 1rem;">
+            <div style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--amber);margin-bottom:.65rem;">Productivity</div>
+            <div style="font-size:.98rem;font-weight:700;color:#0f172a;margin-bottom:.5rem;line-height:1.3;">Excessive curation</div>
+            <div style="font-size:.82rem;color:#64748b;line-height:1.55;">Scientists clean data instead of creating insight.</div>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-top:3px solid #e53e3e;border-radius:10px;padding:1.25rem 1rem;">
+            <div style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#e53e3e;margin-bottom:.65rem;">AI Readiness</div>
+            <div style="font-size:.98rem;font-weight:700;color:#0f172a;margin-bottom:.5rem;line-height:1.3;">Poor AI readiness</div>
+            <div style="font-size:.82rem;color:#64748b;line-height:1.55;">Fragmented inputs degrade model accuracy.</div>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-top:3px solid var(--purple);border-radius:10px;padding:1.25rem 1rem;">
+            <div style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--purple);margin-bottom:.65rem;">Compliance</div>
+            <div style="font-size:.98rem;font-weight:700;color:#0f172a;margin-bottom:.5rem;line-height:1.3;">Regulatory risk</div>
+            <div style="font-size:.82rem;color:#64748b;line-height:1.55;">Broken lineage weakens traceability &amp; trust.</div>
+          </div>
+        </div>
+
+        <!-- Quote -->
+        <div style="background:#fff;border-left:4px solid var(--teal);border-radius:0 8px 8px 0;padding:1rem 1.25rem;">
+          <p style="margin:0;font-style:italic;font-size:.95rem;color:#334155;line-height:1.65;">&ldquo;Many AI initiatives fail not because of model limitations, but because of data quality and interoperability.&rdquo;</p>
+        </div>
+
+      </div>
+      <div class="infographic-caption"><strong>Figure 1</strong> &mdash; The consequences of fragmented pharmaceutical data. Data-prep estimate: widely cited 80/20 rule in data science (Pragmatic Institute; Anaconda).</div>
     </div>
 
     <div class="callout amber">
@@ -325,8 +382,64 @@
       </div>
     </div>
 
+    <!-- Infographic 2: Common Language -->
     <div class="infographic">
-      <img src="../assets/images/blog/ai-harmonization/2_common_language.png" alt="The Role of AI: Three ways AI creates a shared understanding layer. 1. Ontology-Aware Intelligence. 2. Generative AI Enrichment. 3. Intelligent Data Mapping. Example: ALT, SGPT, Alanine Aminotransferase, ALAT, GPT all map to LOINC 1742-6." loading="lazy" />
+      <div style="background:#f8fafc;padding:2.5rem 2.5rem 2rem;">
+
+        <!-- Header -->
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:2rem;">
+          <div style="width:4px;height:2.5rem;background:var(--teal);border-radius:2px;flex-shrink:0;"></div>
+          <div>
+            <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:.15rem;">The Role of AI</div>
+            <div style="font-size:1.35rem;font-weight:800;color:#0f172a;letter-spacing:-.02em;">Turning Data Into a Common Language</div>
+          </div>
+        </div>
+
+        <!-- 3 capability cards -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:2rem;">
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:1.5rem 1.25rem;">
+            <div style="width:2.2rem;height:2.2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;margin-bottom:1rem;">1</div>
+            <div style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);margin-bottom:.5rem;">Ontology-Aware Intelligence</div>
+            <div style="font-size:.93rem;font-weight:700;color:#0f172a;margin-bottom:.5rem;line-height:1.35;">Understands concepts, not just strings</div>
+            <div style="font-size:.82rem;color:#64748b;line-height:1.55;">Understands that concepts are equivalent &mdash; not just that strings match.</div>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:1.5rem 1.25rem;position:relative;">
+            <!-- connector arrow left -->
+            <div style="position:absolute;left:-14px;top:50%;transform:translateY(-50%);width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:14px solid #cbd5e1;"></div>
+            <div style="width:2.2rem;height:2.2rem;border-radius:50%;background:#1d4e89;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;margin-bottom:1rem;">2</div>
+            <div style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#1d4e89;margin-bottom:.5rem;">Generative AI Enrichment</div>
+            <div style="font-size:.93rem;font-weight:700;color:#0f172a;margin-bottom:.5rem;line-height:1.35;">Unlocks unstructured text</div>
+            <div style="font-size:.82rem;color:#64748b;line-height:1.55;">Extracts entities &amp; context from scientific reports and lab notebooks.</div>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:1.5rem 1.25rem;position:relative;">
+            <!-- connector arrow left -->
+            <div style="position:absolute;left:-14px;top:50%;transform:translateY(-50%);width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:14px solid #cbd5e1;"></div>
+            <div style="width:2.2rem;height:2.2rem;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;margin-bottom:1rem;">3</div>
+            <div style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--green);margin-bottom:.5rem;">Intelligent Data Mapping</div>
+            <div style="font-size:.93rem;font-weight:700;color:#0f172a;margin-bottom:.5rem;line-height:1.35;">Mappings in hours, not months</div>
+            <div style="font-size:.82rem;color:#64748b;line-height:1.55;">Learns patterns and recommends harmonization strategies at scale.</div>
+          </div>
+        </div>
+
+        <!-- One concept many names example -->
+        <div style="background:#0f172a;border-radius:12px;padding:1.75rem 2rem;">
+          <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);text-align:center;margin-bottom:1.25rem;">One Concept, Many Local Names</div>
+          <div style="display:flex;justify-content:center;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:1.25rem;">
+            <span style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:.35rem .8rem;font-size:.88rem;font-weight:600;font-family:'JetBrains Mono',monospace;">ALT</span>
+            <span style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:.35rem .8rem;font-size:.88rem;font-weight:600;font-family:'JetBrains Mono',monospace;">SGPT</span>
+            <span style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:.35rem .8rem;font-size:.88rem;font-weight:600;font-family:'JetBrains Mono',monospace;">Alanine Aminotransferase</span>
+            <span style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:.35rem .8rem;font-size:.88rem;font-weight:600;font-family:'JetBrains Mono',monospace;">ALAT</span>
+            <span style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:.35rem .8rem;font-size:.88rem;font-weight:600;font-family:'JetBrains Mono',monospace;">GPT</span>
+          </div>
+          <div style="display:flex;justify-content:center;margin-bottom:1rem;">
+            <div style="width:2px;height:24px;background:var(--teal);"></div>
+          </div>
+          <div style="display:flex;justify-content:center;">
+            <div style="background:var(--teal);color:#fff;border-radius:8px;padding:.55rem 1.5rem;font-size:.95rem;font-weight:700;letter-spacing:.02em;">LOINC 1742-6 &nbsp;&middot;&nbsp; harmonized</div>
+          </div>
+        </div>
+
+      </div>
       <div class="infographic-caption"><strong>Figure 2</strong> &mdash; Three ways AI creates a shared understanding layer across the enterprise. LOINC &mdash; Logical Observation Identifiers Names and Codes, a public standard (Regenstrief Institute).</div>
     </div>
   </div>
@@ -401,8 +514,97 @@
       <p><strong>Cross-site findability jumped from 34.8% to 99.9%.</strong> Before harmonization, a query for &ldquo;ALT&rdquo; surfaced only the one site that used that exact label. After, it retrieved the analyte across all three sources.</p>
     </div>
 
+    <!-- Infographic 3: Case Study Results -->
     <div class="infographic">
-      <img src="../assets/images/blog/ai-harmonization/3_casestudy_results.png" alt="Case Study Results: Harmonizing Multi-Site Lab Data to LOINC. 44→8 terms, 11→5 units, 98% auto-mapped, 99.9% accuracy. Cross-site findability: before 35%, after 100%. Bar chart shows per-analyte findability before vs after." loading="lazy" />
+      <div style="background:#f8fafc;padding:2.5rem 2.5rem 2rem;">
+
+        <!-- Header -->
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;">
+          <div style="width:4px;height:2.5rem;background:var(--teal);border-radius:2px;flex-shrink:0;"></div>
+          <div>
+            <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:.15rem;">Case Study &middot; Built in Python</div>
+            <div style="font-size:1.35rem;font-weight:800;color:#0f172a;letter-spacing:-.02em;">Harmonizing Multi-Site Lab Data to LOINC</div>
+          </div>
+        </div>
+        <div style="font-size:.82rem;color:#64748b;margin-bottom:1.75rem;padding-left:1.25rem;">9,280 records &middot; 3 sources &middot; 8 analytes &middot; pandas + difflib + LOINC</div>
+
+        <!-- 4 metric cards -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;">
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1.25rem 1rem;text-align:center;">
+            <div style="font-size:1.9rem;font-weight:900;color:var(--teal);letter-spacing:-.03em;line-height:1;margin-bottom:.5rem;">44 &rarr; 8</div>
+            <div style="font-size:.78rem;color:#64748b;line-height:1.45;">term strings collapsed to LOINC concepts</div>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1.25rem 1rem;text-align:center;">
+            <div style="font-size:1.9rem;font-weight:900;color:var(--teal);letter-spacing:-.03em;line-height:1;margin-bottom:.5rem;">11 &rarr; 5</div>
+            <div style="font-size:.78rem;color:#64748b;line-height:1.45;">inconsistent units standardized</div>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1.25rem 1rem;text-align:center;">
+            <div style="font-size:1.9rem;font-weight:900;color:#0f172a;letter-spacing:-.03em;line-height:1;margin-bottom:.5rem;">98%</div>
+            <div style="font-size:.78rem;color:#64748b;line-height:1.45;">auto-mapped to LOINC (dictionary + fuzzy)</div>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1.25rem 1rem;text-align:center;">
+            <div style="font-size:1.9rem;font-weight:900;color:var(--green);letter-spacing:-.03em;line-height:1;margin-bottom:.5rem;">99.9%</div>
+            <div style="font-size:.78rem;color:#64748b;line-height:1.45;">mapping accuracy vs. ground truth</div>
+          </div>
+        </div>
+
+        <!-- Cross-site findability highlight -->
+        <div style="background:#fff;border:2px solid var(--teal);border-radius:10px;padding:1.1rem 1.5rem;margin-bottom:1.75rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
+          <div style="font-size:.9rem;font-weight:700;color:#0f172a;flex-shrink:0;">Cross-site findability</div>
+          <div style="display:flex;align-items:center;gap:1rem;flex:1;flex-wrap:wrap;">
+            <div style="text-align:center;">
+              <div style="font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#64748b;margin-bottom:.2rem;">Before</div>
+              <div style="font-size:1.75rem;font-weight:900;color:#e53e3e;letter-spacing:-.03em;">34.8%</div>
+            </div>
+            <div style="font-size:1.5rem;color:#94a3b8;font-weight:700;">&#8594;</div>
+            <div style="text-align:center;">
+              <div style="font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#64748b;margin-bottom:.2rem;">After</div>
+              <div style="font-size:1.75rem;font-weight:900;color:var(--green);letter-spacing:-.03em;">99.9%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Two-column: bar chart + mapping breakdown -->
+        <div style="display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:start;">
+
+          <!-- Bar chart -->
+          <div>
+            <div style="font-size:.82rem;font-weight:700;color:#0f172a;margin-bottom:1rem;">Findability by analyte &mdash; before vs. after</div>
+            <div style="display:flex;flex-direction:column;gap:.55rem;">
+              <!-- ALT --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">ALT</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:35%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
+              <!-- AST --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">AST</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:38%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
+              <!-- Glucose --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">Glucose</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:34%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
+              <!-- Creatinine --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">Creatinine</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:33%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
+              <!-- HbA1C --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">HbA1C</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:37%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
+              <!-- Cholesterol --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">Cholesterol</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:34%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
+              <!-- Platelets --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">Platelets</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:31%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
+              <!-- Hemoglobin --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">Hemoglobin</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:36%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
+            </div>
+            <!-- X-axis label -->
+            <div style="font-size:.7rem;color:#94a3b8;margin-top:.75rem;padding-left:88px;">% of records discoverable by a name query &mdash; 0 to 100%</div>
+            <!-- Legend -->
+            <div style="display:flex;gap:1.25rem;margin-top:.75rem;padding-left:88px;">
+              <div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;color:#475569;"><div style="width:16px;height:9px;border-radius:3px;background:#e53e3e;"></div>Before</div>
+              <div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;color:#475569;"><div style="width:16px;height:9px;border-radius:3px;background:var(--teal);"></div>After</div>
+            </div>
+          </div>
+
+          <!-- Mapping method breakdown -->
+          <div style="min-width:160px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1.25rem;text-align:center;">
+            <div style="font-size:.75rem;font-weight:700;color:#0f172a;margin-bottom:1rem;">How records mapped</div>
+            <!-- Donut representation as stacked bars -->
+            <div style="width:80px;height:80px;border-radius:50%;background:conic-gradient(var(--teal) 0% 96.3%, #1d4e89 96.3% 97.9%, #e53e3e 97.9% 100%);margin:0 auto 1rem;"></div>
+            <div style="font-size:1.5rem;font-weight:900;color:#0f172a;letter-spacing:-.03em;margin-bottom:.75rem;">98%</div>
+            <div style="display:flex;flex-direction:column;gap:.45rem;text-align:left;">
+              <div style="display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:#475569;"><div style="width:10px;height:10px;border-radius:50%;background:var(--teal);flex-shrink:0;"></div>Dictionary 96.3%</div>
+              <div style="display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:#475569;"><div style="width:10px;height:10px;border-radius:50%;background:#1d4e89;flex-shrink:0;"></div>Fuzzy 1.6%</div>
+              <div style="display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:#e53e3e;"><div style="width:10px;height:10px;border-radius:50%;background:#e53e3e;flex-shrink:0;"></div>Review 2.0%</div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
       <div class="infographic-caption"><strong>Figure 3</strong> &mdash; Harmonization results: term and unit consolidation, mapping coverage, and the jump in cross-site findability. Reproducible Python pipeline over a simulated 3-source pooling problem; harmonized to real LOINC codes.</div>
     </div>
 
@@ -483,8 +685,60 @@ df[<span style="color:#16a34a">"needs_review"</span>] = df[<span style="color:#1
       <p>The scale of the prize is significant: the McKinsey Global Institute estimates generative AI could create <strong>$60&ndash;110 billion in annual value</strong> for the pharma and medical-products industries. But AI cannot become foundational without harmonized data. Organizations that invest today in semantic data layers, ontology-driven architectures, and AI-enabled harmonization will be positioned to move faster tomorrow. Those that do not may find themselves with increasingly powerful models &mdash; but increasingly fragmented information.</p>
     </div>
 
+    <!-- Infographic 4: The Payoff -->
     <div class="infographic">
-      <img src="../assets/images/blog/ai-harmonization/4_payoff.png" alt="The Payoff: Harmonization as Strategic Infrastructure. Five benefits: better data quality, faster insight, stronger AI, regulatory confidence, knowledge retention. The prize: $60-110B gen-AI value for pharma. The bar: FDA credibility framework (FDA-2024-D-4689)." loading="lazy" />
+      <div style="background:#f8fafc;padding:2.5rem 2.5rem 2rem;">
+
+        <!-- Header -->
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:2rem;">
+          <div style="width:4px;height:2.5rem;background:var(--teal);border-radius:2px;flex-shrink:0;"></div>
+          <div>
+            <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:.15rem;">The Payoff</div>
+            <div style="font-size:1.35rem;font-weight:800;color:#0f172a;letter-spacing:-.02em;">Harmonization as Strategic Infrastructure</div>
+          </div>
+        </div>
+
+        <!-- 5 benefits -->
+        <div style="display:flex;flex-direction:column;gap:.75rem;margin-bottom:2rem;">
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;">
+            <div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;font-weight:700;">&#10003;</div>
+            <div><strong style="color:#0f172a;">Better data quality</strong> <span style="color:#64748b;font-size:.88rem;">&mdash; Inconsistencies, duplicates &amp; semantic conflicts caught continuously.</span></div>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;">
+            <div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;font-weight:700;">&#10003;</div>
+            <div><strong style="color:#0f172a;">Faster insight</strong> <span style="color:#64748b;font-size:.88rem;">&mdash; Less time finding data, more time generating knowledge.</span></div>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;">
+            <div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;font-weight:700;">&#10003;</div>
+            <div><strong style="color:#0f172a;">Stronger AI</strong> <span style="color:#64748b;font-size:.88rem;">&mdash; Consistent, structured inputs lift model accuracy &amp; reproducibility.</span></div>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;">
+            <div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;font-weight:700;">&#10003;</div>
+            <div><strong style="color:#0f172a;">Regulatory confidence</strong> <span style="color:#64748b;font-size:.88rem;">&mdash; Clean lineage supports credibility &amp; traceability under FDA guidance.</span></div>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;">
+            <div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;font-weight:700;">&#10003;</div>
+            <div><strong style="color:#0f172a;">Knowledge retention</strong> <span style="color:#64748b;font-size:.88rem;">&mdash; Data becomes reusable organizational knowledge across therapeutic areas.</span></div>
+          </div>
+        </div>
+
+        <!-- Prize + Bar two-column -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
+          <div style="background:#0f172a;border-radius:12px;padding:1.75rem 2rem;">
+            <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:1rem;">The Prize</div>
+            <div style="font-size:2.75rem;font-weight:900;color:#fff;letter-spacing:-.04em;line-height:1;margin-bottom:.75rem;">$60&ndash;110B</div>
+            <div style="font-size:.88rem;color:rgba(255,255,255,.65);line-height:1.55;margin-bottom:.65rem;">potential annual gen-AI value for pharma &amp; medical products</div>
+            <div style="font-size:.78rem;color:rgba(255,255,255,.35);font-style:italic;">&mdash; McKinsey Global Institute</div>
+          </div>
+          <div style="background:var(--teal);border-radius:12px;padding:1.75rem 2rem;">
+            <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:1rem;">The Bar</div>
+            <div style="font-size:2.75rem;font-weight:900;color:#fff;letter-spacing:-.04em;line-height:1;margin-bottom:.75rem;">Credibility</div>
+            <div style="font-size:.88rem;color:rgba(255,255,255,.85);line-height:1.55;margin-bottom:.65rem;">FDA&rsquo;s 2025 draft guidance sets a risk-based framework for AI in regulatory decisions</div>
+            <div style="font-size:.78rem;color:rgba(255,255,255,.55);font-style:italic;">&mdash; FDA-2024-D-4689</div>
+          </div>
+        </div>
+
+      </div>
       <div class="infographic-caption"><strong>Figure 4</strong> &mdash; Five benefits, the value at stake, and the rising regulatory bar. McKinsey Global Institute (2024); FDA draft guidance on AI in regulatory decision-making (Jan 2025).</div>
     </div>
   </div>
