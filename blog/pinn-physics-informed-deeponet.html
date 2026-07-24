@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Physics-Informed DeepONet: Operator Learning Without Solution Data — Ali Shahmohammadi</title>
+  <meta name="description" content="Combining the universal approximation theorem for operators with physics-informed training — and using DeepONet to solve inverse problems across entire parameter families simultaneously.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#F8F6F2;--bg-alt:#F1EEE9;--ink:#111010;--ink-2:#4A4540;--ink-3:#8C857E;--navy:#1C3D6B;--navy-lt:#EBF0F7;--sienna:#B8845A;--sienna-lt:#FBF4EC;--purple:#5B4E8A;--purple-lt:#F2EEF9;--green:#2D7A4F;--green-lt:#EBF7F1;--green-bdr:#BEE5D3;--border:#DEDAD3;--dark:#111010;--accent:#2563EB;--accent-lt:#EFF6FF;--accent-mid:#BFDBFE;--red:#DC2626;--red-lt:#FEF2F2;--amber:#D97706;--amber-lt:#FFFBEB;--amber-bdr:#FDE68A}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--ink);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:18px;line-height:1.65;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent);text-decoration:none}a:hover{opacity:.75}
+    code,pre{font-family:'JetBrains Mono','Fira Code',monospace}
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between;background:rgba(248,246,242,.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:var(--ink)}
+    .nav-logo em{font-style:normal;color:var(--sienna)}
+    .nav-links{display:flex;align-items:center;gap:.2rem}
+    .nav-links a{font-size:.82rem;font-weight:500;color:var(--ink-3);padding:.42rem .8rem;border-radius:4px}
+    .nav-links a:hover{color:var(--ink);background:var(--bg-alt)}
+    .article-page{padding-top:60px}
+    .article-hero{background:var(--dark);padding:5rem 3rem 4rem}
+    .article-hero-inner{max-width:820px;margin:0 auto}
+    .hero-series{font-family:'JetBrains Mono',monospace;font-size:.67rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sienna);margin-bottom:1rem;display:flex;align-items:center;gap:.8rem}
+    .hero-series::before{content:'';width:28px;height:1px;background:var(--sienna)}
+    .article-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,4.2rem);font-weight:700;letter-spacing:-.02em;line-height:.97;color:#fff;margin-bottom:1.25rem}
+    .article-title em{font-style:italic;font-weight:400;color:rgba(255,255,255,.4)}
+    .article-sub{font-size:1.08rem;color:rgba(255,255,255,.45);margin-bottom:2rem;line-height:1.75;max-width:640px}
+    .article-meta{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2rem}
+    .meta-pill{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:rgba(255,255,255,.38);border:1px solid rgba(255,255,255,.1);padding:.25rem .65rem;border-radius:2px}
+    .meta-pill.highlight{color:var(--sienna);border-color:rgba(184,132,90,.35)}
+    .article-body{max-width:820px;margin:0 auto;padding:4rem 3rem}
+    @media(max-width:640px){.article-hero{padding:3.5rem 1.5rem 3rem}.article-body{padding:3rem 1.5rem}}
+    .section-label{font-family:'JetBrains Mono',monospace;font-size:.67rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1rem}
+    h2.section-h{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;letter-spacing:-.02em;line-height:1.05;color:var(--ink);margin-bottom:.75rem}
+    h3.sub-h{font-size:1.12rem;font-weight:700;color:var(--ink);margin-bottom:.5rem;margin-top:2rem}
+    .body-text{font-size:1.05rem;color:var(--ink-2);line-height:1.8;margin-bottom:1.25rem}
+    .math-block{background:var(--bg-alt);border:1px solid var(--border);border-left:3px solid var(--navy);border-radius:0 4px 4px 0;padding:1.1rem 1.5rem;margin:1.5rem 0;font-family:'JetBrains Mono',monospace;font-size:.88rem;color:var(--navy);overflow-x:auto;line-height:1.7}
+    .math-inline{font-family:'JetBrains Mono',monospace;font-size:.88em;color:var(--navy);background:var(--navy-lt);padding:.08em .3em;border-radius:2px}
+    .code-block{background:#1C1C1E;border-radius:6px;overflow:hidden;margin:1.5rem 0}
+    .code-header{display:flex;align-items:center;justify-content:space-between;padding:.55rem 1rem;background:#2A2A2D;border-bottom:1px solid rgba(255,255,255,.07)}
+    .code-lang{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:rgba(255,255,255,.35);letter-spacing:.1em;text-transform:uppercase}
+    .code-dots{display:flex;gap:5px}
+    .code-dot{width:10px;height:10px;border-radius:50%}
+    .dot-r{background:#FF5F57}.dot-y{background:#FEBC2E}.dot-g{background:#28C840}
+    pre.code-body{padding:1.25rem 1.5rem;overflow-x:auto;font-size:.88rem;line-height:1.75;color:#D1D5DB}
+    .kw{color:#C084FC}.st{color:#86EFAC}.cm{color:#6B7280;font-style:italic}.fn{color:#93C5FD}.nm{color:#FCA5A5}.tp{color:#67E8F9}
+    .callout{border-radius:4px;padding:1.1rem 1.4rem;margin:1.5rem 0;display:flex;gap:.9rem}
+    .callout-icon{flex-shrink:0;margin-top:.1rem}
+    .callout-body{font-size:.9rem;line-height:1.7}
+    .callout-body strong{display:block;font-weight:700;margin-bottom:.2rem}
+    .callout.insight{background:var(--navy-lt);border:1px solid rgba(28,61,107,.2)}
+    .callout.insight .callout-icon,.callout.insight .callout-body{color:var(--navy)}
+    .callout.warning{background:var(--amber-lt);border:1px solid var(--amber-bdr)}
+    .callout.warning .callout-icon{color:var(--amber)}
+    .callout.warning .callout-body{color:#92400E}
+    .callout.success{background:var(--green-lt);border:1px solid var(--green-bdr)}
+    .callout.success .callout-icon{color:var(--green)}
+    .callout.success .callout-body{color:#14532D}
+    .callout.sienna{background:var(--sienna-lt);border:1px solid rgba(184,132,90,.3)}
+    .callout.sienna .callout-icon,.callout.sienna .callout-body{color:#7A4A2A}
+    .data-table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.875rem}
+    .data-table th{font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding:.65rem 1rem;border-bottom:2px solid var(--border);text-align:left}
+    .data-table td{padding:.65rem 1rem;border-bottom:1px solid var(--border);color:var(--ink-2)}
+    .data-table tr:last-child td{border-bottom:none}
+    .data-table tr:hover td{background:var(--bg-alt)}
+    .fig-wrap{margin:2rem 0;text-align:center}
+    .fig-caption{font-size:.78rem;color:var(--ink-3);margin-top:.6rem;font-style:italic}
+    .series-nav{background:var(--bg-alt);border:1px solid var(--border);border-radius:4px;padding:1.5rem 1.75rem;margin:2.5rem 0}
+    .series-nav-label{font-family:'JetBrains Mono',monospace;font-size:.63rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1rem}
+    .series-nav-list{display:flex;flex-direction:column;gap:.4rem}
+    .series-nav-item{display:flex;align-items:center;gap:.65rem;font-size:.95rem;color:var(--ink-2)}
+    .series-nav-item.current{color:var(--navy);font-weight:600}
+    .series-nav-item a{color:var(--ink-2)}
+    .series-nav-item a:hover{color:var(--navy)}
+    .ref-list{display:flex;flex-direction:column;gap:.75rem;margin-top:1rem}
+    .ref-item{font-size:.92rem;color:var(--ink-2);line-height:1.65;padding-left:2rem;position:relative}
+    .ref-num{position:absolute;left:0;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--ink-3);font-weight:700}
+    .ref-item a{color:var(--accent)}
+    .divider{border:none;border-top:1px solid var(--border);margin:3rem 0}
+    footer{background:#0C0C0C;border-top:1px solid rgba(255,255,255,.05);padding:2rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem}
+    .footer-copy{font-size:.77rem;color:rgba(255,255,255,.22)}
+    .footer-links{display:flex;gap:1.5rem}
+    .footer-links a{font-size:.77rem;color:rgba(255,255,255,.27)}
+    .footer-links a:hover{color:rgba(255,255,255,.7)}
+    .phase-timeline{display:flex;gap:0;margin:2rem 0;overflow-x:auto}
+    .phase-block{flex:1;min-width:160px;border:1px solid var(--border);padding:1.2rem 1rem;position:relative}
+    .phase-block:not(:last-child){border-right:none}
+    .phase-block:first-child{border-radius:4px 0 0 4px}
+    .phase-block:last-child{border-radius:0 4px 4px 0}
+    .phase-num{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:var(--sienna);margin-bottom:.4rem}
+    .phase-title{font-size:.875rem;font-weight:700;color:var(--ink);margin-bottom:.4rem}
+    .phase-body{font-size:.82rem;color:var(--ink-2);line-height:1.6}
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">Ali Shahmohammadi <em>Ph.D.</em></a>
+  <div class="nav-links">
+    <a href="../index.html#career">Career</a>
+    <a href="../index.html#writing">Writing</a>
+    <a href="../index.html#contact">Contact</a>
+    <a href="../resume.html">Resume</a>
+  </div>
+</nav>
+
+<div class="article-page">
+  <div class="article-hero">
+    <div class="article-hero-inner">
+      <div class="hero-series">Physics AI · PINNs Series · Article 8 of 8 · Series Finale</div>
+      <h1 class="article-title">Physics-Informed DeepONet: Operator Learning <em>Without Solution Data,</em> and Parameter Estimation at Scale</h1>
+      <p class="article-sub">Combining the universal approximation theorem for operators with physics-informed training — and using DeepONet to solve inverse problems across entire parameter families simultaneously.</p>
+      <div class="article-meta">
+        <span class="meta-pill highlight">Apr 2026</span>
+        <span class="meta-pill">30 min read</span>
+        <span class="meta-pill">Advanced</span>
+        <span class="meta-pill">Scientific ML</span>
+        <span class="meta-pill">Physics-Informed Operator Learning</span>
+        <span class="meta-pill">Parameter Estimation</span>
+        <span class="meta-pill">notebooks: 04_Research_Papers/11 &amp; 12</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="article-body">
+
+    <!-- Series navigation -->
+    <div class="series-nav">
+      <div class="series-nav-label">Physics AI · PINNs Series</div>
+      <div class="series-nav-list">
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">01</span><a href="pinn-introduction.html">Introduction to PINNs</a></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">02</span><a href="pinn-odes-second-order.html">Second-Order ODEs</a></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">03</span><a href="pinn-heat-equation.html">Heat Equation</a></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">04</span><a href="pinn-burgers-reaction-pdes.html">Burgers &amp; Reaction PDEs</a></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">05</span><a href="pinn-inverse-problems.html">Inverse Problems</a></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">06</span><a href="pinn-adaptive-sampling.html">Adaptive Sampling</a></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">07</span><a href="pinn-deeponet.html">DeepONet — Learning Operators</a></div>
+        <div class="series-nav-item current"><span style="font-family:'JetBrains Mono',monospace;font-size:.75rem">08</span>Physics-Informed DeepONet &larr; you are here</div>
+      </div>
+    </div>
+
+    <!-- Section 1: The data bottleneck -->
+    <div class="section-label">Section 01</div>
+    <h2 class="section-h">The Data Bottleneck in Standard DeepONet</h2>
+
+    <p class="body-text">The previous article established DeepONet's central capability: by learning the solution operator of a PDE, a single trained network can evaluate any input function-to-solution mapping in a millisecond forward pass. The economics are compelling — train once, deploy everywhere. But there is a hidden cost buried in the training phase that deserves scrutiny.</p>
+
+    <p class="body-text">Training a standard DeepONet requires a dataset of $(u_i, s_i)$ pairs: input functions and their <em>corresponding output functions</em>. For the antiderivative example, generating 1,000 pairs took negligible time because the antiderivative can be computed analytically. But for realistic PDE operators — the heat equation, reaction-diffusion, Navier-Stokes — each pair requires running a classical solver (FEM, FD, spectral method) to convergence. For a 3D CFD simulation, a single solve can take hours. Generating 1,000 training pairs means 1,000 solver runs, which can dwarf the DeepONet training time itself.</p>
+
+    <div class="callout warning">
+      <span class="callout-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </span>
+      <div class="callout-body">
+        <strong>The labeled data bottleneck</strong>
+        For standard DeepONet, generating N training pairs requires N full PDE solves. For expensive simulations (3D CFD, nonlinear FEM, multiphysics reactors), this upstream cost can be prohibitive — the same cost that operator learning was supposed to eliminate.
+      </div>
+    </div>
+
+    <p class="body-text">This is not a theoretical concern. In pharmaceutical process modeling, a single coupled reaction-transport simulation of a continuous manufacturing reactor with realistic kinetics and heat effects can take 30–90 minutes on a CPU cluster. Building a training dataset of 1,000 such simulations is a 30,000–90,000 CPU-hour project. The question is: can we train a DeepONet with <em>little or no labeled solution data</em>?</p>
+
+    <p class="body-text">The answer, developed by Wang, Wang &amp; Perdikaris in 2021 (Science Advances), is yes — by applying the governing physics directly as the training signal for the operator. This is the core idea of <strong>Physics-Informed DeepONet (PI-DeepONet)</strong>.</p>
+
+    <!-- Section 2: PI-DeepONet -->
+    <hr class="divider">
+    <div class="section-label">Section 02</div>
+    <h2 class="section-h">Physics-Informed DeepONet</h2>
+
+    <p class="body-text">The key insight is exactly analogous to how PINNs eliminate the need for labeled solution data when training a function approximator: substitute the PDE residual for the data loss (or add it as a regulariser). Applied to an operator, the physics loss requires that the output of the DeepONet — which is a function of both the input function $u$ and the query location $y$ — satisfies the governing PDE at every collocation point, for every input function in the training distribution.</p>
+
+    <p class="body-text">For a general PDE $\mathcal{R}[s] = 0$ with solution operator $\mathcal{G}: u \mapsto s$, the total loss is:</p>
+
+    <div class="math-block">
+      $$\mathcal{L} = \underbrace{\mathcal{L}_{\text{data}}}_{\text{labeled pairs}} + \lambda \underbrace{\mathcal{L}_{\text{physics}}}_{\text{PDE residual on operator output}}$$
+    </div>
+
+    <p class="body-text">where the physics component evaluates the PDE residual applied to the operator's output:</p>
+
+    <div class="math-block">
+      $$\mathcal{L}_{\text{physics}} = \frac{1}{N_f \cdot N_y} \sum_{k=1}^{N_f} \sum_{j=1}^{N_y} \left|\mathcal{R}\bigl[\mathcal{G}(u_k)\bigr](y_j)\right|^2$$
+    </div>
+
+    <p class="body-text">Here $\{u_k\}_{k=1}^{N_f}$ is a set of input functions sampled from the training distribution, and $\{y_j\}_{j=1}^{N_y}$ are collocation points in the output domain. The operator output $\mathcal{G}(u_k)(y_j) = \sum_{p} b_p(u_k) \cdot t_p(y_j) + b_0$ must satisfy the PDE at each $(u_k, y_j)$ pair.</p>
+
+    <p class="body-text">In the pure physics-informed limit ($\mathcal{L}_{\text{data}} = 0$), no labeled pairs $(u_i, s_i)$ are required at all. The network is supervised entirely by the governing equation and boundary/initial conditions. This is the setting demonstrated in the notebook for this article.</p>
+
+    <!-- Visual 1 — PI-DeepONet Loss Composition -->
+    <div class="fig-wrap">
+      <svg viewBox="0 0 740 370" width="100%" style="max-width:740px;font-family:'Inter',sans-serif">
+        <rect width="740" height="370" fill="#F8F6F2" rx="8"/>
+
+        <!-- Random IC u_k -->
+        <text x="30" y="32" font-size="10" fill="#8C857E" font-family="'JetBrains Mono',monospace" letter-spacing="0.08em">RANDOM INPUT FUNCTION u_k</text>
+        <path d="M30,58 C48,32 66,78 84,45 C102,18 120,70 138,42 C156,18 174,62 192,38" stroke="#1C3D6B" stroke-width="2.2" fill="none"/>
+        <text x="108" y="88" text-anchor="middle" font-size="10" fill="#1C3D6B" font-weight="600">sampled from GP prior</text>
+
+        <!-- Arrow to branch -->
+        <line x1="205" y1="58" x2="240" y2="78" stroke="#4A4540" stroke-width="1.4" marker-end="url(#arrowP1)"/>
+
+        <!-- Branch net -->
+        <rect x="248" y="55" width="100" height="55" rx="4" fill="#1C3D6B"/>
+        <text x="298" y="79" text-anchor="middle" font-size="11" fill="white" font-weight="700">Branch</text>
+        <text x="298" y="95" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.6)">Net</text>
+
+        <!-- Branch arrow to dot -->
+        <line x1="348" y1="82" x2="410" y2="155" stroke="#1C3D6B" stroke-width="1.4" stroke-dasharray="5,2" marker-end="url(#arrowP2)"/>
+        <text x="390" y="120" font-size="10" fill="#1C3D6B" font-style="italic">b(u_k)</text>
+
+        <!-- Query (x,t) -->
+        <text x="30" y="180" font-size="10" fill="#8C857E" font-family="'JetBrains Mono',monospace" letter-spacing="0.08em">QUERY POINT (x, t)</text>
+        <circle cx="110" cy="210" r="4" fill="#B8845A"/>
+        <text x="110" y="228" text-anchor="middle" font-size="10" fill="#B8845A" font-weight="600">(x, t)</text>
+
+        <!-- Arrow to trunk -->
+        <line x1="200" y1="210" x2="240" y2="210" stroke="#4A4540" stroke-width="1.4" marker-end="url(#arrowP3)"/>
+
+        <!-- Trunk net -->
+        <rect x="248" y="183" width="100" height="55" rx="4" fill="#B8845A"/>
+        <text x="298" y="207" text-anchor="middle" font-size="11" fill="white" font-weight="700">Trunk</text>
+        <text x="298" y="223" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.6)">Net</text>
+
+        <!-- Trunk arrow to dot -->
+        <line x1="348" y1="210" x2="410" y2="170" stroke="#B8845A" stroke-width="1.4" stroke-dasharray="5,2" marker-end="url(#arrowP4)"/>
+        <text x="390" y="200" font-size="10" fill="#B8845A" font-style="italic">t(x,t)</text>
+
+        <!-- Dot product -->
+        <circle cx="435" cy="157" r="20" fill="white" stroke="#4A4540" stroke-width="1.8"/>
+        <text x="435" y="163" text-anchor="middle" font-size="16" fill="#4A4540" font-weight="700">·</text>
+
+        <!-- Operator output -->
+        <line x1="455" y1="157" x2="500" y2="157" stroke="#4A4540" stroke-width="1.4" marker-end="url(#arrowP5)"/>
+        <rect x="508" y="133" width="120" height="48" rx="4" fill="#2D7A4F"/>
+        <text x="568" y="155" text-anchor="middle" font-size="11" fill="white" font-weight="700">G(u_k)(x,t)</text>
+        <text x="568" y="172" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.6)">operator output</text>
+
+        <!-- Two branches down: data loss and physics loss -->
+        <!-- Data loss arrow -->
+        <line x1="568" y1="181" x2="490" y2="250" stroke="#2D7A4F" stroke-width="1.4" marker-end="url(#arrowP6)"/>
+        <!-- Physics loss arrow -->
+        <line x1="568" y1="181" x2="660" y2="250" stroke="#B8845A" stroke-width="1.4" marker-end="url(#arrowP7)"/>
+
+        <!-- Data loss box -->
+        <rect x="400" y="256" width="165" height="68" rx="4" fill="var(--green-lt)" stroke="var(--green-bdr)"/>
+        <text x="482" y="276" text-anchor="middle" font-size="11" fill="#14532D" font-weight="700">Data Loss</text>
+        <text x="482" y="293" text-anchor="middle" font-size="9.5" fill="#14532D">compare to labeled s(x,t)</text>
+        <text x="482" y="308" text-anchor="middle" font-size="9" fill="#14532D" font-family="'JetBrains Mono',monospace">if available (optional)</text>
+
+        <!-- Physics loss box -->
+        <rect x="578" y="256" width="150" height="68" rx="4" fill="var(--sienna-lt)" stroke="rgba(184,132,90,.35)"/>
+        <text x="653" y="276" text-anchor="middle" font-size="11" fill="#7A4A2A" font-weight="700">Physics Loss</text>
+        <text x="653" y="293" text-anchor="middle" font-size="9.5" fill="#7A4A2A">R[G(u_k)](x,t) = 0</text>
+        <text x="653" y="308" text-anchor="middle" font-size="9" fill="#7A4A2A" font-family="'JetBrains Mono',monospace">autograd thru trunk</text>
+
+        <!-- Arrows to total loss -->
+        <line x1="482" y1="324" x2="482" y2="352" stroke="#14532D" stroke-width="1.4" marker-end="url(#arrowP8)"/>
+        <line x1="653" y1="324" x2="580" y2="352" stroke="#7A4A2A" stroke-width="1.4" marker-end="url(#arrowP9)"/>
+
+        <!-- Total loss -->
+        <rect x="430" y="354" width="190" height="10" rx="3" fill="#1C3D6B" opacity="0.12"/>
+        <text x="525" y="362" text-anchor="middle" font-size="11" fill="#1C3D6B" font-weight="700">Total Loss = L_data + λ·L_physics</text>
+
+        <defs>
+          <marker id="arrowP1" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#4A4540"/></marker>
+          <marker id="arrowP2" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#1C3D6B"/></marker>
+          <marker id="arrowP3" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#4A4540"/></marker>
+          <marker id="arrowP4" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#B8845A"/></marker>
+          <marker id="arrowP5" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#4A4540"/></marker>
+          <marker id="arrowP6" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#2D7A4F"/></marker>
+          <marker id="arrowP7" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#B8845A"/></marker>
+          <marker id="arrowP8" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#14532D"/></marker>
+          <marker id="arrowP9" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#7A4A2A"/></marker>
+        </defs>
+      </svg>
+      <p class="fig-caption">Figure 1. PI-DeepONet training architecture. The operator output $\mathcal{G}(u_k)(x,t)$ is supervised by two loss terms: an optional data loss comparing against labeled solutions, and a mandatory physics loss enforcing the PDE residual via automatic differentiation through the trunk network.</p>
+    </div>
+
+    <!-- Section 3: Why harder than standard PINN -->
+    <hr class="divider">
+    <div class="section-label">Section 03</div>
+    <h2 class="section-h">Why This Is Harder Than a Standard PINN</h2>
+
+    <p class="body-text">At first glance, PI-DeepONet looks like a straightforward extension of the PINN idea to the operator setting. But several structural differences make it substantially more challenging to train.</p>
+
+    <h3 class="sub-h">1. The input is a function, not coordinates</h3>
+    <p class="body-text">In a standard PINN, the only input to the network is a coordinate vector $(x, t) \in \mathbb{R}^d$. The physics loss at a collocation point is simply evaluated by passing $(x_j, t_j)$ forward and computing gradients. In PI-DeepONet, the input is a pair $(u_k, y_j)$ where $u_k$ is an entire function (encoded as $m$ sensor values). The physics loss must hold simultaneously for many different input functions, not just at many spatial locations. The effective "space" over which the physics must hold is infinite-dimensional.</p>
+
+    <h3 class="sub-h">2. Gradients flow through the trunk only</h3>
+    <p class="body-text">Computing the PDE residual requires differentiating the operator output with respect to the query location $y$. In the DeepONet output $\mathcal{G}(u)(y) = \mathbf{b}(u) \cdot \mathbf{t}(y) + b_0$, only the trunk depends on $y$. The gradient is:</p>
+    <div class="math-block">
+      $$\frac{\partial}{\partial y}\mathcal{G}(u)(y) = \mathbf{b}(u) \cdot \frac{\partial \mathbf{t}(y)}{\partial y}$$
+    </div>
+    <p class="body-text">This means the physics loss backpropagates through the trunk network but does not directly update the branch — the branch is only updated via the physics loss through the product $\mathbf{b}(u) \cdot \partial_y \mathbf{t}(y)$. This asymmetry in gradient flow can create training imbalances: the trunk may learn quickly (it is directly constrained by the PDE) while the branch updates slowly. Careful learning rate tuning and periodic activation functions in the trunk (which have better-behaved higher derivatives) help.</p>
+
+    <h3 class="sub-h">3. The loss landscape is nested</h3>
+    <p class="body-text">The outer loop is over input functions $\{u_k\}$; the inner loop is over collocation points $\{y_j\}$ for each function. In practice this means the physics loss is a double sum — a mini-batch must cover both function diversity and spatial diversity to avoid gradient bias. A batch that samples only a single input function is equivalent to a PINN for that one instance; the operator generalisation requires that many diverse input functions appear in each gradient step.</p>
+
+    <!-- Section 4: Reaction-diffusion benchmark -->
+    <hr class="divider">
+    <div class="section-label">Section 04</div>
+    <h2 class="section-h">The Reaction-Diffusion Operator Benchmark</h2>
+
+    <p class="body-text">The canonical benchmark from Wang, Wang &amp; Perdikaris (2021) is the nonlinear reaction-diffusion equation:</p>
+
+    <div class="math-block">
+      $$\frac{\partial s}{\partial t} = D\frac{\partial^2 s}{\partial x^2} + k\,s(1-s), \quad x \in [0,1],\; t \in [0,T]$$
+    </div>
+
+    <p class="body-text">with homogeneous Neumann boundary conditions $\partial_x s(0,t) = \partial_x s(1,t) = 0$ and initial condition $s(x,0) = u(x)$. With $D = 0.01$ and $k = 1$, this equation describes Fisher's reaction-diffusion: a species that both diffuses spatially and grows logistically toward carrying capacity. The solution can exhibit complex transient profiles before settling to $s \equiv 1$.</p>
+
+    <p class="body-text">The operator to learn is $\mathcal{G}: u(x) \mapsto s(x,t)$ — the map from any initial condition to the full space-time solution field. The trunk takes $(x,t) \in \mathbb{R}^2$ as input, producing basis functions over the 2D output domain. The branch takes $u$ evaluated at $m$ spatial sensors.</p>
+
+    <p class="body-text">The antiderivative example from the notebook (notebook 11) uses this same architecture but with the simpler first-order ODE $ds/dy = u(y)$ as the PDE constraint, demonstrating the method with zero labeled solution data:</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="code-dot dot-r"></span><span class="code-dot dot-y"></span><span class="code-dot dot-g"></span></div>
+        <span class="code-lang">Python · physics-informed training (zero labeled data)</span>
+      </div>
+      <pre class="code-body"><span class="cm"># The problem: learn G: u → s  where  ds/dy = u(y),  s(0) = 0</span>
+<span class="cm"># No ground-truth s anywhere — only the ODE and BC.</span>
+
+<span class="kw">def</span> <span class="fn">sample_batch</span>(bs):
+    idx = np.random.randint(<span class="nm">0</span>, N_fun, bs)
+    u_b = U_t[idx]                       <span class="cm"># (bs, m) branch input</span>
+    y = torch.rand(bs, <span class="nm">1</span>, device=device,
+                   requires_grad=<span class="nm">True</span>)   <span class="cm"># query points (need grad for PDE)</span>
+    <span class="cm"># Interpolate u(y) for the RHS of the ODE</span>
+    yi = (y.detach().cpu().numpy().ravel() * (m-<span class="nm">1</span>))
+    lo = np.floor(yi).astype(<span class="fn">int</span>); lo = np.clip(lo, <span class="nm">0</span>, m-<span class="nm">2</span>)
+    fr = yi - lo
+    u_at_y = U[idx, lo]*(<span class="nm">1</span>-fr) + U[idx, lo+<span class="nm">1</span>]*fr
+    u_at_y = torch.tensor(u_at_y, dtype=torch.float32,
+                          device=device).view(-<span class="nm">1</span>, <span class="nm">1</span>)
+    <span class="kw">return</span> u_b, y, u_at_y
+
+<span class="kw">def</span> <span class="fn">boundary_batch</span>(bs):
+    idx = np.random.randint(<span class="nm">0</span>, N_fun, bs)
+    <span class="kw">return</span> U_t[idx], torch.zeros(bs, <span class="nm">1</span>, device=device)
+
+opt = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>)
+
+<span class="kw">for</span> ep <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">10000</span>):
+    opt.zero_grad()
+
+    <span class="cm"># Physics loss: ds/dy = u(y) at random query points</span>
+    u_b, y, u_at_y = sample_batch(<span class="nm">2000</span>)
+    s = model(u_b, y)
+    s_y = torch.autograd.grad(s, y, torch.ones_like(s),
+                               create_graph=<span class="nm">True</span>)[<span class="nm">0</span>]
+    L_phys = torch.mean((s_y - u_at_y)**<span class="nm">2</span>)
+
+    <span class="cm"># Boundary condition: s(0) = 0</span>
+    ub, y0 = boundary_batch(<span class="nm">500</span>)
+    L_bc = torch.mean(model(ub, y0)**<span class="nm">2</span>)
+
+    loss = L_phys + L_bc
+    loss.backward(); opt.step()
+
+    <span class="kw">if</span> ep % <span class="nm">2000</span> == <span class="nm">0</span>:
+        <span class="kw">print</span>(<span class="st">f"epoch {ep:5d} | L_phys {L_phys.item():.2e} | L_bc {L_bc.item():.2e}"</span>)
+
+<span class="cm"># Trained with ZERO solution labels — only the ODE and BC</span></pre>
+    </div>
+
+    <p class="body-text">The crucial line is <code style="font-family:'JetBrains Mono',monospace;font-size:.85em;color:var(--navy)">s_y = torch.autograd.grad(s, y, ...)</code>. This differentiates the operator output with respect to the trunk query $y$ using PyTorch autograd — the gradient flows through the trunk network, computing $\partial_y \mathcal{G}(u)(y) = \mathbf{b}(u) \cdot \partial_y \mathbf{t}(y)$. The physics residual $\partial_y s - u(y) = 0$ then provides the training signal without requiring any labeled $(u_k, s_k)$ pairs.</p>
+
+    <!-- Section 5: Parameter estimation -->
+    <hr class="divider">
+    <div class="section-label">Section 05</div>
+    <h2 class="section-h">Parameter Estimation with Operator Learning</h2>
+
+    <p class="body-text">The most consequential application of PI-DeepONet is not forward prediction — it is inverse parameter estimation. Article 5 in this series demonstrated how a PINN can recover unknown PDE parameters by including them as learnable variables in the physics loss. The cost: a separate PINN must be trained for each new measurement dataset, each requiring 30–120 seconds of gradient descent.</p>
+
+    <p class="body-text">Operator learning offers a fundamentally different paradigm. Instead of treating $D$ and $k$ as fixed physical constants, make them part of the branch input. The augmented branch encodes:</p>
+
+    <div class="math-block">
+      $$\text{branch input} = [u(x_1),\, \ldots,\, u(x_m),\, D,\, k]$$
+    </div>
+
+    <p class="body-text">Now the operator maps $(u, D, k, x, t) \to s(x,t)$: it is the solution operator over the entire parameter space simultaneously. Training this operator requires collocation tuples $(u_k, D_k, k_k, x_j, t_j)$ with the physics loss evaluated at each combination — but crucially, the same training run learns the operator for all $(D, k)$ in the training distribution.</p>
+
+    <p class="body-text">Once the operator is trained and its weights frozen, given new sensor measurements $\{s_{\text{obs}}(x_i, t_i)\}$, the inverse problem reduces to a small optimisation over the branch input alone:</p>
+
+    <div class="math-block">
+      $$\min_{D, k} \sum_i \left|\mathcal{G}(u_0, D, k)(x_i, t_i) - s_{\text{obs}}(x_i, t_i)\right|^2$$
+    </div>
+
+    <p class="body-text">The operator weights are frozen — only $D$ and $k$ (two scalars) are optimised. This turns a nonlinear PDE inverse problem into a 2-parameter regression with a cheap-to-evaluate surrogate. Gradient descent on this 2D problem converges in seconds, compared to the 30–120 second full PINN inverse solve. More importantly, the same frozen operator can be used for unlimited new measurements without any retraining — it is a reusable inference engine for the entire parameter space.</p>
+
+    <!-- Visual 2 — Parameter Estimation Timeline -->
+    <div class="fig-wrap">
+      <div class="phase-timeline">
+        <div class="phase-block" style="background:var(--navy-lt);border-color:rgba(28,61,107,.25)">
+          <div class="phase-num">PHASE 01</div>
+          <div class="phase-title" style="color:var(--navy)">Train Operator Offline</div>
+          <div class="phase-body">Sample $(u_k, D_k, k_k)$ from prior. Run PI-DeepONet training with physics loss over entire parameter family. Cost: paid once.</div>
+        </div>
+        <div class="phase-block" style="background:#F8F6F2;position:relative">
+          <div style="position:absolute;top:50%;left:-12px;transform:translateY(-50%);width:24px;height:24px;background:var(--sienna);border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:2">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="phase-num">PHASE 02</div>
+          <div class="phase-title">Deploy: Weights Frozen</div>
+          <div class="phase-body">Operator deployed. All weights fixed. Forward inference: single pass (&lt;1 ms). Operator can answer any $(u, D, k) \to s$ query instantly.</div>
+        </div>
+        <div class="phase-block" style="background:var(--sienna-lt);border-color:rgba(184,132,90,.3);position:relative">
+          <div style="position:absolute;top:50%;left:-12px;transform:translateY(-50%);width:24px;height:24px;background:var(--sienna);border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:2">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="phase-num">PHASE 03</div>
+          <div class="phase-title" style="color:#7A4A2A">Inverse Problem</div>
+          <div class="phase-body">New measurements arrive. Optimise only $(D, k)$ — 2 scalars — against frozen operator. Converges in seconds. Operator reused for any future dataset.</div>
+        </div>
+      </div>
+      <p class="fig-caption">Figure 2. The three-phase deployment cycle for PI-DeepONet-based parameter estimation. The upstream training cost is paid once; all subsequent inverse queries use the frozen operator with only a 2-parameter optimisation.</p>
+    </div>
+
+    <p class="body-text">The key mechanism that makes this possible is that the learned operator is a smooth, differentiable function of $(D, k)$ through the branch network. Gradients of the data misfit with respect to $(D, k)$ are computed via backpropagation through the frozen operator — the same mechanism used for regular gradient descent, but on a much smaller manifold (2D vs 27,000D for full PINN retraining).</p>
+
+    <!-- Section 6: Architecture improvements -->
+    <hr class="divider">
+    <div class="section-label">Section 06</div>
+    <h2 class="section-h">Architecture Improvements for PI-DeepONet</h2>
+
+    <p class="body-text">Notebook 12 (Architectures and Training) documents the key upgrades that define current best practice for both PINNs and PI-DeepONet. These are not theoretical niceties — they are practical requirements for achieving accurate results on difficult problems.</p>
+
+    <h3 class="sub-h">Modified MLP with Gating</h3>
+    <p class="body-text">Wang et al. 2022 identified that standard MLP initialization causes gradient pathologies in deep PDE networks. The "Modified MLP" introduces two encoder branches $U = \sigma(W_1 x + b_1)$ and $V = \sigma(W_2 x + b_2)$, then applies a gating transform at each hidden layer:</p>
+
+    <div class="math-block">
+      $$H^{(k+1)} = \sigma\!\left(W^{(k)} H^{(k)} + b^{(k)}\right) \odot U + \left(1 - \sigma\!\left(W^{(k)} H^{(k)} + b^{(k)}\right)\right) \odot V$$
+    </div>
+
+    <p class="body-text">The gate $\sigma(W H + b) \in (0,1)$ interpolates between the two encoder representations at each layer depth. This provides stable gradients throughout training — the encoders prevent signal vanishing — and empirically reduces the number of epochs required by 3–5x for stiff problems.</p>
+
+    <h3 class="sub-h">Fourier Feature Embeddings</h3>
+    <p class="body-text">Spectral bias — the tendency of plain MLPs to learn low-frequency components first — is particularly damaging for the trunk network in PI-DeepONet, since the trunk must learn basis functions that capture the full frequency content of the PDE solutions. Random Fourier features (Tancik et al. 2020; Wang et al. 2021) map the trunk input through a random frequency embedding before the MLP:</p>
+
+    <div class="math-block">
+      $$\gamma(y) = \left[\cos(2\pi B_1 y),\, \sin(2\pi B_1 y),\, \ldots,\, \cos(2\pi B_n y),\, \sin(2\pi B_n y)\right]$$
+    </div>
+
+    <p class="body-text">where $B_i \sim \mathcal{N}(0, \sigma^2)$ are randomly sampled frequencies with bandwidth $\sigma$ chosen to match the expected frequency content of the target operator. For the high-frequency Poisson benchmark in notebook 12, this single change reduces the relative $L^2$ error from $\sim 0.5$ (plain MLP) to $\sim 10^{-3}$ (Fourier features) after the same number of training epochs.</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="code-dot dot-r"></span><span class="code-dot dot-y"></span><span class="code-dot dot-g"></span></div>
+        <span class="code-lang">Python · Fourier feature trunk</span>
+      </div>
+      <pre class="code-body"><span class="kw">class</span> <span class="tp">FourierTrunk</span>(nn.Module):
+    <span class="cm">"""Trunk with random Fourier feature embedding + MLP."""</span>
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, in_dim=<span class="nm">2</span>, p=<span class="nm">50</span>, width=<span class="nm">100</span>,
+                 n_feat=<span class="nm">64</span>, sigma=<span class="nm">4.0</span>):
+        <span class="fn">super</span>().__init__()
+        B = torch.randn(in_dim, n_feat) * sigma
+        self.register_buffer(<span class="st">"B"</span>, B)       <span class="cm"># fixed random frequencies</span>
+        self.net = nn.Sequential(
+            nn.Linear(<span class="nm">2</span>*n_feat, width), nn.Tanh(),
+            nn.Linear(width, width), nn.Tanh(),
+            nn.Linear(width, p), nn.Tanh()
+        )
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, y):
+        <span class="cm"># y: (N, in_dim)  e.g. (x, t) pairs</span>
+        proj = <span class="nm">2</span> * np.pi * y @ self.B        <span class="cm"># (N, n_feat)</span>
+        feat = torch.cat([torch.cos(proj), torch.sin(proj)], dim=<span class="nm">1</span>)
+        <span class="kw">return</span> self.net(feat)                <span class="cm"># (N, p)</span></pre>
+    </div>
+
+    <h3 class="sub-h">POD-DeepONet</h3>
+    <p class="body-text">When a small number of labeled solutions is available (say, 50–200), the POD-DeepONet variant uses them constructively rather than as direct supervision. POD (Proper Orthogonal Decomposition, also known as PCA on the solution snapshots) extracts the empirically optimal basis functions from the available solutions. These POD basis functions are used to initialise or replace the trunk network outputs — the trunk is pre-conditioned to represent the relevant solution space before training begins. The branch network then learns to predict POD coefficients rather than raw function values, which is a substantially easier regression task. Wang et al. 2022 showed this variant achieves accuracy competitive with standard DeepONet trained on 10x more labeled data.</p>
+
+    <h3 class="sub-h">PirateNets and Deep Operator Networks</h3>
+    <p class="body-text">Wang et al. 2024 introduced PirateNets (Physics-Informed Residual Adaptive Networks) — a training protocol that uses physics-informed initialization for each residual block, ensuring that very deep networks (40+ layers) train stably. For PI-DeepONet applied to complex multi-scale PDEs, this enables substantially deeper architectures than the 3-layer MLPs in the baseline, capturing richer operator structure at the cost of more careful initialization.</p>
+
+    <!-- Section 7: Training tips -->
+    <hr class="divider">
+    <div class="section-label">Section 07</div>
+    <h2 class="section-h">Training Tips for PI-DeepONet</h2>
+
+    <p class="body-text">Getting PI-DeepONet to converge reliably on difficult PDEs requires attention to several practical details that are not always discussed in papers focused on theoretical contributions.</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Issue</th>
+          <th>Symptom</th>
+          <th>Remedy</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Function-level batch bias</td>
+          <td>Physics loss stagnates; model learns the mean of the distribution</td>
+          <td>Sample diverse mini-batches: at least 128 distinct input functions per gradient step</td>
+        </tr>
+        <tr>
+          <td>Loss imbalance ($\mathcal{L}_{\text{phys}} \gg \mathcal{L}_{\text{data}}$)</td>
+          <td>Model ignores data loss; may satisfy PDE but miss observations</td>
+          <td>Normalise each loss term separately; use NTK-based dynamic weighting (Wang et al. 2022)</td>
+        </tr>
+        <tr>
+          <td>Gradient explosion in physics loss</td>
+          <td>NaN within first 100 epochs</td>
+          <td>Clip gradients: <code>torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)</code></td>
+        </tr>
+        <tr>
+          <td>Slow convergence on temporal PDEs</td>
+          <td>Accurate at $t=0$, degraded at large $t$</td>
+          <td>Causal training: weight collocation points by $e^{-\epsilon \cdot t}$, decrease $\epsilon$ over training</td>
+        </tr>
+        <tr>
+          <td>High-frequency trunk features</td>
+          <td>Operator fails on rapidly oscillating inputs</td>
+          <td>Fourier feature embedding in trunk; choose $\sigma$ to match the spectrum of target PDE solutions</td>
+        </tr>
+        <tr>
+          <td>Branch-trunk gradient asymmetry</td>
+          <td>Branch weights barely change; operator ignores input function details</td>
+          <td>Add a small direct data loss on the branch output (coefficient-level supervision); or reduce trunk learning rate</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="body-text">The learning rate schedule matters considerably for PI-DeepONet. A warm-up phase (100–500 steps of linear increase from $10^{-5}$ to $10^{-3}$) followed by cosine decay prevents early overfit to the initial function samples. The transition from Adam to L-BFGS in the final training phase (standard practice for PINNs) is also beneficial for PI-DeepONet when a small labeled dataset is available, as L-BFGS can drive the data loss to near machine precision.</p>
+
+    <!-- Section 8: Benchmark comparison -->
+    <hr class="divider">
+    <div class="section-label">Section 08</div>
+    <h2 class="section-h">Benchmark Comparison</h2>
+
+    <p class="body-text">The following table compares four approaches to solving the reaction-diffusion benchmark for a distribution of initial conditions, with $D = 0.01$, $k = 1.0$:</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>Labeled pairs needed</th>
+          <th>Training time</th>
+          <th>Test L2 error (unseen ICs)</th>
+          <th>Inference speed</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>PINN (per-instance)</td>
+          <td>0 (per solve)</td>
+          <td>45–90 s per new IC</td>
+          <td>&lt;1e-3 (per-instance)</td>
+          <td>N/A — must retrain</td>
+        </tr>
+        <tr>
+          <td>Standard DeepONet</td>
+          <td>1000+ pairs</td>
+          <td>~600 s (once)</td>
+          <td>1e-2 to 1e-3</td>
+          <td>&lt;1 ms per query</td>
+        </tr>
+        <tr>
+          <td>PI-DeepONet (0 labels)</td>
+          <td>0</td>
+          <td>~800 s (once)</td>
+          <td>5e-3 to 1e-2</td>
+          <td>&lt;1 ms per query</td>
+        </tr>
+        <tr>
+          <td>PI-DeepONet (50 labels)</td>
+          <td>50 (a 20x reduction)</td>
+          <td>~900 s (once)</td>
+          <td>1e-3 to 5e-3</td>
+          <td>&lt;1 ms per query</td>
+        </tr>
+        <tr>
+          <td>POD-DeepONet (50 labels)</td>
+          <td>50</td>
+          <td>~700 s (once)</td>
+          <td>~5e-4</td>
+          <td>&lt;1 ms per query</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Visual 3 — Data Efficiency Comparison -->
+    <div class="fig-wrap">
+      <svg viewBox="0 0 620 310" width="100%" style="max-width:620px;font-family:'Inter',sans-serif">
+        <rect width="620" height="310" fill="#F8F6F2" rx="8"/>
+        <text x="310" y="26" text-anchor="middle" font-size="13" font-weight="700" fill="#111010">Data Efficiency: Standard vs Physics-Informed DeepONet</text>
+        <text x="310" y="42" text-anchor="middle" font-size="10" fill="#8C857E">Relative L2 test error vs. number of labeled training pairs (log-log scale)</text>
+
+        <!-- Axes -->
+        <line x1="80" y1="60" x2="80" y2="240" stroke="#8C857E" stroke-width="1.5"/>
+        <line x1="80" y1="240" x2="570" y2="240" stroke="#8C857E" stroke-width="1.5"/>
+
+        <!-- y-axis labels (L2 error) -->
+        <text x="72" y="65" text-anchor="end" font-size="9" fill="#8C857E">1e-1</text>
+        <text x="72" y="105" text-anchor="end" font-size="9" fill="#8C857E">1e-2</text>
+        <text x="72" y="145" text-anchor="end" font-size="9" fill="#8C857E">1e-3</text>
+        <text x="72" y="185" text-anchor="end" font-size="9" fill="#8C857E">1e-4</text>
+        <text x="72" y="240" text-anchor="end" font-size="9" fill="#8C857E">1e-5</text>
+
+        <!-- x-axis labels (N labeled) -->
+        <text x="130" y="255" text-anchor="middle" font-size="9" fill="#8C857E">10</text>
+        <text x="220" y="255" text-anchor="middle" font-size="9" fill="#8C857E">50</text>
+        <text x="310" y="255" text-anchor="middle" font-size="9" fill="#8C857E">100</text>
+        <text x="400" y="255" text-anchor="middle" font-size="9" fill="#8C857E">500</text>
+        <text x="490" y="255" text-anchor="middle" font-size="9" fill="#8C857E">1000</text>
+        <text x="325" y="270" text-anchor="middle" font-size="10" fill="#8C857E">Number of labeled training pairs</text>
+
+        <!-- Grid lines (horizontal) -->
+        <line x1="80" y1="105" x2="570" y2="105" stroke="#DEDAD3" stroke-width="0.8" stroke-dasharray="3,3"/>
+        <line x1="80" y1="145" x2="570" y2="145" stroke="#DEDAD3" stroke-width="0.8" stroke-dasharray="3,3"/>
+        <line x1="80" y1="185" x2="570" y2="185" stroke="#DEDAD3" stroke-width="0.8" stroke-dasharray="3,3"/>
+
+        <!-- PINN accuracy reference line (horizontal dashed) -->
+        <line x1="80" y1="148" x2="570" y2="148" stroke="#DC2626" stroke-width="1.5" stroke-dasharray="8,4"/>
+        <text x="572" y="152" font-size="9" fill="#DC2626" font-weight="600">PINN accuracy</text>
+
+        <!-- Standard DeepONet curve (navy) - needs many labels, starts high -->
+        <!-- Points: (10→65), (50→95), (100→115), (500→145), (1000→160) in y coords -->
+        <polyline points="130,75 220,95 310,115 400,148 490,162"
+                  stroke="#1C3D6B" stroke-width="2.2" fill="none" stroke-linejoin="round"/>
+        <!-- data points -->
+        <circle cx="130" cy="75" r="5" fill="#1C3D6B"/>
+        <circle cx="220" cy="95" r="5" fill="#1C3D6B"/>
+        <circle cx="310" cy="115" r="5" fill="#1C3D6B"/>
+        <circle cx="400" cy="148" r="5" fill="#1C3D6B"/>
+        <circle cx="490" cy="162" r="5" fill="#1C3D6B"/>
+
+        <!-- PI-DeepONet curve (green) - works with few labels, plateaus at low error -->
+        <!-- Points: (10→108), (50→125), (100→138), (500→155), (1000→162) in y coords -->
+        <polyline points="130,108 220,118 310,128 400,140 490,148"
+                  stroke="#2D7A4F" stroke-width="2.2" fill="none" stroke-linejoin="round"/>
+        <!-- data points -->
+        <circle cx="130" cy="108" r="5" fill="#2D7A4F"/>
+        <circle cx="220" cy="118" r="5" fill="#2D7A4F"/>
+        <circle cx="310" cy="128" r="5" fill="#2D7A4F"/>
+        <circle cx="400" cy="140" r="5" fill="#2D7A4F"/>
+        <circle cx="490" cy="148" r="5" fill="#2D7A4F"/>
+
+        <!-- Crossover annotation -->
+        <circle cx="400" cy="144" r="12" fill="none" stroke="#B8845A" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <text x="415" y="130" font-size="9" fill="#B8845A" font-weight="600">crossover</text>
+        <line x1="415" y1="132" x2="408" y2="140" stroke="#B8845A" stroke-width="1"/>
+
+        <!-- Legend -->
+        <line x1="95" y1="278" x2="120" y2="278" stroke="#1C3D6B" stroke-width="2.2"/>
+        <circle cx="107" cy="278" r="4" fill="#1C3D6B"/>
+        <text x="125" y="282" font-size="10" fill="#4A4540">Standard DeepONet</text>
+        <line x1="255" y1="278" x2="280" y2="278" stroke="#2D7A4F" stroke-width="2.2"/>
+        <circle cx="267" cy="278" r="4" fill="#2D7A4F"/>
+        <text x="285" y="282" font-size="10" fill="#4A4540">PI-DeepONet</text>
+        <line x1="390" y1="278" x2="415" y2="278" stroke="#DC2626" stroke-width="1.5" stroke-dasharray="6,3"/>
+        <text x="420" y="282" font-size="10" fill="#DC2626">PINN accuracy</text>
+
+        <!-- y-axis title (rotated) -->
+        <text transform="rotate(-90 20 150)" x="20" y="150" text-anchor="middle" font-size="10" fill="#8C857E">Relative L2 test error</text>
+      </svg>
+      <p class="fig-caption">Figure 3. Data efficiency comparison. PI-DeepONet (green) achieves comparable or better accuracy with far fewer labeled training pairs than standard DeepONet (navy). Both operator learning methods eventually surpass per-instance PINN accuracy (red dashed line) for large labeled datasets, while being orders of magnitude faster at test time.</p>
+    </div>
+
+    <!-- Section 9: Industrial application -->
+    <hr class="divider">
+    <div class="section-label">Section 09</div>
+    <h2 class="section-h">Industrial Application: Digital Twin for Pharmaceutical Manufacturing</h2>
+
+    <p class="body-text">The methods developed in this article series — from basic PINNs to PI-DeepONet — are not academic constructs. They address concrete engineering challenges in pharmaceutical manufacturing. Let me be specific about how this applies to continuous manufacturing reactor modeling.</p>
+
+    <h3 class="sub-h">The Process Problem</h3>
+    <p class="body-text">A continuous pharmaceutical manufacturing reactor involves coupled transport phenomena: reactant concentration profiles $c(x,t)$ governed by a convection-diffusion-reaction PDE, temperature profiles $T(x,t)$ from the heat equation with reaction-generated source terms, and outlet concentration $c_{\text{out}}(t)$ measured by PAT (Process Analytical Technology) sensors in real time. The governing equations form a coupled system:</p>
+
+    <div class="math-block">
+      $$\frac{\partial c}{\partial t} + v\frac{\partial c}{\partial x} = D_c \frac{\partial^2 c}{\partial x^2} - r(c, T)$$
+      $$\frac{\partial T}{\partial t} + v\frac{\partial T}{\partial x} = D_T \frac{\partial^2 T}{\partial x^2} + \Delta H_r \cdot r(c, T)$$
+    </div>
+
+    <p class="body-text">where $r(c, T) = k_0 e^{-E_a/RT} c^n$ is an Arrhenius reaction rate. The parameters of interest — $k_0$, $E_a$, the reaction order $n$, heat of reaction $\Delta H_r$ — are often imprecisely known and may drift over time as raw material properties change between batches.</p>
+
+    <h3 class="sub-h">The DeepONet Digital Twin</h3>
+    <p class="body-text">A DeepONet trained on this coupled system maps:</p>
+
+    <div class="math-block">
+      $$\mathcal{G}:\; \bigl(c_{\text{in}}(t),\; F(t),\; k_0,\; E_a,\; n\bigr) \;\longmapsto\; \bigl(c(x,t),\; T(x,t),\; c_{\text{out}}(t)\bigr)$$
+    </div>
+
+    <p class="body-text">The branch encodes the inlet concentration profile $c_{\text{in}}(t)$ (sampled at $m$ time points) plus the scalar process parameters concatenated into the branch input vector. The trunk encodes $(x, t)$. Once trained on a distribution of operating conditions using PI-DeepONet (with physics supervision from the PDE system and a small number of validated simulation pairs), the digital twin:</p>
+
+    <ul style="list-style:none;display:flex;flex-direction:column;gap:.6rem;margin:1rem 0 1.5rem 0">
+      <li style="display:flex;gap:.75rem;font-size:.935rem;color:var(--ink-2)"><span style="color:var(--green);flex-shrink:0;margin-top:2px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><strong>Real-time prediction:</strong> given the current inlet profile from flow meters, predict $c_{\text{out}}(t)$ for the next 30 minutes in &lt;1 ms — enabling proactive control.</li>
+      <li style="display:flex;gap:.75rem;font-size:.935rem;color:var(--ink-2)"><span style="color:var(--green);flex-shrink:0;margin-top:2px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><strong>In-loop parameter estimation:</strong> when PAT sensor readings arrive, solve the inverse problem (recover $k_0$, $E_a$ from $c_{\text{out}}$ measurements) in seconds — early detection of raw material variability.</li>
+      <li style="display:flex;gap:.75rem;font-size:.935rem;color:var(--ink-2)"><span style="color:var(--green);flex-shrink:0;margin-top:2px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><strong>Design space exploration:</strong> sweep 10,000 combinations of flow rate, temperature setpoint, and feed concentration to identify the feasible operating region — completed in under 30 seconds.</li>
+      <li style="display:flex;gap:.75rem;font-size:.935rem;color:var(--ink-2)"><span style="color:var(--green);flex-shrink:0;margin-top:2px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><strong>Uncertainty quantification:</strong> sample 50,000 parameter draws from a prior distribution and propagate through the operator to obtain posterior predictive distributions — enabling probabilistic specification testing.</li>
+    </ul>
+
+    <p class="body-text">This is precisely the application domain where the operator learning advantage is transformative. Classical mechanistic models take 30–90 minutes per solve; a PINN digital twin requires retraining for each new operating condition. A PI-DeepONet digital twin trained once covers the entire operating envelope at inference speeds compatible with real-time control loops and ICH Q13 continuous manufacturing process monitoring requirements.</p>
+
+    <div class="callout sienna">
+      <span class="callout-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </span>
+      <div class="callout-body">
+        <strong>ICH Q13 &amp; real-time release relevance</strong>
+        Continuous manufacturing under ICH Q13 requires a Process Control Strategy with real-time monitoring and control capability. A PI-DeepONet digital twin provides the millisecond-speed physics-consistent surrogate needed for in-loop model predictive control and real-time release testing — replacing expensive CFD runs with a learned operator that respects the governing physics.
+      </div>
+    </div>
+
+    <!-- Section 10: State of the field -->
+    <hr class="divider">
+    <div class="section-label">Section 10</div>
+    <h2 class="section-h">State of the Field and Open Problems</h2>
+
+    <p class="body-text">As of early 2026, PI-DeepONet and related physics-informed operator learning methods have moved from proof-of-concept to practical applicability for a significant class of problems. Understanding the current capabilities and limitations is essential for choosing when to deploy these methods.</p>
+
+    <h3 class="sub-h">Where PI-DeepONet Works Well</h3>
+    <p class="body-text">Parabolic PDEs (heat equation, diffusion-reaction, Black-Scholes) and elliptic PDEs (Poisson, Laplace, linear elasticity) are the sweet spot. These problem classes have smooth, bounded solutions with no shocks or discontinuities, making the operator structure compact and the physics loss well-conditioned. Test errors of $10^{-3}$ to $10^{-4}$ in relative $L^2$ norm are routinely achievable with reasonable architectures.</p>
+
+    <h3 class="sub-h">Where It Remains Challenging</h3>
+    <p class="body-text">Hyperbolic PDEs with shocks (Euler equations, conservation laws) remain difficult. The issue is structural: the solution operator is not continuous in the function topology assumed by the Chen &amp; Chen theorem when shocks form. The output function $s = \mathcal{G}(u)$ can have sharp discontinuities even when the input $u$ is smooth, which requires a very large $p$ to represent accurately. Current approaches use ENO-type numerical dissipation in the training loss or reformulate the problem in weak (integral) form to handle shocks.</p>
+
+    <h3 class="sub-h">Open Problems</h3>
+    <p class="body-text"><strong>Geometry variation:</strong> current DeepONet formulations assume a fixed domain $\Omega$. Handling shape optimization (varying $\Omega$ as part of the operator input) is an active research direction — graph neural operators are better positioned for this, but at significant computational cost for complex 3D geometries.</p>
+
+    <p class="body-text"><strong>Uncertainty quantification:</strong> a point-estimate operator does not quantify its own epistemic uncertainty (uncertainty due to limited training data) or aleatoric uncertainty (uncertainty in the PDE parameters). Bayesian neural operators (using variational inference or Monte Carlo dropout) are under active development, but the computational cost of propagating uncertainty through the operator training is substantial.</p>
+
+    <p class="body-text"><strong>3D industrial geometries:</strong> the memory and computational requirements of PI-DeepONet scale with the dimension of the query space. For 3D geometries with $10^5$–$10^6$ degrees of freedom, the trunk must evaluate at high-dimensional $(x,y,z,t)$ inputs, which taxes standard MLP architectures. Combination with model-order reduction (POD-DeepONet for 3D) or attention-based architectures is likely needed.</p>
+
+    <p class="body-text"><strong>Multi-fidelity training:</strong> combining cheap low-fidelity simulations (coarse grid FEM) with expensive high-fidelity data in a unified operator learning framework — analogous to multi-fidelity GPs in the surrogate modeling literature — is an open and practically important problem.</p>
+
+    <div class="callout success">
+      <span class="callout-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+      </span>
+      <div class="callout-body">
+        <strong>Series conclusion</strong>
+        This series has traced the arc from basic PINNs (a network that solves one PDE instance) through inverse problems, adaptive sampling, and finally to operator learning — the framework where a single trained network encodes an entire family of PDE solutions. The common thread is automatic differentiation as a physics-enforcement mechanism. Whether encoding boundary conditions in a single network or enforcing a PDE residual across millions of input functions, the same backpropagation machinery that powers deep learning turns out to be exactly what is needed to incorporate physical law into learned models. The next frontier — 3D multiphysics operators for industrial digital twins — is where this machinery will find its most consequential application.
+      </div>
+    </div>
+
+    <!-- References -->
+    <hr class="divider">
+    <div class="section-label">References</div>
+    <h2 class="section-h">References</h2>
+    <div class="ref-list">
+      <div class="ref-item"><span class="ref-num">[1]</span>Wang, S., Wang, H., &amp; Perdikaris, P. (2021). Learning the solution operator of parametric PDEs with physics-informed DeepONets. <em>Science Advances</em>, 7(40), eabi8605. <a href="https://doi.org/10.1126/sciadv.abi8605">doi:10.1126/sciadv.abi8605</a></div>
+      <div class="ref-item"><span class="ref-num">[2]</span>Lu, L., Jin, P., Pang, G., Zhang, Z., &amp; Karniadakis, G.E. (2021). Learning nonlinear operators via DeepONet based on the universal approximation theorem of operators. <em>Nature Machine Intelligence</em>, 3, 218–229.</div>
+      <div class="ref-item"><span class="ref-num">[3]</span>Wang, S., Wang, H., &amp; Perdikaris, P. (2022). Improved architectures and training algorithms for deep operator networks. <em>Journal of Scientific Computing</em>, 92, 35. arXiv:2204.13188</div>
+      <div class="ref-item"><span class="ref-num">[4]</span>Tancik, M., Srinivasan, P.P., Mildenhall, B., Fridovich-Keil, S., Raghavan, N., Singhal, U., Ramamoorthi, R., Barron, J.T., &amp; Ng, R. (2020). Fourier features let networks learn high frequency functions in low dimensional domains. <em>NeurIPS</em>.</div>
+      <div class="ref-item"><span class="ref-num">[5]</span>Wang, S., Teng, Y., &amp; Perdikaris, P. (2021). Understanding and mitigating gradient flow pathologies in physics-informed neural networks. <em>SIAM Journal on Scientific Computing</em>, 43(5), A3055–A3081.</div>
+      <div class="ref-item"><span class="ref-num">[6]</span>Li, Z., Kovachki, N., Azizzadenesheli, K., Liu, B., Bhattacharya, K., Stuart, A., &amp; Anandkumar, A. (2021). Fourier Neural Operator for parametric partial differential equations. <em>ICLR 2021</em>. arXiv:2010.08895</div>
+      <div class="ref-item"><span class="ref-num">[7]</span>Chen, T., &amp; Chen, H. (1995). Universal approximation to nonlinear operators by neural networks with arbitrary activation functions and its application to dynamical systems. <em>IEEE Transactions on Neural Networks</em>, 6(4), 911–917.</div>
+      <div class="ref-item"><span class="ref-num">[8]</span>Kovachki, N., Li, Z., Liu, B., Azizzadenesheli, K., Bhattacharya, K., Stuart, A., &amp; Anandkumar, A. (2023). Neural operator: Learning maps between function spaces with applications to PDEs. <em>Journal of Machine Learning Research</em>, 24(89), 1–97.</div>
+      <div class="ref-item"><span class="ref-num">[9]</span>Fresca, S., &amp; Manzoni, A. (2022). POD-DL-ROM: Enhancing deep learning-based reduced order models for nonlinear parametrized PDEs by proper orthogonal decomposition. <em>Computer Methods in Applied Mechanics and Engineering</em>, 388, 114181.</div>
+      <div class="ref-item"><span class="ref-num">[10]</span>Wang, S., Sankaran, S., Wang, H., &amp; Perdikaris, P. (2023). An expert's guide to training physics-informed neural networks. <em>Computer Methods in Applied Mechanics and Engineering</em>, 408, 116064.</div>
+      <div class="ref-item"><span class="ref-num">[11]</span>Wang, S., Li, B., Shi, Y., &amp; Perdikaris, P. (2024). PirateNets: Physics-informed deep learning with residual adaptive networks. arXiv:2402.00326</div>
+    </div>
+
+    <!-- Series complete -->
+    <hr class="divider">
+    <div class="series-nav">
+      <div class="series-nav-label">Series complete — return to start</div>
+      <div class="series-nav-list">
+        <div class="series-nav-item"><span style="color:var(--sienna);font-family:'JetBrains Mono',monospace;font-size:.75rem">01</span><a href="pinn-introduction.html">Introduction to PINNs — start from the beginning</a></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">07</span><a href="pinn-deeponet.html">&larr; Previous: DeepONet — Learning Operators</a></div>
+      </div>
+    </div>
+
+  </div><!-- end article-body -->
+</div><!-- end article-page -->
+
+<footer>
+  <span class="footer-copy">&copy; 2026 Ali Shahmohammadi. All rights reserved.</span>
+  <div class="footer-links">
+    <a href="../index.html">Home</a>
+    <a href="../index.html#writing">Writing</a>
+    <a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://linkedin.com/in/alishahmohammadi22" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,24 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ali Shahmohammadi, Ph.D. &mdash; Applied AI Engineer &middot; Trustworthy Scientific Data for Life Sciences</title>
-  <meta name="description" content="Applied AI engineer with a decade in pharmaceutical R&D. I build MCP servers, agentic pipelines, and evaluation harnesses that make scientific data trustworthy for frontier AI &mdash; from discovery to regulated deployment." />
-  <meta property="og:title" content="Ali Shahmohammadi, Ph.D. &mdash; Applied AI Engineer &middot; Trustworthy Scientific Data for Life Sciences" />
-  <meta property="og:description" content="Applied AI engineer with a decade in pharmaceutical R&D. I build MCP servers, agentic pipelines, and eval harnesses that make scientific data trustworthy for frontier AI." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://alishahmohammadi22.github.io" />
-  <meta property="og:image" content="https://alishahmohammadi22.github.io/assets/images/og-preview.png" />
-  <meta property="og:image:type" content="image/png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Ali Shahmohammadi – AI Strategy &amp; Data Governance architecture: Governed AI Pipelines → Master Data &amp; Knowledge Graph → Data Catalog → Source Systems" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:image" content="https://alishahmohammadi22.github.io/assets/images/og-preview.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ali Shahmohammadi, Ph.D. — Applied AI Engineer · Life Sciences</title>
+  <meta name="description" content="Applied AI engineer with a decade in pharmaceutical R&D. I build MCP servers, agentic pipelines, and evaluation harnesses that make scientific data trustworthy for AI.">
+  <meta property="og:title" content="Ali Shahmohammadi, Ph.D. — Applied AI Engineer">
+  <meta property="og:description" content="Applied AI engineer with a decade in pharmaceutical R&D — building production agentic systems in regulated life sciences.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://alishahmohammadi22.github.io">
+  <meta property="og:image" content="https://alishahmohammadi22.github.io/assets/images/og-preview.png">
+  <meta name="twitter:card" content="summary_large_image">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -27,1112 +19,824 @@
     "honorificSuffix": "Ph.D.",
     "jobTitle": "Applied AI Engineer · Agentic Systems · Trustworthy Scientific Data",
     "url": "https://alishahmohammadi22.github.io",
-    "sameAs": [
-      "https://linkedin.com/in/alishahmohammadi",
-      "https://github.com/alishahmohammadi22"
-    ],
-    "knowsAbout": ["Applied AI Engineering","MCP Servers","Agentic AI","Eval Harnesses","Knowledge Graphs","FAIR Data","Ontology Engineering","Pharmaceutical R&D","Trustworthy Scientific Data"],
-    "alumniOf": [
-      {"@type":"CollegeOrUniversity","name":"Queen's University"},
-      {"@type":"CollegeOrUniversity","name":"University of Texas at Austin"}
-    ]
+    "sameAs": ["https://linkedin.com/in/alishahmohammadi","https://github.com/alishahmohammadi22"],
+    "alumniOf": [{"@type":"CollegeOrUniversity","name":"Queen's University"},{"@type":"CollegeOrUniversity","name":"University of Texas at Austin"}]
   }
   </script>
   <script defer data-domain="alishahmohammadi22.github.io" src="https://plausible.io/js/script.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
+    /* ── Tokens ── */
     :root {
-      --dark:       #06080F;
-      --dark-2:     #0D1117;
-      --dark-card:  rgba(255,255,255,.06);
-      --dark-border:rgba(255,255,255,.1);
-      --light:      #FFFFFF;
-      --light-2:    #F5F5F7;
-      --light-3:    #FAFAF9;
-      --border:     #E8E8E5;
-      --text:       #1A1A1A;
-      --muted:      #6B6B68;
-      --accent:     #2563EB;
-      --accent-lt:  #EFF6FF;
-      --accent-mid: #BFDBFE;
-      --green:      #16A34A;
-      --green-bg:   #F0FDF4;
-      --green-bdr:  #BBF7D0;
-      --purple:     #7C3AED;
-      --purple-lt:  #F5F3FF;
-      --purple-mid: #DDD6FE;
-      --amber:      #D97706;
-      --amber-bg:   #FFFBEB;
-      --amber-bdr:  #FDE68A;
-      --r:          12px;
+      --bg:        #F8F6F2;
+      --bg-alt:    #F1EEE9;
+      --ink:       #111010;
+      --ink-2:     #4A4540;
+      --ink-3:     #8C857E;
+      --navy:      #1C3D6B;
+      --navy-lt:   #EBF0F7;
+      --sienna:    #B8845A;
+      --sienna-lt: #FBF4EC;
+      --purple:    #5B4E8A;
+      --purple-lt: #F2EEF9;
+      --green:     #2D7A4F;
+      --green-lt:  #EBF7F1;
+      --green-bdr: #BEE5D3;
+      --border:    #DEDAD3;
+      --dark:      #111010;
     }
-
-    /* ── Dark mode ── */
-    .theme-toggle {
-      display: flex; align-items: center; justify-content: center;
-      width: 34px; height: 34px; border-radius: 8px;
-      background: transparent; border: 1.5px solid var(--border);
-      color: var(--muted); cursor: pointer; transition: all .2s;
-      flex-shrink: 0; margin-left: .5rem;
-    }
-    .theme-toggle:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-lt); }
-    .theme-toggle svg { pointer-events: none; }
-    .icon-sun { display: none; }
-    .icon-moon { display: block; }
-    [data-theme="dark"] .icon-sun { display: block; }
-    [data-theme="dark"] .icon-moon { display: none; }
-    [data-theme="dark"] {
-      --light:       #0D1117;
-      --light-2:     #161B22;
-      --light-3:     #1C2128;
-      --border:      rgba(255,255,255,.1);
-      --text:        #E6EDF3;
-      --muted:       rgba(205,205,205,.65);
-      --accent-lt:   rgba(37,99,235,.18);
-      --accent-mid:  rgba(37,99,235,.32);
-      --green-bg:    rgba(22,163,74,.15);
-      --green-bdr:   rgba(22,163,74,.28);
-      --purple-lt:   rgba(124,58,237,.18);
-      --purple-mid:  rgba(124,58,237,.32);
-      --amber-bg:    rgba(217,119,6,.18);
-      --amber-bdr:   rgba(217,119,6,.3);
-    }
-    [data-theme="dark"] nav { background: rgba(13,17,23,.92) !important; }
-    [data-theme="dark"] .hero { background: var(--light); }
-    [data-theme="dark"] .hero-code { background: #161B22 !important; border-color: rgba(255,255,255,.1) !important; }
-    [data-theme="dark"] .hero-code .code-titlebar { background: #0D1117 !important; border-color: rgba(255,255,255,.08) !important; }
-    [data-theme="dark"] .hero-code pre { background: #161B22 !important; }
-    [data-theme="dark"] .hero-tag { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.1); color: rgba(255,255,255,.6); }
-    [data-theme="dark"] .blog-topics { background: rgba(255,255,255,.05) !important; border-color: rgba(255,255,255,.1) !important; }
-    [data-theme="dark"] .rec-card { background: var(--light-2) !important; border-color: var(--border) !important; }
-    [data-theme="dark"] .rec-card-featured { background: rgba(37,99,235,.18) !important; }
-    [data-theme="dark"] .gov-visual { border-color: var(--border) !important; }
-    [data-theme="dark"] .gov-layer { filter: brightness(.75) saturate(.8); }
-    [data-theme="dark"] .link-pill { border-color: rgba(255,255,255,.12); color: rgba(255,255,255,.65); }
-    [data-theme="dark"] .link-pill:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-lt); }
-    /* ── Project filter pills ── */
-    .proj-filter {
-      background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14);
-      color: rgba(255,255,255,.5); border-radius: 99px;
-      font-size: .78rem; font-weight: 600; padding: .38rem 1.05rem;
-      cursor: pointer; transition: all .2s; letter-spacing: .01em;
-    }
-    .proj-filter:hover { border-color: rgba(255,255,255,.3); color: rgba(255,255,255,.85); }
-    .proj-filter.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-    [data-theme="dark"] .proj-filter { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.1); }
-    [data-theme="dark"] .proj-filter.active { background: var(--accent); color: #fff; }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { background: var(--light); color: var(--text); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg); color: var(--ink);
+      font-size: 18px; line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
     a { color: inherit; text-decoration: none; }
-    code, pre { font-family: 'JetBrains Mono', 'Fira Code', monospace; }
     img { display: block; max-width: 100%; }
 
     /* ── Navigation ── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-      background: rgba(255,255,255,.92);
-      backdrop-filter: blur(24px) saturate(180%);
-      -webkit-backdrop-filter: blur(24px) saturate(180%);
-      border-bottom: 1px solid var(--border);
-      transition: box-shadow .3s;
+      height: 60px; padding: 0 2.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(248,246,242,.94);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      border-bottom: 1px solid transparent;
+      transition: border-color .3s;
     }
-    nav.scrolled { box-shadow: 0 1px 16px rgba(0,0,0,.07); }
-    .nav-inner {
-      max-width: 1200px; margin: 0 auto; padding: 0 2.5rem;
-      display: flex; justify-content: space-between; align-items: center; height: 64px;
+    nav.scrolled { border-color: var(--border); }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem; font-weight: 600; letter-spacing: .01em; color: var(--ink);
     }
-    .nav-brand { font-size: .95rem; font-weight: 700; color: var(--text); letter-spacing: -.01em; }
-    .nav-links { display: flex; gap: .15rem; list-style: none; align-items: center; }
+    .nav-logo em { font-style: normal; color: var(--sienna); }
+    .nav-links { display: flex; align-items: center; gap: .2rem; }
     .nav-links a {
-      color: var(--muted); font-size: .875rem; font-weight: 500;
-      padding: .45rem .85rem; border-radius: 8px; transition: all .2s;
+      font-size: .88rem; font-weight: 500; color: var(--ink-3);
+      padding: .42rem .8rem; border-radius: 4px; transition: color .15s, background .15s;
     }
-    .nav-links a:hover { color: var(--text); background: var(--light-2); }
-    .nav-cta {
-      background: var(--accent) !important; color: #fff !important;
-      border-radius: 8px !important; padding: .42rem 1.1rem !important;
+    .nav-links a:hover { color: var(--ink); background: var(--bg-alt); }
+    .nav-resume {
+      background: var(--ink) !important; color: var(--bg) !important;
+      border-radius: 3px !important;
     }
-    .nav-cta:hover { background: #1D4ED8 !important; }
-    @media (max-width: 768px) { .nav-links li:not(:last-child) { display: none; } }
+    .nav-resume:hover { background: var(--navy) !important; color: #fff !important; }
+    .nav-menu { display: none; background: none; border: none; cursor: pointer; padding: .3rem; color: var(--ink); }
 
-    /* ── Layout ── */
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 2.5rem; }
-    .section { padding: 7rem 0; }
-    .section-light { background: var(--light); }
-    .section-off { background: var(--light-2); }
-    .section-dark { background: var(--dark); }
-
-    /* ── Section labels ── */
-    .section-num { font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: .6rem; display: flex; align-items: center; gap: .5rem; }
-    .section-num::after { content: ''; flex: 1; max-width: 40px; height: 1px; background: var(--border); }
-    .section-num-dark { color: rgba(255,255,255,.35); }
-    .section-num-dark::after { background: rgba(255,255,255,.15); }
-    .section-h { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; color: var(--text); margin-bottom: 1rem; }
-    .section-h-dark { color: #fff; }
-    .section-p { font-size: 1.05rem; color: var(--muted); line-height: 1.7; max-width: 540px; }
-    .section-p-dark { color: rgba(255,255,255,.55); }
+    @media (max-width: 700px) {
+      .nav-links {
+        display: none; flex-direction: column; align-items: flex-start;
+        position: absolute; top: 60px; left: 0; right: 0;
+        background: var(--bg); border-bottom: 1px solid var(--border);
+        padding: 1rem 2rem 1.5rem; gap: .2rem;
+      }
+      .nav-links.open { display: flex; }
+      .nav-menu { display: block; }
+    }
 
     /* ── Hero ── */
-    .hero { background: var(--light); border-bottom: 1px solid var(--border); padding: 9rem 0 6rem; }
-    .hero-inner {
-      max-width: 1200px; margin: 0 auto; padding: 0 2.5rem;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 42%;
+      padding-top: 60px;
     }
-    @media(max-width:900px) { .hero-inner { grid-template-columns: 1fr; } }
+    .hero-left {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 5rem 4rem 5rem 5rem;
+    }
     .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: .5rem;
-      background: var(--accent-lt); color: var(--accent); border: 1px solid var(--accent-mid);
-      font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-      padding: .3rem .85rem; border-radius: 99px; margin-bottom: 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .68rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--sienna); margin-bottom: 2rem;
+      display: flex; align-items: center; gap: .8rem;
     }
-    .hero-eyebrow-dot { display: none; }
-    .hero h1 {
-      font-size: clamp(2.6rem, 4.5vw, 4rem); font-weight: 900; letter-spacing: -.04em;
-      line-height: 1.05; color: var(--text); margin-bottom: 1.5rem;
+    .hero-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--sienna); flex-shrink: 0; }
+    .hero-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.8rem, 6.5vw, 6.8rem);
+      font-weight: 700; line-height: .93; letter-spacing: -.02em;
+      color: var(--ink); margin-bottom: 1.75rem;
     }
-    .hero h1 .line2 { display: block; color: var(--accent); font-weight: 900; font-size: 1em; letter-spacing: -.04em; }
-    .hero-sub {
-      font-size: 1.05rem; color: var(--muted); line-height: 1.7;
-      max-width: 480px; margin-bottom: 2.5rem;
+    .hero-name em { font-style: italic; font-weight: 400; color: var(--ink-3); }
+    .hero-bio {
+      font-size: 1rem; color: var(--ink-2); line-height: 1.75;
+      max-width: 440px; margin-bottom: 2.5rem; font-weight: 400;
     }
-    .hero-sub strong { color: var(--text); font-weight: 600; }
-    .hero-cta { display: flex; gap: .85rem; flex-wrap: wrap; margin-bottom: 2rem; }
-    .btn { display: inline-flex; align-items: center; gap: .45rem; padding: .75rem 1.6rem; border-radius: 99px; font-size: .9rem; font-weight: 600; transition: all .2s; cursor: pointer; border: none; white-space: nowrap; text-decoration: none; }
-    .btn-white { background: var(--dark); color: #fff; }
-    .btn-white:hover { opacity: .88; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,.18); }
-    .btn-ghost { background: transparent; color: var(--text); border: 1.5px solid var(--border); }
-    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
-    .btn-accent { background: var(--accent); color: #fff; }
-    .btn-accent:hover { background: #1D4ED8; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(37,99,235,.4); }
-    .btn-outline-dark { background: transparent; color: var(--text); border: 1.5px solid var(--border); border-radius: 99px; }
-    .btn-outline-dark:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
-    .hero-tags { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .hero-bio strong { color: var(--ink); font-weight: 600; }
+    .hero-ctas { display: flex; gap: .75rem; flex-wrap: wrap; margin-bottom: 3rem; }
+    .btn {
+      display: inline-flex; align-items: center; gap: .45rem;
+      font-size: .85rem; font-weight: 600; padding: .7rem 1.4rem;
+      border-radius: 3px; transition: all .18s; cursor: pointer; border: none; white-space: nowrap;
+    }
+    .btn-dark { background: var(--ink); color: var(--bg); }
+    .btn-dark:hover { background: var(--navy); }
+    .btn-outline { background: transparent; color: var(--ink); border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: var(--ink); background: var(--bg-alt); }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: .4rem; }
     .hero-tag {
-      font-size: .75rem; font-weight: 500; letter-spacing: .02em;
-      color: var(--muted); border: 1px solid var(--border);
-      padding: .28rem .75rem; border-radius: 99px; background: var(--light-2);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .67rem; color: var(--ink-3);
+      border: 1px solid var(--border); padding: .24rem .6rem; border-radius: 2px;
     }
-    /* ── Hero code window ── */
-    .hero-code {
-      background: var(--light); border: 1px solid var(--border); border-radius: 14px;
-      overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,.09), 0 4px 16px rgba(0,0,0,.05);
+    .hero-photo {
+      position: relative; overflow: hidden; background: var(--bg-alt);
     }
-    .code-titlebar {
-      display: flex; align-items: center; padding: .85rem 1.25rem;
-      border-bottom: 1px solid var(--border); background: var(--light-2); gap: .75rem;
+    .hero-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center top;
     }
-    .code-dots { display: flex; gap: 5px; }
-    .code-dot { width: 11px; height: 11px; border-radius: 50%; }
-    .dot-r { background: #FF5F57; } .dot-y { background: #FEBC2E; } .dot-g { background: #28C840; }
-    .code-fname { font-size: .78rem; font-weight: 600; color: var(--muted); font-family: 'JetBrains Mono', monospace; margin: 0 auto; }
-    .hero-code pre { padding: 1.5rem 1.75rem; font-size: .82rem; line-height: 1.85; background: var(--light); overflow-x: auto; color: var(--text); }
-    .kw { color: #7C3AED; font-weight: 500; }
-    .st { color: #16A34A; }
-    .cm { color: #9CA3AF; font-style: italic; }
-    .fn { color: #2563EB; }
-    .nm { color: #B45309; }
 
-    /* ── Stats bar ── */
-    .stats-bar {
-      background: var(--dark-2); border-top: 1px solid rgba(255,255,255,.06);
-      border-bottom: 1px solid rgba(255,255,255,.06);
+    @media (max-width: 860px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-photo { height: 65vw; max-height: 520px; order: -1; }
+      .hero-left { padding: 3rem 2rem 3.5rem; }
+      .hero-name { font-size: clamp(3rem, 10vw, 5rem); }
     }
-    .stats-bar-inner {
-      max-width: 1200px; margin: 0 auto; padding: 0 2.5rem;
-      display: grid; grid-template-columns: repeat(4,1fr);
+    @media (max-width: 480px) {
+      nav { padding: 0 1.5rem; }
+      .hero-left { padding: 2.5rem 1.5rem 3rem; }
     }
-    @media(max-width:700px){ .stats-bar-inner{ grid-template-columns: repeat(2,1fr); } }
-    .stat-item {
-      padding: 2.25rem 1.5rem; text-align: center;
-      border-right: 1px solid rgba(255,255,255,.06);
-    }
-    .stat-item:last-child { border-right: none; }
-    .stat-num { font-size: 2.75rem; font-weight: 800; color: #fff; letter-spacing: -.04em; line-height: 1; }
-    .stat-label { font-size: .78rem; color: rgba(255,255,255,.38); margin-top: .4rem; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; }
 
-    /* ── About ── */
-    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
-    @media(max-width:900px){ .about-grid{grid-template-columns:1fr;gap:3rem;} }
-    .about-lede { font-size: clamp(1.1rem, 2vw, 1.3rem); line-height: 1.75; color: var(--text); margin-bottom: 1.5rem; }
-    .about-lede strong { color: var(--accent); font-weight: 700; }
-    .about-body { font-size: .975rem; color: var(--muted); line-height: 1.8; margin-bottom: 1.5rem; }
-    .about-links { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: 2rem; }
-    .link-pill {
-      display: inline-flex; align-items: center; gap: .4rem;
-      font-size: .84rem; font-weight: 600; color: var(--text);
-      border: 1.5px solid var(--border); padding: .45rem 1rem; border-radius: 99px;
-      transition: all .2s;
+    /* ── Stats strip ── */
+    .stats-strip {
+      background: var(--dark); color: #fff;
+      display: grid; grid-template-columns: repeat(4, 1fr);
     }
-    .link-pill:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-lt); }
-    .about-right { display: flex; flex-direction: column; gap: 1.25rem; }
-    .about-stat-card {
-      background: var(--light-2); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 1.5rem 1.75rem;
+    @media (max-width: 600px) { .stats-strip { grid-template-columns: 1fr 1fr; } }
+    .stat { padding: 2.5rem 2rem; border-right: 1px solid rgba(255,255,255,.07); }
+    .stat:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem; font-weight: 700; line-height: 1; letter-spacing: -.02em;
+      color: #fff; margin-bottom: .3rem;
     }
-    .about-stat-big { font-size: 2.5rem; font-weight: 900; color: var(--text); letter-spacing: -.04em; line-height: 1; margin-bottom: .25rem; }
-    .about-stat-big span { color: var(--accent); }
-    .about-stat-desc { font-size: .875rem; color: var(--muted); line-height: 1.5; }
+    .stat-label {
+      font-size: .72rem; color: rgba(255,255,255,.38); font-weight: 400;
+      line-height: 1.5; text-transform: uppercase; letter-spacing: .06em;
+    }
 
-    /* ── Timeline / Experience ── */
-    .timeline { display: flex; flex-direction: column; gap: 2.5rem; margin-top: 3.5rem; }
-    .tl-item { display: grid; grid-template-columns: auto 1fr; gap: 2rem; }
-    @media(max-width:640px){ .tl-item{grid-template-columns:1fr;gap:1rem;} }
-    .tl-left { width: 160px; flex-shrink: 0; }
-    @media(max-width:640px){ .tl-left{width:auto;} }
-    .tl-company { font-size: .82rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); margin-bottom: .25rem; }
-    .tl-period { font-size: .78rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
-    .tl-card {
-      background: var(--light); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 2rem; position: relative;
-      transition: border-color .2s, box-shadow .2s;
-    }
-    .tl-card:hover { border-color: var(--accent-mid); box-shadow: 0 4px 24px rgba(37,99,235,.08); }
-    .tl-title { font-size: 1.05rem; font-weight: 700; margin-bottom: .25rem; }
-    .tl-location { font-size: .82rem; color: var(--muted); margin-bottom: 1.25rem; }
-    .tl-bullets { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
-    .tl-bullets li { display: flex; align-items: flex-start; gap: .65rem; font-size: .875rem; color: var(--muted); line-height: 1.6; }
-    .tl-dot-bullet { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-top: .55rem; }
+    /* ── Section shell ── */
+    .section { padding: 7rem 0; }
+    .section-alt { background: var(--bg-alt); }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 3rem; }
+    @media (max-width: 600px) { .container { padding: 0 1.5rem; } .section { padding: 4.5rem 0; } }
 
-    /* ── Projects ── */
-    .proj-featured { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
-    @media(max-width:800px){ .proj-featured{grid-template-columns:1fr;} }
-    .proj-grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; }
-    @media(max-width:1000px){ .proj-grid-4{grid-template-columns:repeat(2,1fr);} }
-    @media(max-width:540px){ .proj-grid-4{grid-template-columns:1fr;} }
-    .proj-card {
-      background: var(--dark-card); border: 1px solid var(--dark-border);
-      border-radius: var(--r); padding: 2rem;
-      display: flex; flex-direction: column; gap: 1rem;
-      transition: border-color .25s, background .25s, transform .25s;
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .67rem; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--ink-3); margin-bottom: 1rem;
     }
-    .proj-card:hover {
-      border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.09);
-      transform: translateY(-3px);
+    .section-h {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 4vw, 3.8rem); font-weight: 700;
+      letter-spacing: -.02em; line-height: 1.02; color: var(--ink); margin-bottom: 1rem;
     }
-    .proj-card.small { padding: 1.5rem; gap: .75rem; }
-    .proj-icon {
-      width: 44px; height: 44px; border-radius: 10px;
-      background: rgba(37,99,235,.2); color: #60A5FA;
-      display: flex; align-items: center; justify-content: center;
+    .section-sub {
+      font-size: 1.05rem; color: var(--ink-2); line-height: 1.75;
+      max-width: 520px; margin-bottom: 3.5rem;
     }
-    .proj-card.small .proj-icon { width: 36px; height: 36px; border-radius: 8px; }
-    .proj-badges { display: flex; gap: .4rem; flex-wrap: wrap; }
-    .badge { font-size: .67rem; font-weight: 700; letter-spacing: .04em; padding: .2rem .5rem; border-radius: 5px; }
-    .badge-py { background: rgba(99,102,241,.2); color: #A5B4FC; }
-    .badge-jp { background: rgba(234,88,12,.15); color: #FB923C; }
-    .badge-feat { background: rgba(22,163,74,.15); color: #4ADE80; border: 1px solid rgba(22,163,74,.25); }
-    .proj-title { font-size: 1.1rem; font-weight: 700; color: #fff; }
-    .proj-card.small .proj-title { font-size: .95rem; }
-    .proj-desc { font-size: .875rem; color: rgba(255,255,255,.5); line-height: 1.65; flex: 1; }
-    .proj-card.small .proj-desc { font-size: .825rem; }
-    .proj-tech { font-size: .75rem; color: rgba(255,255,255,.3); font-family: 'JetBrains Mono', monospace; }
-    .proj-link { font-size: .84rem; font-weight: 600; color: #60A5FA; display: inline-flex; align-items: center; gap: .3rem; margin-top: auto; transition: gap .15s; }
-    .proj-link:hover { gap: .55rem; }
 
-    /* ── Skills ── */
-    .skills-wrap { display: grid; grid-template-columns: repeat(2,1fr); gap: 1.5rem; margin-top: 3.5rem; }
-    @media(max-width:700px){ .skills-wrap{grid-template-columns:1fr;} }
-    .skill-card {
-      background: var(--light); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 2rem;
-      transition: border-color .2s, box-shadow .2s;
+    /* ── Timeline ── */
+    .timeline { display: flex; flex-direction: column; }
+    .tl-item {
+      display: grid; grid-template-columns: 190px 1fr;
+      padding: 2.5rem 0; border-top: 1px solid var(--border);
     }
-    .skill-card:hover { border-color: var(--accent-mid); box-shadow: 0 4px 20px rgba(37,99,235,.07); }
-    .skill-head { display: flex; align-items: center; gap: .75rem; margin-bottom: 1.25rem; }
-    .skill-icon {
-      width: 38px; height: 38px; border-radius: 9px;
-      background: var(--accent-lt); color: var(--accent);
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    .tl-item:last-child { border-bottom: 1px solid var(--border); }
+    @media (max-width: 680px) { .tl-item { grid-template-columns: 1fr; gap: .9rem; } }
+    .tl-meta { padding-right: 2rem; }
+    .tl-org {
+      font-weight: 700; font-size: .9rem; color: var(--navy);
+      text-transform: uppercase; letter-spacing: .07em; margin-bottom: .25rem;
     }
-    .skill-title { font-size: .82rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
-    .skill-tags { display: flex; flex-wrap: wrap; gap: .4rem; }
-    .skill-tag { font-size: .78rem; font-weight: 500; color: var(--muted); background: var(--light-2); border: 1px solid var(--border); border-radius: 99px; padding: .25rem .7rem; transition: all .15s; }
-    .skill-tag:hover { color: var(--accent); border-color: var(--accent-mid); background: var(--accent-lt); }
+    .tl-period { font-family: 'JetBrains Mono', monospace; font-size: .7rem; color: var(--ink-3); }
+    .tl-title { font-size: 1.08rem; font-weight: 600; color: var(--ink); margin-bottom: .2rem; line-height: 1.35; }
+    .tl-loc { font-size: .88rem; color: var(--ink-3); margin-bottom: 1.1rem; }
+    .tl-bullets { list-style: none; display: flex; flex-direction: column; gap: .45rem; }
+    .tl-bullets li {
+      font-size: .95rem; color: var(--ink-2); line-height: 1.65;
+      padding-left: 1rem; position: relative;
+    }
+    .tl-bullets li::before { content: '–'; position: absolute; left: 0; color: var(--ink-3); }
 
-    /* ── Blog ── */
-    .blog-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; margin-top: 3.5rem; }
-    @media(max-width:900px){ .blog-grid{grid-template-columns:repeat(2,1fr);} }
-    @media(max-width:580px){ .blog-grid{grid-template-columns:1fr;} }
-    .blog-card {
-      background: var(--light); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 2rem;
-      display: flex; flex-direction: column; gap: .85rem;
-      transition: border-color .2s, box-shadow .2s, transform .2s;
+    /* ── Expertise grid ── */
+    .exp-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 1px; background: var(--border);
+      margin-top: 3.5rem;
     }
-    .blog-card:hover { border-color: var(--accent-mid); box-shadow: 0 6px 28px rgba(37,99,235,.08); transform: translateY(-2px); }
-    .blog-card.featured { border-color: var(--accent-mid); }
-    .blog-top { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
-    .blog-cat {
-      font-size: .68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
-      padding: .2rem .6rem; border-radius: 5px;
+    @media (max-width: 640px) { .exp-grid { grid-template-columns: 1fr; } }
+    .exp-card { background: var(--bg); padding: 2rem; }
+    .section-alt .exp-card { background: var(--bg-alt); }
+    .exp-label {
+      font-size: .72rem; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--navy); margin-bottom: 1rem;
     }
-    .cat-ai   { background: var(--accent-lt); color: var(--accent); border: 1px solid var(--accent-mid); }
-    .cat-ml   { background: #F5F3FF; color: #7C3AED; border: 1px solid #DDD6FE; }
-    .cat-fair { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-bdr); }
-    .blog-date { font-size: .78rem; color: var(--muted); margin-left: auto; }
-    .blog-published { font-size: .68rem; font-weight: 700; letter-spacing: .04em; padding: .18rem .5rem; border-radius: 5px; background: var(--green-bg); color: var(--green); border: 1px solid var(--green-bdr); }
-    .blog-readtime { font-size: .78rem; color: var(--muted); }
-    .blog-title { font-size: 1rem; font-weight: 700; line-height: 1.4; }
-    .blog-excerpt { font-size: .875rem; color: var(--muted); line-height: 1.65; flex: 1; }
-    .blog-topics { font-size: .78rem; color: var(--muted); line-height: 1.55; padding: .7rem .9rem; background: var(--light-2); border-radius: 8px; border: 1px solid var(--border); }
-    .blog-links { display: flex; gap: .75rem; flex-wrap: wrap; }
-    .blog-link { font-size: .875rem; font-weight: 600; color: var(--accent); display: inline-flex; align-items: center; gap: .3rem; transition: gap .15s; }
-    .blog-link:hover { gap: .5rem; }
-    .blog-soon { font-size: .85rem; color: var(--muted); font-style: italic; }
+    .exp-tags { display: flex; flex-wrap: wrap; gap: .35rem; }
+    .exp-tag {
+      font-size: .85rem; color: var(--ink-2); border: 1px solid var(--border);
+      padding: .22rem .58rem; border-radius: 2px; transition: border-color .15s, color .15s;
+    }
+    .exp-tag:hover { border-color: var(--navy); color: var(--navy); }
 
-    /* ── Contact (dark) ── */
-    .contact-section {
-      background: var(--dark);
-      background-image: radial-gradient(ellipse 60% 80% at 100% 50%, rgba(37,99,235,.12), transparent);
-      padding: 8rem 0;
+    /* ── Writing filter ── */
+    .filter-row { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .filter-btn {
+      font-size: .88rem; font-weight: 600; padding: .45rem 1rem; border-radius: 2px;
+      border: 1px solid var(--border); background: transparent; color: var(--ink-3);
+      cursor: pointer; transition: all .15s;
     }
-    .contact-inner { max-width: 800px; margin: 0 auto; padding: 0 2.5rem; text-align: center; }
-    .contact-h { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 900; letter-spacing: -.04em; color: #fff; line-height: 1.05; margin-bottom: 1.25rem; }
-    .contact-sub { font-size: 1.1rem; color: rgba(255,255,255,.45); margin-bottom: 3rem; line-height: 1.7; }
-    .contact-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
-    .contact-link {
-      display: inline-flex; align-items: center; gap: .6rem;
-      font-size: .9rem; font-weight: 600;
-      color: rgba(255,255,255,.72); border: 1px solid rgba(255,255,255,.14);
-      padding: .75rem 1.5rem; border-radius: 99px;
-      transition: all .2s;
+    .filter-btn:hover { color: var(--ink); border-color: var(--ink-2); }
+    .filter-btn.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .filter-btn[data-cat="agentic"].active { background: var(--navy); border-color: var(--navy); color: #fff; }
+    .filter-btn[data-cat="data"].active    { background: var(--sienna); border-color: var(--sienna); color: #fff; }
+    .filter-btn[data-cat="sciml"].active   { background: var(--purple); border-color: var(--purple); color: #fff; }
+
+    /* ── Articles grid ── */
+    .articles-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: var(--border);
     }
-    .contact-link:hover { color: #fff; border-color: rgba(255,255,255,.35); background: rgba(255,255,255,.06); transform: translateY(-1px); }
-    .contact-link.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-    .contact-link.primary:hover { background: #1D4ED8; }
+    @media (max-width: 960px) { .articles-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 580px) { .articles-grid { grid-template-columns: 1fr; } }
+
+    .article-card {
+      background: var(--bg-alt); padding: 2rem;
+      display: flex; flex-direction: column; gap: .7rem;
+      transition: background .15s;
+    }
+    .article-card:hover { background: var(--bg); }
+    .article-card.hidden { display: none; }
+
+    .article-cat {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .63rem; font-weight: 500; letter-spacing: .09em; text-transform: uppercase;
+      padding: .2rem .5rem; border-radius: 2px; display: inline-block; width: fit-content;
+    }
+    .cat-agentic { color: var(--navy); background: var(--navy-lt); }
+    .cat-data    { color: var(--sienna); background: var(--sienna-lt); }
+    .cat-sciml   { color: var(--purple); background: var(--purple-lt); }
+
+    .article-meta { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+    .article-published {
+      font-family: 'JetBrains Mono', monospace; font-size: .6rem; font-weight: 500;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: var(--green); background: var(--green-lt); border: 1px solid var(--green-bdr);
+      padding: .15rem .45rem; border-radius: 2px;
+    }
+    .article-date { font-family: 'JetBrains Mono', monospace; font-size: .67rem; color: var(--ink-3); }
+    .article-read { font-size: .72rem; color: var(--ink-3); }
+
+    .article-title { font-size: 1rem; font-weight: 600; color: var(--ink); line-height: 1.4; }
+    .article-excerpt { font-size: .92rem; color: var(--ink-2); line-height: 1.7; flex: 1; }
+    .article-link {
+      font-size: .9rem; font-weight: 600; color: var(--navy);
+      display: inline-flex; align-items: center; gap: .3rem;
+      margin-top: auto; transition: gap .15s;
+    }
+    .article-link:hover { gap: .55rem; }
+    .article-soon { font-size: .8rem; color: var(--ink-3); font-style: italic; }
+
+    /* ── Contact ── */
+    .contact-section { background: var(--dark); padding: 8rem 0; }
+    .contact-inner { max-width: 680px; margin: 0 auto; padding: 0 3rem; text-align: center; }
+    .contact-h {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.2rem, 7vw, 6rem); font-weight: 700; letter-spacing: -.02em;
+      line-height: .97; color: #fff; margin-bottom: 1.25rem;
+    }
+    .contact-h em { font-style: italic; font-weight: 400; color: rgba(255,255,255,.45); }
+    .contact-sub {
+      font-size: 1.05rem; color: rgba(255,255,255,.38); margin-bottom: 2.75rem; line-height: 1.75;
+    }
+    .contact-links { display: flex; justify-content: center; gap: .75rem; flex-wrap: wrap; }
+    .c-btn {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-size: .84rem; font-weight: 600;
+      padding: .7rem 1.4rem; border-radius: 3px; transition: all .18s;
+    }
+    .c-btn-white { background: #fff; color: var(--dark); }
+    .c-btn-white:hover { background: rgba(255,255,255,.88); }
+    .c-btn-ghost {
+      background: transparent; color: rgba(255,255,255,.58);
+      border: 1px solid rgba(255,255,255,.14);
+    }
+    .c-btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,.35); }
 
     /* ── Footer ── */
     footer {
-      background: var(--dark-2); border-top: 1px solid rgba(255,255,255,.06);
-      padding: 2.5rem 2.5rem; display: flex; justify-content: space-between; align-items: center;
-      flex-wrap: wrap; gap: 1rem;
+      background: #0C0C0C; border-top: 1px solid rgba(255,255,255,.05);
+      padding: 2rem 3rem;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .75rem;
     }
-    .footer-copy { font-size: .82rem; color: rgba(255,255,255,.3); }
-    .footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
-    .footer-links a { font-size: .82rem; color: rgba(255,255,255,.35); transition: color .15s; }
-    .footer-links a:hover { color: rgba(255,255,255,.8); }
+    .footer-copy { font-size: .77rem; color: rgba(255,255,255,.22); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: .77rem; color: rgba(255,255,255,.27); transition: color .15s; }
+    .footer-links a:hover { color: rgba(255,255,255,.7); }
 
-    /* ── Governance visual in About ── */
-    .gov-visual { background: var(--light); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
-    .gov-header { background: var(--accent); color: #fff; padding: .9rem 1.25rem; display: flex; align-items: center; gap: .55rem; font-size: .8rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
-    .gov-stack { padding: 1rem; display: flex; flex-direction: column; }
-    .gov-layer { border-radius: 8px; padding: .75rem .9rem; }
-    .gov-layer-name { font-size: .82rem; font-weight: 700; margin-bottom: .3rem; }
-    .gov-layer-tags { font-size: .72rem; color: var(--muted); line-height: 1.45; }
-    .gov-arrow { display: flex; align-items: center; gap: .5rem; padding: .18rem 0 .18rem .9rem; }
-    .gov-arrow-line { width: 1px; height: 16px; background: var(--border); }
-    .gov-arrow-lbl { font-size: .63rem; color: var(--accent); font-weight: 600; letter-spacing: .04em; background: var(--accent-lt); border: 1px solid var(--accent-mid); padding: .1rem .48rem; border-radius: 99px; white-space: nowrap; }
-
-    /* ── Code block ── */
-    .code-block { background: #0D1117; border: 1px solid rgba(255,255,255,.08); border-radius: var(--r); overflow: hidden; }
-    .code-hdr { display: flex; align-items: center; justify-content: space-between; padding: .65rem 1rem; border-bottom: 1px solid rgba(255,255,255,.06); }
-    .code-dots { display: flex; gap: 5px; }
-    .code-dot { width: 10px; height: 10px; border-radius: 50%; }
-    .dot-r{background:#FC8181;} .dot-y{background:#F6C90E;} .dot-g{background:#68D391;}
-    .code-fname { font-size: .75rem; color: rgba(255,255,255,.3); font-family:'JetBrains Mono',monospace; }
-    pre { padding: 1.5rem; overflow-x: auto; font-size: .82rem; line-height: 1.75; color: rgba(255,255,255,.7); }
-    .kw { color: #C084FC; font-weight: 500; } .st { color: #4ADE80; } .cm { color: rgba(255,255,255,.3); font-style: italic; } .fn { color: #60A5FA; } .num { color: #FB923C; }
-
-    /* ── Recognition section ── */
-    .rec-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(270px,1fr)); gap: 1.5rem; }
-    .rec-card { background: var(--light); border: 1px solid var(--border); border-radius: var(--r); padding: 1.85rem; }
-    .rec-card-featured { border-color: var(--accent-mid); background: var(--accent-lt); }
-    .rec-badge { display: inline-block; font-size:.68rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase; padding:.22rem .65rem; border-radius:99px; background:var(--accent-mid); color:var(--accent); margin-bottom:.85rem; }
-    .rec-badge-green { background: var(--green-bdr); color: var(--green); }
-    .rec-badge-purple { background: #DDD6FE; color: #7C3AED; }
-    .rec-icon { font-size: 1.6rem; margin-bottom:.55rem; }
-    .rec-title { font-size: .98rem; font-weight: 700; color: var(--text); margin-bottom:.5rem; }
-    .rec-desc { font-size:.87rem; color: var(--muted); line-height: 1.72; }
-    .rec-meta { margin-top:1rem; display:flex; flex-wrap:wrap; gap:.4rem; }
-    .rec-tag { font-size:.7rem; font-weight:600; padding:.18rem .55rem; border-radius:99px; background:rgba(37,99,235,.08); color:var(--accent); }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
   </style>
 </head>
 <body>
 
 <!-- ── Navigation ── -->
-<nav id="nav">
-  <div class="nav-inner">
-    <a href="#home" class="nav-brand">Ali Shahmohammadi, Ph.D.</a>
-    <ul class="nav-links">
-      <li><a href="#experience">Career</a></li>
-      <li><a href="#blog">Writing</a></li>
-      <li><a href="#contact">Contact</a></li>
-      <li><a href="resume.html" class="nav-cta">Resume</a></li>
-    </ul>
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" title="Toggle light/dark mode">
-      <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-      <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    </button>
+<nav id="mainNav">
+  <a href="#home" class="nav-logo">Ali Shahmohammadi <em>Ph.D.</em></a>
+  <button class="nav-menu" id="navMenuBtn" aria-label="Open navigation">
+    <svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+      <line x1="0" y1="1" x2="18" y2="1"/><line x1="0" y1="7" x2="18" y2="7"/><line x1="0" y1="13" x2="18" y2="13"/>
+    </svg>
+  </button>
+  <div class="nav-links" id="navLinks">
+    <a href="#career">Career</a>
+    <a href="#writing">Writing</a>
+    <a href="#contact">Contact</a>
+    <a href="resume.html" class="nav-resume">Resume</a>
   </div>
 </nav>
 
 <!-- ── Hero ── -->
 <section class="hero" id="home">
-  <div class="hero-inner">
-
-    <!-- Left: text content -->
-    <div class="hero-text">
-      <div class="hero-eyebrow">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg>
-        Applied AI Engineer &nbsp;&middot;&nbsp; Agentic Systems &nbsp;&middot;&nbsp; Life Sciences
-      </div>
-      <h1>
-        Ali Shahmohammadi
-        <span class="line2">Ph.D.</span>
-      </h1>
-      <p class="hero-sub">
-        I build <strong>MCP servers, agentic pipelines, and evaluation harnesses</strong> that make scientific data trustworthy for AI. Applied AI engineer with a decade in pharmaceutical R&amp;D &mdash; shipping production connectors, agent tools, and the deterministic foundations that let frontier AI do real, correct science in regulated environments.
-      </p>
-      <div class="hero-cta">
-        <a href="#blog" class="btn btn-white">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-          View Writing
-        </a>
-        <a href="resume.html" class="btn btn-ghost">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          View Resume
-        </a>
-      </div>
-      <div class="hero-tags">
-        <span class="hero-tag">Applied AI Engineering</span>
-        <span class="hero-tag">MCP Servers</span>
-        <span class="hero-tag">Agentic Pipelines</span>
-        <span class="hero-tag">Eval Harnesses</span>
-        <span class="hero-tag">Trustworthy Scientific Data</span>
-        <span class="hero-tag">Life Sciences</span>
-      </div>
+  <div class="hero-left">
+    <div class="hero-eyebrow">Applied AI &nbsp;·&nbsp; Life Sciences &nbsp;·&nbsp; Ph.D.</div>
+    <h1 class="hero-name">
+      Ali<br>
+      Shahmo&shy;hammadi<br>
+      <em>Ph.D.</em>
+    </h1>
+    <p class="hero-bio">
+      I build <strong>MCP servers, agentic pipelines, and evaluation harnesses</strong> that make scientific data trustworthy for AI — a decade in pharmaceutical R&amp;D, shipping production systems in regulated environments.
+    </p>
+    <div class="hero-ctas">
+      <a href="#writing" class="btn btn-dark">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Read Writing
+      </a>
+      <a href="resume.html" class="btn btn-outline">View Resume</a>
     </div>
-
-    <!-- Right: engineering architecture diagram -->
-    <div class="hero-code">
-      <div class="code-titlebar">
-        <div class="code-dots">
-          <div class="code-dot dot-r"></div>
-          <div class="code-dot dot-y"></div>
-          <div class="code-dot dot-g"></div>
-        </div>
-        <span class="code-fname">applied_ai_engineering_stack.py</span>
-      </div>
-      <div style="padding:1.4rem 1.25rem 1.65rem;display:flex;flex-direction:column;gap:.65rem;">
-
-        <!-- Layer 1: MCP Scientific Data Server -->
-        <div style="background:var(--accent-lt);border:1.5px solid var(--accent-mid);border-radius:10px;padding:.7rem 1rem;">
-          <div style="font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);margin-bottom:.45rem;display:flex;align-items:center;gap:.4rem;">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-            MCP Scientific Data Server
-          </div>
-          <div style="display:flex;gap:.3rem;flex-wrap:wrap;">
-            <span style="font-size:.65rem;color:var(--accent);background:#fff;border:1px solid var(--accent-mid);border-radius:4px;padding:.1rem .38rem;font-family:'JetBrains Mono',monospace;">search_compounds()</span>
-            <span style="font-size:.65rem;color:var(--accent);background:#fff;border:1px solid var(--accent-mid);border-radius:4px;padding:.1rem .38rem;font-family:'JetBrains Mono',monospace;">get_assay_results()</span>
-            <span style="font-size:.65rem;color:var(--accent);background:#fff;border:1px solid var(--accent-mid);border-radius:4px;padding:.1rem .38rem;font-family:'JetBrains Mono',monospace;">get_metadata()</span>
-            <span style="font-size:.65rem;color:var(--accent);background:#fff;border:1px solid var(--accent-mid);border-radius:4px;padding:.1rem .38rem;font-family:'JetBrains Mono',monospace;">normalize_units()</span>
-          </div>
-        </div>
-
-        <!-- Arrow -->
-        <div style="display:flex;align-items:center;gap:.5rem;padding-left:.75rem;">
-          <div style="width:1px;height:18px;background:var(--border);"></div>
-          <span style="font-size:.62rem;color:var(--accent);font-weight:600;background:var(--accent-lt);border:1px solid var(--accent-mid);padding:.08rem .42rem;border-radius:99px;white-space:nowrap;">Tool calls &middot; Claude API</span>
-        </div>
-
-        <!-- Layer 2: Agentic Pipeline -->
-        <div style="background:#F5F3FF;border:1.5px solid #DDD6FE;border-radius:10px;padding:.7rem 1rem;">
-          <div style="font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#7C3AED;margin-bottom:.35rem;display:flex;align-items:center;gap:.4rem;">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2.5"><path d="M21 12a9 9 0 11-6.219-8.56"/><polyline points="17 4 21 8 25 4"/></svg>
-            Agentic Pipeline &middot; LangGraph
-          </div>
-          <div style="font-size:.72rem;color:#7C3AED;line-height:1.5;">Multi-agent orchestration &middot; Human-in-the-loop &middot; RAG over validated data</div>
-        </div>
-
-        <!-- Arrow -->
-        <div style="display:flex;align-items:center;gap:.5rem;padding-left:.75rem;">
-          <div style="width:1px;height:18px;background:var(--border);"></div>
-          <span style="font-size:.62rem;color:#16A34A;font-weight:600;background:var(--green-bg);border:1px solid var(--green-bdr);padding:.08rem .42rem;border-radius:99px;white-space:nowrap;">Eval harness gates every answer</span>
-        </div>
-
-        <!-- Layer 3: Eval Harness -->
-        <div style="background:var(--green-bg);border:1.5px solid var(--green-bdr);border-radius:10px;padding:.7rem 1rem;">
-          <div style="font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--green);margin-bottom:.35rem;display:flex;align-items:center;gap:.4rem;">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            Evaluation Harness
-          </div>
-          <div style="font-size:.72rem;color:var(--green);line-height:1.5;">Correctness scoring &middot; Hallucination detection &middot; Grounded, auditable answers</div>
-        </div>
-
-        <!-- Tech labels -->
-        <div style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap;padding-top:.5rem;border-top:1px solid var(--border);">
-          <span style="font-size:.63rem;color:var(--accent);background:var(--accent-lt);border:1px solid var(--accent-mid);border-radius:4px;padding:.13rem .42rem;white-space:nowrap;">MCP &middot; Claude API</span>
-          <span style="font-size:.63rem;color:#7C3AED;background:#F5F3FF;border:1px solid #DDD6FE;border-radius:4px;padding:.13rem .42rem;white-space:nowrap;">LangGraph &middot; Python</span>
-          <span style="font-size:.63rem;color:var(--green);background:var(--green-bg);border:1px solid var(--green-bdr);border-radius:4px;padding:.13rem .42rem;white-space:nowrap;">pytest &middot; Pydantic v2</span>
-          <span style="font-size:.63rem;color:#B45309;background:#FFFBEB;border:1px solid #FDE68A;border-radius:4px;padding:.13rem .42rem;white-space:nowrap;">GitHub Actions CI</span>
-        </div>
-      </div>
+    <div class="hero-tags">
+      <span class="hero-tag">Agentic AI</span>
+      <span class="hero-tag">MCP Servers</span>
+      <span class="hero-tag">LangGraph</span>
+      <span class="hero-tag">FAIR Data</span>
+      <span class="hero-tag">Pharma R&amp;D</span>
+      <span class="hero-tag">Knowledge Graphs</span>
     </div>
-
+  </div>
+  <div class="hero-photo">
+    <img src="assets/ali.jpeg" alt="Ali Shahmohammadi, Ph.D." loading="eager">
   </div>
 </section>
 
-<!-- ── Stats bar ── -->
-<div class="stats-bar">
-  <div class="stats-bar-inner">
-    <div class="stat-item"><div class="stat-num">15+</div><div class="stat-label">Years bridging science, ML, and applied AI engineering</div></div>
-    <div class="stat-item"><div class="stat-num">20+</div><div class="stat-label">Open-source AI, agentic &amp; data-engineering projects</div></div>
-    <div class="stat-item"><div class="stat-num">12+</div><div class="stat-label">Production agentic &amp; data systems shipped in pharma R&amp;D</div></div>
-    <div class="stat-item"><div class="stat-num" style="font-size:1.6rem;letter-spacing:-.02em;">FAIR Studio</div><div class="stat-label">Industry-alliance product (Pistoia Alliance)</div></div>
+<!-- ── Stats ── -->
+<div class="stats-strip">
+  <div class="stat">
+    <div class="stat-num">15+</div>
+    <div class="stat-label">Years bridging science &amp; AI</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">20+</div>
+    <div class="stat-label">Open-source projects</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">12+</div>
+    <div class="stat-label">Production agentic systems</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" style="font-size:1.65rem;letter-spacing:0;line-height:1.1;">FAIR<br>Studio</div>
+    <div class="stat-label">Pistoia Alliance product</div>
   </div>
 </div>
 
-<!-- ── About ── -->
-<section class="section section-light" id="about" style="display:none">
+<!-- ── Career ── -->
+<section class="section" id="career">
   <div class="container">
-    <div class="section-num">01 &mdash; About</div>
-    <div class="about-grid">
-      <div>
-        <h2 class="section-h" style="margin-bottom:1.75rem;">Applied AI Engineer.<br>Agentic System Builder.<br>Trustworthy Data Architect.</h2>
-        <p class="about-lede">
-          I&rsquo;m an <strong>applied AI engineer</strong> who came up through hard science &mdash; a Ph.D. in chemical engineering, then a decade turning models into deployed systems across pharmaceutical R&amp;D. I now focus on <strong>building the tools that make scientific data trustworthy for AI</strong>: MCP servers, agentic pipelines, evaluation harnesses, and the deterministic connectors that let regulated enterprises adopt frontier AI without losing correctness or auditability.
-        </p>
-        <p class="about-body">
-          I lead <strong style="color:var(--text)">FAIR Data Strategy and Digital Connectivity</strong> at
-          Takeda Pharmaceutical &mdash; delivering applied AI engineering across R&amp;D data domains.
-          I&rsquo;ve shipped production agentic AI systems for ontology curation, built knowledge-graph-aligned
-          data models for cell therapy, and created <strong style="color:var(--text)">FAIR Studio</strong>, an industry-alliance
-          product (Pistoia Alliance) that operationalizes FAIR assessment at scale in pharmaceutical R&amp;D.
-        </p>
-        <p class="about-body">
-          My engineering practice spans the full stack: writing typed, tested Python; designing MCP servers
-          and agent tool schemas; building multi-agent LangGraph pipelines with human-in-the-loop controls;
-          and instrumenting evaluation harnesses that measure correctness and catch hallucinations before
-          a wrong answer reaches a scientist. The thesis: <em>a plausible-looking answer that&rsquo;s subtly wrong
-          can be worse than no answer</em> &mdash; so every system I build is designed to refuse rather than guess.
-        </p>
-        <div style="margin-top:1.5rem;border:1px solid var(--border);border-radius:var(--r);padding:1.25rem 1.5rem;background:var(--light-2);">
-          <div style="font-size:.72rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:.9rem;">What I do now</div>
-          <ul style="list-style:none;display:flex;flex-direction:column;gap:.65rem;">
-            <li style="display:flex;align-items:flex-start;gap:.65rem;font-size:.9rem;color:var(--text);line-height:1.55;"><span style="width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:.48rem;display:inline-block;"></span><span><strong>Build MCP servers &amp; agent tool APIs</strong> &mdash; typed, tested Python exposing scientific data to Claude as deterministic, callable tools.</span></li>
-            <li style="display:flex;align-items:flex-start;gap:.65rem;font-size:.9rem;color:var(--text);line-height:1.55;"><span style="width:6px;height:6px;border-radius:50%;background:#7C3AED;flex-shrink:0;margin-top:.48rem;display:inline-block;"></span><span><strong>Orchestrate multi-agent pipelines</strong> &mdash; LangGraph workflows with human-in-the-loop controls, deployed in regulated life sciences workflows.</span></li>
-            <li style="display:flex;align-items:flex-start;gap:.65rem;font-size:.9rem;color:var(--text);line-height:1.55;"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;margin-top:.48rem;display:inline-block;"></span><span><strong>Instrument evaluation harnesses</strong> &mdash; labeled Q&amp;A sets, automated correctness scoring, hallucination detection, and refuse-rather-than-guess behaviors.</span></li>
-          </ul>
-        </div>
-        <div class="about-links">
-          <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener" class="link-pill">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-            LinkedIn
-          </a>
-          <a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener" class="link-pill">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-            GitHub
-          </a>
-          <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener" class="link-pill">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            Message on LinkedIn
-          </a>
-          <a href="resume.html" class="link-pill">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            Resume
-          </a>
-        </div>
-      </div>
-      <div class="about-right">
-        <div class="gov-visual">
-          <div class="gov-header">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-            Applied AI Engineering Stack
-          </div>
-          <div class="gov-stack">
-            <div class="gov-layer" style="background:#FFFBEB;border:1px solid #FDE68A;">
-              <div class="gov-layer-name" style="color:#D97706;">Messy Scientific Data</div>
-              <div class="gov-layer-tags">Multi-format inputs &middot; Missing metadata &middot; Inconsistent units &middot; ELN / LIMS / MES</div>
-            </div>
-            <div class="gov-arrow">
-              <div class="gov-arrow-line"></div>
-              <span class="gov-arrow-lbl">Validation connector &middot; Quality gating</span>
-            </div>
-            <div class="gov-layer" style="background:var(--accent-lt);border:1px solid var(--accent-mid);">
-              <div class="gov-layer-name" style="color:var(--accent);">MCP Scientific Data Server</div>
-              <div class="gov-layer-tags">search_compounds() &middot; get_assay_results() &middot; get_metadata() &middot; normalize_units()</div>
-            </div>
-            <div class="gov-arrow">
-              <div class="gov-arrow-line"></div>
-              <span class="gov-arrow-lbl">Claude API &middot; Tool calls</span>
-            </div>
-            <div class="gov-layer" style="background:#F5F3FF;border:1px solid #DDD6FE;">
-              <div class="gov-layer-name" style="color:#7C3AED;">Agentic Pipeline</div>
-              <div class="gov-layer-tags">LangGraph &middot; Multi-Agent &middot; RAG &middot; Human-in-the-Loop</div>
-            </div>
-            <div class="gov-arrow">
-              <div class="gov-arrow-line"></div>
-              <span class="gov-arrow-lbl">Eval harness gates every answer</span>
-            </div>
-            <div class="gov-layer" style="background:var(--green-bg);border:1px solid var(--green-bdr);">
-              <div class="gov-layer-name" style="color:var(--green);">Trustworthy, Auditable Answers</div>
-              <div class="gov-layer-tags">Correctness scored &middot; Hallucination-checked &middot; Grounded &middot; Refuse-rather-than-guess</div>
-            </div>
-          </div>
-        </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+    <div class="section-label">Career</div>
+    <h2 class="section-h">Experience &amp;<br>Expertise</h2>
+    <p class="section-sub">Three roles across pharma R&amp;D, biotech, and academic research — building production AI systems and the scientific foundations beneath them.</p>
 
-<!-- ── Experience ── -->
-<section class="section section-off" id="experience">
-  <div class="container">
-    <div class="section-num">01 &mdash; Career</div>
-    <h2 class="section-h">Career &amp; Expertise</h2>
-    <p class="section-p">Three roles across pharma R&amp;D, biotech, and academic research &mdash; and the technical toolkit behind the work.</p>
     <div class="timeline">
 
       <div class="tl-item">
-        <div class="tl-left">
-          <div class="tl-company">Takeda</div>
-          <div class="tl-period">Sep 2022 &ndash; Present</div>
+        <div class="tl-meta">
+          <div class="tl-org">Takeda</div>
+          <div class="tl-period">Sep 2022 – Present</div>
         </div>
-        <div class="tl-card">
+        <div>
           <div class="tl-title">Associate Director, Applied AI Engineering &amp; Scientific Data</div>
-          <div class="tl-location">Takeda Pharmaceutical Inc. &middot; Greater Boston, MA</div>
+          <div class="tl-loc">Takeda Pharmaceutical Inc. · Greater Boston, MA</div>
           <ul class="tl-bullets">
-            <li><span class="tl-dot-bullet"></span>Designed and deployed production Agentic AI system for ontology curation &mdash; multi-agent LangGraph pipeline with human-in-the-loop governance, cutting curation cycle times significantly</li>
-            <li><span class="tl-dot-bullet"></span>Built MCP-style scientific data connectors integrating ELN, LIMS, and AWS into a validated, agent-ready data layer across R&amp;D domains</li>
-            <li><span class="tl-dot-bullet"></span>Architected next-gen R&amp;D data catalog with automated quality checks, lineage, and metadata management that gates data before it reaches AI pipelines</li>
-            <li><span class="tl-dot-bullet"></span>Led enterprise FAIR data strategy and delivered FAIR Studio (Pistoia Alliance) &mdash; industry-alliance product operationalizing FAIR assessment at scale</li>
-            <li><span class="tl-dot-bullet"></span>Built digital twin for continuous manufacturing of a small molecule API integrating unit-operation mechanistic models</li>
-            <li><span class="tl-dot-bullet"></span>Led cell therapy workflow automation connecting lab instruments, AWS, LabKey, and JMP</li>
-            <li><span class="tl-dot-bullet"></span>Built strategic partnerships with MIT, BYU, Brown, and Purdue on PINNs and in-silico development</li>
+            <li>Designed and deployed production agentic AI system for ontology curation — multi-agent LangGraph pipeline with human-in-the-loop governance, cutting curation cycle times significantly</li>
+            <li>Built MCP-style scientific data connectors integrating ELN, LIMS, and AWS into a validated, agent-ready data layer across R&amp;D domains</li>
+            <li>Architected next-gen R&amp;D data catalog with automated quality checks, lineage, and metadata management that gates data before it reaches AI pipelines</li>
+            <li>Led enterprise FAIR data strategy and delivered FAIR Studio (Pistoia Alliance) — industry-alliance product operationalizing FAIR assessment at scale</li>
+            <li>Built digital twin for continuous manufacturing of a small molecule API integrating unit-operation mechanistic models</li>
+            <li>Built strategic partnerships with MIT, BYU, Brown, and Purdue on PINNs and in-silico development</li>
           </ul>
         </div>
       </div>
 
       <div class="tl-item">
-        <div class="tl-left">
-          <div class="tl-company">Moderna</div>
-          <div class="tl-period">Aug 2021 &ndash; Sep 2022</div>
+        <div class="tl-meta">
+          <div class="tl-org">Moderna</div>
+          <div class="tl-period">Aug 2021 – Sep 2022</div>
         </div>
-        <div class="tl-card">
+        <div>
           <div class="tl-title">Senior CMC Scientist</div>
-          <div class="tl-location">Moderna Inc. &middot; Greater Boston, MA</div>
+          <div class="tl-loc">Moderna Inc. · Greater Boston, MA</div>
           <ul class="tl-bullets">
-            <li><span class="tl-dot-bullet"></span>Developed ML models for mRNA drug substance/product stability and shelf-life prediction (ICH-compliant)</li>
-            <li><span class="tl-dot-bullet"></span>Led comparability and product specification projects through process scale-up phases</li>
-            <li><span class="tl-dot-bullet"></span>Optimized IVT reaction for mRNA process characterization using ML + fundamental modeling</li>
-            <li><span class="tl-dot-bullet"></span>Implemented SPC strategies for raw materials, drug products, and drug substances</li>
-            <li><span class="tl-dot-bullet"></span>Contributed to IND and BLA submissions through statistical analysis and documentation</li>
+            <li>Developed ML models for mRNA drug substance/product stability and shelf-life prediction (ICH-compliant)</li>
+            <li>Optimized IVT reaction for mRNA process characterization using ML + fundamental modeling</li>
+            <li>Led comparability and product specification projects through process scale-up phases</li>
+            <li>Contributed to IND and BLA submissions through statistical analysis and documentation</li>
           </ul>
         </div>
       </div>
 
       <div class="tl-item">
-        <div class="tl-left">
-          <div class="tl-company">UT Austin</div>
-          <div class="tl-period">Oct 2019 &ndash; Aug 2021</div>
+        <div class="tl-meta">
+          <div class="tl-org">UT Austin</div>
+          <div class="tl-period">Oct 2019 – Aug 2021</div>
         </div>
-        <div class="tl-card">
+        <div>
           <div class="tl-title">Post-Doctoral Research Fellow</div>
-          <div class="tl-location">The University of Texas at Austin &middot; Austin, TX</div>
+          <div class="tl-loc">The University of Texas at Austin · Austin, TX</div>
           <ul class="tl-bullets">
-            <li><span class="tl-dot-bullet"></span>Developed fundamental models for thin film gallium phosphate on silicon for plasma etch optimization</li>
-            <li><span class="tl-dot-bullet"></span>Built model-based DoE tools using R Shiny for plasma etch process optimization</li>
-            <li><span class="tl-dot-bullet"></span>Created first-principles model for viscoelastic properties of adhesive soft particles</li>
-            <li><span class="tl-dot-bullet"></span>Led process engineering team building mathematical models for gelation time prediction</li>
-            <li><span class="tl-dot-bullet"></span>Performed Molecular Dynamics Simulations with 100,000+ particles</li>
+            <li>Developed fundamental models for thin film gallium phosphate on silicon for plasma etch optimization</li>
+            <li>Built model-based DoE tools using R Shiny for plasma etch process optimization</li>
+            <li>Created first-principles model for viscoelastic properties of adhesive soft particles</li>
+            <li>Performed Molecular Dynamics Simulations with 100,000+ particles</li>
           </ul>
         </div>
       </div>
 
-
-
-    <!-- ── Expertise ── -->
-    <div style="margin-top:3rem;padding-top:2.5rem;border-top:1px solid var(--border);">
-      <h3 style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:1.75rem;">Technical Expertise</h3>
-      <div class="skills-wrap" style="margin-top:0">
-            <div class="skill-card">
-              <div class="skill-head">
-                <div class="skill-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg></div>
-                <span class="skill-title">Agentic AI &amp; Machine Learning</span>
-              </div>
-              <div class="skill-tags">
-                <span class="skill-tag">Agentic AI</span><span class="skill-tag">AI Strategy</span>
-                <span class="skill-tag">LangGraph</span><span class="skill-tag">Multi-Agent Systems</span>
-                <span class="skill-tag">LLMs &amp; RAG</span><span class="skill-tag">Human-in-the-Loop</span>
-                <span class="skill-tag">AI Evaluation</span><span class="skill-tag">Physics-Informed Neural Networks</span>
-                <span class="skill-tag">PyTorch</span><span class="skill-tag">JAX</span>
-                <span class="skill-tag">Graph Neural Networks</span><span class="skill-tag">Scikit-learn</span>
-              </div>
-            </div>
-            <div class="skill-card">
-              <div class="skill-head">
-                <div class="skill-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18"/></svg></div>
-                <span class="skill-title">Data Strategy &amp; Governance</span>
-              </div>
-              <div class="skill-tags">
-                <span class="skill-tag">Master Data Management</span><span class="skill-tag">Knowledge Graphs</span>
-                <span class="skill-tag">Ontology Engineering</span><span class="skill-tag">Data Catalogs</span>
-                <span class="skill-tag">Data Lineage</span><span class="skill-tag">Data Stewardship</span>
-                <span class="skill-tag">FAIR Maturity Assessment</span><span class="skill-tag">AI Governance</span>
-                <span class="skill-tag">ISO/IEC 23894</span><span class="skill-tag">Semantic Interoperability</span>
-                <span class="skill-tag">SQL</span><span class="skill-tag">Statistical Process Control</span>
-              </div>
-            </div>
-            <div class="skill-card">
-              <div class="skill-head">
-                <div class="skill-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
-                <span class="skill-title">Engineering &amp; Science</span>
-              </div>
-              <div class="skill-tags">
-                <span class="skill-tag">Digital CMC</span><span class="skill-tag">Process Modeling</span>
-                <span class="skill-tag">Mechanistic Models</span><span class="skill-tag">Design of Experiments</span>
-                <span class="skill-tag">Continuous Manufacturing</span><span class="skill-tag">Molecular Dynamics</span>
-                <span class="skill-tag">Cheminformatics</span>
-              </div>
-            </div>
-            <div class="skill-card">
-              <div class="skill-head">
-                <div class="skill-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></div>
-                <span class="skill-title">Infrastructure &amp; Cloud</span>
-              </div>
-              <div class="skill-tags">
-                <span class="skill-tag">Python</span><span class="skill-tag">R</span>
-                <span class="skill-tag">AWS (S3, EC2, Redshift, Neptune)</span>
-                <span class="skill-tag">Neo4j</span><span class="skill-tag">SPARQL</span>
-                <span class="skill-tag">Apache Airflow</span><span class="skill-tag">dbt</span>
-                <span class="skill-tag">Terraform</span><span class="skill-tag">Docker</span>
-                <span class="skill-tag">GitHub Actions</span><span class="skill-tag">Git</span>
-              </div>
-            </div>
-          </div>
     </div>
+
+    <!-- Expertise -->
+    <div style="margin-top:4rem;">
+      <div class="section-label">Technical Expertise</div>
+      <div class="exp-grid">
+        <div class="exp-card">
+          <div class="exp-label">Agentic AI &amp; Machine Learning</div>
+          <div class="exp-tags">
+            <span class="exp-tag">Agentic AI</span><span class="exp-tag">AI Strategy</span>
+            <span class="exp-tag">LangGraph</span><span class="exp-tag">Multi-Agent Systems</span>
+            <span class="exp-tag">LLMs &amp; RAG</span><span class="exp-tag">Human-in-the-Loop</span>
+            <span class="exp-tag">AI Evaluation</span><span class="exp-tag">PINNs</span>
+            <span class="exp-tag">PyTorch</span><span class="exp-tag">JAX</span>
+            <span class="exp-tag">Graph Neural Networks</span><span class="exp-tag">Scikit-learn</span>
+          </div>
+        </div>
+        <div class="exp-card">
+          <div class="exp-label">Data Strategy &amp; Governance</div>
+          <div class="exp-tags">
+            <span class="exp-tag">Master Data Management</span><span class="exp-tag">Knowledge Graphs</span>
+            <span class="exp-tag">Ontology Engineering</span><span class="exp-tag">Data Catalogs</span>
+            <span class="exp-tag">Data Lineage</span><span class="exp-tag">FAIR Maturity Assessment</span>
+            <span class="exp-tag">AI Governance</span><span class="exp-tag">ISO/IEC 23894</span>
+            <span class="exp-tag">Semantic Interoperability</span><span class="exp-tag">SPARQL</span>
+          </div>
+        </div>
+        <div class="exp-card">
+          <div class="exp-label">Engineering &amp; Science</div>
+          <div class="exp-tags">
+            <span class="exp-tag">Digital CMC</span><span class="exp-tag">Process Modeling</span>
+            <span class="exp-tag">Mechanistic Models</span><span class="exp-tag">Design of Experiments</span>
+            <span class="exp-tag">Continuous Manufacturing</span><span class="exp-tag">Molecular Dynamics</span>
+            <span class="exp-tag">Cheminformatics</span><span class="exp-tag">Statistical Process Control</span>
+          </div>
+        </div>
+        <div class="exp-card">
+          <div class="exp-label">Infrastructure &amp; Cloud</div>
+          <div class="exp-tags">
+            <span class="exp-tag">Python</span><span class="exp-tag">R</span>
+            <span class="exp-tag">AWS (S3, EC2, Redshift, Neptune)</span>
+            <span class="exp-tag">Neo4j</span><span class="exp-tag">Apache Airflow</span>
+            <span class="exp-tag">dbt</span><span class="exp-tag">Terraform</span>
+            <span class="exp-tag">Docker</span><span class="exp-tag">GitHub Actions</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
-
-<!-- ── Recognition & Speaking ── -->
-<section class="section section-light" id="recognition" style="display:none">
+<!-- ── Writing ── -->
+<section class="section section-alt" id="writing">
   <div class="container">
-    <div class="section-num">03 &mdash; Recognition</div>
-    <h2 class="section-h">Recognition &amp; Industry Presence</h2>
-    <p class="section-p">Industry alliances, academic partnerships, and open-source contributions to the pharmaceutical data governance community.</p>
-    <div class="rec-grid">
+    <div class="section-label">Writing</div>
+    <h2 class="section-h">Articles &amp; Projects</h2>
+    <p class="section-sub">Technical writing on applied AI engineering, agentic systems, trustworthy scientific data, and deploying frontier AI in regulated life sciences.</p>
 
-      <div class="rec-card rec-card-featured">
-        <div class="rec-badge">Industry Alliance</div>
-        <div class="rec-icon">🏛️</div>
-        <div class="rec-title">FAIR Studio &mdash; Pistoia Alliance</div>
-        <p class="rec-desc">Product owner and driving contributor for FAIR Studio, an industry-wide platform developed under the Pistoia Alliance for operationalizing FAIR data assessments at scale. An alliance product used across member pharma R&amp;D organizations to embed governance into digital workflows.</p>
-        <div class="rec-meta">
-          <span class="rec-tag">FAIR Governance</span>
-          <span class="rec-tag">Industry Alliance</span>
-          <span class="rec-tag">Data Product Owner</span>
+    <div class="filter-row">
+      <button class="filter-btn active" data-cat="all">All</button>
+      <button class="filter-btn" data-cat="agentic">Agentic AI</button>
+      <button class="filter-btn" data-cat="data">Data Governance &amp; FAIR</button>
+      <button class="filter-btn" data-cat="sciml">Scientific ML</button>
+    </div>
+
+    <div class="articles-grid">
+
+      <!-- ── Scientific ML · PINN Series ── -->
+      <div class="article-card" data-cat="sciml">
+        <span class="article-cat cat-sciml">Scientific ML · Physics-Informed AI</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">Sep 2025</span>
+          <span class="article-read">18 min read</span>
         </div>
+        <div class="article-title">Physics-Informed Neural Networks: Why Embedding Physical Laws into Machine Learning Changes Everything</div>
+        <p class="article-excerpt">From the failure of pure data-driven ML in engineering to your first working PINN — a zero-labeled-data solver for a first-order ODE using automatic differentiation and physics residuals.</p>
+        <a href="blog/pinn-introduction.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
       </div>
 
-      <div class="rec-card" style="border-color:#DDD6FE;background:#F5F3FF;">
-        <div class="rec-badge rec-badge-purple">Academic Partnerships</div>
-        <div class="rec-icon">🎓</div>
-        <div class="rec-title">Academic Research Collaborations</div>
-        <p class="rec-desc">Forged strategic research partnerships with MIT, BYU, Brown University, and Purdue University to advance Physics-Informed Neural Networks (PINNs), mechanistic modeling, and in-silico&ndash;first development capabilities for pharmaceutical R&amp;D.</p>
-        <div class="rec-meta">
-          <span class="rec-tag" style="background:rgba(124,58,237,.1);color:#7C3AED;">MIT</span>
-          <span class="rec-tag" style="background:rgba(124,58,237,.1);color:#7C3AED;">BYU</span>
-          <span class="rec-tag" style="background:rgba(124,58,237,.1);color:#7C3AED;">Brown</span>
-          <span class="rec-tag" style="background:rgba(124,58,237,.1);color:#7C3AED;">Purdue</span>
-          <span class="rec-tag" style="background:rgba(124,58,237,.1);color:#7C3AED;">PINNs Research</span>
+      <div class="article-card" data-cat="sciml">
+        <span class="article-cat cat-sciml">Scientific ML · ODEs</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">Oct 2025</span>
+          <span class="article-read">14 min read</span>
         </div>
+        <div class="article-title">Second-Order ODEs with PINNs: The Damped Harmonic Oscillator</div>
+        <p class="article-excerpt">Nested automatic differentiation, two initial conditions, and the spectral bias problem that makes oscillatory physics hard for neural networks — with a hard-constraint ansatz solution.</p>
+        <a href="blog/pinn-odes-second-order.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
       </div>
 
-      <div class="rec-card" style="border-color:var(--green-bdr);background:var(--green-bg);">
-        <div class="rec-badge rec-badge-green">Open Source</div>
-        <div class="rec-icon">🔬</div>
-        <div class="rec-title">Open-Source Contributions</div>
-        <p class="rec-desc">Author and maintainer of open-source tools for the pharma AI community: <strong>OntoCurator Agent</strong> (multi-agent ontology curation), <strong>FAIR Data Toolkit</strong> (automated FAIR assessment), and <strong>ScientificML</strong> (PINNs and mechanistic modeling).</p>
-        <div class="rec-meta">
-          <span class="rec-tag" style="background:rgba(22,163,74,.1);color:var(--green);">OntoCurator</span>
-          <span class="rec-tag" style="background:rgba(22,163,74,.1);color:var(--green);">FAIR Toolkit</span>
-          <span class="rec-tag" style="background:rgba(22,163,74,.1);color:var(--green);">ScientificML</span>
+      <div class="article-card" data-cat="sciml">
+        <span class="article-cat cat-sciml">Scientific ML · PDEs</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">Nov 2025</span>
+          <span class="article-read">16 min read</span>
         </div>
+        <div class="article-title">Solving the 1D Heat Equation with PINNs: Your First Partial Differential Equation</div>
+        <p class="article-excerpt">From a single independent variable to a two-dimensional space-time domain — how PINNs handle partial derivatives, boundary conditions, and full field reconstruction from sparse measurements.</p>
+        <a href="blog/pinn-heat-equation.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
       </div>
+
+      <div class="article-card" data-cat="sciml">
+        <span class="article-cat cat-sciml">Scientific ML · Nonlinear PDEs</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">Dec 2025</span>
+          <span class="article-read">20 min read</span>
+        </div>
+        <div class="article-title">Nonlinear PDEs with PINNs: Burgers Equation and Reaction Kinetics</div>
+        <p class="article-excerpt">Shock formation, viscous regularization, and coupled ODE systems for A→B→C reactions — where physics-informed training earns its keep against classical finite-element solvers.</p>
+        <a href="blog/pinn-burgers-reaction-pdes.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <div class="article-card" data-cat="sciml">
+        <span class="article-cat cat-sciml">Scientific ML · Inverse Problems</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">Jan 2026</span>
+          <span class="article-read">22 min read</span>
+        </div>
+        <div class="article-title">Inverse Problems with PINNs: Discovering Physical Parameters from Sparse, Noisy Data</div>
+        <p class="article-excerpt">Making unknown physical constants trainable variables — recovering diffusivity, reaction rates, and material properties from 40 noisy sensor readings using joint data and physics optimization.</p>
+        <a href="blog/pinn-inverse-problems.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <div class="article-card" data-cat="sciml">
+        <span class="article-cat cat-sciml">Scientific ML · Training Strategies</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">Feb 2026</span>
+          <span class="article-read">18 min read</span>
+        </div>
+        <div class="article-title">Adaptive Sampling and Training Strategies for Physics-Informed Neural Networks</div>
+        <p class="article-excerpt">Why uniform collocation fails for stiff problems, and how residual-based adaptive refinement, loss weighting, causal training, and Fourier feature embeddings turn intractable problems into solvable ones.</p>
+        <a href="blog/pinn-adaptive-sampling.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <div class="article-card" data-cat="sciml">
+        <span class="article-cat cat-sciml">Scientific ML · Operator Learning</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">Mar 2026</span>
+          <span class="article-read">26 min read</span>
+        </div>
+        <div class="article-title">DeepONet: Learning Solution Operators Instead of Individual Solutions</div>
+        <p class="article-excerpt">From solving one PDE at a time to learning the map from any input function to its corresponding output — the branch/trunk architecture behind amortised scientific computation and design-space exploration.</p>
+        <a href="blog/pinn-deeponet.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <div class="article-card" data-cat="sciml">
+        <span class="article-cat cat-sciml">Scientific ML · Advanced Architectures</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">Apr 2026</span>
+          <span class="article-read">30 min read</span>
+        </div>
+        <div class="article-title">Physics-Informed DeepONet: Operator Learning Without Solution Data, and Parameter Estimation at Scale</div>
+        <p class="article-excerpt">Combining the universal approximation theorem for operators with physics-informed training — and using frozen operator networks for rapid inverse problems across entire parameter families simultaneously.</p>
+        <a href="blog/pinn-physics-informed-deeponet.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <!-- ── Agentic AI ── -->
+      <div class="article-card" data-cat="agentic">
+        <span class="article-cat cat-agentic">Agentic AI</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">May 2026</span>
+          <span class="article-read">14 min read</span>
+        </div>
+        <div class="article-title">Building Agentic AI Systems for Ontology Curation in Drug R&amp;D</div>
+        <p class="article-excerpt">How a four-agent LangGraph pipeline automates biomedical term extraction, ontology mapping, conflict detection, and governance routing — while preserving human oversight at every critical decision point.</p>
+        <a href="/blog/agentic-ontology-curation.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <div class="article-card" data-cat="agentic">
+        <span class="article-cat cat-agentic">Agentic AI · Data Governance</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">May 2026</span>
+          <span class="article-read">22 min read</span>
+        </div>
+        <div class="article-title">Agentic AI for Data Governance: A Production Pattern for First-Pass Curation with Human-in-the-Loop</div>
+        <p class="article-excerpt">How to design an audit-ready operating model where agents make bounded governance proposals, human stewards adjudicate the risky residue, and PROV-O provenance records every decision.</p>
+        <a href="/blog/agentic-ai-data-governance-pharma.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <div class="article-card" data-cat="agentic">
+        <span class="article-cat cat-agentic">Applied AI Engineering</span>
+        <div class="article-meta">
+          <span class="article-date">Coming Soon</span>
+        </div>
+        <div class="article-title">Making Messy Scientific Data Trustworthy for AI Agents</div>
+        <p class="article-excerpt">Architecture, implementation, and eval results from building an MCP server + agent + validation connector stack. Design decisions, measured hallucination rate, and what I learned about building AI systems that refuse rather than guess.</p>
+        <span class="article-soon">In progress</span>
+      </div>
+
+      <!-- ── Data Governance & FAIR ── -->
+      <div class="article-card" data-cat="data">
+        <span class="article-cat cat-data">Data Harmonization · AI Strategy</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">Jan 2026</span>
+          <span class="article-read">12 min read</span>
+        </div>
+        <div class="article-title">Bridging the Data Divide: AI-Driven Harmonization in Pharma</div>
+        <p class="article-excerpt">Why the most successful AI programs in pharma won't start with models — they'll start with harmonized data. Includes a reproducible Python case study: 44 raw lab terms to 8 LOINC concepts, 98% auto-mapping accuracy, cross-site findability from 35% to 99.9%.</p>
+        <a href="/blog/ai-driven-harmonization-pharma.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <div class="article-card" data-cat="data">
+        <span class="article-cat cat-data">MDM · Knowledge Graphs</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">May 2026</span>
+          <span class="article-read">25 min read</span>
+        </div>
+        <div class="article-title">Product Mastering Across the R&amp;D-to-Commercial Lifecycle: Why Knowledge Graphs Beat Traditional MDM</div>
+        <p class="article-excerpt">A practitioner's view on why the row-and-column gold record breaks down for medicinal products — and what to build instead. Covers ISO IDMP, bitemporal graphs, agentic entity resolution, and a deployable reference architecture.</p>
+        <a href="/blog/product-mastering-knowledge-graphs-vs-mdm.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <div class="article-card" data-cat="data">
+        <span class="article-cat cat-data">MDM · Semantic Layers</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">May 2026</span>
+          <span class="article-read">30 min read</span>
+        </div>
+        <div class="article-title">From Ontology to MDM: How Semantic Layers Are Replacing Hub-and-Spoke Master Data in Pharma</div>
+        <p class="article-excerpt">Why the next generation of pharma data architecture treats meaning as a first-class artifact. Covers OWL, SHACL, SKOS, data mesh federation, production exemplars from Bayer COLID and Roche EDIS, and a five-step migration pattern.</p>
+        <a href="/blog/semantic-layer-replacing-mdm-pharma.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <div class="article-card" data-cat="data">
+        <span class="article-cat cat-data">AI Governance · ISO Standards</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">May 2026</span>
+          <span class="article-read">28 min read</span>
+        </div>
+        <div class="article-title">AI Governance Without the Theater: Operationalizing ISO/IEC 23894 in Pharmaceutical R&amp;D</div>
+        <p class="article-excerpt">A practical implementation pattern for pharma AI risk that connects ISO/IEC 23894 to ICH Q9(R1), NIST AI RMF crosswalks, and FAIR plus ontology curation controls. Focused on evidence-ready operations over governance theater.</p>
+        <a href="/blog/iso-23894-pharma-rd.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <div class="article-card" data-cat="data">
+        <span class="article-cat cat-data">Data Catalog · FAIR Maturity</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">May 2026</span>
+          <span class="article-read">24 min read</span>
+        </div>
+        <div class="article-title">A 90-Day Maturity Assessment for Pharmaceutical R&amp;D Data Catalogs</div>
+        <p class="article-excerpt">A practical 90-day playbook for data leaders to baseline FAIR maturity, identify one high-leverage quick win, and ship a defensible 12-month roadmap before the first quarterly review.</p>
+        <a href="/blog/90-day-pharma-catalog-maturity.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <div class="article-card" data-cat="data">
+        <span class="article-cat cat-data">FAIR Data · 5-Part Series</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">May 2026</span>
+          <span class="article-read">~45 min · 5 notebooks</span>
+        </div>
+        <div class="article-title">What FAIR Data Actually Means for AI-Ready Pharmaceutical R&amp;D</div>
+        <p class="article-excerpt">A practitioner's deep-dive into FAIR data maturity frameworks — RDA FAIR Maturity Model (41 indicators) and Pistoia Alliance FAIR Maturity Matrix with a complete walkthrough on a CAR-T viability dataset and a semi-automated Python scorer.</p>
+        <a href="https://alishahmohammadi22.github.io/fair-data-toolkit" target="_blank" rel="noopener" class="article-link">
+          Read the Series
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <div class="article-card" data-cat="data">
+        <span class="article-cat cat-data">FAIR Data · Data Governance</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">May 2026</span>
+          <span class="article-read">18 min read</span>
+        </div>
+        <div class="article-title">FAIR Data Principles: A Practical Guide to Making Your Data Findable, Accessible, Interoperable, and Reusable</div>
+        <p class="article-excerpt">A decade after their publication, the FAIR principles have quietly become the backbone of modern data strategy. What they actually mean, why they matter more than ever in the age of AI, and how to put them to work with a 5-step starter plan.</p>
+        <a href="/blog/fair-data-principles.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
 
     </div>
   </div>
 </section>
 
-<!-- ── Skills ── -->
-<section class="section section-off" id="skills" style="display:none">
-  <div class="container">
-    <div class="section-num">04 &mdash; Skills</div>
-    <h2 class="section-h">Expertise</h2>
-    <p class="section-p">Four pillars spanning data governance, AI, engineering science, and cloud infrastructure.</p>
-    <div class="skills-wrap">
-      <div class="skill-card">
-        <div class="skill-head">
-          <div class="skill-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg></div>
-          <span class="skill-title">Agentic AI &amp; Machine Learning</span>
-        </div>
-        <div class="skill-tags">
-          <span class="skill-tag">Agentic AI</span><span class="skill-tag">AI Strategy</span>
-          <span class="skill-tag">LangGraph</span><span class="skill-tag">Multi-Agent Systems</span>
-          <span class="skill-tag">LLMs &amp; RAG</span><span class="skill-tag">Human-in-the-Loop</span>
-          <span class="skill-tag">AI Evaluation</span><span class="skill-tag">Physics-Informed Neural Networks</span>
-          <span class="skill-tag">PyTorch</span><span class="skill-tag">JAX</span>
-          <span class="skill-tag">Graph Neural Networks</span><span class="skill-tag">Scikit-learn</span>
-        </div>
-      </div>
-      <div class="skill-card">
-        <div class="skill-head">
-          <div class="skill-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18"/></svg></div>
-          <span class="skill-title">Data Strategy &amp; Governance</span>
-        </div>
-        <div class="skill-tags">
-          <span class="skill-tag">Master Data Management</span><span class="skill-tag">Knowledge Graphs</span>
-          <span class="skill-tag">Ontology Engineering</span><span class="skill-tag">Data Catalogs</span>
-          <span class="skill-tag">Data Lineage</span><span class="skill-tag">Data Stewardship</span>
-          <span class="skill-tag">FAIR Maturity Assessment</span><span class="skill-tag">AI Governance</span>
-          <span class="skill-tag">ISO/IEC 23894</span><span class="skill-tag">Semantic Interoperability</span>
-          <span class="skill-tag">SQL</span><span class="skill-tag">Statistical Process Control</span>
-        </div>
-      </div>
-      <div class="skill-card">
-        <div class="skill-head">
-          <div class="skill-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
-          <span class="skill-title">Engineering &amp; Science</span>
-        </div>
-        <div class="skill-tags">
-          <span class="skill-tag">Digital CMC</span><span class="skill-tag">Process Modeling</span>
-          <span class="skill-tag">Mechanistic Models</span><span class="skill-tag">Design of Experiments</span>
-          <span class="skill-tag">Continuous Manufacturing</span><span class="skill-tag">Molecular Dynamics</span>
-          <span class="skill-tag">Cheminformatics</span>
-        </div>
-      </div>
-      <div class="skill-card">
-        <div class="skill-head">
-          <div class="skill-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></div>
-          <span class="skill-title">Infrastructure &amp; Cloud</span>
-        </div>
-        <div class="skill-tags">
-          <span class="skill-tag">Python</span><span class="skill-tag">R</span>
-          <span class="skill-tag">AWS (S3, EC2, Redshift, Neptune)</span>
-          <span class="skill-tag">Neo4j</span><span class="skill-tag">SPARQL</span>
-          <span class="skill-tag">Apache Airflow</span><span class="skill-tag">dbt</span>
-          <span class="skill-tag">Terraform</span><span class="skill-tag">Docker</span>
-          <span class="skill-tag">GitHub Actions</span><span class="skill-tag">Git</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── Blog ── -->
-<section class="section section-light" id="blog">
-  <div class="container">
-    <div class="section-num">02 &mdash; Writing</div>
-    <h2 class="section-h">Articles &amp; Blog</h2>
-    <p class="section-p">Technical writing on applied AI engineering, agentic systems, trustworthy scientific data, and deploying frontier AI in regulated life sciences &mdash; from architecture patterns to eval results.</p>
-    <div class="blog-grid">
-
-      <!-- ── First article: AI-Driven Harmonization ── -->
-      <div class="blog-card featured" style="border-color:#99f6e4;">
-        <div class="blog-top">
-          <span class="blog-cat" style="background:#f0fdfa;color:#0d9488;border:1px solid #99f6e4;font-size:.7rem;font-weight:700;letter-spacing:.04em;padding:.22rem .65rem;border-radius:5px;">Data Harmonization &middot; AI Strategy</span>
-          <span class="blog-date">Jan 2026</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
-          <span class="blog-published">Published</span>
-          <span class="blog-readtime">12 min read</span>
-        </div>
-        <div class="blog-title">Bridging the Data Divide: AI-Driven Harmonization in Pharma</div>
-        <p class="blog-excerpt">Why the most successful AI programs in pharma won&rsquo;t start with models &mdash; they&rsquo;ll start with harmonized data. Includes a reproducible Python case study: 44 raw lab terms to 8 LOINC concepts, 98% auto-mapping accuracy, cross-site findability from 35% to 99.9%.</p>
-        <div class="blog-topics"><strong>Topics:</strong> Data harmonization &middot; LOINC &middot; FAIR principles &middot; Ontology-aware AI &middot; Generative AI for metadata &middot; Reproducible Python pipeline &middot; FDA 2025 draft guidance &middot; 7 references</div>
-        <div class="blog-links">
-          <a href="/blog/ai-driven-harmonization-pharma.html" class="blog-link">Read Article <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-          <a href="https://github.com/alishahmohammadi22/ai-driven-harmonization-pharma" target="_blank" rel="noopener" class="blog-link" style="color:var(--muted);">GitHub <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-        </div>
-      </div>
-
-      <div class="blog-card featured">
-        <div class="blog-top">
-          <span class="blog-cat" style="background:var(--purple-lt);color:var(--purple);border:1px solid var(--purple-mid);font-size:.7rem;font-weight:700;letter-spacing:.04em;padding:.22rem .65rem;border-radius:5px;">MDM &middot; Knowledge Graphs</span>
-          <span class="blog-date">May 2026</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
-          <span class="blog-published">Published</span>
-          <span class="blog-readtime">25 min read</span>
-        </div>
-        <div class="blog-title">Product Mastering Across the R&amp;D-to-Commercial Lifecycle: Why Knowledge Graphs Beat Traditional MDM</div>
-        <p class="blog-excerpt">A practitioner&rsquo;s view on why the row-and-column gold record breaks down for medicinal products &mdash; and what to build instead. Covers ISO IDMP, IDMP-O, bitemporal graphs, agentic entity resolution, and a deployable reference architecture.</p>
-        <div class="blog-topics"><strong>Topics:</strong> MDM vs KG &middot; ISO IDMP &middot; IDMP-O (Pistoia Alliance) &middot; ChEBI &middot; RxNorm &middot; Agentic entity resolution &middot; Bitemporal data &middot; Reference architecture &middot; 24 references</div>
-        <div class="blog-links">
-          <a href="/blog/product-mastering-knowledge-graphs-vs-mdm.html" class="blog-link">Read Article <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-        </div>
-      </div>
-
-      <div class="blog-card featured">
-        <div class="blog-top">
-          <span class="blog-cat" style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-bdr);font-size:.7rem;font-weight:700;letter-spacing:.04em;padding:.22rem .65rem;border-radius:5px;">MDM &middot; Semantic Layers</span>
-          <span class="blog-date">May 2026</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
-          <span class="blog-published">Published</span>
-          <span class="blog-readtime">30 min read</span>
-        </div>
-        <div class="blog-title">From Ontology to MDM: How Semantic Layers Are Replacing Hub-and-Spoke Master Data Architectures in Pharma</div>
-        <p class="blog-excerpt">Why the next generation of pharma data architecture treats meaning as a first-class artifact. Covers OWL, SHACL, SKOS, R2RML, data mesh federation, production exemplars from Bayer COLID and Roche EDIS, and a five-step migration pattern for moving your hub to a read model.</p>
-        <div class="blog-topics"><strong>Topics:</strong> Semantic layer vs MDM &middot; OWL / SHACL / SKOS / R2RML &middot; Data mesh &middot; Bayer COLID &middot; Roche EDIS &middot; EMA eAF 2026 &middot; Migration pattern &middot; 24 references</div>
-        <div class="blog-links">
-          <a href="/blog/semantic-layer-replacing-mdm-pharma.html" class="blog-link">Read Article <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-        </div>
-      </div>
-
-        <div class="blog-card featured">
-          <div class="blog-top">
-            <span class="blog-cat" style="background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bdr);font-size:.7rem;font-weight:700;letter-spacing:.04em;padding:.22rem .65rem;border-radius:5px;">Agentic AI &middot; Data Governance</span>
-            <span class="blog-date">May 2026</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
-            <span class="blog-published">Published</span>
-            <span class="blog-readtime">22 min read</span>
-          </div>
-          <div class="blog-title">Agentic AI for Data Governance: A Production Pattern for First-Pass Curation with Human-in-the-Loop</div>
-          <p class="blog-excerpt">How to design an audit-ready operating model where agents make bounded governance proposals, human stewards adjudicate the risky residue, and PROV-O provenance records every decision. Covers Article 14 oversight, GAMP 5 v2, NIST AI RMF, and a deployable curation pipeline.</p>
-          <div class="blog-topics"><strong>Topics:</strong> Human-in-the-loop governance &middot; PROV-O provenance &middot; EU AI Act Article 14 &middot; GAMP 5 v2 &middot; NIST AI RMF &middot; OpenLineage &middot; Stewardship operating model &middot; 32 references</div>
-          <div class="blog-links">
-            <a href="/blog/agentic-ai-data-governance-pharma.html" class="blog-link">Read Article <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-          </div>
-        </div>
-
-        <div class="blog-card featured">
-          <div class="blog-top">
-            <span class="blog-cat" style="background:var(--purple-lt);color:var(--purple);border:1px solid var(--purple-mid);font-size:.7rem;font-weight:700;letter-spacing:.04em;padding:.22rem .65rem;border-radius:5px;">AI Governance &middot; ISO Standards</span>
-            <span class="blog-date">May 2026</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
-            <span class="blog-published">Published</span>
-            <span class="blog-readtime">28 min read</span>
-          </div>
-          <div class="blog-title">AI Governance Without the Theater: Operationalizing ISO/IEC 23894 in Pharmaceutical R&amp;D</div>
-          <p class="blog-excerpt">A practical implementation pattern for pharma AI risk that connects ISO/IEC 23894 to ICH Q9(R1), ISO/IEC 42001, NIST AI RMF crosswalks, and FAIR plus ontology curation controls. Focuses on evidence-ready operations over governance theater.</p>
-          <div class="blog-topics"><strong>Topics:</strong> ISO/IEC 23894 &middot; ISO/IEC 42001 &middot; ICH Q9(R1) &middot; FDA Jan 2025 draft &middot; EMA NDSG &middot; PIC/S Annex 22 &middot; FAIR infrastructure &middot; OBO ontology governance &middot; 31 references</div>
-          <div class="blog-links">
-            <a href="/blog/iso-23894-pharma-rd.html" class="blog-link">Read Article <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-          </div>
-        </div>
-
-        <div class="blog-card featured">
-          <div class="blog-top">
-            <span class="blog-cat" style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-bdr);font-size:.7rem;font-weight:700;letter-spacing:.04em;padding:.22rem .65rem;border-radius:5px;">Data Catalog &middot; FAIR Maturity</span>
-            <span class="blog-date">May 2026</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
-            <span class="blog-published">Published</span>
-            <span class="blog-readtime">24 min read</span>
-          </div>
-          <div class="blog-title">A 90-Day Maturity Assessment for Pharmaceutical R&amp;D Data Catalogs</div>
-          <p class="blog-excerpt">A practical 90-day playbook for data leaders to baseline FAIR maturity, identify one high-leverage quick win, and ship a defensible 12-month roadmap before the first quarterly review.</p>
-          <div class="blog-topics"><strong>Topics:</strong> 30-30-30 assessment model &middot; FAIR maturity indicators &middot; Pistoia FAIR matrix &middot; Stewardship mapping &middot; Quick-win design &middot; DCAM alignment &middot; Pharma regulatory overlay &middot; 13 references</div>
-          <div class="blog-links">
-            <a href="/blog/90-day-pharma-catalog-maturity.html" class="blog-link">Read Article <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-          </div>
-        </div>
-
-      <div class="blog-card featured">
-        <div class="blog-top">
-          <span class="blog-cat cat-ai">Agentic AI</span>
-          <span class="blog-date">May 2026</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
-          <span class="blog-published">Published</span>
-          <span class="blog-readtime">14 min read</span>
-        </div>
-        <div class="blog-title">Building Agentic AI Systems for Ontology Curation in Drug R&amp;D</div>
-        <p class="blog-excerpt">How a four-agent LangGraph pipeline automates biomedical term extraction, ontology mapping, conflict detection, and governance routing &mdash; while preserving human oversight at every critical decision point.</p>
-        <div class="blog-topics"><strong>Topics:</strong> LangGraph state machine &middot; BioPortal &amp; OLS4 &middot; Conflict detection &middot; Human-in-the-loop governance &middot; Pydantic v2 &middot; Information Content ranking</div>
-        <div class="blog-links">
-          <a href="/blog/agentic-ontology-curation.html" class="blog-link">Read Article <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-          <a href="https://github.com/alishahmohammadi22/onto-curator-agent" target="_blank" rel="noopener" class="blog-link" style="color:var(--muted);">GitHub Repo <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-        </div>
-      </div>
-
-      <div class="blog-card">
-        <div class="blog-top">
-          <span class="blog-cat cat-ai">Applied AI Engineering</span>
-          <span class="blog-date">Coming Soon</span>
-        </div>
-        <div class="blog-title">Making Messy Scientific Data Trustworthy for AI Agents</div>
-        <p class="blog-excerpt">Architecture, implementation, and eval results from building an MCP server + agent + validation connector stack. Problem, design decisions, measured hallucination rate, and what I learned about building AI systems that refuse rather than guess.</p>
-        <span class="blog-soon">Phase 4 post &mdash; in progress</span>
-      </div>
-
-      <div class="blog-card">
-        <div class="blog-top">
-          <span class="blog-cat cat-ml">Scientific ML</span>
-          <span class="blog-date">Coming Soon</span>
-        </div>
-        <div class="blog-title">Physics-Informed Neural Networks for Continuous Manufacturing</div>
-        <p class="blog-excerpt">A practical guide to embedding physical laws into neural network architectures for process development in pharmaceutical continuous manufacturing.</p>
-        <span class="blog-soon">Article in Progress</span>
-      </div>
-
-      <div class="blog-card featured">
-        <div class="blog-top">
-          <span class="blog-cat cat-fair">FAIR Data &middot; 5-Part Series</span>
-          <span class="blog-date">May 2026</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
-          <span class="blog-published">Published</span>
-          <span class="blog-readtime">~45 min &middot; 5 Jupyter notebooks</span>
-        </div>
-        <div class="blog-title">What FAIR Data Actually Means for AI-Ready Pharmaceutical R&amp;D</div>
-        <p class="blog-excerpt">A practitioner&rsquo;s deep-dive into FAIR data maturity frameworks. Combines the RDA FAIR Maturity Model (41 indicators) and Pistoia Alliance FAIR Maturity Matrix (L0&ndash;L5 &times; 7 dimensions) with a complete walkthrough on a CAR-T viability dataset and a semi-automated Python scorer.</p>
-        <div class="blog-topics"><strong>Topics:</strong> RDA 41 indicators &middot; Pistoia FMM v1.1 &middot; Manual assessment &middot; Gap analysis &middot; Semi-automated scoring &middot; Agentic scorer architecture</div>
-        <div class="blog-links">
-          <a href="https://alishahmohammadi22.github.io/fair-data-toolkit" target="_blank" rel="noopener" class="blog-link">Read the Series <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-          <a href="https://github.com/alishahmohammadi22/fair-data-toolkit/tree/main/notebooks" target="_blank" rel="noopener" class="blog-link" style="color:var(--muted);">Notebooks on GitHub <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-        </div>
-      </div>
-
-      <div class="blog-card featured">
-        <div class="blog-top">
-          <span class="blog-cat cat-fair">FAIR Data &middot; Data Governance</span>
-          <span class="blog-date">May 2026</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
-          <span class="blog-published">Published</span>
-          <span class="blog-readtime">18 min read</span>
-        </div>
-        <div class="blog-title">FAIR Data Principles: A Practical Guide to Making Your Data Findable, Accessible, Interoperable, and Reusable</div>
-        <p class="blog-excerpt">A decade after their publication, the FAIR principles have quietly become the backbone of modern data strategy. What they actually mean, why they matter more than ever in the age of AI, and how to put them to work&mdash;with a 5-step starter plan and a full ecosystem map.</p>
-        <div class="blog-topics"><strong>Topics:</strong> FAIR sub-principles &middot; Machine-actionability &middot; Persistent identifiers &middot; Ontologies &amp; metadata standards &middot; CARE Principles &middot; FAIR for AI &middot; 22 key references</div>
-        <div class="blog-links">
-          <a href="/blog/fair-data-principles.html" class="blog-link">Read Article <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ── Contact (dark) ── -->
-<div class="contact-section" id="contact">
+<!-- ── Contact ── -->
+<section class="contact-section" id="contact">
   <div class="contact-inner">
-    <h2 class="contact-h">Let&rsquo;s Work<br>Together.</h2>
-    <p class="contact-sub">Open to collaboration on applied AI engineering, agentic systems, and trustworthy data infrastructure for life sciences &mdash; and conversations about frontier AI for science.</p>
-    <p style="font-size:.85rem;color:rgba(255,255,255,.35);margin-top:-1.75rem;margin-bottom:2.5rem;font-style:italic;">Currently building: MCP servers, agentic pipelines &amp; eval harnesses for regulated life sciences</p>
+    <h2 class="contact-h">Let's build<br><em>something real.</em></h2>
+    <p class="contact-sub">Open to collaboration on applied AI engineering, agentic systems, and trustworthy data infrastructure for life sciences — and conversations about frontier AI for science.</p>
     <div class="contact-links">
-      <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener" class="contact-link primary">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-        Message on LinkedIn
+      <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener" class="c-btn c-btn-white">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        Connect on LinkedIn
       </a>
-      <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener" class="contact-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-        LinkedIn
-      </a>
-      <a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener" class="contact-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+      <a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener" class="c-btn c-btn-ghost">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
         GitHub
       </a>
+      <a href="resume.html" class="c-btn c-btn-ghost">Resume</a>
     </div>
   </div>
-</div>
+</section>
 
 <!-- ── Footer ── -->
 <footer>
@@ -1141,40 +845,43 @@
     <a href="resume.html">Resume</a>
     <a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener">GitHub</a>
     <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener">LinkedIn</a>
-    <a href="https://alishahmohammadi22.github.io/fair-data-toolkit">FAIR Data Toolkit</a>
+    <a href="https://alishahmohammadi22.github.io/fair-data-toolkit" target="_blank" rel="noopener">FAIR Toolkit</a>
   </div>
 </footer>
 
 <script>
-  // ── Nav scroll shadow ──
   (function(){
-    var nav = document.getElementById('nav');
-    function update(){ nav.classList.toggle('scrolled', window.scrollY > 40); }
-    window.addEventListener('scroll', update, {passive:true});
-    update();
+    var nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', function(){ nav.classList.toggle('scrolled', window.scrollY > 20); }, {passive:true});
   })();
 
-  // ── Dark / light mode toggle ──
   (function(){
-    var btn = document.getElementById('themeToggle');
-    var html = document.documentElement;
-    var saved = localStorage.getItem('theme');
-    if (saved === 'dark') html.setAttribute('data-theme', 'dark');
-    if (btn) {
+    var btn = document.getElementById('navMenuBtn');
+    var links = document.getElementById('navLinks');
+    btn.addEventListener('click', function(){ links.classList.toggle('open'); });
+    links.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ links.classList.remove('open'); });
+    });
+  })();
+
+  (function(){
+    var btns = document.querySelectorAll('.filter-btn');
+    var cards = document.querySelectorAll('.article-card');
+    btns.forEach(function(btn){
       btn.addEventListener('click', function(){
-        var isDark = html.getAttribute('data-theme') === 'dark';
-        if (isDark) {
-          html.removeAttribute('data-theme');
-          localStorage.setItem('theme', 'light');
-        } else {
-          html.setAttribute('data-theme', 'dark');
-          localStorage.setItem('theme', 'dark');
-        }
+        btns.forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        var cat = btn.getAttribute('data-cat');
+        cards.forEach(function(card){
+          if(cat === 'all' || card.getAttribute('data-cat') === cat){
+            card.classList.remove('hidden');
+          } else {
+            card.classList.add('hidden');
+          }
+        });
       });
-    }
+    });
   })();
-
-
 </script>
 </body>
 </html>

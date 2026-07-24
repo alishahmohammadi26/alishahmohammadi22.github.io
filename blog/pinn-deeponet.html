@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeepONet: Learning Solution Operators — Ali Shahmohammadi</title>
+  <meta name="description" content="From solving one PDE at a time to learning the map from any input function to its corresponding output — the architecture behind amortised scientific computation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#F8F6F2;--bg-alt:#F1EEE9;--ink:#111010;--ink-2:#4A4540;--ink-3:#8C857E;--navy:#1C3D6B;--navy-lt:#EBF0F7;--sienna:#B8845A;--sienna-lt:#FBF4EC;--purple:#5B4E8A;--purple-lt:#F2EEF9;--green:#2D7A4F;--green-lt:#EBF7F1;--green-bdr:#BEE5D3;--border:#DEDAD3;--dark:#111010;--accent:#2563EB;--accent-lt:#EFF6FF;--accent-mid:#BFDBFE;--red:#DC2626;--red-lt:#FEF2F2;--amber:#D97706;--amber-lt:#FFFBEB;--amber-bdr:#FDE68A}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--ink);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:18px;line-height:1.65;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent);text-decoration:none}a:hover{opacity:.75}
+    code,pre{font-family:'JetBrains Mono','Fira Code',monospace}
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between;background:rgba(248,246,242,.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:var(--ink)}
+    .nav-logo em{font-style:normal;color:var(--sienna)}
+    .nav-links{display:flex;align-items:center;gap:.2rem}
+    .nav-links a{font-size:.82rem;font-weight:500;color:var(--ink-3);padding:.42rem .8rem;border-radius:4px}
+    .nav-links a:hover{color:var(--ink);background:var(--bg-alt)}
+    .article-page{padding-top:60px}
+    .article-hero{background:var(--dark);padding:5rem 3rem 4rem}
+    .article-hero-inner{max-width:820px;margin:0 auto}
+    .hero-series{font-family:'JetBrains Mono',monospace;font-size:.67rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sienna);margin-bottom:1rem;display:flex;align-items:center;gap:.8rem}
+    .hero-series::before{content:'';width:28px;height:1px;background:var(--sienna)}
+    .article-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,4.2rem);font-weight:700;letter-spacing:-.02em;line-height:.97;color:#fff;margin-bottom:1.25rem}
+    .article-title em{font-style:italic;font-weight:400;color:rgba(255,255,255,.4)}
+    .article-sub{font-size:1.08rem;color:rgba(255,255,255,.45);margin-bottom:2rem;line-height:1.75;max-width:640px}
+    .article-meta{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2rem}
+    .meta-pill{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:rgba(255,255,255,.38);border:1px solid rgba(255,255,255,.1);padding:.25rem .65rem;border-radius:2px}
+    .meta-pill.highlight{color:var(--sienna);border-color:rgba(184,132,90,.35)}
+    .article-body{max-width:820px;margin:0 auto;padding:4rem 3rem}
+    @media(max-width:640px){.article-hero{padding:3.5rem 1.5rem 3rem}.article-body{padding:3rem 1.5rem}}
+    .section-label{font-family:'JetBrains Mono',monospace;font-size:.67rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1rem}
+    h2.section-h{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;letter-spacing:-.02em;line-height:1.05;color:var(--ink);margin-bottom:.75rem}
+    h3.sub-h{font-size:1.12rem;font-weight:700;color:var(--ink);margin-bottom:.5rem;margin-top:2rem}
+    .body-text{font-size:1.05rem;color:var(--ink-2);line-height:1.8;margin-bottom:1.25rem}
+    .math-block{background:var(--bg-alt);border:1px solid var(--border);border-left:3px solid var(--navy);border-radius:0 4px 4px 0;padding:1.1rem 1.5rem;margin:1.5rem 0;font-family:'JetBrains Mono',monospace;font-size:.88rem;color:var(--navy);overflow-x:auto;line-height:1.7}
+    .math-inline{font-family:'JetBrains Mono',monospace;font-size:.88em;color:var(--navy);background:var(--navy-lt);padding:.08em .3em;border-radius:2px}
+    .code-block{background:#1C1C1E;border-radius:6px;overflow:hidden;margin:1.5rem 0}
+    .code-header{display:flex;align-items:center;justify-content:space-between;padding:.55rem 1rem;background:#2A2A2D;border-bottom:1px solid rgba(255,255,255,.07)}
+    .code-lang{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:rgba(255,255,255,.35);letter-spacing:.1em;text-transform:uppercase}
+    .code-dots{display:flex;gap:5px}
+    .code-dot{width:10px;height:10px;border-radius:50%}
+    .dot-r{background:#FF5F57}.dot-y{background:#FEBC2E}.dot-g{background:#28C840}
+    pre.code-body{padding:1.25rem 1.5rem;overflow-x:auto;font-size:.88rem;line-height:1.75;color:#D1D5DB}
+    .kw{color:#C084FC}.st{color:#86EFAC}.cm{color:#6B7280;font-style:italic}.fn{color:#93C5FD}.nm{color:#FCA5A5}.tp{color:#67E8F9}
+    .callout{border-radius:4px;padding:1.1rem 1.4rem;margin:1.5rem 0;display:flex;gap:.9rem}
+    .callout-icon{flex-shrink:0;margin-top:.1rem}
+    .callout-body{font-size:.9rem;line-height:1.7}
+    .callout-body strong{display:block;font-weight:700;margin-bottom:.2rem}
+    .callout.insight{background:var(--navy-lt);border:1px solid rgba(28,61,107,.2)}
+    .callout.insight .callout-icon,.callout.insight .callout-body{color:var(--navy)}
+    .callout.warning{background:var(--amber-lt);border:1px solid var(--amber-bdr)}
+    .callout.warning .callout-icon{color:var(--amber)}
+    .callout.warning .callout-body{color:#92400E}
+    .callout.success{background:var(--green-lt);border:1px solid var(--green-bdr)}
+    .callout.success .callout-icon{color:var(--green)}
+    .callout.success .callout-body{color:#14532D}
+    .data-table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.875rem}
+    .data-table th{font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding:.65rem 1rem;border-bottom:2px solid var(--border);text-align:left}
+    .data-table td{padding:.65rem 1rem;border-bottom:1px solid var(--border);color:var(--ink-2)}
+    .data-table tr:last-child td{border-bottom:none}
+    .data-table tr:hover td{background:var(--bg-alt)}
+    .fig-wrap{margin:2rem 0;text-align:center}
+    .fig-caption{font-size:.78rem;color:var(--ink-3);margin-top:.6rem;font-style:italic}
+    .series-nav{background:var(--bg-alt);border:1px solid var(--border);border-radius:4px;padding:1.5rem 1.75rem;margin:2.5rem 0}
+    .series-nav-label{font-family:'JetBrains Mono',monospace;font-size:.63rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1rem}
+    .series-nav-list{display:flex;flex-direction:column;gap:.4rem}
+    .series-nav-item{display:flex;align-items:center;gap:.65rem;font-size:.95rem;color:var(--ink-2)}
+    .series-nav-item.current{color:var(--navy);font-weight:600}
+    .series-nav-item a{color:var(--ink-2)}
+    .series-nav-item a:hover{color:var(--navy)}
+    .ref-list{display:flex;flex-direction:column;gap:.75rem;margin-top:1rem}
+    .ref-item{font-size:.92rem;color:var(--ink-2);line-height:1.65;padding-left:2rem;position:relative}
+    .ref-num{position:absolute;left:0;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--ink-3);font-weight:700}
+    .ref-item a{color:var(--accent)}
+    .divider{border:none;border-top:1px solid var(--border);margin:3rem 0}
+    footer{background:#0C0C0C;border-top:1px solid rgba(255,255,255,.05);padding:2rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem}
+    .footer-copy{font-size:.77rem;color:rgba(255,255,255,.22)}
+    .footer-links{display:flex;gap:1.5rem}
+    .footer-links a{font-size:.77rem;color:rgba(255,255,255,.27)}
+    .footer-links a:hover{color:rgba(255,255,255,.7)}
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">Ali Shahmohammadi <em>Ph.D.</em></a>
+  <div class="nav-links">
+    <a href="../index.html#career">Career</a>
+    <a href="../index.html#writing">Writing</a>
+    <a href="../index.html#contact">Contact</a>
+    <a href="../resume.html">Resume</a>
+  </div>
+</nav>
+
+<div class="article-page">
+  <div class="article-hero">
+    <div class="article-hero-inner">
+      <div class="hero-series">Physics AI · PINNs Series · Article 7 of 8</div>
+      <h1 class="article-title">DeepONet: Learning Solution Operators <em>Instead of Individual Solutions</em></h1>
+      <p class="article-sub">From solving one PDE at a time to learning the map from any input function to its corresponding output — the architecture behind amortised scientific computation.</p>
+      <div class="article-meta">
+        <span class="meta-pill highlight">Mar 2026</span>
+        <span class="meta-pill">26 min read</span>
+        <span class="meta-pill">Advanced</span>
+        <span class="meta-pill">Scientific ML</span>
+        <span class="meta-pill">Operator Learning</span>
+        <span class="meta-pill">notebook: 03_Advanced/09_deeponet.ipynb</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="article-body">
+
+    <!-- Series navigation -->
+    <div class="series-nav">
+      <div class="series-nav-label">Physics AI · PINNs Series</div>
+      <div class="series-nav-list">
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">01</span><a href="pinn-introduction.html">Introduction to PINNs</a></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">02</span><a href="pinn-odes-second-order.html">Second-Order ODEs</a></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">03</span><a href="pinn-heat-equation.html">Heat Equation</a></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">04</span><a href="pinn-burgers-reaction-pdes.html">Burgers &amp; Reaction PDEs</a></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">05</span><a href="pinn-inverse-problems.html">Inverse Problems</a></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">06</span><a href="pinn-adaptive-sampling.html">Adaptive Sampling</a></div>
+        <div class="series-nav-item current"><span style="font-family:'JetBrains Mono',monospace;font-size:.75rem">07</span>DeepONet — Learning Operators &larr; you are here</div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">08</span><a href="pinn-physics-informed-deeponet.html">Physics-Informed DeepONet</a></div>
+      </div>
+    </div>
+
+    <!-- Section 1: The fundamental limitation -->
+    <div class="section-label">Section 01</div>
+    <h2 class="section-h">The Fundamental Limitation of PINNs</h2>
+
+    <p class="body-text">Every notebook and article in this series up to now has trained a neural network to represent <em>one</em> solution to <em>one</em> problem instance. The network approximates $u(x,t;\theta^*)$ for a specific set of initial conditions, boundary conditions, and PDE parameters — and does it remarkably well. But change any of those inputs, even slightly, and you discard the trained weights and start from scratch.</p>
+
+    <p class="body-text">Consider what this costs in practice. Design exploration over 1,000 initial condition variations for a pharmaceutical reactor: $1{,}000 \times 45\text{s} \approx 12.5$ hours of training. Uncertainty quantification via Monte Carlo over 10,000 parameter samples: weeks of GPU time. Real-time digital twin control with millisecond update requirements: completely out of reach. The PINN paradigm — however powerful — is fundamentally a <em>per-instance</em> solver.</p>
+
+    <div class="callout warning">
+      <span class="callout-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </span>
+      <div class="callout-body">
+        <strong>The per-instance bottleneck</strong>
+        A trained PINN encodes exactly one solution to exactly one problem instance. It does not generalise to new initial conditions, new forcing functions, or new PDE parameters without full retraining. This is the central limitation operator learning is designed to overcome.
+      </div>
+    </div>
+
+    <p class="body-text">The root cause is how PINNs are parameterised. The network maps <em>coordinates</em> $(x,t)$ to a solution value — it is a function approximator in the classical sense. What we need instead is a machine that takes the problem specification (the initial condition function, the forcing function, the parameter values) and outputs the corresponding solution function. That is not a function approximator. It is an <em>operator approximator</em>.</p>
+
+    <!-- Section 2: Operators vs functions -->
+    <hr class="divider">
+    <div class="section-label">Section 02</div>
+    <h2 class="section-h">Operators versus Functions</h2>
+
+    <p class="body-text">Before describing the architecture, the distinction must be made precise. A function maps a number to a number (or a finite-dimensional vector to a vector):</p>
+
+    <div class="math-block">
+      $$f: \mathbb{R}^n \to \mathbb{R}^m, \quad f(x) = y$$
+    </div>
+
+    <p class="body-text">An <em>operator</em> maps a function to a function — it is a map between infinite-dimensional spaces:</p>
+
+    <div class="math-block">
+      $$\mathcal{G}: \bigl(\mathcal{X} \to \mathbb{R}\bigr) \;\longrightarrow\; \bigl(\mathcal{Y} \to \mathbb{R}\bigr), \quad \mathcal{G}[u] = s$$
+    </div>
+
+    <p class="body-text">The input $u$ is an entire function; the output $s$ is an entire function. Three canonical examples build intuition:</p>
+
+    <p class="body-text"><strong>The differential operator:</strong> $\mathcal{L}[u](x) = \frac{du}{dx}$ — maps a differentiable function to its derivative.</p>
+
+    <p class="body-text"><strong>The integral (antiderivative) operator:</strong></p>
+    <div class="math-block">
+      $$\mathcal{G}[u](x) = \int_0^x u(\tau)\,d\tau, \quad s(0)=0$$
+    </div>
+    <p class="body-text">Given any integrable function $u$, the operator returns its antiderivative $s$ satisfying $s(0)=0$. This is the benchmark problem in Lu et al. 2021 and in the notebook for this article.</p>
+
+    <p class="body-text"><strong>The solution operator of a PDE:</strong> Given an initial condition $u_0(x)$, the solution operator $\mathcal{G}$ returns the full space-time field $s(x,t)$ satisfying the governing equation. This is the most valuable example — it maps any admissible IC to the corresponding solution, amortising the cost of solving the PDE across all possible inputs.</p>
+
+    <!-- Visual 2 — Operator vs Function Concept -->
+    <div class="fig-wrap">
+      <svg viewBox="0 0 600 210" width="100%" style="max-width:600px;font-family:'Inter',sans-serif">
+        <!-- Left panel: Function mapping -->
+        <rect x="5" y="5" width="280" height="200" rx="6" fill="#EBF0F7" stroke="#1C3D6B" stroke-width="1.2"/>
+        <text x="145" y="28" text-anchor="middle" font-size="11" font-weight="700" fill="#1C3D6B" letter-spacing="0.08em" font-family="'JetBrains Mono',monospace" text-transform="uppercase">FUNCTION MAPPING</text>
+        <!-- number lines -->
+        <line x1="40" y1="105" x2="120" y2="105" stroke="#1C3D6B" stroke-width="1.5"/>
+        <circle cx="80" cy="105" r="5" fill="#1C3D6B"/>
+        <text x="80" y="98" text-anchor="middle" font-size="11" fill="#1C3D6B" font-weight="600">x</text>
+        <text x="80" y="125" text-anchor="middle" font-size="10" fill="#8C857E">ℝ (domain)</text>
+
+        <line x1="165" y1="105" x2="250" y2="105" stroke="#1C3D6B" stroke-width="1.5"/>
+        <circle cx="210" cy="105" r="5" fill="#B8845A"/>
+        <text x="210" y="98" text-anchor="middle" font-size="11" fill="#B8845A" font-weight="600">f(x)</text>
+        <text x="210" y="125" text-anchor="middle" font-size="10" fill="#8C857E">ℝ (range)</text>
+
+        <!-- arrow -->
+        <line x1="128" y1="105" x2="157" y2="105" stroke="#4A4540" stroke-width="1.5" marker-end="url(#arrowA)"/>
+        <text x="142" y="98" text-anchor="middle" font-size="10" fill="#4A4540" font-style="italic">f</text>
+
+        <text x="145" y="175" text-anchor="middle" font-size="10" fill="#4A4540">number → number</text>
+
+        <!-- Right panel: Operator mapping -->
+        <rect x="315" y="5" width="280" height="200" rx="6" fill="#EBF7F1" stroke="#2D7A4F" stroke-width="1.2"/>
+        <text x="455" y="28" text-anchor="middle" font-size="11" font-weight="700" fill="#2D7A4F" letter-spacing="0.08em" font-family="'JetBrains Mono',monospace">OPERATOR MAPPING</text>
+
+        <!-- input curve -->
+        <path d="M345,135 C355,70 370,155 385,85 C400,40 415,120 430,90" stroke="#1C3D6B" stroke-width="2" fill="none"/>
+        <text x="388" y="155" text-anchor="middle" font-size="11" fill="#1C3D6B" font-weight="600">u(x)</text>
+
+        <!-- output curve -->
+        <path d="M478,120 C490,80 505,115 520,75 C535,45 548,100 565,85" stroke="#B8845A" stroke-width="2" fill="none"/>
+        <text x="522" y="155" text-anchor="middle" font-size="11" fill="#B8845A" font-weight="600">s(x)</text>
+
+        <!-- arrow -->
+        <line x1="436" y1="105" x2="470" y2="105" stroke="#4A4540" stroke-width="1.5" marker-end="url(#arrowB)"/>
+        <text x="453" y="98" text-anchor="middle" font-size="11" fill="#2D7A4F" font-weight="700" font-style="italic">G[·]</text>
+
+        <text x="455" y="175" text-anchor="middle" font-size="10" fill="#4A4540">function → function</text>
+
+        <defs>
+          <marker id="arrowA" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#4A4540"/>
+          </marker>
+          <marker id="arrowB" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#4A4540"/>
+          </marker>
+        </defs>
+      </svg>
+      <p class="fig-caption">Figure 1. The distinction between a function (maps numbers to numbers) and an operator (maps functions to functions). DeepONet approximates the latter.</p>
+    </div>
+
+    <!-- Section 3: Universal Approximation -->
+    <hr class="divider">
+    <div class="section-label">Section 03</div>
+    <h2 class="section-h">Universal Approximation of Operators</h2>
+
+    <p class="body-text">The theoretical foundation for DeepONet is the <strong>Chen &amp; Chen 1995 universal approximation theorem for operators</strong>. In its original form (IEEE Trans. Neural Netw., 1995), the theorem states:</p>
+
+    <div class="callout insight">
+      <span class="callout-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </span>
+      <div class="callout-body">
+        <strong>Theorem (Chen &amp; Chen 1995)</strong>
+        Suppose $\mathcal{G}: C(K_1) \to C(K_2)$ is a continuous operator, where $K_1 \subset \mathbb{R}^m$ and $K_2 \subset \mathbb{R}^d$ are compact sets. Then for any $\varepsilon > 0$, there exist networks $f_k$ (branch) and $g_k$ (trunk) such that
+        $$\sup_{u \in C(K_1)}\sup_{y \in K_2}\left|\mathcal{G}(u)(y) - \sum_{k=1}^p f_k(u(x_1),\ldots,u(x_m))\cdot g_k(y)\right| < \varepsilon$$
+        for a sufficient number of sensors $m$ and basis functions $p$.
+      </div>
+    </div>
+
+    <p class="body-text">The theorem guarantees that a network of the form $\sum_k b_k(u) \cdot t_k(y)$ can approximate any continuous operator to arbitrary precision. The $b_k$ functions are evaluated on the input function $u$ sampled at $m$ fixed sensors; the $t_k$ functions depend on the query location $y$ alone. This dot-product structure is not an architectural choice made for computational convenience — it emerges directly from the theoretical guarantee.</p>
+
+    <p class="body-text">The approximation is in the <em>uniform</em> norm over the entire function space: the network must be simultaneously accurate for all admissible input functions $u$ and all query locations $y$. This is a much stronger guarantee than pointwise approximation, and it is what makes DeepONet a principled tool rather than an ad hoc regression.</p>
+
+    <!-- Section 4: Architecture -->
+    <hr class="divider">
+    <div class="section-label">Section 04</div>
+    <h2 class="section-h">The DeepONet Architecture</h2>
+
+    <p class="body-text">Lu et al. 2021 (Nature Machine Intelligence) operationalise the Chen &amp; Chen theorem into a practical neural architecture with two sub-networks connected by a dot product. The architecture is elegantly minimal yet expressive enough to handle a wide class of PDE solution operators.</p>
+
+    <!-- Visual 1 — DeepONet Architecture -->
+    <div class="fig-wrap">
+      <svg viewBox="0 0 740 320" width="100%" style="max-width:740px;font-family:'Inter',sans-serif">
+        <!-- Background -->
+        <rect width="740" height="320" fill="#F8F6F2" rx="8"/>
+
+        <!-- Input function -->
+        <text x="28" y="38" font-size="11" fill="#8C857E" font-family="'JetBrains Mono',monospace" letter-spacing="0.08em">INPUT FUNCTION u(x)</text>
+        <path d="M22,80 C40,50 58,110 76,68 C94,30 112,95 130,62 C148,32 166,85 184,58" stroke="#1C3D6B" stroke-width="2.5" fill="none"/>
+        <!-- sensor dots -->
+        <circle cx="40" cy="73" r="4.5" fill="#B8845A" stroke="white" stroke-width="1.5"/>
+        <circle cx="66" cy="94" r="4.5" fill="#B8845A" stroke="white" stroke-width="1.5"/>
+        <circle cx="92" cy="57" r="4.5" fill="#B8845A" stroke="white" stroke-width="1.5"/>
+        <circle cx="118" cy="82" r="4.5" fill="#B8845A" stroke="white" stroke-width="1.5"/>
+        <circle cx="144" cy="48" r="4.5" fill="#B8845A" stroke="white" stroke-width="1.5"/>
+        <circle cx="170" cy="74" r="4.5" fill="#B8845A" stroke="white" stroke-width="1.5"/>
+        <text x="104" y="115" text-anchor="middle" font-size="10" fill="#B8845A" font-weight="600">m = 100 sensors {x₁,...,xₘ}</text>
+
+        <!-- Arrow to branch -->
+        <line x1="200" y1="75" x2="240" y2="75" stroke="#4A4540" stroke-width="1.5" marker-end="url(#arrowMain)"/>
+
+        <!-- Branch network box -->
+        <rect x="248" y="40" width="110" height="70" rx="5" fill="#1C3D6B"/>
+        <text x="303" y="68" text-anchor="middle" font-size="12" fill="white" font-weight="700">Branch</text>
+        <text x="303" y="84" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.65)">Network</text>
+        <text x="303" y="100" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.45)" font-family="'JetBrains Mono',monospace">MLP(m → p)</text>
+
+        <!-- Branch output vector -->
+        <line x1="358" y1="75" x2="400" y2="75" stroke="#4A4540" stroke-width="1.5" marker-end="url(#arrowMain2)"/>
+        <text x="378" y="68" text-anchor="middle" font-size="10" fill="#4A4540" font-style="italic">b ∈ ℝᵖ</text>
+
+        <!-- Branch vector circles -->
+        <g>
+          <circle cx="418" cy="58" r="8" fill="#1C3D6B" opacity="0.85"/>
+          <circle cx="418" cy="74" r="8" fill="#1C3D6B" opacity="0.7"/>
+          <circle cx="418" cy="90" r="8" fill="#1C3D6B" opacity="0.55"/>
+          <text x="418" y="107" text-anchor="middle" font-size="9" fill="#8C857E">b₁..bₚ</text>
+        </g>
+
+        <!-- Dot product symbol -->
+        <circle cx="480" cy="155" r="22" fill="white" stroke="#4A4540" stroke-width="1.8"/>
+        <text x="480" y="161" text-anchor="middle" font-size="18" fill="#4A4540" font-weight="700">·</text>
+        <text x="480" y="178" text-anchor="middle" font-size="9" fill="#8C857E" font-family="'JetBrains Mono',monospace">dot product</text>
+
+        <!-- Lines from vectors to dot product -->
+        <line x1="426" y1="75" x2="464" y2="142" stroke="#1C3D6B" stroke-width="1.2" stroke-dasharray="4,2"/>
+
+        <!-- Trunk vector circles -->
+        <g>
+          <circle cx="418" cy="218" r="8" fill="#B8845A" opacity="0.85"/>
+          <circle cx="418" cy="234" r="8" fill="#B8845A" opacity="0.7"/>
+          <circle cx="418" cy="250" r="8" fill="#B8845A" opacity="0.55"/>
+          <text x="418" y="268" text-anchor="middle" font-size="9" fill="#8C857E">t₁..tₚ</text>
+        </g>
+        <line x1="426" y1="234" x2="464" y2="168" stroke="#B8845A" stroke-width="1.2" stroke-dasharray="4,2"/>
+
+        <!-- Arrow trunk vector from trunk net -->
+        <line x1="358" y1="235" x2="400" y2="235" stroke="#4A4540" stroke-width="1.5" marker-end="url(#arrowMain3)"/>
+        <text x="378" y="228" text-anchor="middle" font-size="10" fill="#4A4540" font-style="italic">t(y) ∈ ℝᵖ</text>
+
+        <!-- Trunk network box -->
+        <rect x="248" y="200" width="110" height="70" rx="5" fill="#B8845A"/>
+        <text x="303" y="228" text-anchor="middle" font-size="12" fill="white" font-weight="700">Trunk</text>
+        <text x="303" y="244" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.65)">Network</text>
+        <text x="303" y="260" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.45)" font-family="'JetBrains Mono',monospace">MLP(1 → p)</text>
+
+        <!-- Arrow to trunk from query -->
+        <line x1="200" y1="235" x2="240" y2="235" stroke="#4A4540" stroke-width="1.5" marker-end="url(#arrowMain4)"/>
+
+        <!-- Query point y -->
+        <text x="28" y="220" font-size="11" fill="#8C857E" font-family="'JetBrains Mono',monospace" letter-spacing="0.08em">QUERY LOCATION y</text>
+        <line x1="40" y1="240" x2="185" y2="240" stroke="#B8845A" stroke-width="1.5"/>
+        <circle cx="130" cy="240" r="5" fill="#B8845A"/>
+        <text x="130" y="258" text-anchor="middle" font-size="10" fill="#B8845A" font-weight="600">y</text>
+        <text x="28" y="278" font-size="10" fill="#8C857E">any continuous output location</text>
+
+        <!-- Output -->
+        <line x1="502" y1="155" x2="560" y2="155" stroke="#4A4540" stroke-width="1.8" marker-end="url(#arrowOut)"/>
+        <rect x="568" y="128" width="140" height="54" rx="5" fill="#2D7A4F"/>
+        <text x="638" y="152" text-anchor="middle" font-size="12" fill="white" font-weight="700">G(u)(y)</text>
+        <text x="638" y="168" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.65)" font-family="'JetBrains Mono',monospace">= Σ bₖ · tₖ(y) + b₀</text>
+
+        <!-- Formula at bottom -->
+        <rect x="240" y="290" width="280" height="24" rx="3" fill="#EBF0F7"/>
+        <text x="380" y="306" text-anchor="middle" font-size="10" fill="#1C3D6B" font-family="'JetBrains Mono',monospace">G(u)(y) ≈ b(u)·t(y) + b₀</text>
+
+        <defs>
+          <marker id="arrowMain" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#4A4540"/></marker>
+          <marker id="arrowMain2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#4A4540"/></marker>
+          <marker id="arrowMain3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#4A4540"/></marker>
+          <marker id="arrowMain4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#4A4540"/></marker>
+          <marker id="arrowOut" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#4A4540"/></marker>
+        </defs>
+      </svg>
+      <p class="fig-caption">Figure 2. DeepONet architecture (Lu et al. 2021). The branch network encodes the input function evaluated at $m$ fixed sensors; the trunk network encodes the query location $y$. The output is a dot product of the two embeddings plus a bias — a weighted sum of $p$ learned basis functions.</p>
+    </div>
+
+    <h3 class="sub-h">The Branch Network</h3>
+    <p class="body-text">The branch network takes the input function $u$ evaluated at $m$ fixed sensor locations $\{x_1, \ldots, x_m\}$ as a finite-dimensional vector $[u(x_1), \ldots, u(x_m)] \in \mathbb{R}^m$. It encodes this into a coefficient vector $\mathbf{b}(u) \in \mathbb{R}^p$. The branch can be any feed-forward architecture; a three-layer tanh MLP with hidden width 80 is standard for the antiderivative benchmark. The branch weights encode information about the entire input function — effectively, they are the "context encoder."</p>
+
+    <h3 class="sub-h">The Trunk Network</h3>
+    <p class="body-text">The trunk network takes a scalar query location $y \in \mathbb{R}$ and encodes it into $\mathbf{t}(y) \in \mathbb{R}^p$. Crucially, the trunk's final activation is a Tanh (not linear), ensuring that the basis functions $\{t_k(y)\}$ are bounded. The trunk learns a set of $p$ basis functions over the output domain — what amounts to a learned, PDE-adapted basis analogous to Fourier modes or POD eigenfunctions, but without any prior specification.</p>
+
+    <h3 class="sub-h">The Dot Product Output</h3>
+    <p class="body-text">The output is:</p>
+    <div class="math-block">
+      $$\mathcal{G}(u)(y) \approx \mathbf{b}(u) \cdot \mathbf{t}(y) + b_0 = \sum_{k=1}^{p} b_k(u) \cdot t_k(y) + b_0$$
+    </div>
+    <p class="body-text">The scalar $b_0$ is a learnable bias. This dot product is a weighted combination of the $p$ trunk basis functions, where the weights $\{b_k(u)\}$ are determined by the input function via the branch network. The analogy with a functional basis expansion is exact: if the trunk learned the Fourier basis $\{sin(k\pi y), cos(k\pi y)\}$, the branch would be predicting Fourier coefficients. But the basis is learned jointly with the coefficients, which is what makes DeepONet so flexible.</p>
+
+    <!-- Section 5: The antiderivative example -->
+    <hr class="divider">
+    <div class="section-label">Section 05</div>
+    <h2 class="section-h">Implementation: The Antiderivative Operator</h2>
+
+    <p class="body-text">The canonical benchmark from Lu et al. 2021 is the antiderivative operator: $\mathcal{G}[u](x) = \int_0^x u(\tau)\,d\tau$, $s(0)=0$. Input functions are smooth random draws from a Gaussian process with squared-exponential kernel and length scale 0.2. This produces a rich diversity of smooth but highly variable functions — exactly the kind of distribution over which we want the operator to generalise.</p>
+
+    <h3 class="sub-h">Dataset Generation</h3>
+    <p class="body-text">The dataset generation uses a Gaussian process to sample random input functions, then computes their antiderivatives via cumulative trapezoid integration. The GP covariance structure ensures the generated functions are smooth (controlled by the length scale) but cover a wide range of shapes.</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="code-dot dot-r"></span><span class="code-dot dot-y"></span><span class="code-dot dot-g"></span></div>
+        <span class="code-lang">Python · dataset generation</span>
+      </div>
+      <pre class="code-body"><span class="kw">import</span> torch, torch.nn <span class="kw">as</span> nn
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+torch.manual_seed(<span class="nm">0</span>); np.random.seed(<span class="nm">0</span>)
+device = torch.device(<span class="st">"cuda"</span> <span class="kw">if</span> torch.cuda.is_available() <span class="kw">else</span> <span class="st">"cpu"</span>)
+
+m = <span class="nm">100</span>                       <span class="cm"># number of sensor locations</span>
+x_grid = np.linspace(<span class="nm">0</span>, <span class="nm">1</span>, m)
+
+<span class="kw">def</span> <span class="fn">random_function</span>(n=<span class="nm">1</span>, length_scale=<span class="nm">0.2</span>):
+    <span class="cm"># Sample smooth functions via a squared-exponential GP kernel</span>
+    X = x_grid.reshape(-<span class="nm">1</span>, <span class="nm">1</span>)
+    K = np.exp(-(X - X.T)**<span class="nm">2</span> / (<span class="nm">2</span>*length_scale**<span class="nm">2</span>)) + <span class="nm">1e-8</span>*np.eye(m)
+    L = np.linalg.cholesky(K)
+    <span class="kw">return</span> (L @ np.random.randn(m, n)).T          <span class="cm"># (n, m)</span>
+
+<span class="kw">def</span> <span class="fn">antiderivative</span>(u):
+    <span class="cm"># Cumulative trapezoid, s(0) = 0</span>
+    dx = x_grid[<span class="nm">1</span>] - x_grid[<span class="nm">0</span>]
+    s = np.zeros_like(u)
+    s[:, <span class="nm">1</span>:] = np.cumsum((u[:, <span class="nm">1</span>:] + u[:, :-<span class="nm">1</span>]) / <span class="nm">2</span> * dx, axis=<span class="nm">1</span>)
+    <span class="kw">return</span> s
+
+<span class="kw">def</span> <span class="fn">make_dataset</span>(N):
+    U = random_function(N)                       <span class="cm"># (N, m)  input functions</span>
+    S = antiderivative(U)                        <span class="cm"># (N, m)  target functions</span>
+    Q = <span class="nm">30</span>                                       <span class="cm"># query points per function</span>
+    idx = np.random.randint(<span class="nm">0</span>, m, size=(N, Q))
+    y   = x_grid[idx]                            <span class="cm"># (N, Q)</span>
+    s_y = np.take_along_axis(S, idx, axis=<span class="nm">1</span>)     <span class="cm"># (N, Q)</span>
+    <span class="cm"># Flatten into (N*Q) training triples</span>
+    branch = np.repeat(U, Q, axis=<span class="nm">0</span>)            <span class="cm"># (N*Q, m)</span>
+    trunk  = y.reshape(-<span class="nm">1</span>, <span class="nm">1</span>)                   <span class="cm"># (N*Q, 1)</span>
+    target = s_y.reshape(-<span class="nm">1</span>, <span class="nm">1</span>)                 <span class="cm"># (N*Q, 1)</span>
+    <span class="kw">return</span> (torch.tensor(branch, dtype=torch.float32, device=device),
+            torch.tensor(trunk,  dtype=torch.float32, device=device),
+            torch.tensor(target, dtype=torch.float32, device=device))
+
+br_tr, tr_tr, y_tr = make_dataset(<span class="nm">1000</span>)
+<span class="kw">print</span>(<span class="st">"training triples:"</span>, br_tr.shape[<span class="nm">0</span>])  <span class="cm"># → 30,000</span></pre>
+    </div>
+
+    <h3 class="sub-h">The DeepONet Model</h3>
+    <p class="body-text">The PyTorch implementation directly mirrors the mathematical structure. The branch and trunk are three-layer MLPs with tanh activations; the final trunk layer also applies tanh to keep the basis functions bounded. The forward pass is a single dot product plus bias:</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="code-dot dot-r"></span><span class="code-dot dot-y"></span><span class="code-dot dot-g"></span></div>
+        <span class="code-lang">Python · DeepONet class</span>
+      </div>
+      <pre class="code-body"><span class="kw">class</span> <span class="tp">DeepONet</span>(nn.Module):
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, m, p=<span class="nm">40</span>, width=<span class="nm">80</span>):
+        <span class="fn">super</span>().__init__()
+        self.branch = nn.Sequential(
+            nn.Linear(m, width), nn.Tanh(),
+            nn.Linear(width, width), nn.Tanh(),
+            nn.Linear(width, p)
+        )
+        self.trunk = nn.Sequential(
+            nn.Linear(<span class="nm">1</span>, width), nn.Tanh(),
+            nn.Linear(width, width), nn.Tanh(),
+            nn.Linear(width, p), nn.Tanh()   <span class="cm"># final tanh: bounds basis functions</span>
+        )
+        self.b0 = nn.Parameter(torch.zeros(<span class="nm">1</span>))
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, u_sensors, y):
+        b = self.branch(u_sensors)   <span class="cm"># (N, p)  — coefficients</span>
+        t = self.trunk(y)            <span class="cm"># (N, p)  — basis functions</span>
+        <span class="kw">return</span> torch.sum(b * t, dim=<span class="nm">1</span>, keepdim=<span class="nm">True</span>) + self.b0   <span class="cm"># (N, 1)</span>
+
+model = <span class="tp">DeepONet</span>(m).to(device)
+<span class="kw">print</span>(<span class="st">"params:"</span>, <span class="fn">sum</span>(p.numel() <span class="kw">for</span> p <span class="kw">in</span> model.parameters()))
+<span class="cm"># → 27,681 parameters</span></pre>
+    </div>
+
+    <h3 class="sub-h">Training</h3>
+    <p class="body-text">Training uses Adam with random mini-batches of 4,096 triples (out of 30,000). The loss is simple mean squared error between predicted and true antiderivative values. Over 8,000 epochs the loss falls three orders of magnitude:</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="code-dot dot-r"></span><span class="code-dot dot-y"></span><span class="code-dot dot-g"></span></div>
+        <span class="code-lang">Python · training loop</span>
+      </div>
+      <pre class="code-body">opt = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>)
+EPOCHS, bs = <span class="nm">8000</span>, <span class="nm">4096</span>
+N = br_tr.shape[<span class="nm">0</span>]
+
+<span class="kw">for</span> ep <span class="kw">in</span> <span class="fn">range</span>(EPOCHS):
+    perm = torch.randperm(N, device=device)[:bs]
+    opt.zero_grad()
+    pred = model(br_tr[perm], tr_tr[perm])
+    loss = torch.mean((pred - y_tr[perm])**<span class="nm">2</span>)
+    loss.backward(); opt.step()
+    <span class="kw">if</span> ep % <span class="nm">1500</span> == <span class="nm">0</span>:
+        <span class="kw">print</span>(<span class="st">f"epoch {ep:5d} | loss {loss.item():.3e}"</span>)
+
+<span class="cm"># epoch     0 | loss 2.276e-01</span>
+<span class="cm"># epoch  1500 | loss 3.719e-04</span>
+<span class="cm"># epoch  3000 | loss 1.387e-04</span>
+<span class="cm"># epoch  4500 | loss 4.582e-05</span>
+<span class="cm"># epoch  6000 | loss 4.642e-05</span>
+<span class="cm"># epoch  7500 | loss 3.076e-05</span></pre>
+    </div>
+
+    <p class="body-text">The network has only 27,681 parameters, which is small relative to the complexity of the operator it learns. This is a key advantage: the parameterisation is efficient because the operator has a compact representation in the learned basis.</p>
+
+    <!-- Section 6: Why the dot product works -->
+    <hr class="divider">
+    <div class="section-label">Section 06</div>
+    <h2 class="section-h">Why the Dot Product Works: Learned Basis Expansions</h2>
+
+    <p class="body-text">The output $\sum_k b_k(u) \cdot t_k(y)$ is a <em>functional basis expansion</em> — a weighted sum of $p$ functions $\{t_k(y)\}$ over the output domain, where the weights $\{b_k(u)\}$ depend on the input function. This structure has a long history in scientific computing:</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>Basis $\{t_k\}$</th>
+          <th>Coefficients $\{b_k\}$</th>
+          <th>Key property</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Fourier Series</td>
+          <td>$\sin(k\pi y), \cos(k\pi y)$ — fixed</td>
+          <td>Computed analytically from $u$</td>
+          <td>Universal for periodic functions</td>
+        </tr>
+        <tr>
+          <td>POD / PCA</td>
+          <td>Eigenfunctions of empirical covariance — data-driven, fixed post-training</td>
+          <td>Projected coefficients</td>
+          <td>Optimal $L^2$ basis for the training ensemble</td>
+        </tr>
+        <tr>
+          <td>DeepONet</td>
+          <td>Trunk outputs — learned jointly</td>
+          <td>Branch outputs — learned jointly</td>
+          <td>Jointly optimal; adapts to the PDE structure</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="body-text">The key advantage over POD is that the DeepONet basis is not constrained to be linear in the input. The branch network can represent highly nonlinear dependence of the coefficients on the input function. The trunk learns basis functions that need not be orthogonal or satisfy any a priori constraint — they adapt to whatever representation minimises the total loss across the training distribution of input functions.</p>
+
+    <div class="callout insight">
+      <span class="callout-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </span>
+      <div class="callout-body">
+        <strong>Discretisation independence</strong>
+        Because the trunk takes a continuous query location $y$, a trained DeepONet can be evaluated at <em>any</em> point in the output domain — not just the grid on which it was trained. This is the "mesh-free" property: the output resolution is not fixed at training time. A PINN shares this property; FNO-family methods do not (they require a fixed discretisation).
+      </div>
+    </div>
+
+    <!-- Section 7: Generalisation -->
+    <hr class="divider">
+    <div class="section-label">Section 07</div>
+    <h2 class="section-h">Generalisation to Unseen Input Functions</h2>
+
+    <p class="body-text">The critical test is evaluation on input functions that were never seen during training. The following code evaluates the trained model on three freshly sampled GP functions and computes the relative $L^2$ error:</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="code-dot dot-r"></span><span class="code-dot dot-y"></span><span class="code-dot dot-g"></span></div>
+        <span class="code-lang">Python · inference on unseen functions</span>
+      </div>
+      <pre class="code-body">U_test = random_function(<span class="nm">3</span>)                      <span class="cm"># 3 new, unseen functions</span>
+S_test = antiderivative(U_test)
+y_full = torch.tensor(x_grid, dtype=torch.float32, device=device).view(-<span class="nm">1</span>, <span class="nm">1</span>)
+
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">3</span>):
+    br = torch.tensor(np.repeat(U_test[i:i+<span class="nm">1</span>], m, axis=<span class="nm">0</span>),
+                      dtype=torch.float32, device=device)
+    <span class="kw">with</span> torch.no_grad():
+        pred = model(br, y_full).cpu().numpy().ravel()
+    err = np.linalg.norm(pred - S_test[i]) / np.linalg.norm(S_test[i])
+    <span class="kw">print</span>(<span class="st">f"Unseen function #{i+1}: relative L2 error = {err:.2e}"</span>)
+
+<span class="cm"># Unseen function #1: relative L2 error ≈ 5.1e-03</span>
+<span class="cm"># Unseen function #2: relative L2 error ≈ 3.8e-03</span>
+<span class="cm"># Unseen function #3: relative L2 error ≈ 7.2e-03</span></pre>
+    </div>
+
+    <p class="body-text">Relative $L^2$ errors of $10^{-3}$ to $10^{-2}$ on completely unseen input functions represent genuine operator generalisation — the network has learned something structural about the antiderivative operation, not just memorised the training set. More importantly, each evaluation takes a <em>single forward pass</em> through the 27,681-parameter network, requiring less than 1 millisecond on CPU.</p>
+
+    <p class="body-text">Compare this to training a PINN for each new input function from scratch: 30–60 seconds of gradient descent, every time. For a design sweep over 1,000 initial conditions, this difference is the distinction between a 1.5-second deployment and a 12-hour batch job.</p>
+
+    <!-- Section 8: Speed comparison -->
+    <hr class="divider">
+    <div class="section-label">Section 08</div>
+    <h2 class="section-h">Speed Comparison: PINN vs DeepONet for Design Sweeps</h2>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Workflow</th>
+          <th>Cost per query</th>
+          <th>Cost for N = 1000 design sweep</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>PINN — single solve</td>
+          <td>~45 s</td>
+          <td>~45,000 s (12.5 h)</td>
+          <td>Full retraining required for each new IC/BC/parameter</td>
+        </tr>
+        <tr>
+          <td>DeepONet — offline training</td>
+          <td>~600 s (once)</td>
+          <td>~600 s (once)</td>
+          <td>Paid once; amortised over all future queries</td>
+        </tr>
+        <tr>
+          <td>DeepONet — inference</td>
+          <td>&lt;1 ms</td>
+          <td>~1.5 s</td>
+          <td>Single forward pass; GPU parallelism makes it faster still</td>
+        </tr>
+        <tr>
+          <td>Classical FEM/FD solver</td>
+          <td>1–10 s (simple)</td>
+          <td>1,000–10,000 s</td>
+          <td>Accurate but scales linearly with N; no generalisation</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Visual 3 — Speed comparison bar chart -->
+    <div class="fig-wrap">
+      <svg viewBox="0 0 660 280" width="100%" style="max-width:660px;font-family:'Inter',sans-serif">
+        <rect width="660" height="280" fill="#F8F6F2" rx="8"/>
+        <text x="330" y="26" text-anchor="middle" font-size="13" font-weight="700" fill="#111010">Time cost: PINN vs DeepONet (N = 1,000 design sweep)</text>
+        <text x="330" y="42" text-anchor="middle" font-size="10" fill="#8C857E">Log scale — x-axis in seconds</text>
+
+        <!-- y-axis labels -->
+        <text x="220" y="80" text-anchor="end" font-size="11" fill="#4A4540">PINN × 1000 sweeps</text>
+        <text x="220" y="130" text-anchor="end" font-size="11" fill="#4A4540">PINN (single solve)</text>
+        <text x="220" y="180" text-anchor="end" font-size="11" fill="#4A4540">DeepONet training</text>
+        <text x="220" y="230" text-anchor="end" font-size="11" fill="#4A4540">DeepONet × 1000 inferences</text>
+
+        <!-- Log scale: 1s = 225px, 10s = 270px, 100s = 315px, 1000s = 360px, 10000s = 405px, 45000s = ~427px -->
+        <!-- scale: log10(t) mapped to x: x = 230 + log10(t) * 45, clamped -->
+        <!-- PINN × 1000: 45000s → log=4.65 → 230 + 4.65*35 = 230+163 = 393 -->
+        <rect x="230" y="64" width="393" height="24" rx="3" fill="#1C3D6B"/>
+        <text x="627" y="81" font-size="10" fill="#1C3D6B" font-weight="700">45,000 s</text>
+
+        <!-- PINN single: 45s → log=1.65 → 230 + 1.65*35=230+58=288 -->
+        <rect x="230" y="114" width="58" height="24" rx="3" fill="#1C3D6B" opacity="0.7"/>
+        <text x="292" y="131" font-size="10" fill="#1C3D6B" font-weight="700">45 s</text>
+
+        <!-- DeepONet training: 600s → log=2.78 → 230 + 2.78*35=230+97=327 -->
+        <rect x="230" y="164" width="97" height="24" rx="3" fill="#2D7A4F"/>
+        <text x="331" y="181" font-size="10" fill="#2D7A4F" font-weight="700">600 s</text>
+
+        <!-- DeepONet 1000 inferences: 1.5s → log=0.18 → 230+0.18*35=230+6=236 -->
+        <rect x="230" y="214" width="6" height="24" rx="2" fill="#2D7A4F" opacity="0.7"/>
+        <text x="240" y="231" font-size="10" fill="#2D7A4F" font-weight="700">1.5 s</text>
+
+        <!-- x-axis -->
+        <line x1="230" y1="254" x2="628" y2="254" stroke="#DEDAD3" stroke-width="1.5"/>
+        <text x="230" y="268" text-anchor="middle" font-size="9" fill="#8C857E">1 s</text>
+        <text x="265" y="268" text-anchor="middle" font-size="9" fill="#8C857E">10 s</text>
+        <text x="300" y="268" text-anchor="middle" font-size="9" fill="#8C857E">100 s</text>
+        <text x="335" y="268" text-anchor="middle" font-size="9" fill="#8C857E">1 ks</text>
+        <text x="370" y="268" text-anchor="middle" font-size="9" fill="#8C857E">10 ks</text>
+        <text x="405" y="268" text-anchor="middle" font-size="9" fill="#8C857E">100 ks</text>
+
+        <!-- tick marks -->
+        <line x1="230" y1="254" x2="230" y2="258" stroke="#8C857E" stroke-width="1"/>
+        <line x1="265" y1="254" x2="265" y2="258" stroke="#8C857E" stroke-width="1"/>
+        <line x1="300" y1="254" x2="300" y2="258" stroke="#8C857E" stroke-width="1"/>
+        <line x1="335" y1="254" x2="335" y2="258" stroke="#8C857E" stroke-width="1"/>
+        <line x1="370" y1="254" x2="370" y2="258" stroke="#8C857E" stroke-width="1"/>
+        <line x1="405" y1="254" x2="405" y2="258" stroke="#8C857E" stroke-width="1"/>
+
+        <!-- legend -->
+        <rect x="450" y="60" width="12" height="12" rx="2" fill="#1C3D6B"/>
+        <text x="466" y="71" font-size="10" fill="#4A4540">PINN-based</text>
+        <rect x="450" y="80" width="12" height="12" rx="2" fill="#2D7A4F"/>
+        <text x="466" y="91" font-size="10" fill="#4A4540">DeepONet-based</text>
+      </svg>
+      <p class="fig-caption">Figure 3. Logarithmic time comparison for N = 1,000 design sweep. DeepONet amortises the training cost across all inferences; total query time drops from 12.5 hours (PINN) to 1.5 seconds.</p>
+    </div>
+
+    <!-- Section 9: Practical Extensions -->
+    <hr class="divider">
+    <div class="section-label">Section 09</div>
+    <h2 class="section-h">Practical Extensions</h2>
+
+    <h3 class="sub-h">Time-Dependent Problems</h3>
+    <p class="body-text">For parabolic and hyperbolic PDEs, the trunk query is extended to include both space and time: $y \to (x, t) \in \mathbb{R}^2$. The trunk becomes a 2-input MLP encoding spatial-temporal basis functions. The branch continues to encode the initial condition evaluated at $m$ spatial sensors. The antiderivative benchmark generalises: the operator maps $u_0(x)$ to the full space-time field $s(x,t)$. For the heat equation, for example, a single DeepONet handles all initial conditions simultaneously after training.</p>
+
+    <h3 class="sub-h">Multi-Output DeepONet</h3>
+    <p class="body-text">For systems with multiple output fields — for example, the velocity components $(u, v)$ and pressure $p$ in Navier-Stokes — the output layer is extended to $q$ scalar outputs, each with its own dot product: $\mathcal{G}_j(u)(y) = \mathbf{b}_j(u) \cdot \mathbf{t}(y) + b_{0,j}$ for $j = 1, \ldots, q$. The trunk can be shared (same basis functions for all outputs) or separate (different bases per output). Shared trunk reduces parameter count; separate trunks allow each field to develop its own optimal basis.</p>
+
+    <h3 class="sub-h">Modified DeepONet and Improved Initialisation</h3>
+    <p class="body-text">Wang et al. 2022 (arXiv:2204.13188) identified that the standard DeepONet initialization leads to gradient pathologies similar to those observed in PINNs. Their "Modified DeepONet" uses a gating mechanism between two encoders (analogous to the Modified MLP for PINNs), achieving more stable training and better accuracy with fewer epochs. The key modification introduces encoder outputs $U = \sigma(W_1 x + b_1)$ and $V = \sigma(W_2 x + b_2)$, then gates each hidden layer: $H^{(k)} = \sigma(W^{(k)} H^{(k-1)} + b^{(k)}) \odot U + (1 - \sigma(W^{(k)} H^{(k-1)} + b^{(k)})) \odot V$.</p>
+
+    <h3 class="sub-h">DeepONet for Coupled Systems (DeepM&amp;Mnet)</h3>
+    <p class="body-text">Cai et al. 2021 extended DeepONet to multi-physics problems with multiple coupled equations. The "DeepM&amp;Mnet" architecture uses a network for each physical field, with cross-field coupling through shared branch encodings. This is directly applicable to pharmaceutical process models where heat transfer, mass transfer, and reaction kinetics must be solved simultaneously.</p>
+
+    <!-- Section 10: FNO comparison -->
+    <hr class="divider">
+    <div class="section-label">Section 10</div>
+    <h2 class="section-h">Connection to Other Operator Learning Methods</h2>
+
+    <p class="body-text">DeepONet is one of two dominant operator learning families that emerged around 2021. The Fourier Neural Operator (FNO, Li et al. 2021) takes a fundamentally different approach: it applies convolutions in Fourier space to learn the operator. Understanding the tradeoffs is essential for choosing the right tool.</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>DeepONet</th>
+          <th>FNO (Fourier Neural Operator)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Theoretical basis</td>
+          <td>Chen &amp; Chen 1995 UAT for operators</td>
+          <td>Universal approximation via Fourier convolution</td>
+        </tr>
+        <tr>
+          <td>Inductive bias</td>
+          <td>Branch/trunk factorisation; basis expansion</td>
+          <td>Translation equivariance; spectral convolution</td>
+        </tr>
+        <tr>
+          <td>Discretisation dependence</td>
+          <td>Mesh-free (trunk is continuous in $y$)</td>
+          <td>Tied to the training grid resolution</td>
+        </tr>
+        <tr>
+          <td>Sensor placement</td>
+          <td>Fixed sensor locations for branch input</td>
+          <td>Regular grid assumed</td>
+        </tr>
+        <tr>
+          <td>Data requirement</td>
+          <td>Smaller datasets often sufficient</td>
+          <td>Benefits from large datasets; excels for turbulence-like problems</td>
+        </tr>
+        <tr>
+          <td>Computational cost</td>
+          <td>Low; small parameter count for simple operators</td>
+          <td>Higher; FFT overhead but very fast for large grids</td>
+        </tr>
+        <tr>
+          <td>Best suited for</td>
+          <td>Low-dimensional output domains, sensor-based inputs, time-continuous queries</td>
+          <td>High-resolution 2D/3D PDE fields; climate, turbulence, fluid dynamics</td>
+        </tr>
+        <tr>
+          <td>Physics-informed variant</td>
+          <td>PI-DeepONet (Wang et al. 2021)</td>
+          <td>PINO (Li et al. 2021)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="body-text">Beyond these two, the neural operator landscape includes the Graph Neural Operator (GNO, Li et al. 2020) which handles irregular geometries via message-passing graphs; the Spherical FNO (SFNO, Bonev et al. 2023) adapted for global climate modeling on the sphere; and the GNOT (Han et al. 2022) which uses attention mechanisms for general operator learning. Kovachki et al. 2023 (JMLR) provides a comprehensive theoretical unification of all these methods under the neural operator framework.</p>
+
+    <div class="callout success">
+      <span class="callout-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+      </span>
+      <div class="callout-body">
+        <strong>Key takeaway</strong>
+        DeepONet is the method of choice when: (1) input data arrives from physical sensors at fixed locations, (2) the output must be queried at arbitrary continuous locations, or (3) data is limited and physics can supplement the training signal. FNO dominates when working with high-resolution structured grids and large datasets. Both methods vastly outperform per-instance PINNs for design sweeps or UQ tasks.
+      </div>
+    </div>
+
+    <!-- References -->
+    <hr class="divider">
+    <div class="section-label">References</div>
+    <h2 class="section-h">References</h2>
+    <div class="ref-list">
+      <div class="ref-item"><span class="ref-num">[1]</span>Lu, L., Jin, P., Pang, G., Zhang, Z., &amp; Karniadakis, G.E. (2021). Learning nonlinear operators via DeepONet based on the universal approximation theorem of operators. <em>Nature Machine Intelligence</em>, 3, 218–229. <a href="https://doi.org/10.1038/s42256-021-00302-5">doi:10.1038/s42256-021-00302-5</a></div>
+      <div class="ref-item"><span class="ref-num">[2]</span>Chen, T., &amp; Chen, H. (1995). Universal approximation to nonlinear operators by neural networks with arbitrary activation functions and its application to dynamical systems. <em>IEEE Transactions on Neural Networks</em>, 6(4), 911–917.</div>
+      <div class="ref-item"><span class="ref-num">[3]</span>Li, Z., Kovachki, N., Azizzadenesheli, K., Liu, B., Bhattacharya, K., Stuart, A., &amp; Anandkumar, A. (2021). Fourier Neural Operator for parametric partial differential equations. <em>ICLR 2021</em>. arXiv:2010.08895</div>
+      <div class="ref-item"><span class="ref-num">[4]</span>Wang, S., Wang, H., &amp; Perdikaris, P. (2022). Improved architectures and training algorithms for deep operator networks. <em>Journal of Scientific Computing</em>, 92, 35. arXiv:2204.13188</div>
+      <div class="ref-item"><span class="ref-num">[5]</span>Cai, S., Wang, Z., Lu, L., Zaki, T.A., &amp; Karniadakis, G.E. (2021). DeepM&amp;Mnet: Inferring the electroconvection multiphysics fields based on operator approximation by neural networks. <em>Journal of Computational Physics</em>, 436, 110296.</div>
+      <div class="ref-item"><span class="ref-num">[6]</span>Kovachki, N., Li, Z., Liu, B., Azizzadenesheli, K., Bhattacharya, K., Stuart, A., &amp; Anandkumar, A. (2023). Neural operator: Learning maps between function spaces with applications to PDEs. <em>Journal of Machine Learning Research</em>, 24(89), 1–97.</div>
+    </div>
+
+    <!-- Next article -->
+    <hr class="divider">
+    <div class="series-nav">
+      <div class="series-nav-label">Up next in the series</div>
+      <div class="series-nav-list">
+        <div class="series-nav-item">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--sienna)">08</span>
+          <a href="pinn-physics-informed-deeponet.html">Physics-Informed DeepONet: Operator Learning Without Solution Data, and Parameter Estimation at Scale</a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end article-body -->
+</div><!-- end article-page -->
+
+<footer>
+  <span class="footer-copy">&copy; 2026 Ali Shahmohammadi. All rights reserved.</span>
+  <div class="footer-links">
+    <a href="../index.html">Home</a>
+    <a href="../index.html#writing">Writing</a>
+    <a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://linkedin.com/in/alishahmohammadi22" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+</footer>
+
+</body>
+</html>

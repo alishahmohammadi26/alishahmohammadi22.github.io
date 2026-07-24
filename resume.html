@@ -1,283 +1,502 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Resume &mdash; Ali Shahmohammadi, Ph.D. | Applied AI Engineer &middot; Agentic Systems &middot; Life Sciences</title>
-  <meta name="description" content="Resume of Ali Shahmohammadi PhD &mdash; Applied AI Engineer building MCP servers, agentic pipelines, and evaluation harnesses for trustworthy scientific data in regulated life sciences." />
-  <meta property="og:title" content="Resume &mdash; Ali Shahmohammadi, Ph.D. | Applied AI Engineer &middot; Agentic Systems &middot; Life Sciences" />
-  <meta property="og:description" content="Applied AI engineer with a decade in pharmaceutical R&amp;D. MCP servers, agentic pipelines, eval harnesses, and the deterministic data foundations that make frontier AI reliable in life sciences." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://alishahmohammadi22.github.io/resume.html" />
-  <meta property="og:image" content="https://alishahmohammadi22.github.io/assets/images/og-preview.png" />
-  <meta property="og:image:type" content="image/png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:image" content="https://alishahmohammadi22.github.io/assets/images/og-preview.png" />
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume — Ali Shahmohammadi, Ph.D. | Applied AI Engineer · Life Sciences</title>
+  <meta name="description" content="Resume of Ali Shahmohammadi PhD — Applied AI Engineer building MCP servers, agentic pipelines, and evaluation harnesses for trustworthy scientific data in regulated life sciences.">
+  <meta property="og:title" content="Resume — Ali Shahmohammadi, Ph.D.">
+  <meta property="og:description" content="Applied AI engineer with a decade in pharmaceutical R&D — MCP servers, agentic pipelines, and the data foundations that make frontier AI reliable in life sciences.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://alishahmohammadi22.github.io/resume.html">
+  <meta property="og:image" content="https://alishahmohammadi22.github.io/assets/images/og-preview.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #F8F6F2;
+      --bg-alt:    #F1EEE9;
+      --ink:       #111010;
+      --ink-2:     #4A4540;
+      --ink-3:     #8C857E;
+      --navy:      #1C3D6B;
+      --navy-lt:   #EBF0F7;
+      --sienna:    #B8845A;
+      --sienna-lt: #FBF4EC;
+      --purple:    #5B4E8A;
+      --purple-lt: #F2EEF9;
+      --green:     #2D7A4F;
+      --green-lt:  #EBF7F1;
+      --green-bdr: #BEE5D3;
+      --border:    #DEDAD3;
+      --dark:      #111010;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg); color: var(--ink);
+      font-size: 16px; line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Navigation ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 60px; padding: 0 2.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(248,246,242,.94);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem; font-weight: 600; letter-spacing: .01em; color: var(--ink);
+    }
+    .nav-logo em { font-style: normal; color: var(--sienna); }
+    .nav-links { display: flex; align-items: center; gap: .2rem; }
+    .nav-links a {
+      font-size: .82rem; font-weight: 500; color: var(--ink-3);
+      padding: .42rem .8rem; border-radius: 4px; transition: color .15s, background .15s;
+    }
+    .nav-links a:hover { color: var(--ink); background: var(--bg-alt); }
+    .nav-active { color: var(--ink) !important; }
+    .nav-back {
+      display: inline-flex; align-items: center; gap: .35rem;
+      font-size: .82rem; font-weight: 500; color: var(--ink-3) !important;
+      padding: .42rem .8rem !important; border-radius: 4px;
+      transition: color .15s, background .15s;
+    }
+    .nav-back:hover { color: var(--ink) !important; background: var(--bg-alt) !important; }
+    .nav-menu { display: none; background: none; border: none; cursor: pointer; padding: .3rem; color: var(--ink); }
+
+    @media (max-width: 700px) {
+      nav { padding: 0 1.5rem; }
+      .nav-links {
+        display: none; flex-direction: column; align-items: flex-start;
+        position: absolute; top: 60px; left: 0; right: 0;
+        background: var(--bg); border-bottom: 1px solid var(--border);
+        padding: 1rem 2rem 1.5rem; gap: .2rem;
+      }
+      .nav-links.open { display: flex; }
+      .nav-menu { display: block; }
+    }
+
+    /* ── Page layout ── */
+    .page { padding-top: 60px; }
+
+    /* ── Resume header ── */
+    .resume-header {
+      background: var(--dark); padding: 5rem 3rem 4rem;
+    }
+    .resume-header-inner { max-width: 860px; margin: 0 auto; }
+    .resume-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .67rem; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--sienna); margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: .8rem;
+    }
+    .resume-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--sienna); }
+    .resume-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 700;
+      letter-spacing: -.02em; line-height: .95; color: #fff;
+      margin-bottom: 1.25rem;
+    }
+    .resume-name em { font-style: italic; font-weight: 400; color: rgba(255,255,255,.4); }
+    .resume-title {
+      font-size: .9rem; color: rgba(255,255,255,.45); font-weight: 400;
+      letter-spacing: .01em; margin-bottom: 2rem; line-height: 1.6;
+    }
+    .resume-contact {
+      display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 2.25rem;
+    }
+    .resume-contact a, .resume-contact span {
+      font-family: 'JetBrains Mono', monospace; font-size: .71rem;
+      color: rgba(255,255,255,.38); border: 1px solid rgba(255,255,255,.1);
+      padding: .28rem .7rem; border-radius: 2px;
+      transition: color .15s, border-color .15s;
+    }
+    .resume-contact a:hover { color: rgba(255,255,255,.75); border-color: rgba(255,255,255,.25); }
+    .resume-dl {
+      display: inline-flex; align-items: center; gap: .45rem;
+      font-size: .82rem; font-weight: 600;
+      background: rgba(255,255,255,.08); color: rgba(255,255,255,.65);
+      border: 1px solid rgba(255,255,255,.14);
+      padding: .65rem 1.3rem; border-radius: 3px;
+      transition: background .18s, color .18s;
+    }
+    .resume-dl:hover { background: rgba(255,255,255,.14); color: #fff; }
+
+    /* ── Body ── */
+    .resume-body { max-width: 860px; margin: 0 auto; padding: 5rem 3rem; }
+    @media (max-width: 600px) {
+      .resume-header { padding: 3.5rem 1.5rem 3rem; }
+      .resume-body { padding: 3.5rem 1.5rem; }
+    }
+
+    /* ── Section ── */
+    .r-section { margin-bottom: 4.5rem; }
+    .r-section:last-child { margin-bottom: 0; }
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .67rem; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--ink-3); margin-bottom: 1.75rem;
+      padding-bottom: .75rem; border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Summary ── */
+    .summary-text {
+      font-size: .95rem; color: var(--ink-2); line-height: 1.85;
+    }
+
+    /* ── Timeline ── */
+    .r-role {
+      display: grid; grid-template-columns: 190px 1fr;
+      padding: 2rem 0; border-top: 1px solid var(--border);
+    }
+    .r-role:last-child { border-bottom: 1px solid var(--border); }
+    @media (max-width: 640px) { .r-role { grid-template-columns: 1fr; gap: .75rem; } }
+    .r-meta { padding-right: 2rem; }
+    .r-org {
+      font-weight: 700; font-size: .8rem; color: var(--navy);
+      text-transform: uppercase; letter-spacing: .07em; margin-bottom: .2rem;
+    }
+    .r-period {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .67rem; color: var(--ink-3); line-height: 1.5;
+    }
+    .r-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: .15rem; line-height: 1.35; }
+    .r-company { font-size: .8rem; color: var(--ink-3); margin-bottom: 1rem; }
+    .r-bullets { list-style: none; display: flex; flex-direction: column; gap: .45rem; }
+    .r-bullets li {
+      font-size: .875rem; color: var(--ink-2); line-height: 1.65;
+      padding-left: 1rem; position: relative;
+    }
+    .r-bullets li::before { content: '–'; position: absolute; left: 0; color: var(--ink-3); }
+
+    /* ── Skills grid ── */
+    .skills-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 1px; background: var(--border);
+    }
+    @media (max-width: 580px) { .skills-grid { grid-template-columns: 1fr; } }
+    .skill-card { background: var(--bg); padding: 1.75rem; }
+    .skill-label {
+      font-size: .7rem; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--navy); margin-bottom: .85rem;
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: .3rem; }
+    .skill-tag {
+      font-size: .77rem; color: var(--ink-2); border: 1px solid var(--border);
+      padding: .2rem .55rem; border-radius: 2px;
+    }
+
+    /* ── Education ── */
+    .edu-item { padding: 1.75rem 0; border-top: 1px solid var(--border); }
+    .edu-item:last-child { border-bottom: 1px solid var(--border); }
+    .edu-degree { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: .2rem; }
+    .edu-school { font-size: .85rem; color: var(--ink-3); margin-bottom: .3rem; }
+    .edu-gpa {
+      font-family: 'JetBrains Mono', monospace; font-size: .72rem;
+      color: var(--green); margin-bottom: .5rem;
+    }
+    .edu-note { font-size: .85rem; color: var(--ink-2); line-height: 1.7; }
+
+    /* ── Footer ── */
+    footer {
+      background: #0C0C0C; border-top: 1px solid rgba(255,255,255,.05);
+      padding: 2rem 3rem;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .75rem;
+    }
+    .footer-copy { font-size: .77rem; color: rgba(255,255,255,.22); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: .77rem; color: rgba(255,255,255,.27); transition: color .15s; }
+    .footer-links a:hover { color: rgba(255,255,255,.7); }
+
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+  </style>
 </head>
 <body>
 
-  <!-- Navigation -->
-  <nav class="navbar" id="navbar">
-    <div class="nav-container">
-      <a href="index.html" class="nav-brand">← Ali Shah, Ph.D.</a>
-      <ul class="nav-links">
-        <li><a href="index.html#about">About</a></li>
-        <li><a href="index.html#experience">Experience</a></li>
-        <li><a href="index.html#projects">Projects</a></li>
-        <li><a href="index.html#blog">Blog</a></li>
-        <li><a href="index.html#contact">Contact</a></li>
-      </ul>
+<!-- ── Navigation ── -->
+<nav id="mainNav">
+  <a href="index.html" class="nav-logo">Ali Shahmohammadi <em>Ph.D.</em></a>
+  <button class="nav-menu" id="navMenuBtn" aria-label="Open navigation">
+    <svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+      <line x1="0" y1="1" x2="18" y2="1"/><line x1="0" y1="7" x2="18" y2="7"/><line x1="0" y1="13" x2="18" y2="13"/>
+    </svg>
+  </button>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html#career">Career</a>
+    <a href="index.html#writing">Writing</a>
+    <a href="index.html#contact">Contact</a>
+    <a href="resume.html" class="nav-active" style="color:var(--ink);">Resume</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- ── Header ── -->
+  <header class="resume-header">
+    <div class="resume-header-inner">
+      <div class="resume-eyebrow">Curriculum Vitae</div>
+      <h1 class="resume-name">Ali Shahmohammadi<br><em>Ph.D.</em></h1>
+      <p class="resume-title">Applied AI Engineer &nbsp;·&nbsp; Agentic Systems &nbsp;·&nbsp; Trustworthy Scientific Data &nbsp;·&nbsp; Life Sciences</p>
+      <div class="resume-contact">
+        <a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener">github.com/alishahmohammadi22</a>
+        <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener">linkedin.com/in/alishahmohammadi</a>
+        <span>Greater Boston, MA</span>
+      </div>
+      <a href="https://github.com/alishahmohammadi22/alishahmohammadi22.github.io/raw/main/resume.md" class="resume-dl">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download .md
+      </a>
     </div>
-  </nav>
+  </header>
 
-  <div class="resume-page">
+  <!-- ── Body ── -->
+  <main class="resume-body">
 
-    <!-- Resume Header -->
-    <header class="resume-header">
-      <div class="container">
-        <h1 class="resume-name">Ali Shahmohammadi, Ph.D.</h1>
-        <p class="resume-title">Applied AI Engineer &middot; Agentic Systems &middot; Trustworthy Scientific Data &middot; Life Sciences</p>
-        <div class="resume-contact">
+    <!-- Summary -->
+    <section class="r-section">
+      <div class="section-label">Professional Summary</div>
+      <p class="summary-text">
+        Ph.D. computational scientist and digital leader with 10+ years in pharmaceutical R&amp;D, spanning non-GxP discovery science and GxP-regulated manufacturing. Track record architecting and deploying production-scale agentic AI systems, GPU-accelerated scientific ML (PyTorch, JAX, CUDA), experiment-capture platforms (ELN/LIMS), and enterprise data governance frameworks. Hands-on with Python, C/C++, and AWS; domain depth in digital CMC, continuous manufacturing, cell therapy, and regulated data infrastructure (21 CFR Part 11, ICH, GxP, ALCOA+). Deployed FAIR Studio (Pistoia Alliance), reduced ontology curation cycle times from months to under one hour with agentic AI, and established R&amp;D data governance adopted across 10 research domains. Recognized for translating complex AI/ML and platform strategy into production-scale solutions and for building high-impact academic partnerships (MIT, Brown, BYU, Purdue) and vendor relationships (TetraScience, Benchling).
+      </p>
+    </section>
 
-          <a href="https://github.com/alishahmohammadi22">github.com/alishahmohammadi22</a>
-          <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener">linkedin.com/in/alishahmohammadi</a>
-          <span>📍 Greater Boston, MA</span>
+    <!-- Experience -->
+    <section class="r-section">
+      <div class="section-label">Research &amp; Development Experience</div>
+
+      <div class="r-role">
+        <div class="r-meta">
+          <div class="r-org">Takeda</div>
+          <div class="r-period">Jul 2024 – Present</div>
         </div>
-        <div class="resume-download">
-          <a href="https://github.com/alishahmohammadi22/alishahmohammadi22.github.io/raw/main/resume.md"
-             class="btn btn-secondary" style="font-size:0.85rem; padding:8px 20px;">
-            Download .md
-          </a>
+        <div>
+          <div class="r-title">Associate Director, Digital — Workflow Automation &amp; Applied AI</div>
+          <div class="r-company">Takeda Pharmaceutical Inc. · Cambridge, MA</div>
+          <ul class="r-bullets">
+            <li>Lead a multidisciplinary team of five scientists and engineers owning experiment-capture, workflow automation, and applied-AI platforms across non-GxP research and GxP-adjacent cell-therapy environments — from roadmap through hands-on configuration and production deployment.</li>
+            <li>Designed and shipped an agentic AI system for ontology curation and instrument-data mapping with human-in-the-loop approval — reduced curation cycle time from ~2–3 months to under 1 hour per instrument type, providing a template for next-generation event-driven experiment-capture architectures.</li>
+            <li>Architected the governed, end-to-end cell-therapy scientific data backbone: lab instruments → LabKey → AWS → JMP with near-real-time observability; built data model, catalog, controlled vocabularies, and quality rules with 21 CFR Part 11-aligned controls.</li>
+            <li>Delivered the flow-cytometry automation with TetraScience: instrument → LabKey → AI-driven autogating → FlowJo → back to LabKey — eliminating manual handoffs, embedding QC checkpoints, saving ~2 hours per assay run.</li>
+            <li>Own the TetraScience vendor relationship for cell therapy experiment-capture and instrument integrations, driving roadmap alignment, escalation management, and joint delivery of new connector types.</li>
+            <li>Built and drove enterprise deployment of FAIR Studio (Pistoia Alliance) — operationalizing FAIR assessment and embedding data governance directly into AI pipelines; adopted across 10 research domains.</li>
+            <li>Developed an MCP Scientific Data Server exposing scientific datasets as agent-callable tools to LLMs via the Model Context Protocol, with deterministic connectors and an evaluation harness.</li>
+            <li>Communicate regularly with senior R&amp;D leaders — from Group Lead through Senior Vice President — synthesizing platform strategy, project status, and risk assessments for executive audiences.</li>
+          </ul>
         </div>
       </div>
-    </header>
 
-    <!-- Resume Body -->
-    <main class="resume-body">
-
-      <!-- Professional Summary -->
-      <section class="resume-section">
-        <h2 class="resume-section-title">Professional Summary</h2>
-        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.8;">
-          Ph.D. computational scientist and digital leader with 10+ years in pharmaceutical R&amp;D, spanning non-GxP discovery science and GxP-regulated manufacturing. Track record architecting and deploying production-scale agentic AI systems, GPU-accelerated scientific ML (PyTorch, JAX, CUDA), experiment-capture platforms (ELN/LIMS), and enterprise data governance frameworks. Hands-on with Python, C/C++, and AWS; domain depth in digital CMC, continuous manufacturing, cell therapy, and regulated data infrastructure (21 CFR Part 11, ICH, GxP, ALCOA+). Deployed FAIR Studio (Pistoia Alliance), reduced ontology curation cycle times from months to under one hour with agentic AI, and established R&amp;D data governance adopted across 10 research domains. Recognized for translating complex AI/ML and platform strategy into production-scale solutions and for building high-impact academic partnerships (MIT, Brown, BYU, Purdue) and vendor relationships (TetraScience, Benchling).
-        </p>
-      </section>
-
-      <!-- Experience -->
-      <section class="resume-section">
-        <h2 class="resume-section-title">Research &amp; Development Experience</h2>
-
-        <div class="resume-role">
-          <div class="resume-role-header">
-            <span class="resume-role-title">Associate Director, Digital &mdash; Workflow Automation &amp; Applied AI</span>
-            <span class="resume-role-period">Jul 2024 – Present</span>
-          </div>
-          <p class="resume-role-company">Takeda Pharmaceutical Inc. · Cambridge, MA</p>
-          <ul class="resume-role-bullets">
-            <li>Lead a multidisciplinary team of five scientists and engineers owning experiment-capture, workflow automation, and applied-AI platforms across non-GxP research and GxP-adjacent cell-therapy environments &mdash; from roadmap through hands-on configuration and production deployment.</li>
-            <li>Designed and shipped an agentic AI system for ontology curation and instrument-data mapping with human-in-the-loop approval &mdash; reduced curation cycle time from ~2&ndash;3 months to under 1 hour per instrument type, providing a template for next-generation event-driven experiment-capture architectures.</li>
-            <li>Architected the governed, end-to-end cell-therapy scientific data backbone: lab instruments &rarr; LabKey &rarr; AWS &rarr; JMP with near-real-time observability; built data model, catalog, controlled vocabularies, and quality rules with 21 CFR Part 11-aligned controls.</li>
-            <li>Delivered the flow-cytometry automation with TetraScience: instrument &rarr; LabKey &rarr; AI-driven autogating &rarr; FlowJo &rarr; back to LabKey &mdash; eliminating manual handoffs, embedding QC checkpoints, and saving ~2 hours per assay run while preserving attributable, contemporaneous records.</li>
-            <li>Own the TetraScience vendor relationship for cell therapy experiment-capture and instrument integrations, driving roadmap alignment, escalation management, and joint delivery of new connector types.</li>
-            <li>Built and drove enterprise deployment of FAIR Studio (Pistoia Alliance) &mdash; operationalizing FAIR assessment and embedding data governance directly into AI pipelines; adopted across 10 research domains.</li>
-            <li>Developed an MCP Scientific Data Server exposing scientific datasets as agent-callable tools to LLMs via the Model Context Protocol, with deterministic connectors and an evaluation harness.</li>
-            <li>Communicate regularly with senior R&amp;D leaders &mdash; from Group Lead through Senior Vice President &mdash; synthesizing platform strategy, project status, and risk assessments for executive audiences.</li>
-            <li>Designed evaluation and validation frameworks for AI/ML platform components to meet reliability and Computer System Validation (CSV) expectations.</li>
-          </ul>
+      <div class="r-role">
+        <div class="r-meta">
+          <div class="r-org">Takeda</div>
+          <div class="r-period">Sep 2022 – Jul 2024</div>
         </div>
-
-        <div class="resume-role">
-          <div class="resume-role-header">
-            <span class="resume-role-title">Senior Scientist, Digital CMC</span>
-            <span class="resume-role-period">Sep 2022 – Jul 2024</span>
-          </div>
-          <p class="resume-role-company">Takeda Pharmaceutical Inc. · Greater Boston, MA</p>
-          <ul class="resume-role-bullets">
-            <li>Built physics-informed neural networks (PINNs) and first-principles hybrid models (PyTorch, GPU-trained) for the continuous-hydrogenation step and continuous manufacturing of a pharmaceutical API &mdash; a validated in-silico platform that reduced experimental burden by 40%.</li>
+        <div>
+          <div class="r-title">Senior Scientist, Digital CMC</div>
+          <div class="r-company">Takeda Pharmaceutical Inc. · Greater Boston, MA</div>
+          <ul class="r-bullets">
+            <li>Built physics-informed neural networks (PINNs) and first-principles hybrid models (PyTorch, GPU-trained) for the continuous-hydrogenation step and continuous manufacturing of a pharmaceutical API — a validated in-silico platform that reduced experimental burden by 40%.</li>
             <li>Developed and deployed a mechanistic process model and digital twin for continuous manufacturing of a pharmaceutical API, supporting scale-up, optimization, and quantitative operational-risk assessment.</li>
-            <li>Delivered an AI/ML predictive model for product-level CO&sup2; emissions supporting Takeda&rsquo;s sustainability strategy.</li>
-            <li>Built strategic academic partnerships with MIT, Brown, BYU, and Purdue to advance PINNs, mechanistic modeling, and in-silico&ndash;first process development across modalities.</li>
+            <li>Delivered an AI/ML predictive model for product-level CO₂ emissions supporting Takeda's sustainability strategy.</li>
+            <li>Built strategic academic partnerships with MIT, Brown, BYU, and Purdue to advance PINNs, mechanistic modeling, and in-silico-first process development across modalities.</li>
           </ul>
         </div>
+      </div>
 
-        <div class="resume-role">
-          <div class="resume-role-header">
-            <span class="resume-role-title">Senior Statistician, CMC</span>
-            <span class="resume-role-period">Jul 2021 – Sep 2022</span>
-          </div>
-          <p class="resume-role-company">Moderna Inc. · Greater Boston, MA</p>
-          <ul class="resume-role-bullets">
+      <div class="r-role">
+        <div class="r-meta">
+          <div class="r-org">Moderna</div>
+          <div class="r-period">Jul 2021 – Sep 2022</div>
+        </div>
+        <div>
+          <div class="r-title">Senior Statistician, CMC</div>
+          <div class="r-company">Moderna Inc. · Greater Boston, MA</div>
+          <ul class="r-bullets">
             <li>Contributed statistical analysis, DoE, hypothesis testing, and factor-screening to mRNA and LNP process development in a GxP-regulated manufacturing environment; supported IND and BLA submissions.</li>
             <li>Built ML and fundamental stability models (ICH-aligned) predicting shelf-life of mRNA drug substances and drug products, informing risk-based release strategies.</li>
             <li>Implemented SPC and anomaly-detection systems for mRNA DS/DP manufacturing, enabling earlier drift detection and faster root-cause investigation.</li>
             <li>Combined machine learning with first-principles modeling to optimize the IVT reaction for mRNA process characterization, accelerating process understanding.</li>
           </ul>
         </div>
+      </div>
 
-        <div class="resume-role">
-          <div class="resume-role-header">
-            <span class="resume-role-title">Post-Doctoral Research Fellow</span>
-            <span class="resume-role-period">Oct 2019 – Aug 2021</span>
-          </div>
-          <p class="resume-role-company">The University of Texas at Austin · Austin, TX</p>
-          <ul class="resume-role-bullets">
+      <div class="r-role">
+        <div class="r-meta">
+          <div class="r-org">UT Austin</div>
+          <div class="r-period">Oct 2019 – Aug 2021</div>
+        </div>
+        <div>
+          <div class="r-title">Post-Doctoral Research Fellow</div>
+          <div class="r-company">The University of Texas at Austin · Austin, TX</div>
+          <ul class="r-bullets">
             <li>Developed fundamental models to predict the thickness of thin film gallium phosphate on silicon, enabling rapid model-based optimization of plasma etching processes.</li>
-            <li>Designed model-based Design of Experiments (DoE) and performed statistical analysis to obtain informative data during thin film deposition.</li>
             <li>Built R Shiny user interface to provide model-based DoE for optimization of plasma etch processes and conducting statistical analysis.</li>
             <li>Articulated a fundamental model to predict the linear and nonlinear viscoelastic properties of adhesive soft particles in aqueous solutions.</li>
-            <li>Led a process engineering team in developing mathematical models and implementing statistical techniques to predict the gelation time of adhesive soft materials.</li>
+            <li>Led a process engineering team developing mathematical models and implementing statistical techniques to predict the gelation time of adhesive soft materials.</li>
             <li>Performed Molecular Dynamic Simulations with over 100,000 particles to investigate microstructural changes in soft matter.</li>
           </ul>
         </div>
+      </div>
 
-      </section>
+    </section>
 
-      <!-- Skills -->
-      <section class="resume-section">
-        <h2 class="resume-section-title">Skills</h2>
-        <div class="resume-skills-grid">
-          <div class="resume-skill-category">
-            <p class="resume-skill-category-name">Applied AI Engineering</p>
-            <p class="resume-skill-list">MCP Server Development, Agentic AI Pipelines, LangGraph Multi-Agent Systems, Evaluation Harnesses, LLMs &amp; RAG, AWS Bedrock, LlamaIndex, LangChain, Human-in-the-Loop Governance, GPU-Accelerated ML, Physics-Informed Neural Networks, PyTorch, JAX, CUDA, C/C++</p>
-          </div>
-          <div class="resume-skill-category">
-            <p class="resume-skill-category-name">Data &amp; Knowledge Engineering</p>
-            <p class="resume-skill-list">Scientific Data Connectors, Validation Pipelines, Knowledge Graphs, Ontology Engineering, FAIR Data (RDA &amp; Pistoia), Data Catalogs, Data Lineage, Semantic Interoperability, Master Data Management, Statistical Process Control</p>
-          </div>
-          <div class="resume-skill-category">
-            <p class="resume-skill-category-name">Programming &amp; Infrastructure</p>
-            <p class="resume-skill-list">Python, C/C++, R, PyTorch, TensorFlow, JAX, CUDA, SQL, Git, GitHub Actions, Terraform, AWS (S3, EC2, Redshift, EMR, Neptune, Bedrock), Docker, REST/JSON APIs</p>
-          </div>
-          <div class="resume-skill-category">
-            <p class="resume-skill-category-name">Software &amp; Analytics</p>
-            <p class="resume-skill-list">JMP, Power BI, Tableau, Microsoft Power Automate</p>
-          </div>
-          <div class="resume-skill-category">
-            <p class="resume-skill-category-name">ELN &amp; Regulatory Compliance</p>
-            <p class="resume-skill-list">Benchling, Dotmatics, TetraScience Data Platform, 21 CFR Part 11, ALCOA+, Computer System Validation (CSV), GxP, ICH, Audit Readiness, Change Control</p>
-          </div>
-          <div class="resume-skill-category">
-            <p class="resume-skill-category-name">Certifications</p>
-            <p class="resume-skill-list">AWS Solutions Architect · Six Sigma Black Belt · Machine Learning with Python · Deep Learning with Python</p>
+    <!-- Skills -->
+    <section class="r-section">
+      <div class="section-label">Skills &amp; Expertise</div>
+      <div class="skills-grid">
+
+        <div class="skill-card">
+          <div class="skill-label">Applied AI Engineering</div>
+          <div class="skill-tags">
+            <span class="skill-tag">MCP Server Development</span>
+            <span class="skill-tag">Agentic AI Pipelines</span>
+            <span class="skill-tag">LangGraph</span>
+            <span class="skill-tag">Multi-Agent Systems</span>
+            <span class="skill-tag">LLMs &amp; RAG</span>
+            <span class="skill-tag">AWS Bedrock</span>
+            <span class="skill-tag">LlamaIndex</span>
+            <span class="skill-tag">Human-in-the-Loop</span>
+            <span class="skill-tag">Evaluation Harnesses</span>
+            <span class="skill-tag">PINNs</span>
+            <span class="skill-tag">PyTorch</span>
+            <span class="skill-tag">JAX</span>
+            <span class="skill-tag">CUDA</span>
           </div>
         </div>
-      </section>
 
-      <!-- Skills -->
-      <section class="resume-section">
-        <h2 class="resume-section-title">Skills &amp; Expertise</h2>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.25rem;">
-
-          <div style="background:var(--bg-off,#F5F5F7);border:1px solid var(--border,#E8E8E5);border-radius:10px;padding:1.25rem;">
-            <p style="font-size:.75rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#2563EB;margin-bottom:.75rem;">Data Governance &amp; MDM</p>
-            <ul style="list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:.4rem;">
-              <li style="font-size:.8rem;background:#EFF6FF;border:1px solid #BFDBFE;color:#2563EB;padding:.18rem .55rem;border-radius:99px;">Master Data Management</li>
-              <li style="font-size:.8rem;background:#EFF6FF;border:1px solid #BFDBFE;color:#2563EB;padding:.18rem .55rem;border-radius:99px;">Knowledge Graphs</li>
-              <li style="font-size:.8rem;background:#EFF6FF;border:1px solid #BFDBFE;color:#2563EB;padding:.18rem .55rem;border-radius:99px;">Ontology Engineering</li>
-              <li style="font-size:.8rem;background:#EFF6FF;border:1px solid #BFDBFE;color:#2563EB;padding:.18rem .55rem;border-radius:99px;">Data Catalogs</li>
-              <li style="font-size:.8rem;background:#EFF6FF;border:1px solid #BFDBFE;color:#2563EB;padding:.18rem .55rem;border-radius:99px;">Data Lineage</li>
-              <li style="font-size:.8rem;background:#EFF6FF;border:1px solid #BFDBFE;color:#2563EB;padding:.18rem .55rem;border-radius:99px;">FAIR Maturity Assessment</li>
-              <li style="font-size:.8rem;background:#EFF6FF;border:1px solid #BFDBFE;color:#2563EB;padding:.18rem .55rem;border-radius:99px;">AI Governance</li>
-              <li style="font-size:.8rem;background:#EFF6FF;border:1px solid #BFDBFE;color:#2563EB;padding:.18rem .55rem;border-radius:99px;">ISO/IEC 23894</li>
-              <li style="font-size:.8rem;background:#EFF6FF;border:1px solid #BFDBFE;color:#2563EB;padding:.18rem .55rem;border-radius:99px;">SPARQL</li>
-              <li style="font-size:.8rem;background:#EFF6FF;border:1px solid #BFDBFE;color:#2563EB;padding:.18rem .55rem;border-radius:99px;">Semantic Interoperability</li>
-            </ul>
+        <div class="skill-card">
+          <div class="skill-label">Data &amp; Knowledge Engineering</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Scientific Data Connectors</span>
+            <span class="skill-tag">Knowledge Graphs</span>
+            <span class="skill-tag">Ontology Engineering</span>
+            <span class="skill-tag">FAIR Data (RDA &amp; Pistoia)</span>
+            <span class="skill-tag">Data Catalogs</span>
+            <span class="skill-tag">Data Lineage</span>
+            <span class="skill-tag">Master Data Management</span>
+            <span class="skill-tag">Semantic Interoperability</span>
+            <span class="skill-tag">SPARQL</span>
+            <span class="skill-tag">Statistical Process Control</span>
           </div>
-
-          <div style="background:var(--bg-off,#F5F5F7);border:1px solid var(--border,#E8E8E5);border-radius:10px;padding:1.25rem;">
-            <p style="font-size:.75rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#7C3AED;margin-bottom:.75rem;">Agentic AI &amp; ML</p>
-            <ul style="list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:.4rem;">
-              <li style="font-size:.8rem;background:#F5F3FF;border:1px solid #DDD6FE;color:#7C3AED;padding:.18rem .55rem;border-radius:99px;">LangGraph</li>
-              <li style="font-size:.8rem;background:#F5F3FF;border:1px solid #DDD6FE;color:#7C3AED;padding:.18rem .55rem;border-radius:99px;">LangChain</li>
-              <li style="font-size:.8rem;background:#F5F3FF;border:1px solid #DDD6FE;color:#7C3AED;padding:.18rem .55rem;border-radius:99px;">Multi-Agent Systems</li>
-              <li style="font-size:.8rem;background:#F5F3FF;border:1px solid #DDD6FE;color:#7C3AED;padding:.18rem .55rem;border-radius:99px;">PINNs</li>
-              <li style="font-size:.8rem;background:#F5F3FF;border:1px solid #DDD6FE;color:#7C3AED;padding:.18rem .55rem;border-radius:99px;">RAG Systems</li>
-              <li style="font-size:.8rem;background:#F5F3FF;border:1px solid #DDD6FE;color:#7C3AED;padding:.18rem .55rem;border-radius:99px;">AI Evaluation</li>
-              <li style="font-size:.8rem;background:#F5F3FF;border:1px solid #DDD6FE;color:#7C3AED;padding:.18rem .55rem;border-radius:99px;">CUDA</li>
-              <li style="font-size:.8rem;background:#F5F3FF;border:1px solid #DDD6FE;color:#7C3AED;padding:.18rem .55rem;border-radius:99px;">AWS Bedrock</li>
-              <li style="font-size:.8rem;background:#F5F3FF;border:1px solid #DDD6FE;color:#7C3AED;padding:.18rem .55rem;border-radius:99px;">XGBoost</li>
-              <li style="font-size:.8rem;background:#F5F3FF;border:1px solid #DDD6FE;color:#7C3AED;padding:.18rem .55rem;border-radius:99px;">Mechanistic Modeling</li>
-            </ul>
-          </div>
-
-          <div style="background:var(--bg-off,#F5F5F7);border:1px solid var(--border,#E8E8E5);border-radius:10px;padding:1.25rem;">
-            <p style="font-size:.75rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#16A34A;margin-bottom:.75rem;">Programming &amp; Infrastructure</p>
-            <ul style="list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:.4rem;">
-              <li style="font-size:.8rem;background:#F0FDF4;border:1px solid #BBF7D0;color:#16A34A;padding:.18rem .55rem;border-radius:99px;">Python</li>
-              <li style="font-size:.8rem;background:#F0FDF4;border:1px solid #BBF7D0;color:#16A34A;padding:.18rem .55rem;border-radius:99px;">C/C++</li>
-              <li style="font-size:.8rem;background:#F0FDF4;border:1px solid #BBF7D0;color:#16A34A;padding:.18rem .55rem;border-radius:99px;">AWS (Neptune, S3, Lambda, Bedrock)</li>
-              <li style="font-size:.8rem;background:#F0FDF4;border:1px solid #BBF7D0;color:#16A34A;padding:.18rem .55rem;border-radius:99px;">Neo4j</li>
-              <li style="font-size:.8rem;background:#F0FDF4;border:1px solid #BBF7D0;color:#16A34A;padding:.18rem .55rem;border-radius:99px;">dbt</li>
-              <li style="font-size:.8rem;background:#F0FDF4;border:1px solid #BBF7D0;color:#16A34A;padding:.18rem .55rem;border-radius:99px;">Apache Airflow</li>
-              <li style="font-size:.8rem;background:#F0FDF4;border:1px solid #BBF7D0;color:#16A34A;padding:.18rem .55rem;border-radius:99px;">Docker</li>
-              <li style="font-size:.8rem;background:#F0FDF4;border:1px solid #BBF7D0;color:#16A34A;padding:.18rem .55rem;border-radius:99px;">GitHub Actions</li>
-              <li style="font-size:.8rem;background:#F0FDF4;border:1px solid #BBF7D0;color:#16A34A;padding:.18rem .55rem;border-radius:99px;">Terraform</li>
-              <li style="font-size:.8rem;background:#F0FDF4;border:1px solid #BBF7D0;color:#16A34A;padding:.18rem .55rem;border-radius:99px;">R</li>
-            </ul>
-          </div>
-
-          <div style="background:var(--bg-off,#F5F5F7);border:1px solid var(--border,#E8E8E5);border-radius:10px;padding:1.25rem;">
-            <p style="font-size:.75rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#B45309;margin-bottom:.75rem;">Pharma R&amp;D Domain</p>
-            <ul style="list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:.4rem;">
-              <li style="font-size:.8rem;background:#FFFBEB;border:1px solid #FDE68A;color:#B45309;padding:.18rem .55rem;border-radius:99px;">Digital CMC</li>
-              <li style="font-size:.8rem;background:#FFFBEB;border:1px solid #FDE68A;color:#B45309;padding:.18rem .55rem;border-radius:99px;">Continuous Manufacturing</li>
-              <li style="font-size:.8rem;background:#FFFBEB;border:1px solid #FDE68A;color:#B45309;padding:.18rem .55rem;border-radius:99px;">Cell Therapy</li>
-              <li style="font-size:.8rem;background:#FFFBEB;border:1px solid #FDE68A;color:#B45309;padding:.18rem .55rem;border-radius:99px;">mRNA / LNP</li>
-              <li style="font-size:.8rem;background:#FFFBEB;border:1px solid #FDE68A;color:#B45309;padding:.18rem .55rem;border-radius:99px;">21 CFR Part 11</li>
-              <li style="font-size:.8rem;background:#FFFBEB;border:1px solid #FDE68A;color:#B45309;padding:.18rem .55rem;border-radius:99px;">ALCOA+ / CSV</li>
-              <li style="font-size:.8rem;background:#FFFBEB;border:1px solid #FDE68A;color:#B45309;padding:.18rem .55rem;border-radius:99px;">ICH Guidelines</li>
-              <li style="font-size:.8rem;background:#FFFBEB;border:1px solid #FDE68A;color:#B45309;padding:.18rem .55rem;border-radius:99px;">GxP</li>
-              <li style="font-size:.8rem;background:#FFFBEB;border:1px solid #FDE68A;color:#B45309;padding:.18rem .55rem;border-radius:99px;">Benchling / Dotmatics</li>
-              <li style="font-size:.8rem;background:#FFFBEB;border:1px solid #FDE68A;color:#B45309;padding:.18rem .55rem;border-radius:99px;">TetraScience</li>
-              <li style="font-size:.8rem;background:#FFFBEB;border:1px solid #FDE68A;color:#B45309;padding:.18rem .55rem;border-radius:99px;">Process Scale-Up</li>
-            </ul>
-          </div>
-
-        </div>
-      </section>
-
-      <!-- Education -->
-      <section class="resume-section">
-        <h2 class="resume-section-title">Education</h2>
-
-        <div class="resume-edu-item">
-          <p class="resume-degree">Ph.D. in Chemical Process Engineering</p>
-          <p class="resume-school">Queen's University · Ontario, Canada · Sep 2015 – Sep 2019</p>
-          <p class="resume-gpa">GPA: 3.98 / 4.0</p>
-          <p style="color: var(--text-muted); font-size: 0.875rem; line-height: 1.7; margin-top: 0.4rem;">Doctoral research conducted as an Eli Lilly&ndash;sponsored industrial collaboration; developed a Bayesian model-based DoE methodology that reduced experiments required for kinetic-model development and validation of complex chemical systems.</p>
         </div>
 
-        <div class="resume-edu-item">
-          <p class="resume-degree">M.Sc. in Chemical Process Engineering</p>
-          <p class="resume-school">Tarbiat Modares University · Tehran, Iran · Sep 2011 – Jan 2013</p>
-          <p class="resume-gpa">GPA: 3.96 / 4.0</p>
+        <div class="skill-card">
+          <div class="skill-label">Programming &amp; Infrastructure</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">C/C++</span>
+            <span class="skill-tag">R</span>
+            <span class="skill-tag">SQL</span>
+            <span class="skill-tag">AWS (S3, EC2, Redshift, Neptune, Bedrock)</span>
+            <span class="skill-tag">Neo4j</span>
+            <span class="skill-tag">Apache Airflow</span>
+            <span class="skill-tag">dbt</span>
+            <span class="skill-tag">Docker</span>
+            <span class="skill-tag">Terraform</span>
+            <span class="skill-tag">GitHub Actions</span>
+          </div>
         </div>
 
-        <div class="resume-edu-item">
-          <p class="resume-degree">B.Sc. in Chemical Engineering</p>
-          <p class="resume-school">University of Tehran · Tehran, Iran · Sep 2007 – Aug 2011</p>
-          <p class="resume-gpa">GPA: 3.30 / 4.0</p>
+        <div class="skill-card">
+          <div class="skill-label">Pharma R&amp;D Domain</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Digital CMC</span>
+            <span class="skill-tag">Continuous Manufacturing</span>
+            <span class="skill-tag">Cell Therapy</span>
+            <span class="skill-tag">mRNA / LNP</span>
+            <span class="skill-tag">21 CFR Part 11</span>
+            <span class="skill-tag">ALCOA+ / CSV</span>
+            <span class="skill-tag">ICH Guidelines</span>
+            <span class="skill-tag">GxP</span>
+            <span class="skill-tag">Benchling</span>
+            <span class="skill-tag">Dotmatics</span>
+            <span class="skill-tag">TetraScience</span>
+          </div>
         </div>
 
-      </section>
+        <div class="skill-card">
+          <div class="skill-label">Analytics &amp; Visualization</div>
+          <div class="skill-tags">
+            <span class="skill-tag">JMP</span>
+            <span class="skill-tag">Power BI</span>
+            <span class="skill-tag">Tableau</span>
+            <span class="skill-tag">Microsoft Power Automate</span>
+            <span class="skill-tag">XGBoost</span>
+            <span class="skill-tag">Scikit-learn</span>
+            <span class="skill-tag">Design of Experiments</span>
+          </div>
+        </div>
 
-    </main>
+        <div class="skill-card">
+          <div class="skill-label">Certifications</div>
+          <div class="skill-tags">
+            <span class="skill-tag">AWS Solutions Architect</span>
+            <span class="skill-tag">Six Sigma Black Belt</span>
+            <span class="skill-tag">Machine Learning with Python</span>
+            <span class="skill-tag">Deep Learning with Python</span>
+          </div>
+        </div>
 
+      </div>
+    </section>
+
+    <!-- Education -->
+    <section class="r-section">
+      <div class="section-label">Education</div>
+
+      <div class="edu-item">
+        <div class="edu-degree">Ph.D. in Chemical Process Engineering</div>
+        <div class="edu-school">Queen's University · Ontario, Canada · Sep 2015 – Sep 2019</div>
+        <div class="edu-gpa">GPA 3.98 / 4.0</div>
+        <p class="edu-note">Doctoral research conducted as an Eli Lilly-sponsored industrial collaboration; developed a Bayesian model-based DoE methodology that reduced experiments required for kinetic-model development and validation of complex chemical systems.</p>
+      </div>
+
+      <div class="edu-item">
+        <div class="edu-degree">M.Sc. in Chemical Process Engineering</div>
+        <div class="edu-school">Tarbiat Modares University · Tehran, Iran · Sep 2011 – Jan 2013</div>
+        <div class="edu-gpa">GPA 3.96 / 4.0</div>
+      </div>
+
+      <div class="edu-item">
+        <div class="edu-degree">B.Sc. in Chemical Engineering</div>
+        <div class="edu-school">University of Tehran · Tehran, Iran · Sep 2007 – Aug 2011</div>
+        <div class="edu-gpa">GPA 3.30 / 4.0</div>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<!-- ── Footer ── -->
+<footer>
+  <span class="footer-copy">&copy; 2026 Ali Shahmohammadi, Ph.D. &mdash; Built with GitHub Pages</span>
+  <div class="footer-links">
+    <a href="index.html">Portfolio</a>
+    <a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener">LinkedIn</a>
   </div>
+</footer>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <p>© 2026 Ali Shahmohammadi, Ph.D.</p>
-      <p><a href="index.html">Portfolio</a> · <a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener">GitHub</a> · <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener">LinkedIn</a></p>
-    </div>
-  </footer>
-
-  <script src="assets/js/main.js"></script>
+<script>
+  (function(){
+    var btn = document.getElementById('navMenuBtn');
+    var links = document.getElementById('navLinks');
+    btn.addEventListener('click', function(){ links.classList.toggle('open'); });
+    links.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ links.classList.remove('open'); });
+    });
+  })();
+</script>
 </body>
 </html>

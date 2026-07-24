@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Second-Order ODEs with PINNs: The Damped Harmonic Oscillator — Ali Shahmohammadi</title>
+  <meta name="description" content="Nested automatic differentiation, two initial conditions, and the spectral bias problem that makes oscillatory physics hard for neural networks. Article 2 of the Physics AI series.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#F8F6F2;--bg-alt:#F1EEE9;--ink:#111010;--ink-2:#4A4540;--ink-3:#8C857E;--navy:#1C3D6B;--navy-lt:#EBF0F7;--sienna:#B8845A;--sienna-lt:#FBF4EC;--purple:#5B4E8A;--purple-lt:#F2EEF9;--green:#2D7A4F;--green-lt:#EBF7F1;--green-bdr:#BEE5D3;--border:#DEDAD3;--dark:#111010;--accent:#2563EB;--accent-lt:#EFF6FF;--accent-mid:#BFDBFE;--red:#DC2626;--red-lt:#FEF2F2;--amber:#D97706;--amber-lt:#FFFBEB;--amber-bdr:#FDE68A}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--ink);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:18px;line-height:1.65;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent);text-decoration:none}a:hover{opacity:.75}
+    code,pre{font-family:'JetBrains Mono','Fira Code',monospace}
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between;background:rgba(248,246,242,.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:var(--ink)}
+    .nav-logo em{font-style:normal;color:var(--sienna)}
+    .nav-links{display:flex;align-items:center;gap:.2rem}
+    .nav-links a{font-size:.82rem;font-weight:500;color:var(--ink-3);padding:.42rem .8rem;border-radius:4px;transition:color .15s,background .15s}
+    .nav-links a:hover{color:var(--ink);background:var(--bg-alt)}
+    .article-page{padding-top:60px}
+    .article-hero{background:var(--dark);padding:5rem 3rem 4rem}
+    .article-hero-inner{max-width:820px;margin:0 auto}
+    .hero-series{font-family:'JetBrains Mono',monospace;font-size:.67rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sienna);margin-bottom:1rem;display:flex;align-items:center;gap:.8rem}
+    .hero-series::before{content:'';width:28px;height:1px;background:var(--sienna)}
+    .article-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,4.2rem);font-weight:700;letter-spacing:-.02em;line-height:.97;color:#fff;margin-bottom:1.25rem}
+    .article-title em{font-style:italic;font-weight:400;color:rgba(255,255,255,.4)}
+    .article-sub{font-size:1.08rem;color:rgba(255,255,255,.45);margin-bottom:2rem;line-height:1.75;max-width:640px}
+    .article-meta{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2rem}
+    .meta-pill{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:rgba(255,255,255,.38);border:1px solid rgba(255,255,255,.1);padding:.25rem .65rem;border-radius:2px}
+    .meta-pill.highlight{color:var(--sienna);border-color:rgba(184,132,90,.35)}
+    .article-body{max-width:820px;margin:0 auto;padding:4rem 3rem}
+    @media(max-width:640px){.article-hero{padding:3.5rem 1.5rem 3rem}.article-body{padding:3rem 1.5rem}}
+    .section-label{font-family:'JetBrains Mono',monospace;font-size:.67rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1rem}
+    h2.section-h{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;letter-spacing:-.02em;line-height:1.05;color:var(--ink);margin-bottom:.75rem}
+    h3.sub-h{font-size:1.12rem;font-weight:700;color:var(--ink);margin-bottom:.5rem;margin-top:2rem}
+    .body-text{font-size:1.05rem;color:var(--ink-2);line-height:1.8;margin-bottom:1.25rem}
+    .math-block{background:var(--bg-alt);border:1px solid var(--border);border-left:3px solid var(--navy);border-radius:0 4px 4px 0;padding:1.1rem 1.5rem;margin:1.5rem 0;font-family:'JetBrains Mono',monospace;font-size:.88rem;color:var(--navy);overflow-x:auto;line-height:1.7}
+    .math-inline{font-family:'JetBrains Mono',monospace;font-size:.88em;color:var(--navy);background:var(--navy-lt);padding:.08em .3em;border-radius:2px}
+    .code-block{background:#1C1C1E;border-radius:6px;overflow:hidden;margin:1.5rem 0}
+    .code-header{display:flex;align-items:center;justify-content:space-between;padding:.55rem 1rem;background:#2A2A2D;border-bottom:1px solid rgba(255,255,255,.07)}
+    .code-lang{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:rgba(255,255,255,.35);letter-spacing:.1em;text-transform:uppercase}
+    .code-dots{display:flex;gap:5px}
+    .code-dot{width:10px;height:10px;border-radius:50%}
+    .dot-r{background:#FF5F57}.dot-y{background:#FEBC2E}.dot-g{background:#28C840}
+    pre.code-body{padding:1.25rem 1.5rem;overflow-x:auto;font-size:.88rem;line-height:1.75;color:#D1D5DB}
+    .kw{color:#C084FC}.st{color:#86EFAC}.cm{color:#6B7280;font-style:italic}.fn{color:#93C5FD}.nm{color:#FCA5A5}.tp{color:#67E8F9}
+    .callout{border-radius:4px;padding:1.1rem 1.4rem;margin:1.5rem 0;display:flex;gap:.9rem}
+    .callout-icon{flex-shrink:0;margin-top:.1rem}
+    .callout-body{font-size:.9rem;line-height:1.7}
+    .callout-body strong{display:block;font-weight:700;margin-bottom:.2rem}
+    .callout.insight{background:var(--navy-lt);border:1px solid rgba(28,61,107,.2)}
+    .callout.insight .callout-icon{color:var(--navy)}
+    .callout.insight .callout-body{color:var(--navy)}
+    .callout.warning{background:var(--amber-lt);border:1px solid var(--amber-bdr)}
+    .callout.warning .callout-icon{color:var(--amber)}
+    .callout.warning .callout-body{color:#92400E}
+    .callout.success{background:var(--green-lt);border:1px solid var(--green-bdr)}
+    .callout.success .callout-icon{color:var(--green)}
+    .callout.success .callout-body{color:#14532D}
+    .data-table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.875rem}
+    .data-table th{font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding:.65rem 1rem;border-bottom:2px solid var(--border);text-align:left}
+    .data-table td{padding:.65rem 1rem;border-bottom:1px solid var(--border);color:var(--ink-2);vertical-align:top}
+    .data-table tr:last-child td{border-bottom:none}
+    .data-table tr:hover td{background:var(--bg-alt)}
+    .fig-wrap{margin:2rem 0;text-align:center}
+    .fig-caption{font-size:.78rem;color:var(--ink-3);margin-top:.6rem;font-style:italic}
+    .series-nav{background:var(--bg-alt);border:1px solid var(--border);border-radius:4px;padding:1.5rem 1.75rem;margin:2.5rem 0}
+    .series-nav-label{font-family:'JetBrains Mono',monospace;font-size:.63rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1rem}
+    .series-nav-list{display:flex;flex-direction:column;gap:.4rem}
+    .series-nav-item{display:flex;align-items:center;gap:.65rem;font-size:.95rem;color:var(--ink-2)}
+    .series-nav-item.current{color:var(--navy);font-weight:600}
+    .series-nav-item a{color:var(--ink-2)}
+    .series-nav-item a:hover{color:var(--navy)}
+    .ref-list{display:flex;flex-direction:column;gap:.75rem;margin-top:1rem}
+    .ref-item{font-size:.92rem;color:var(--ink-2);line-height:1.65;padding-left:2rem;position:relative}
+    .ref-num{position:absolute;left:0;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--ink-3);font-weight:700}
+    .ref-item a{color:var(--accent)}
+    .divider{border:none;border-top:1px solid var(--border);margin:3rem 0}
+    footer{background:#0C0C0C;border-top:1px solid rgba(255,255,255,.05);padding:2rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem}
+    .footer-copy{font-size:.77rem;color:rgba(255,255,255,.22)}
+    .footer-links{display:flex;gap:1.5rem}
+    .footer-links a{font-size:.77rem;color:rgba(255,255,255,.27);transition:color .15s}
+    .footer-links a:hover{color:rgba(255,255,255,.7)}
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">Ali Shahmohammadi <em>Ph.D.</em></a>
+  <div class="nav-links">
+    <a href="../index.html#career">Career</a>
+    <a href="../index.html#writing">Writing</a>
+    <a href="../index.html#contact">Contact</a>
+    <a href="../resume.html">Resume</a>
+  </div>
+</nav>
+
+<div class="article-page">
+
+  <div class="article-hero">
+    <div class="article-hero-inner">
+      <div class="hero-series">Physics AI · PINNs Series · Article 2 of 8</div>
+      <h1 class="article-title">Second-Order ODEs with PINNs<br><em>The Damped Harmonic Oscillator</em></h1>
+      <p class="article-sub">Nested automatic differentiation, two initial conditions, the hard-constraint ansatz, and the spectral bias problem that makes oscillatory physics hard for neural networks.</p>
+      <div class="article-meta">
+        <span class="meta-pill highlight">Scientific ML</span>
+        <span class="meta-pill highlight">ODEs</span>
+        <span class="meta-pill">Oct 2025</span>
+        <span class="meta-pill">14 min read</span>
+        <span class="meta-pill">Beginner–Intermediate</span>
+        <span class="meta-pill">PyTorch</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="article-body">
+
+    <!-- Prerequisites -->
+    <div class="callout insight" style="margin-bottom:2rem;">
+      <div class="callout-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      </div>
+      <div class="callout-body">
+        <strong>Prerequisites</strong>
+        This article assumes familiarity with the concepts from Article 1: the PINN loss structure, collocation points, and basic PyTorch autograd. If you are new to PINNs, start at <a href="pinn-introduction.html">the introduction</a>.
+      </div>
+    </div>
+
+    <!-- Series Navigation -->
+    <div class="series-nav">
+      <div class="series-nav-label">Physics AI · PINNs Series</div>
+      <div class="series-nav-list">
+        <div class="series-nav-item">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">01</span>
+          <a href="pinn-introduction.html">Introduction to PINNs — first-order ODE, autograd, zero labeled data</a>
+        </div>
+        <div class="series-nav-item current">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--sienna);min-width:2rem;">02</span>
+          Second-Order ODEs: The Damped Harmonic Oscillator
+        </div>
+        <div class="series-nav-item">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">03</span>
+          <span style="color:var(--ink-3);">Heat Transfer Equation — 1D parabolic PDE</span>
+        </div>
+        <div class="series-nav-item">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">04</span>
+          <span style="color:var(--ink-3);">Burger's Equation — shock formation and viscosity</span>
+        </div>
+        <div class="series-nav-item">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">05</span>
+          <span style="color:var(--ink-3);">Reaction Kinetics — multi-species coupled ODEs</span>
+        </div>
+        <div class="series-nav-item">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">06</span>
+          <span style="color:var(--ink-3);">Wave Equation — hyperbolic PDE, energy conservation</span>
+        </div>
+        <div class="series-nav-item">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">07</span>
+          <span style="color:var(--ink-3);">Inverse Parameter Estimation — learning rate constants from sparse data</span>
+        </div>
+        <div class="series-nav-item">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">08</span>
+          <span style="color:var(--ink-3);">Adaptive Sampling and DeepONet — beyond vanilla PINNs</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 1: Why Second-Order ODEs Matter -->
+    <div id="section1" style="margin-top:3rem;">
+      <div class="section-label">01 — Why Second-Order ODEs Matter</div>
+      <h2 class="section-h">From Springs to RLC Circuits</h2>
+
+      <p class="body-text">In Article 1, we solved $dy/dx = -y$ — a single scalar first-order ODE. Real engineering systems are rarely so simple. The vast majority of dynamic models in mechanical, electrical, chemical, and biomedical engineering are governed by <strong>second-order dynamics</strong>:</p>
+
+      <ul style="margin-bottom:1.25rem;padding-left:1.5rem;color:var(--ink-2);font-size:.975rem;line-height:1.8;">
+        <li><strong>Mechanical:</strong> spring-mass-damper systems, structural vibration, seismic response</li>
+        <li><strong>Electrical:</strong> RLC circuits, where voltage, current, and charge are related through two time derivatives</li>
+        <li><strong>Chemical:</strong> pressure oscillations in a packed-bed reactor, surge in compressors</li>
+        <li><strong>Biomedical:</strong> pharmacokinetic models with two-compartment dynamics, respiratory mechanics</li>
+        <li><strong>Control:</strong> every PID controller acts on a second-order plant model by default</li>
+      </ul>
+
+      <p class="body-text">The general form is Newton's second law applied to a single degree of freedom:</p>
+      <div class="math-block">$$m\ddot{u} + c\dot{u} + ku = F(t)$$</div>
+
+      <p class="body-text">where $m$ is mass, $c$ is the damping coefficient, $k$ is the spring constant, and $F(t)$ is the external forcing. Dividing through by $m$ and introducing the standard dimensionless parameters:</p>
+      <div class="math-block">$$\frac{d^2u}{dt^2} + 2\zeta\omega_0\,\frac{du}{dt} + \omega_0^2 u = 0, \qquad \omega_0 = \sqrt{\frac{k}{m}}, \quad \zeta = \frac{c}{2\sqrt{km}}$$</div>
+
+      <p class="body-text">Here $\omega_0$ is the <strong>natural frequency</strong> (radians per second) — the oscillation frequency of the undamped system — and $\zeta$ is the <strong>damping ratio</strong>, which determines the qualitative character of the response. The three regimes are:</p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Regime</th>
+            <th>Condition</th>
+            <th>Character</th>
+            <th>Engineering example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Under-damped</td>
+            <td>$\zeta &lt; 1$</td>
+            <td>Oscillates, decaying amplitude</td>
+            <td>Suspension system, servo motor</td>
+          </tr>
+          <tr>
+            <td>Critically damped</td>
+            <td>$\zeta = 1$</td>
+            <td>Fastest non-oscillatory return</td>
+            <td>Door closers, instrument dampers</td>
+          </tr>
+          <tr>
+            <td>Over-damped</td>
+            <td>$\zeta &gt; 1$</td>
+            <td>Slow monotonic return</td>
+            <td>Shock absorbers, dashpots</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="body-text">This notebook focuses on the under-damped case ($\zeta = 0.20$, $\omega_0 = 3.0$), which produces oscillatory dynamics — the hardest regime for a PINN to learn, and the most interesting from a methodology standpoint.</p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 2: The Physics -->
+    <div id="section2">
+      <div class="section-label">02 — The Physics</div>
+      <h2 class="section-h">Exact Analytical Solution</h2>
+
+      <p class="body-text">For the free-vibration under-damped case ($F(t) = 0$, $\zeta &lt; 1$) with initial conditions $u(0) = u_0$ and $\dot{u}(0) = v_0$, the exact closed-form solution is:</p>
+
+      <div class="math-block">$$u(t) = e^{-\zeta\omega_0 t}\left[u_0\cos(\omega_d t) + \frac{v_0 + \zeta\omega_0 u_0}{\omega_d}\sin(\omega_d t)\right]$$</div>
+
+      <p class="body-text">where $\omega_d = \omega_0\sqrt{1-\zeta^2}$ is the <strong>damped natural frequency</strong> — always less than $\omega_0$, since damping reduces the oscillation rate. The solution is a product of an exponentially decaying envelope $e^{-\zeta\omega_0 t}$ and a sinusoidal oscillation at frequency $\omega_d$.</p>
+
+      <p class="body-text">For the notebook parameters ($\omega_0 = 3.0$, $\zeta = 0.20$, $u_0 = 1.0$, $v_0 = 0.0$, $T = 6.0$ s):</p>
+      <ul style="margin-bottom:1.25rem;padding-left:1.5rem;color:var(--ink-2);font-size:.975rem;line-height:1.8;">
+        <li>Damped frequency: $\omega_d = 3.0\sqrt{1 - 0.04} \approx 2.939$ rad/s</li>
+        <li>Decay envelope time constant: $1/(\zeta\omega_0) = 1/0.6 \approx 1.67$ s</li>
+        <li>Period of oscillation: $T_d = 2\pi/\omega_d \approx 2.14$ s</li>
+        <li>Roughly 2.8 full oscillations complete within the 6-second domain</li>
+      </ul>
+
+      <!-- Visual 1: Phase Space Diagram -->
+      <div class="fig-wrap" style="display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;align-items:flex-start;">
+        <div>
+          <svg width="300" height="300" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" style="font-family:'Inter',sans-serif;">
+            <rect width="300" height="300" fill="#F8F6F2" rx="4"/>
+            <!-- Axes -->
+            <line x1="150" y1="10" x2="150" y2="285" stroke="#DEDAD3" stroke-width="1.5"/>
+            <line x1="15" y1="150" x2="285" y2="150" stroke="#DEDAD3" stroke-width="1.5"/>
+            <!-- Axis labels -->
+            <text x="280" y="165" font-size="11" fill="#8C857E" font-style="italic">u</text>
+            <text x="155" y="18" font-size="11" fill="#8C857E" font-style="italic">du/dt</text>
+            <!-- Spiral: starts at (u=1, du/dt=0) = (245, 150), spirals inward -->
+            <!-- Parameterize: u(t) = e^(-0.2*3*t)*cos(2.939*t), du/dt = -e^(-0.2*3*t)*(0.6*cos + 2.939*sin) -->
+            <!-- Map: x = 150 + 95*u, y = 150 - 70*dudt -->
+            <path d="M245,150 C245,120 230,94 215,86 C198,78 178,88 168,104 C158,120 162,140 172,152 C182,163 198,166 210,160 C222,154 226,143 224,134 C222,125 216,119 209,118 C202,117 196,122 195,130 C194,137 198,143 203,144 C208,145 212,142 212,138 C212,134 209,132 207,133 C205,134 205,136 206,137 C207,138 208,138 208,138"
+              fill="none" stroke="#1C3D6B" stroke-width="2" stroke-linecap="round"/>
+            <!-- Add more spiral turns -->
+            <path d="M245,150
+              C246,128 237,106 222,97
+              C207,88 188,91 177,103
+              C166,115 166,132 174,143
+              C182,154 196,157 207,151
+              C218,145 221,133 218,124
+              C215,115 207,110 199,112
+              C191,114 187,121 189,128
+              C191,135 197,139 202,138
+              C207,137 209,133 208,130
+              C207,127 204,126 202,127
+              C200,128 200,131 201,132
+              C202,133 203,133 203,133"
+              fill="none" stroke="#1C3D6B" stroke-width="1.8" stroke-linecap="round"/>
+            <!-- Arrow showing direction -->
+            <polygon points="245,148 239,143 244,143" fill="#B8845A"/>
+            <!-- Origin dot -->
+            <circle cx="150" cy="150" r="4" fill="#B8845A"/>
+            <text x="156" y="147" font-size="9" fill="#B8845A">stable fixed point</text>
+            <!-- Start point label -->
+            <circle cx="245" cy="150" r="3.5" fill="#1C3D6B"/>
+            <text x="248" y="147" font-size="9" fill="#1C3D6B">t=0</text>
+          </svg>
+          <div class="fig-caption">Figure 1. Phase portrait of the under-damped oscillator in the $(u, \dot{u})$ plane. The trajectory spirals inward toward the stable fixed point at the origin, with each circuit corresponding to one oscillation cycle.</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 3: Nested Autograd -->
+    <div id="section3">
+      <div class="section-label">03 — Nested Automatic Differentiation</div>
+      <h2 class="section-h">Computing Second Derivatives Through the Network</h2>
+
+      <p class="body-text">The ODE residual for the damped oscillator requires the second time-derivative $\ddot{u}$:</p>
+      <div class="math-block">$$\mathcal{R}(t) = \ddot{u} + 2\zeta\omega_0\dot{u} + \omega_0^2 u = 0$$</div>
+
+      <p class="body-text">In Article 1, we computed one derivative: $\frac{d\hat{y}}{dx}$. Here we need two: first $\dot{u} = \frac{du}{dt}$, then $\ddot{u} = \frac{d^2u}{dt^2}$. PyTorch handles this by calling <code>torch.autograd.grad</code> twice in sequence — but the first call <strong>must</strong> use <code>create_graph=True</code>.</p>
+
+      <p class="body-text">Why? When <code>create_graph=True</code> is set, PyTorch does not free the intermediate computational graph after computing $\dot{u}$. This graph is then available for a second backward pass to compute $\ddot{u}$. Without it, the first differentiation discards the graph, and the second call raises a runtime error.</p>
+
+      <!-- Visual 2: Nested Autograd Diagram -->
+      <div class="fig-wrap">
+        <svg width="680" height="140" viewBox="0 0 680 140" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;font-family:'Inter',sans-serif;">
+          <rect width="680" height="140" fill="#F8F6F2" rx="4"/>
+          <!-- Boxes -->
+          <rect x="10" y="50" width="60" height="36" rx="3" fill="#EBF0F7" stroke="#1C3D6B" stroke-width="1.2"/>
+          <text x="40" y="72" text-anchor="middle" font-size="10" fill="#1C3D6B" font-family="'JetBrains Mono',monospace">t ∈ ℝ</text>
+
+          <rect x="100" y="50" width="80" height="36" rx="3" fill="#fff" stroke="#DEDAD3" stroke-width="1.2"/>
+          <text x="140" y="72" text-anchor="middle" font-size="10" fill="#4A4540">NN(t)</text>
+
+          <rect x="210" y="50" width="55" height="36" rx="3" fill="#EBF0F7" stroke="#1C3D6B" stroke-width="1.2"/>
+          <text x="237" y="72" text-anchor="middle" font-size="10" fill="#1C3D6B" font-family="'JetBrains Mono',monospace">u(t)</text>
+
+          <rect x="295" y="50" width="120" height="36" rx="3" fill="#FBF4EC" stroke="#B8845A" stroke-width="1.2"/>
+          <text x="355" y="65" text-anchor="middle" font-size="8.5" fill="#B8845A" font-family="'JetBrains Mono',monospace">autograd.grad(u, t)</text>
+          <text x="355" y="78" text-anchor="middle" font-size="8" fill="#B8845A">create_graph=True</text>
+
+          <rect x="445" y="50" width="55" height="36" rx="3" fill="#EBF0F7" stroke="#1C3D6B" stroke-width="1.2"/>
+          <text x="472" y="68" text-anchor="middle" font-size="10" fill="#1C3D6B" font-family="'JetBrains Mono',monospace">u̇(t)</text>
+
+          <rect x="525" y="50" width="120" height="36" rx="3" fill="#FBF4EC" stroke="#B8845A" stroke-width="1.2"/>
+          <text x="585" y="65" text-anchor="middle" font-size="8.5" fill="#B8845A" font-family="'JetBrains Mono',monospace">autograd.grad(u̇, t)</text>
+          <text x="585" y="78" text-anchor="middle" font-size="8" fill="#B8845A">second pass</text>
+
+          <!-- Arrows between boxes -->
+          <defs>
+            <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#4A4540"/>
+            </marker>
+          </defs>
+          <line x1="70" y1="68" x2="98" y2="68" stroke="#4A4540" stroke-width="1.3" marker-end="url(#arr2)"/>
+          <line x1="180" y1="68" x2="208" y2="68" stroke="#4A4540" stroke-width="1.3" marker-end="url(#arr2)"/>
+          <line x1="265" y1="68" x2="293" y2="68" stroke="#4A4540" stroke-width="1.3" marker-end="url(#arr2)"/>
+          <line x1="415" y1="68" x2="443" y2="68" stroke="#4A4540" stroke-width="1.3" marker-end="url(#arr2)"/>
+          <line x1="500" y1="68" x2="523" y2="68" stroke="#4A4540" stroke-width="1.3" marker-end="url(#arr2)"/>
+
+          <!-- Residual label at bottom -->
+          <text x="340" y="118" text-anchor="middle" font-size="9.5" fill="#1C3D6B" font-family="'JetBrains Mono',monospace">Residual:  ü + 2ζω₀ u̇ + ω₀² u  =  0</text>
+          <!-- Arrow pointing down to residual label -->
+          <line x1="472" y1="86" x2="472" y2="100" stroke="#1C3D6B" stroke-width="1" stroke-dasharray="3,2"/>
+          <line x1="237" y1="86" x2="237" y2="100" stroke="#1C3D6B" stroke-width="1" stroke-dasharray="3,2"/>
+          <line x1="237" y1="100" x2="472" y2="100" stroke="#1C3D6B" stroke-width="1" stroke-dasharray="3,2"/>
+          <line x1="354" y1="100" x2="354" y2="112" stroke="#1C3D6B" stroke-width="1.3" marker-end="url(#arr2)"/>
+        </svg>
+        <div class="fig-caption">Figure 2. Nested autograd for second-order ODE. The first <code>autograd.grad</code> call (with <code>create_graph=True</code>) computes $\dot{u}$ while preserving the graph. The second call differentiates $\dot{u}$ to obtain $\ddot{u}$. Both are assembled into the ODE residual.</div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">Python · PyTorch</span>
+          <div class="code-dots"><span class="code-dot dot-r"></span><span class="code-dot dot-y"></span><span class="code-dot dot-g"></span></div>
+        </div>
+<pre class="code-body"><span class="kw">def</span> <span class="fn">residual</span>(model, t):
+    u = model(t)
+    <span class="cm"># First derivative: create_graph=True keeps the graph for the second pass</span>
+    u_t = torch.autograd.grad(
+        u, t,
+        torch.ones_like(u),
+        create_graph=<span class="kw">True</span>
+    )[<span class="nm">0</span>]
+    <span class="cm"># Second derivative: differentiate u_t w.r.t. t</span>
+    u_tt = torch.autograd.grad(
+        u_t, t,
+        torch.ones_like(u_t),
+        create_graph=<span class="kw">True</span>
+    )[<span class="nm">0</span>]
+    <span class="cm"># ODE residual: ü + 2ζω₀u̇ + ω₀²u = 0</span>
+    <span class="kw">return</span> u_tt + <span class="nm">2</span>*zeta*omega0*u_t + omega0**<span class="nm">2</span> * u</pre>
+      </div>
+
+      <p class="body-text">Compared to the first-order case, the only change is one additional <code>autograd.grad</code> call. The computational overhead is modest — PyTorch simply extends the reverse-mode pass one level deeper. This pattern generalizes immediately: $n$-th order ODEs require $n$ nested calls, each with <code>create_graph=True</code> on all but the last.</p>
+
+      <div class="callout insight">
+        <div class="callout-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="callout-body">
+          <strong>create_graph=True is not optional for intermediate derivatives</strong>
+          Omitting <code>create_graph=True</code> on the first call causes PyTorch to free the intermediate computation tape. The second <code>autograd.grad</code> call then raises a RuntimeError. The rule is: use <code>create_graph=True</code> on every derivative that will itself be differentiated.
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 4: Two Initial Conditions -->
+    <div id="section4">
+      <div class="section-label">04 — Two Initial Conditions</div>
+      <h2 class="section-h">Why One IC Is Not Enough</h2>
+
+      <p class="body-text">A second-order ODE requires <strong>two</strong> initial conditions to specify a unique solution. Geometrically: the phase space $(u, \dot{u})$ is two-dimensional, and specifying only $u(0) = u_0$ leaves the trajectory's direction — its initial velocity — entirely unconstrained. The result is infinitely many trajectories, all satisfying the equation and the single condition, but diverging immediately.</p>
+
+      <p class="body-text">The initial condition loss must therefore include both the initial displacement and the initial velocity:</p>
+      <div class="math-block">$$\mathcal{L}_{IC} = \left(u(0) - u_0\right)^2 + \left(\dot{u}(0) - v_0\right)^2$$</div>
+
+      <p class="body-text">Note that computing $\dot{u}(0)$ uses exactly the same <code>autograd.grad</code> call as the residual computation — the derivative of the network at a specific point. This means the IC loss on the velocity shares the same computational infrastructure as the physics residual. There is no special treatment required; the network's derivative is already a first-class differentiable expression.</p>
+
+      <h3 class="sub-h">The weighting problem</h3>
+
+      <p class="body-text">In practice, the physics loss and the IC loss have different natural scales. Early in training, the physics loss is large (the network knows nothing about the ODE) and dominates the gradient. The IC loss — which starts at a moderate value and should be satisfied quickly — gets insufficient gradient budget and is learned slowly.</p>
+
+      <p class="body-text">The notebook addresses this with a fixed weight of 20× on the IC loss:</p>
+      <div class="math-block">$$\mathcal{L}_{total} = \mathcal{L}_{physics} + \underbrace{20 \cdot \mathcal{L}_{IC}}_{\text{up-weighted}}$$</div>
+
+      <p class="body-text">This forces the optimizer to prioritize the initial conditions early, preventing the degenerate situation where the network satisfies the ODE over most of the domain but starts from the wrong state. The choice of 20× is problem-dependent and can be treated as a hyperparameter; adaptive weighting methods (Self-Adaptive PINNs, NTK-based balancing) provide more principled approaches for larger systems.</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">Python · PyTorch</span>
+          <div class="code-dots"><span class="code-dot dot-r"></span><span class="code-dot dot-y"></span><span class="code-dot dot-g"></span></div>
+        </div>
+<pre class="code-body"><span class="kw">def</span> <span class="fn">loss_fn</span>(model):
+    r = residual(model, t_col)
+    loss_phys = torch.mean(r**<span class="nm">2</span>)
+
+    <span class="cm"># Evaluate network and its first derivative at t=0</span>
+    u_pred = model(t0)
+    u_t0 = torch.autograd.grad(
+        u_pred, t0, torch.ones_like(u_pred), create_graph=<span class="kw">True</span>
+    )[<span class="nm">0</span>]
+
+    <span class="cm"># Both value and velocity must match initial conditions</span>
+    loss_ic = (u_pred - u0)**<span class="nm">2</span> + (u_t0 - v0)**<span class="nm">2</span>
+
+    <span class="cm"># Up-weight IC loss: 20x ensures it dominates early in training</span>
+    <span class="kw">return</span> loss_phys + <span class="nm">20.0</span> * loss_ic.squeeze()</pre>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 5: Hard Constraint Variant -->
+    <div id="section5">
+      <div class="section-label">05 — Hard Constraint Variant</div>
+      <h2 class="section-h">The Ansatz That Eliminates the IC Loss Entirely</h2>
+
+      <p class="body-text">The 20× weighting trick is a <em>soft constraint</em>: we encourage the network to satisfy the initial conditions, but we cannot guarantee it will. A more elegant approach — and one that provably satisfies both initial conditions by construction — is the <strong>hard-constraint ansatz</strong>.</p>
+
+      <p class="body-text">The idea: wrap the raw neural network $N(t)$ in a function that is guaranteed to satisfy $u(0) = u_0$ and $\dot{u}(0) = v_0$, regardless of $N$'s output. One such construction is:</p>
+
+      <div class="math-block">$$\hat{u}(t) = u_0 + v_0 t + t^2 \cdot N(t)$$</div>
+
+      <p class="body-text"><strong>Verification:</strong> At $t=0$: $\hat{u}(0) = u_0 + 0 + 0 = u_0$. Taking the time derivative: $\dot{\hat{u}} = v_0 + 2t \cdot N(t) + t^2 \cdot N'(t)$. At $t=0$: $\dot{\hat{u}}(0) = v_0 + 0 + 0 = v_0$. Both initial conditions are satisfied identically for any value of $N(0)$ and $N'(0)$.</p>
+
+      <p class="body-text">The training loss for the hard-constraint PINN contains <strong>only the physics residual</strong> — the IC terms are gone entirely, because the ansatz structure makes them structurally impossible to violate:</p>
+      <div class="math-block">$$\mathcal{L}_{total} = \mathcal{L}_{physics} = \frac{1}{N_c}\sum_{i=1}^{N_c} \mathcal{R}(t_i)^2$$</div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-lang">Python · PyTorch</span>
+          <div class="code-dots"><span class="code-dot dot-r"></span><span class="code-dot dot-y"></span><span class="code-dot dot-g"></span></div>
+        </div>
+<pre class="code-body"><span class="kw">class</span> <span class="tp">HardIC</span>(nn.Module):
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, layers, u0, v0):
+        <span class="kw">super</span>().__init__()
+        self.core = <span class="tp">MLP</span>(layers)
+        self.u0 = u0
+        self.v0 = v0
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, t):
+        <span class="cm"># Ansatz: u(t) = u0 + v0*t + t² * N(t)</span>
+        <span class="cm"># Satisfies u(0)=u0 and u'(0)=v0 for any N</span>
+        <span class="kw">return</span> self.u0 + self.v0 * t + (t**<span class="nm">2</span>) * self.core(t)
+
+<span class="cm"># Training: only physics residual, no IC terms needed</span>
+<span class="kw">for</span> ep <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">6000</span>):
+    opt2.zero_grad()
+    r = residual(model2, t_col)   <span class="cm"># purely the ODE residual</span>
+    loss = torch.mean(r**<span class="nm">2</span>)
+    loss.backward()
+    opt2.step()</pre>
+      </div>
+
+      <p class="body-text">The hard-constraint model consistently achieves lower relative L2 error in fewer epochs. By removing the tension between satisfying the physics and the initial conditions as separate loss terms, the optimizer can devote its full gradient budget to minimizing the ODE residual across the domain. The notebook reports hard-constraint relative L2 error approximately 2–4× lower than the soft-constraint equivalent at the same epoch count.</p>
+
+      <!-- Visual 3: Hard vs Soft IC Bar Chart -->
+      <div class="fig-wrap">
+        <svg width="420" height="250" viewBox="0 0 420 250" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;font-family:'Inter',sans-serif;">
+          <rect width="420" height="250" fill="#F8F6F2" rx="4"/>
+          <!-- Y axis -->
+          <line x1="70" y1="20" x2="70" y2="185" stroke="#DEDAD3" stroke-width="1.5"/>
+          <line x1="70" y1="185" x2="380" y2="185" stroke="#DEDAD3" stroke-width="1.5"/>
+          <!-- Y labels -->
+          <text x="60" y="25" text-anchor="end" font-size="9" fill="#8C857E" font-family="'JetBrains Mono',monospace">10⁻¹</text>
+          <text x="60" y="75" text-anchor="end" font-size="9" fill="#8C857E" font-family="'JetBrains Mono',monospace">10⁻²</text>
+          <text x="60" y="125" text-anchor="end" font-size="9" fill="#8C857E" font-family="'JetBrains Mono',monospace">10⁻³</text>
+          <text x="60" y="175" text-anchor="end" font-size="9" fill="#8C857E" font-family="'JetBrains Mono',monospace">10⁻⁴</text>
+          <!-- Grid lines -->
+          <line x1="70" y1="25" x2="380" y2="25" stroke="#DEDAD3" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <line x1="70" y1="75" x2="380" y2="75" stroke="#DEDAD3" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <line x1="70" y1="125" x2="380" y2="125" stroke="#DEDAD3" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <line x1="70" y1="175" x2="380" y2="175" stroke="#DEDAD3" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <!-- Soft IC bar: L2 ~5e-3  => log10(5e-3) = -2.3 => y = 25 + (2.3/3)*150 = 25+115 = 140 -->
+          <rect x="120" y="90" width="80" height="95" fill="#B8845A" rx="2" opacity="0.85"/>
+          <text x="160" y="83" text-anchor="middle" font-size="9.5" fill="#B8845A" font-weight="700">~5×10⁻³</text>
+          <!-- Hard IC bar: L2 ~8e-4 => log10(8e-4) = -3.1 => y = 25 + (3.1/3)*150 = 25+155 = 155, height = 30 -->
+          <rect x="260" y="143" width="80" height="42" fill="#1C3D6B" rx="2" opacity="0.85"/>
+          <text x="300" y="136" text-anchor="middle" font-size="9.5" fill="#1C3D6B" font-weight="700">~8×10⁻⁴</text>
+          <!-- X labels -->
+          <text x="160" y="202" text-anchor="middle" font-size="11" fill="#4A4540">Soft IC</text>
+          <text x="160" y="215" text-anchor="middle" font-size="9" fill="#8C857E">(weighted ×20)</text>
+          <text x="300" y="202" text-anchor="middle" font-size="11" fill="#4A4540">Hard IC</text>
+          <text x="300" y="215" text-anchor="middle" font-size="9" fill="#8C857E">(ansatz)</text>
+          <!-- Y axis title -->
+          <text x="14" y="115" text-anchor="middle" font-size="10" fill="#4A4540" transform="rotate(-90 14 115)">Relative L2 Error</text>
+          <!-- Title -->
+          <text x="225" y="235" text-anchor="middle" font-size="9.5" fill="#8C857E">Relative L2 error after 6,000 epochs — lower is better</text>
+        </svg>
+        <div class="fig-caption">Figure 3. Hard-constraint ansatz vs soft-constraint (×20 IC weighting) after equal training. The ansatz eliminates the IC loss term, freeing the optimizer to focus entirely on the physics residual and achieving approximately one additional decade of accuracy.</div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 6: Spectral Bias -->
+    <div id="section6">
+      <div class="section-label">06 — Spectral Bias</div>
+      <h2 class="section-h">Why High-Frequency Oscillations Break PINNs</h2>
+
+      <p class="body-text">The most important conceptual lesson of this notebook is not about nested derivatives or hard constraints — it is about a fundamental limitation of smooth neural networks called <strong>spectral bias</strong>.</p>
+
+      <p class="body-text">Rahaman et al. (2019) showed empirically and theoretically that neural networks with smooth activation functions (Tanh, sigmoid, GELU) preferentially learn <strong>low-frequency components of the target function first</strong>. The network explores its parameter space in a direction that minimizes the loss from large-scale, slowly-varying features before it is capable of representing rapid oscillations.</p>
+
+      <p class="body-text">For PINNs, this creates a concrete failure mode. Consider two versions of the damped oscillator with different natural frequencies:</p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Natural Frequency $\omega_0$</th>
+            <th>Oscillations in $[0, 6]$</th>
+            <th>PINN Convergence</th>
+            <th>Relative L2 Error</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>$\omega_0 = 1.0$</td>
+            <td>~1 cycle</td>
+            <td>Good — converges in ~3,000 epochs</td>
+            <td>$\sim 10^{-3}$</td>
+          </tr>
+          <tr>
+            <td>$\omega_0 = 3.0$ (notebook)</td>
+            <td>~3 cycles</td>
+            <td>Moderate — converges in ~8,000 epochs</td>
+            <td>$\sim 5\times10^{-3}$</td>
+          </tr>
+          <tr>
+            <td>$\omega_0 = 10.0$</td>
+            <td>~10 cycles</td>
+            <td>Poor — often fails to converge</td>
+            <td>$&gt;10^{-1}$</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="body-text">The failure mode at $\omega_0 = 10$ is not a matter of insufficient training time. The network genuinely cannot represent rapid oscillations because the smooth activation functions create a spectral bottleneck: a Tanh layer with $n$ neurons cannot efficiently represent functions with spectral content much above $n/4$ cycles per unit length. For a 64-neuron layer, anything above ~16 cycles per unit domain width is effectively invisible to the network.</p>
+
+      <h3 class="sub-h">Physical interpretation</h3>
+      <p class="body-text">The spectral bias is the neural network analog of aliasing in digital signal processing. Just as a sampled signal cannot represent frequencies above the Nyquist limit without aliasing artifacts, a finite-width smooth network cannot represent frequencies above an implicit bandwidth limit without systematic errors. The crucial difference is that in PINNs, the "bandwidth limit" is not set by a sampling rate but by the network architecture and activation function choice — and it is not obvious or easy to compute a priori.</p>
+
+      <h3 class="sub-h">Mitigations</h3>
+      <p class="body-text">Active research is addressing spectral bias through multiple strategies:</p>
+
+      <ul style="margin-bottom:1.25rem;padding-left:1.5rem;color:var(--ink-2);font-size:.975rem;line-height:1.8;">
+        <li><strong>Fourier feature embeddings:</strong> Transform the input $t \mapsto [\cos(B t), \sin(B t)]$ for random or learnable frequencies $B$. This shifts the network's natural frequency response upward.</li>
+        <li><strong>Multi-scale architectures:</strong> Run parallel network branches at different frequency scales and combine outputs.</li>
+        <li><strong>Curriculum training / causal learning:</strong> Wang, Sankaran &amp; Perdikaris (2022) showed that training the PINN to satisfy causality — learning the solution from $t=0$ forward in time — significantly reduces spectral artifacts at high frequencies.</li>
+        <li><strong>Adaptive activation functions:</strong> Replace fixed Tanh with learnable activations $\tanh(a \cdot x)$ where $a$ is a trainable parameter. The network can tune its own frequency response.</li>
+        <li><strong>Neural Operators (FNO, DeepONet):</strong> For high-frequency or multi-scale problems, operator learning architectures are often superior to vanilla PINNs.</li>
+      </ul>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 7: Results and Comparison -->
+    <div id="section7">
+      <div class="section-label">07 — Results</div>
+      <h2 class="section-h">Accuracy and What Changed from Article 1</h2>
+
+      <p class="body-text">Training the soft-constraint PINN for 8,000 epochs with Adam at $\eta = 2\times10^{-3}$, the model converges to a relative L2 error of approximately $5\times10^{-3}$ for $\omega_0 = 3.0$, $\zeta = 0.20$. The hard-constraint variant requires only 6,000 epochs to achieve a lower error of approximately $8\times10^{-4}$.</p>
+
+      <p class="body-text">The table below summarizes how the PINN formulation evolves from the first-order ODE case to the second-order oscillator, and anticipates the extensions needed for PDE problems in later articles:</p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Aspect</th>
+            <th>Article 1: First-Order ODE</th>
+            <th>Article 2: Second-Order ODE</th>
+            <th>Article 3+: PDEs</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Network inputs</td>
+            <td>$x \in \mathbb{R}$</td>
+            <td>$t \in \mathbb{R}$</td>
+            <td>$(x, t) \in \mathbb{R}^2$</td>
+          </tr>
+          <tr>
+            <td>Autograd calls for residual</td>
+            <td>1 (first derivative)</td>
+            <td>2 (nested, first &amp; second)</td>
+            <td>2+ (mixed partials)</td>
+          </tr>
+          <tr>
+            <td>Number of initial conditions</td>
+            <td>1 ($y(0) = 1$)</td>
+            <td>2 ($u(0) = u_0$, $\dot{u}(0) = v_0$)</td>
+            <td>1 IC + boundary conditions</td>
+          </tr>
+          <tr>
+            <td>Collocation point shape</td>
+            <td>1D line $[0, 5]$</td>
+            <td>1D line $[0, T]$</td>
+            <td>2D grid $(x, t) \in [0,1]\times[0,T]$</td>
+          </tr>
+          <tr>
+            <td>Hard constraint ansatz</td>
+            <td>$u_0 + t \cdot N(t)$</td>
+            <td>$u_0 + v_0 t + t^2 N(t)$</td>
+            <td>Domain-dependent construction</td>
+          </tr>
+          <tr>
+            <td>Key failure mode</td>
+            <td>Too few collocation points</td>
+            <td>Spectral bias at high $\omega_0$</td>
+            <td>Spectral bias + stiffness + coupling</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout success">
+        <div class="callout-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="callout-body">
+          <strong>Notebook results summary</strong>
+          Soft IC (×20 weight): rel. L2 error $\approx 5\times10^{-3}$ after 8,000 epochs. Hard IC ansatz: rel. L2 error $\approx 8\times10^{-4}$ after 6,000 epochs. Both use the architecture MLP [1, 64, 64, 64, 1] with Tanh activations and Adam optimizer.
+        </div>
+      </div>
+
+      <p class="body-text">The notebook is available at <a href="https://github.com/alishahmohammadi22/physics-ai-pinns" target="_blank" rel="noopener">github.com/alishahmohammadi22/physics-ai-pinns</a>, file <code>01_Beginner/02_second_order_odes.ipynb</code>. It is self-contained and runnable on CPU in under 5 minutes.</p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 8: Conclusion -->
+    <div id="section8">
+      <div class="section-label">08 — Conclusion</div>
+      <h2 class="section-h">Three Lessons for the Rest of the Series</h2>
+
+      <p class="body-text">The damped harmonic oscillator introduces three concepts that appear repeatedly in every subsequent article in this series:</p>
+
+      <p class="body-text"><strong>Nested autograd is the natural generalization.</strong> Going from first- to second-order dynamics requires exactly one additional <code>autograd.grad</code> call with <code>create_graph=True</code>. This pattern extends to any order and to mixed partial derivatives in PDEs. The engineering implication is that PINNs can natively handle Navier-Stokes, heat equations, and elasticity equations without any change to the fundamental training architecture.</p>
+
+      <p class="body-text"><strong>Hard constraints are better than soft constraints.</strong> Whenever the initial or boundary conditions can be encoded directly into the network's output layer through an ansatz, doing so eliminates loss terms, reduces optimizer conflict, and accelerates convergence. This is not always possible — complex geometries resist simple ansatz constructions — but when it is available, it should be used.</p>
+
+      <p class="body-text"><strong>Spectral bias is the governing challenge.</strong> For smooth-activation networks, the effective resolution in frequency space is bounded by the network width. Any problem with high-frequency dynamics — fast oscillations, sharp fronts, thin boundary layers — will expose this limitation. The rest of this series is, in large part, a catalog of techniques developed to overcome it.</p>
+
+      <div class="callout insight">
+        <div class="callout-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <div class="callout-body">
+          <strong>Next in the series</strong>
+          Article 3 extends the framework to its first genuine PDE: the 1D heat equation $\partial T / \partial t = \alpha\, \partial^2 T / \partial x^2$. The input becomes two-dimensional $(x, t)$, collocation points become a 2D scatter over space-time, and boundary conditions appear at both spatial endpoints.
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- References -->
+    <div id="references">
+      <div class="section-label">References</div>
+      <h2 class="section-h">Further Reading</h2>
+
+      <div class="ref-list">
+        <div class="ref-item">
+          <span class="ref-num">[1]</span>
+          <strong>Raissi, M., Perdikaris, P., &amp; Karniadakis, G. E.</strong> (2019). Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. <em>Journal of Computational Physics</em>, 378, 686–707. <a href="https://doi.org/10.1016/j.jcp.2018.10.045" target="_blank" rel="noopener">DOI: 10.1016/j.jcp.2018.10.045</a> — The foundational paper establishing the PINN framework and demonstrating forward and inverse problems.
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[2]</span>
+          <strong>Wang, S., Sankaran, S., &amp; Perdikaris, P.</strong> (2022). Respecting causality is all you need for training physics-informed neural networks. <a href="https://arxiv.org/abs/2203.07404" target="_blank" rel="noopener">arXiv: 2203.07404</a> — Demonstrates that temporal causality violations are a root cause of PINN failure on oscillatory and advection-dominated problems; proposes a causal training algorithm that dramatically improves convergence.
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[3]</span>
+          <strong>Rahaman, N., Baratin, A., Arpit, D., Draxler, F., Lin, M., Hamprecht, F. A., Bengio, Y., &amp; Courville, A.</strong> (2019). On the spectral bias of neural networks. <em>Proceedings of the 36th International Conference on Machine Learning (ICML 2019)</em>. <a href="https://arxiv.org/abs/1806.08734" target="_blank" rel="noopener">arXiv: 1806.08734</a> — Establishes the theoretical basis for spectral bias: smooth networks learn low frequencies first, with convergence rate decreasing with frequency. Foundational for understanding PINN limitations.
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[4]</span>
+          <strong>Wang, S., Teng, Y., &amp; Perdikaris, P.</strong> (2021). Understanding and mitigating gradient flow pathologies in physics-informed neural networks. <em>SIAM Journal on Scientific Computing</em>, 43(5), A3055–A3081. <a href="https://doi.org/10.1137/20M1318043" target="_blank" rel="noopener">DOI: 10.1137/20M1318043</a> — Analyzes gradient imbalance between physics and IC/BC loss terms using neural tangent kernel theory; motivates adaptive loss weighting.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /.article-body -->
+</div><!-- /.article-page -->
+
+<footer>
+  <span class="footer-copy">&copy; 2026 Ali Shahmohammadi, Ph.D.</span>
+  <div class="footer-links">
+    <a href="../index.html">Portfolio</a>
+    <a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+</footer>
+
+</body>
+</html>

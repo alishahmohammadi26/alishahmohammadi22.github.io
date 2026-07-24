@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nonlinear PDEs with PINNs: Burgers Equation and Reaction Kinetics — Ali Shahmohammadi</title>
+  <meta name="description" content="Shock formation, viscous regularization, and coupled ODE systems for A→B→C reactions — where physics-informed training earns its keep.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#F8F6F2;--bg-alt:#F1EEE9;--ink:#111010;--ink-2:#4A4540;--ink-3:#8C857E;--navy:#1C3D6B;--navy-lt:#EBF0F7;--sienna:#B8845A;--sienna-lt:#FBF4EC;--purple:#5B4E8A;--purple-lt:#F2EEF9;--green:#2D7A4F;--green-lt:#EBF7F1;--green-bdr:#BEE5D3;--border:#DEDAD3;--dark:#111010;--accent:#2563EB;--accent-lt:#EFF6FF;--accent-mid:#BFDBFE;--red:#DC2626;--red-lt:#FEF2F2;--amber:#D97706;--amber-lt:#FFFBEB;--amber-bdr:#FDE68A}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--ink);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:18px;line-height:1.65;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent);text-decoration:none}a:hover{opacity:.75}
+    code,pre{font-family:'JetBrains Mono','Fira Code',monospace}
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between;background:rgba(248,246,242,.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:var(--ink)}
+    .nav-logo em{font-style:normal;color:var(--sienna)}
+    .nav-links{display:flex;align-items:center;gap:.2rem}
+    .nav-links a{font-size:.82rem;font-weight:500;color:var(--ink-3);padding:.42rem .8rem;border-radius:4px;transition:color .15s,background .15s}
+    .nav-links a:hover{color:var(--ink);background:var(--bg-alt)}
+    .article-page{padding-top:60px}
+    .article-hero{background:var(--dark);padding:5rem 3rem 4rem}
+    .article-hero-inner{max-width:820px;margin:0 auto}
+    .hero-series{font-family:'JetBrains Mono',monospace;font-size:.67rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sienna);margin-bottom:1rem;display:flex;align-items:center;gap:.8rem}
+    .hero-series::before{content:'';width:28px;height:1px;background:var(--sienna)}
+    .article-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,4.2rem);font-weight:700;letter-spacing:-.02em;line-height:.97;color:#fff;margin-bottom:1.25rem}
+    .article-title em{font-style:italic;font-weight:400;color:rgba(255,255,255,.4)}
+    .article-sub{font-size:1.08rem;color:rgba(255,255,255,.45);margin-bottom:2rem;line-height:1.75;max-width:640px}
+    .article-meta{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2rem}
+    .meta-pill{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:rgba(255,255,255,.38);border:1px solid rgba(255,255,255,.1);padding:.25rem .65rem;border-radius:2px}
+    .meta-pill.highlight{color:var(--sienna);border-color:rgba(184,132,90,.35)}
+    .article-body{max-width:820px;margin:0 auto;padding:4rem 3rem}
+    @media(max-width:640px){.article-hero{padding:3.5rem 1.5rem 3rem}.article-body{padding:3rem 1.5rem}}
+    .section-label{font-family:'JetBrains Mono',monospace;font-size:.67rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1rem}
+    h2.section-h{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;letter-spacing:-.02em;line-height:1.05;color:var(--ink);margin-bottom:.75rem}
+    h3.sub-h{font-size:1.12rem;font-weight:700;color:var(--ink);margin-bottom:.5rem;margin-top:2rem}
+    .body-text{font-size:1.05rem;color:var(--ink-2);line-height:1.8;margin-bottom:1.25rem}
+    .math-block{background:var(--bg-alt);border:1px solid var(--border);border-left:3px solid var(--navy);border-radius:0 4px 4px 0;padding:1.1rem 1.5rem;margin:1.5rem 0;font-family:'JetBrains Mono',monospace;font-size:.88rem;color:var(--navy);overflow-x:auto;line-height:1.7}
+    .math-inline{font-family:'JetBrains Mono',monospace;font-size:.88em;color:var(--navy);background:var(--navy-lt);padding:.08em .3em;border-radius:2px}
+    .code-block{background:#1C1C1E;border-radius:6px;overflow:hidden;margin:1.5rem 0}
+    .code-header{display:flex;align-items:center;justify-content:space-between;padding:.55rem 1rem;background:#2A2A2D;border-bottom:1px solid rgba(255,255,255,.07)}
+    .code-lang{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:rgba(255,255,255,.35);letter-spacing:.1em;text-transform:uppercase}
+    .code-dots{display:flex;gap:5px}
+    .code-dot{width:10px;height:10px;border-radius:50%}
+    .dot-r{background:#FF5F57}.dot-y{background:#FEBC2E}.dot-g{background:#28C840}
+    pre.code-body{padding:1.25rem 1.5rem;overflow-x:auto;font-size:.88rem;line-height:1.75;color:#D1D5DB}
+    .kw{color:#C084FC}.st{color:#86EFAC}.cm{color:#6B7280;font-style:italic}.fn{color:#93C5FD}.nm{color:#FCA5A5}.tp{color:#67E8F9}
+    .callout{border-radius:4px;padding:1.1rem 1.4rem;margin:1.5rem 0;display:flex;gap:.9rem}
+    .callout-icon{flex-shrink:0;margin-top:.1rem}
+    .callout-body{font-size:.9rem;line-height:1.7}
+    .callout-body strong{display:block;font-weight:700;margin-bottom:.2rem}
+    .callout.insight{background:var(--navy-lt);border:1px solid rgba(28,61,107,.2)}
+    .callout.insight .callout-icon{color:var(--navy)}
+    .callout.insight .callout-body{color:var(--navy)}
+    .callout.warning{background:var(--amber-lt);border:1px solid var(--amber-bdr)}
+    .callout.warning .callout-icon{color:var(--amber)}
+    .callout.warning .callout-body{color:#92400E}
+    .callout.success{background:var(--green-lt);border:1px solid var(--green-bdr)}
+    .callout.success .callout-icon{color:var(--green)}
+    .callout.success .callout-body{color:#14532D}
+    .data-table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.875rem}
+    .data-table th{font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding:.65rem 1rem;border-bottom:2px solid var(--border);text-align:left}
+    .data-table td{padding:.65rem 1rem;border-bottom:1px solid var(--border);color:var(--ink-2);vertical-align:top}
+    .data-table tr:last-child td{border-bottom:none}
+    .data-table tr:hover td{background:var(--bg-alt)}
+    .fig-wrap{margin:2rem 0;text-align:center}
+    .fig-caption{font-size:.78rem;color:var(--ink-3);margin-top:.6rem;font-style:italic}
+    .series-nav{background:var(--bg-alt);border:1px solid var(--border);border-radius:4px;padding:1.5rem 1.75rem;margin:2.5rem 0}
+    .series-nav-label{font-family:'JetBrains Mono',monospace;font-size:.63rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1rem}
+    .series-nav-list{display:flex;flex-direction:column;gap:.4rem}
+    .series-nav-item{display:flex;align-items:center;gap:.65rem;font-size:.95rem;color:var(--ink-2)}
+    .series-nav-item.current{color:var(--navy);font-weight:600}
+    .series-nav-item a{color:var(--ink-2)}
+    .series-nav-item a:hover{color:var(--navy)}
+    .ref-list{display:flex;flex-direction:column;gap:.75rem;margin-top:1rem}
+    .ref-item{font-size:.92rem;color:var(--ink-2);line-height:1.65;padding-left:2rem;position:relative}
+    .ref-num{position:absolute;left:0;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--ink-3);font-weight:700}
+    .ref-item a{color:var(--accent)}
+    .divider{border:none;border-top:1px solid var(--border);margin:3rem 0}
+    footer{background:#0C0C0C;border-top:1px solid rgba(255,255,255,.05);padding:2rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem}
+    .footer-copy{font-size:.77rem;color:rgba(255,255,255,.22)}
+    .footer-links{display:flex;gap:1.5rem}
+    .footer-links a{font-size:.77rem;color:rgba(255,255,255,.27);transition:color .15s}
+    .footer-links a:hover{color:rgba(255,255,255,.7)}
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">Ali Shahmohammadi <em>Ph.D.</em></a>
+  <div class="nav-links">
+    <a href="../index.html#career">Career</a>
+    <a href="../index.html#writing">Writing</a>
+    <a href="../index.html#contact">Contact</a>
+    <a href="../resume.html">Resume</a>
+  </div>
+</nav>
+
+<div class="article-page">
+
+  <!-- Hero -->
+  <div class="article-hero">
+    <div class="article-hero-inner">
+      <div class="hero-series">Physics AI &mdash; PINNs Series &nbsp;&middot;&nbsp; Article 4 of 8</div>
+      <h1 class="article-title">Nonlinear PDEs with PINNs:<br><em>Burgers &amp; Reaction Kinetics</em></h1>
+      <p class="article-sub">Shock formation, viscous regularization, and coupled ODE systems for A&rarr;B&rarr;C reactions &mdash; where physics-informed training earns its keep.</p>
+      <div class="article-meta">
+        <span class="meta-pill highlight">Dec 2025</span>
+        <span class="meta-pill">20 min read</span>
+        <span class="meta-pill">Scientific ML &middot; Nonlinear PDEs</span>
+        <span class="meta-pill">Intermediate</span>
+        <span class="meta-pill">notebooks: 04_burgers · 05_reaction_kinetics</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="article-body">
+
+    <!-- Series nav -->
+    <div class="series-nav">
+      <div class="series-nav-label">Physics AI / PINNs &mdash; Series Navigation</div>
+      <div class="series-nav-list">
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">01</span><a href="pinn-introduction.html">Introduction to PINNs</a><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3)">Sep 2025</span></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">02</span><a href="pinn-odes-second-order.html">Second-Order ODEs</a><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3)">Oct 2025</span></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">03</span><a href="pinn-heat-equation.html">Heat Equation &mdash; 1D PDE</a><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3)">Nov 2025</span></div>
+        <div class="series-nav-item current"><span style="font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">04</span>Burgers &amp; Reaction PDEs<span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--navy)">Dec 2025</span></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">05</span><a href="pinn-inverse-problems.html">Inverse Problems &amp; Parameter Estimation</a><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3)">Jan 2026</span></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">06</span><a href="pinn-adaptive-sampling.html">Adaptive Sampling &amp; Training Strategies</a><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3)">Feb 2026</span></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">07</span><a href="pinn-deeponet.html">DeepONet &mdash; Learning Operators</a><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3)">Mar 2026</span></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">08</span><a href="pinn-physics-informed-deeponet.html">Physics-Informed DeepONet &amp; Advanced Architectures</a><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3)">Apr 2026</span></div>
+      </div>
+    </div>
+
+    <!-- Section 1: The nonlinearity challenge -->
+    <div style="margin-top:3rem">
+      <div class="section-label">01 &mdash; The Nonlinearity Challenge</div>
+      <h2 class="section-h">Why Nonlinear PDEs Are Qualitatively Harder</h2>
+      <p class="body-text">The heat equation from Article 3 is linear: if $u_1$ and $u_2$ are solutions, so is $\alpha u_1 + \beta u_2$. Linearity is what makes Fourier analysis work. You decompose the initial condition into eigenfunctions of the spatial operator, each mode evolves independently, and you superpose the results. The analytical machinery is beautiful and exact.</p>
+      <p class="body-text">Real engineering systems are relentlessly nonlinear. In fluid dynamics, fluid carries its own momentum &mdash; the velocity field advects itself, producing the nonlinear convective term $(\mathbf{u}\cdot\nabla)\mathbf{u}$ in the Navier-Stokes equations. In chemical kinetics, rate laws are products of concentrations: $r = k[A][B]$ for a bimolecular reaction, or the hyperbolic Michaelis-Menten form $r = V_\mathrm{max}[S]/(K_m + [S])$ for enzyme kinetics. In combustion, temperature-dependent Arrhenius rate constants introduce exponential nonlinearity.</p>
+      <p class="body-text">Classical numerical methods handle nonlinearity through linearisation (Newton iterations at each time step) or explicit time-stepping with severe stability constraints. Finite element methods can struggle with convection-dominated problems (the Péclet number problem) and require upwinding schemes or stabilisation terms. The PINN approach sidesteps mesh generation entirely and encodes the nonlinear residual directly, though it introduces its own set of challenges around spectral bias and loss landscape geometry that we examine in this article.</p>
+
+      <div class="callout insight">
+        <div class="callout-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="callout-body">
+          <strong>Spectral bias and sharp gradients</strong>
+          Neural networks trained with gradient descent preferentially learn low-frequency components of a target function before high-frequency ones &mdash; a phenomenon called spectral bias or frequency principle (Rahaman et al., 2019). For PDEs with sharp features like shocks, this bias means the network resists capturing the steep gradient, and training can stall in a shallow-gradient local minimum. Careful initialisation, adaptive sampling, and two-stage optimisation are the main remedies.
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 2: Burgers equation -->
+    <div>
+      <div class="section-label">02 &mdash; Burgers' Equation</div>
+      <h2 class="section-h">Burgers' Equation: 1D Navier-Stokes Without Pressure</h2>
+      <p class="body-text">Burgers' equation is the benchmark nonlinear PDE for PINNs. It is the headline example in Raissi, Perdikaris &amp; Karniadakis (2019) and has been reproduced and extended in hundreds of subsequent papers. Its importance stems from two properties: it is simple enough to analyse rigorously, and it produces a near-shock at low viscosity that genuinely tests the network's ability to represent steep gradients.</p>
+
+      <h3 class="sub-h">The equation</h3>
+      <div class="math-block">
+        $$\frac{\partial u}{\partial t} + u\,\frac{\partial u}{\partial x} = \nu\,\frac{\partial^2 u}{\partial x^2}$$
+      </div>
+      <p class="body-text">This is the 1D Navier-Stokes momentum equation with the pressure gradient suppressed and the velocity field called $u$. The left side is the material derivative $Du/Dt = \partial u/\partial t + u\,\partial u/\partial x$ &mdash; the rate of change of velocity following a fluid parcel. The right side is viscous dissipation. When $\nu \to 0$ the equation becomes the inviscid Burgers equation, which develops a genuine discontinuity (shock) in finite time from smooth initial data.</p>
+
+      <h3 class="sub-h">Standard test case (Raissi et al. 2019)</h3>
+      <div class="math-block">
+        $$x \in [-1,1], \quad t \in [0,1], \quad \nu = \frac{0.01}{\pi}$$
+        $$u(x,0) = -\sin(\pi x), \qquad u(-1,t) = u(1,t) = 0$$
+      </div>
+      <p class="body-text">The initial condition $u(x,0) = -\sin(\pi x)$ is negative for $x > 0$ and positive for $x < 0$. This means fluid is moving toward $x = 0$ from both sides, creating a compressive wave that steepens into a near-shock around $t \approx 0.4$. The viscosity $\nu = 0.01/\pi \approx 0.00318$ is small enough that the layer is very thin but just sufficient to prevent an actual discontinuity, yielding a steep but smooth gradient that the network must resolve.</p>
+
+      <h3 class="sub-h">The PDE residual with nonlinear term</h3>
+      <p class="body-text">The residual that must be driven to zero at every interior collocation point is:</p>
+      <div class="math-block">
+        $$\mathcal{R}(x,t) = \underbrace{\frac{\partial u}{\partial t}}_{\text{autograd}} + \underbrace{u \cdot \frac{\partial u}{\partial x}}_{\text{nonlinear}} - \underbrace{\nu \cdot \frac{\partial^2 u}{\partial x^2}}_{\text{viscous}}$$
+      </div>
+      <p class="body-text">The critical observation is that the nonlinear term $u\,\partial u/\partial x$ involves the product of the network output $u$ (from a forward pass) with the spatial gradient $\partial u/\partial x$ (from autograd). This product is automatically handled by PyTorch's autograd engine &mdash; no special treatment needed. The residual computation reads exactly like the mathematical formula:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span class="code-dot dot-r"></span><span class="code-dot dot-y"></span><span class="code-dot dot-g"></span></div>
+          <span class="code-lang">Python &mdash; Burgers residual with nonlinear term</span>
+        </div>
+        <pre class="code-body">nu = <span class="nm">0.01</span> / np.pi   <span class="cm"># ≈ 0.00318  (small viscosity → near-shock)</span>
+
+<span class="kw">def</span> <span class="fn">residual</span>(model, x, t):
+    u   = <span class="fn">model</span>(x, t)
+    u_t = torch.autograd.<span class="fn">grad</span>(u, t,  torch.<span class="fn">ones_like</span>(u), create_graph=<span class="kw">True</span>)[<span class="nm">0</span>]
+    u_x = torch.autograd.<span class="fn">grad</span>(u, x,  torch.<span class="fn">ones_like</span>(u), create_graph=<span class="kw">True</span>)[<span class="nm">0</span>]
+    u_xx= torch.autograd.<span class="fn">grad</span>(u_x, x, torch.<span class="fn">ones_like</span>(u_x), create_graph=<span class="kw">True</span>)[<span class="nm">0</span>]
+    <span class="cm"># The nonlinear term u*u_x is computed elementwise — autograd handles it</span>
+    <span class="kw">return</span> u_t + u * u_x - nu * u_xx
+
+<span class="kw">def</span> <span class="fn">loss_fn</span>():
+    r   = <span class="fn">residual</span>(model, x_f, t_f)
+    L_f = torch.<span class="fn">mean</span>(r**<span class="nm">2</span>)
+    L_0 = torch.<span class="fn">mean</span>((<span class="fn">model</span>(x_0, t_0) - u_0)**<span class="nm">2</span>)   <span class="cm"># IC: -sin(πx)</span>
+    L_b = (torch.<span class="fn">mean</span>(<span class="fn">model</span>(x_bL, t_b)**<span class="nm">2</span>) +
+           torch.<span class="fn">mean</span>(<span class="fn">model</span>(x_bR, t_b)**<span class="nm">2</span>))          <span class="cm"># BC: u=0 at x=±1</span>
+    <span class="kw">return</span> L_f + L_0 + L_b</pre>
+      </div>
+
+      <!-- Visual 1: Burgers Shock Formation -->
+      <div class="fig-wrap">
+        <svg width="480" height="300" viewBox="0 0 480 300" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;border:1px solid var(--border);border-radius:4px;background:var(--bg-alt)">
+          <defs>
+            <clipPath id="burgersclip"><rect x="55" y="20" width="390" height="220"/></clipPath>
+          </defs>
+          <!-- Grid -->
+          <g stroke="#DEDAD3" stroke-width="1">
+            <line x1="55" y1="20" x2="55" y2="240"/>
+            <line x1="250" y1="20" x2="250" y2="240"/>
+            <line x1="445" y1="20" x2="445" y2="240"/>
+            <line x1="55" y1="130" x2="445" y2="130"/>
+            <line x1="55" y1="240" x2="445" y2="240"/>
+            <line x1="55" y1="20" x2="445" y2="20"/>
+            <line x1="152.5" y1="20" x2="152.5" y2="240" stroke-dasharray="4,4"/>
+            <line x1="347.5" y1="20" x2="347.5" y2="240" stroke-dasharray="4,4"/>
+            <line x1="55" y1="75" x2="445" y2="75" stroke-dasharray="4,4"/>
+            <line x1="55" y1="185" x2="445" y2="185" stroke-dasharray="4,4"/>
+          </g>
+
+          <!-- Axis labels -->
+          <text x="245" y="270" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#4A4540">x</text>
+          <text x="14" y="132" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#4A4540" transform="rotate(-90,14,132)">u(x,t)</text>
+          <text x="55" y="258" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E">−1</text>
+          <text x="250" y="258" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E">0</text>
+          <text x="445" y="258" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E">+1</text>
+          <text x="48" y="244" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E">−1</text>
+          <text x="48" y="134" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E">0</text>
+          <text x="48" y="24" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E">+1</text>
+
+          <!-- t=0: u = -sin(πx), smooth sinusoid  -->
+          <!-- y maps: u=-1→y=240, u=0→y=130, u=1→y=20.  y = 130 - 110*u -->
+          <!-- x maps: x=-1→svgx=55, x=1→svgx=445. svgx = 250 + 195*x -->
+          <!-- -sin(πx): at x=-1→0, x=-0.5→1, x=0→0, x=0.5→-1, x=1→0 -->
+          <polyline clip-path="url(#burgersclip)" fill="none" stroke="#1C3D6B" stroke-width="2.5"
+            points="55,130 74,93 98,38 131,22 175,130 219,238 250,130 281,22 313,38 366,93 390,130 418,130 445,130"/>
+
+          <!-- t=0.5: steepening, centre shifting negative -->
+          <polyline clip-path="url(#burgersclip)" fill="none" stroke="#4A7FB5" stroke-width="2.2"
+            points="55,130 85,105 120,65 160,42 195,68 220,102 240,120 255,138 270,160 295,195 330,220 365,228 410,130 445,130"/>
+
+          <!-- t=1.0: near-shock, very steep at x≈0 -->
+          <polyline clip-path="url(#burgersclip)" fill="none" stroke="#8EB8D8" stroke-width="2"
+            points="55,130 90,118 135,95 170,68 200,44 220,30 238,25 244,28 248,55 250,130 252,205 256,232 270,236 300,232 340,225 380,205 420,175 445,130"/>
+
+          <!-- Legend -->
+          <rect x="58" y="24" width="150" height="68" fill="rgba(248,246,242,0.92)" stroke="#DEDAD3" stroke-width="1" rx="3"/>
+          <line x1="66" y1="38" x2="86" y2="38" stroke="#1C3D6B" stroke-width="2.5"/>
+          <text x="92" y="42" font-family="Inter,sans-serif" font-size="10.5" fill="#4A4540">t = 0 (smooth IC)</text>
+          <line x1="66" y1="54" x2="86" y2="54" stroke="#4A7FB5" stroke-width="2.2"/>
+          <text x="92" y="58" font-family="Inter,sans-serif" font-size="10.5" fill="#4A4540">t = 0.5 (steepening)</text>
+          <line x1="66" y1="70" x2="86" y2="70" stroke="#8EB8D8" stroke-width="2"/>
+          <text x="92" y="74" font-family="Inter,sans-serif" font-size="10.5" fill="#4A4540">t = 1.0 (near-shock)</text>
+
+          <!-- Axes -->
+          <line x1="55" y1="240" x2="450" y2="240" stroke="#4A4540" stroke-width="1.5"/>
+          <line x1="55" y1="240" x2="55" y2="15" stroke="#4A4540" stroke-width="1.5"/>
+          <!-- Zero-velocity reference line emphasised -->
+          <line x1="55" y1="130" x2="445" y2="130" stroke="#8C857E" stroke-width="1" stroke-dasharray="6,3"/>
+        </svg>
+        <div class="fig-caption">Figure 1. Burgers equation: evolution of $u(x,t)$ from the smooth initial condition $-\sin(\pi x)$ at $t=0$ toward a near-shock at $t=1$. At $t=0.5$ the profile has already begun to steepen at $x=0$. At $t=1.0$, with $\nu=0.01/\pi$, the gradient $\partial u/\partial x$ at $x=0$ is very large but remains finite due to the small but nonzero viscosity.</div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 3: Viscosity challenge and training strategy -->
+    <div>
+      <div class="section-label">03 &mdash; Training Strategy</div>
+      <h2 class="section-h">The Viscosity Challenge and Two-Stage Training</h2>
+      <p class="body-text">The small viscosity $\nu = 0.01/\pi$ is simultaneously the most physically interesting aspect of the problem and the most numerically challenging. It means the layer thickness at the shock is $O(\nu/|\nabla u|) \approx O(0.003)$, occupying a tiny fraction of the domain. Uniform random sampling of 10,000 collocation points across $[-1,1]\times[0,1]$ places on average only $\sim$30 points inside this thin layer &mdash; far too few to strongly constrain the residual where it matters most.</p>
+      <p class="body-text">The notebook addresses this with a deeper and wider network ([2, 40, 40, 40, 40, 40, 1] &mdash; five hidden layers of width 40) and critically, a two-stage optimisation strategy that has become the de facto standard in the PINN literature.</p>
+
+      <h3 class="sub-h">Stage 1: Adam (robust, first-order)</h3>
+      <p class="body-text">Adam is run for 15,000 epochs at $10^{-3}$. Its adaptive learning rates per parameter make it robust to poorly conditioned loss landscapes and effective at escaping sharp valleys. However, Adam alone typically leaves the solution slightly diffuse around steep features &mdash; it converges to a good basin but cannot tightly minimise the residual there.</p>
+
+      <h3 class="sub-h">Stage 2: L-BFGS (quasi-Newton, uses curvature)</h3>
+      <p class="body-text">L-BFGS (Limited-memory Broyden-Fletcher-Goldfarb-Shanno) is a quasi-Newton method. It approximates the inverse Hessian from the history of gradient vectors, allowing much larger and better-directed steps than gradient descent. Starting from Adam's solution, L-BFGS can drive the loss down several additional orders of magnitude and sharpen the resolution of the steep layer.</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span class="code-dot dot-r"></span><span class="code-dot dot-y"></span><span class="code-dot dot-g"></span></div>
+          <span class="code-lang">Python &mdash; two-stage Adam → L-BFGS training</span>
+        </div>
+        <pre class="code-body"><span class="cm"># Stage 1: Adam — robust, handles the difficult early training</span>
+opt = torch.optim.<span class="fn">Adam</span>(model.parameters(), lr=<span class="nm">1e-3</span>)
+<span class="kw">for</span> ep <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">15000</span>):
+    opt.<span class="fn">zero_grad</span>(); loss = <span class="fn">loss_fn</span>(); loss.<span class="fn">backward</span>(); opt.<span class="fn">step</span>()
+    <span class="kw">if</span> ep % <span class="nm">2500</span> == <span class="nm">0</span>:
+        <span class="fn">print</span>(<span class="st">f"[adam] epoch {ep:5d} | loss {loss.item():.3e}"</span>)
+
+<span class="cm"># Stage 2: L-BFGS — quasi-Newton, drives loss to near-machine precision</span>
+opt2 = torch.optim.<span class="fn">LBFGS</span>(
+    model.parameters(),
+    max_iter=<span class="nm">3000</span>,
+    tolerance_grad=<span class="nm">1e-9</span>,
+    tolerance_change=<span class="nm">1e-12</span>,
+    history_size=<span class="nm">50</span>,
+    line_search_fn=<span class="st">"strong_wolfe"</span>
+)
+<span class="kw">def</span> <span class="fn">closure</span>():
+    opt2.<span class="fn">zero_grad</span>()
+    l = <span class="fn">loss_fn</span>()
+    l.<span class="fn">backward</span>()
+    <span class="kw">return</span> l
+opt2.<span class="fn">step</span>(closure)
+<span class="fn">print</span>(<span class="st">"L-BFGS done | final loss:"</span>, <span class="fn">loss_fn</span>().<span class="fn">item</span>())</pre>
+      </div>
+
+      <div class="callout warning">
+        <div class="callout-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="callout-body">
+          <strong>L-BFGS cold-start failure</strong>
+          L-BFGS applied from random initialisation almost always diverges for PINNs. The loss landscape is non-convex and the initial gradient signal is dominated by noise. The Adam warm-start is not optional &mdash; it is what places the network in a basin where the Hessian approximation is meaningful and L-BFGS can take productive steps.
+        </div>
+      </div>
+
+      <p class="body-text">The network architecture uses five hidden layers of width 40 rather than the three layers of width 64 used for the heat equation. For the Burgers problem with its sharp interior layer, depth (more layers) helps more than width because it enables the network to compose multiple nonlinear transformations needed to represent the steep gradient, while keeping the total parameter count manageable for the L-BFGS inverse Hessian approximation.</p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 4: Reaction kinetics -->
+    <div>
+      <div class="section-label">04 &mdash; Reaction Kinetics</div>
+      <h2 class="section-h">A&rarr;B&rarr;C: Consecutive First-Order Reactions</h2>
+      <p class="body-text">Notebook <code>05_reaction_kinetics.ipynb</code> addresses a different kind of problem: not a PDE over space-time, but a system of coupled ODEs representing chemical species concentrations evolving over time. The consecutive reaction $A \xrightarrow{k_1} B \xrightarrow{k_2} C$ describes a process where a reactant $A$ is converted to an intermediate $B$, which then converts to a product $C$. This is the simplest form of a reaction network and a foundational model in pharmaceutical synthesis, metabolic pathway analysis, and polymer degradation kinetics.</p>
+
+      <h3 class="sub-h">Governing equations</h3>
+      <div class="math-block">
+        $$\frac{dC_A}{dt} = -k_1 C_A$$
+        $$\frac{dC_B}{dt} = k_1 C_A - k_2 C_B$$
+        $$\frac{dC_C}{dt} = k_2 C_B$$
+      </div>
+      <p class="body-text">With initial conditions $C_A(0) = 1$, $C_B(0) = C_C(0) = 0$ and rate constants $k_1 = 1.5$, $k_2 = 0.6$ from the notebook. Mass is conserved exactly: $C_A(t) + C_B(t) + C_C(t) = 1$ for all $t$.</p>
+
+      <h3 class="sub-h">Analytical solution</h3>
+      <p class="body-text">For $k_1 \neq k_2$, the system admits a closed-form solution derived by successive integration of the first-order linear ODEs:</p>
+      <div class="math-block">
+        $$C_A(t) = e^{-k_1 t}$$
+        $$C_B(t) = \frac{k_1}{k_2 - k_1}\left(e^{-k_1 t} - e^{-k_2 t}\right)$$
+        $$C_C(t) = 1 - C_A(t) - C_B(t)$$
+      </div>
+      <p class="body-text">With $k_1 = 1.5 > k_2 = 0.6$, species $B$ accumulates before $C_A$ is depleted because the formation rate ($k_1 C_A$) initially exceeds the consumption rate ($k_2 C_B$). The intermediate $C_B$ peaks at $t^* = \ln(k_1/k_2)/(k_1-k_2) \approx 1.02$ before decaying to zero as the reaction completes.</p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 5: Multi-output network -->
+    <div>
+      <div class="section-label">05 &mdash; Multi-Output Architecture</div>
+      <h2 class="section-h">Multi-Output Networks and Coupled Residuals</h2>
+      <p class="body-text">The reaction PINN outputs three values simultaneously: a single shared network with one input ($t$) and three outputs ($C_A, C_B, C_C$). This <em>shared trunk, multiple head</em> architecture is the standard approach for coupled systems. The shared hidden layers learn common temporal features (e.g., characteristic timescales, overall curvature shapes) that all three species exhibit, while the separate output dimensions specialise to each species' profile.</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span class="code-dot dot-r"></span><span class="code-dot dot-y"></span><span class="code-dot dot-g"></span></div>
+          <span class="code-lang">Python &mdash; multi-output PINN and coupled residuals</span>
+        </div>
+        <pre class="code-body"><span class="kw">class</span> <span class="tp">KineticsPINN</span>(nn.Module):
+    <span class="cm"># Single input t → three outputs [C_A, C_B, C_C]</span>
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, width=<span class="nm">64</span>, depth=<span class="nm">4</span>):
+        <span class="fn">super</span>().__init__()
+        layers = [<span class="nm">1</span>] + [width]*depth + [<span class="nm">3</span>]
+        seq = []
+        <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(layers)-<span class="nm">1</span>):
+            seq.append(nn.<span class="fn">Linear</span>(layers[i], layers[i+<span class="nm">1</span>]))
+            <span class="kw">if</span> i &lt; <span class="fn">len</span>(layers)-<span class="nm">2</span>:
+                seq.append(nn.<span class="fn">Tanh</span>())
+        self.net = nn.<span class="fn">Sequential</span>(*seq)
+    <span class="kw">def</span> <span class="fn">forward</span>(self, t):
+        <span class="kw">return</span> self.net(t)   <span class="cm"># shape (N, 3)</span>
+
+<span class="kw">def</span> <span class="fn">d_dt</span>(y, t):
+    <span class="cm"># Differentiate each output scalar w.r.t. t</span>
+    <span class="kw">return</span> torch.autograd.<span class="fn">grad</span>(y, t, torch.<span class="fn">ones_like</span>(y), create_graph=<span class="kw">True</span>)[<span class="nm">0</span>]
+
+<span class="kw">def</span> <span class="fn">loss_fn</span>():
+    y = <span class="fn">model</span>(t_col)                       <span class="cm"># shape (N, 3)</span>
+    A, B, C = y[:,<span class="nm">0</span>:<span class="nm">1</span>], y[:,<span class="nm">1</span>:<span class="nm">2</span>], y[:,<span class="nm">2</span>:<span class="nm">3</span>]
+
+    <span class="cm"># Each species' time derivative</span>
+    At = <span class="fn">d_dt</span>(A, t_col)
+    Bt = <span class="fn">d_dt</span>(B, t_col)
+    Ct = <span class="fn">d_dt</span>(C, t_col)
+
+    <span class="cm"># ODE residuals (should all be zero)</span>
+    rA = At + k1 * A
+    rB = Bt - k1 * A + k2 * B
+    rC = Ct - k2 * B
+
+    L_pde = torch.<span class="fn">mean</span>(rA**<span class="nm">2</span> + rB**<span class="nm">2</span> + rC**<span class="nm">2</span>)
+    L_ic  = torch.<span class="fn">mean</span>((<span class="fn">model</span>(t0) - y0)**<span class="nm">2</span>)
+
+    <span class="cm"># IC weighted ×20 — helps during early training</span>
+    <span class="kw">return</span> L_pde + <span class="nm">20.0</span> * L_ic</pre>
+      </div>
+
+      <p class="body-text">Several design choices in this code are worth noting. First, <code>y[:, 0:1]</code> preserves the batch dimension (shape <code>(N,1)</code>), which is required for <code>autograd.grad</code> to compute per-sample gradients correctly &mdash; using <code>y[:, 0]</code> would produce shape <code>(N,)</code> and silently fail. Second, the three residuals are summed before taking the mean, which effectively weights each species equally. Third, the IC loss carries a weight of 20 &mdash; this is a form of manual loss weighting that ensures the initial condition is satisfied early in training, providing a reliable anchor for the time-integration structure of the ODE system.</p>
+
+      <h3 class="sub-h">Mass conservation as a free diagnostic</h3>
+      <p class="body-text">Notice that mass conservation $C_A + C_B + C_C = 1$ is <em>not</em> imposed as a loss term in the notebook. After training, the constraint is evaluated as a diagnostic: if $C_A + C_B + C_C \approx 1$ everywhere, it confirms that the three ODE residuals are genuinely satisfied (since their sum implies the conservation law). This is a powerful cross-check &mdash; a network that satisfies mass conservation only because it was penalised to do so tells us less about ODE accuracy than one that satisfies it as an emergent consequence of correct residuals.</p>
+
+      <div class="callout success">
+        <div class="callout-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="callout-body">
+          <strong>Typical results</strong>
+          The KineticsPINN achieves relative $L_2$ error below $10^{-3}$ across all three species after 10,000 Adam epochs, and mass conservation is satisfied to within $\pm0.002$ across the time window $[0,6]$ &mdash; without ever explicitly penalising the conservation law.
+        </div>
+      </div>
+
+      <!-- Visual 2: Reaction Kinetics Concentration Plot -->
+      <div class="fig-wrap">
+        <svg width="480" height="300" viewBox="0 0 480 300" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;border:1px solid var(--border);border-radius:4px;background:var(--bg-alt)">
+          <defs>
+            <clipPath id="kinclip"><rect x="55" y="20" width="390" height="220"/></clipPath>
+          </defs>
+          <!-- Grid -->
+          <g stroke="#DEDAD3" stroke-width="1">
+            <line x1="55" y1="20" x2="55" y2="240"/>
+            <line x1="55" y1="240" x2="445" y2="240"/>
+            <line x1="55" y1="20" x2="445" y2="20"/>
+            <line x1="55" y1="130" x2="445" y2="130" stroke-dasharray="4,4"/>
+            <line x1="55" y1="75" x2="445" y2="75" stroke-dasharray="4,4"/>
+            <line x1="133" y1="20" x2="133" y2="240" stroke-dasharray="4,4"/>
+            <line x1="211" y1="20" x2="211" y2="240" stroke-dasharray="4,4"/>
+            <line x1="289" y1="20" x2="289" y2="240" stroke-dasharray="4,4"/>
+            <line x1="367" y1="20" x2="367" y2="240" stroke-dasharray="4,4"/>
+            <line x1="445" y1="20" x2="445" y2="240"/>
+          </g>
+
+          <!-- Axis labels -->
+          <text x="245" y="270" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#4A4540">time (t)</text>
+          <text x="14" y="132" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#4A4540" transform="rotate(-90,14,132)">concentration</text>
+          <text x="55" y="258" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E">0</text>
+          <text x="133" y="258" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E">1</text>
+          <text x="211" y="258" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E">2</text>
+          <text x="289" y="258" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E">3</text>
+          <text x="367" y="258" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E">4</text>
+          <text x="445" y="258" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E">5</text>
+          <text x="48" y="24" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E">1.0</text>
+          <text x="48" y="134" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E">0.5</text>
+          <text x="48" y="244" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E">0</text>
+
+          <!-- C_A: exp(-1.5*t), decays from 1 to ~0 by t=5 -->
+          <!-- y = 240 - 220*c  (c in [0,1]) -->
+          <!-- x = 55 + 78*t  (t in [0,5]) -->
+          <polyline clip-path="url(#kinclip)" fill="none" stroke="#1C3D6B" stroke-width="2.5"
+            points="55,20 80,36 109,57 138,78 167,98 196,115 225,130 254,143 283,154 312,163 341,171 370,178 399,184 428,189 445,192"/>
+
+          <!-- C_B: k1/(k2-k1)*(exp(-k1*t)-exp(-k2*t)), peaks ~t=1 -->
+          <!-- k1=1.5, k2=0.6, k1/(k2-k1) = 1.5/(-0.9) = -1.667 → always positive when sign reversed -->
+          <!-- Actually k1/(k2-k1) = 1.5/(0.6-1.5) = 1.5/(-0.9) = -1.667 -->
+          <!-- B = (k1/(k2-k1))*(exp(-k1*t)-exp(-k2*t)) = -1.667*(exp(-1.5t)-exp(-0.6t)) -->
+          <!-- At t=0: 0; t=0.5: -1.667*(0.472-0.741)=0.449; t=1: -1.667*(0.223-0.549)=0.544 (peak); t=2: -1.667*(0.050-0.301)=0.418; t=3: -1.667*(0.011-0.165)=0.257 -->
+          <polyline clip-path="url(#kinclip)" fill="none" stroke="#B8845A" stroke-width="2.5"
+            points="55,240 80,222 109,195 133,187 150,184 167,183 185,184 211,188 225,193 254,203 283,214 312,222 341,228 370,233 399,237 428,238 445,239"/>
+
+          <!-- C_C: 1 - C_A - C_B, sigmoidal rise from 0 to 1 -->
+          <polyline clip-path="url(#kinclip)" fill="none" stroke="#2D7A4F" stroke-width="2.5"
+            points="55,240 80,240 109,238 133,234 150,229 167,222 196,213 225,205 254,195 283,182 312,168 341,155 370,142 399,130 428,120 445,114"/>
+
+          <!-- Species labels on curves -->
+          <text x="90" y="40" font-family="Inter,sans-serif" font-size="11" fill="#1C3D6B" font-weight="600">C_A</text>
+          <text x="155" y="176" font-family="Inter,sans-serif" font-size="11" fill="#B8845A" font-weight="600">C_B</text>
+          <text x="390" y="108" font-family="Inter,sans-serif" font-size="11" fill="#2D7A4F" font-weight="600">C_C</text>
+
+          <!-- Peak marker for C_B -->
+          <circle cx="175" cy="183" r="4" fill="none" stroke="#B8845A" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <line x1="175" y1="183" x2="175" y2="240" stroke="#B8845A" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+          <text x="178" y="212" font-family="JetBrains Mono,monospace" font-size="9" fill="#B8845A">t*≈1.0</text>
+
+          <!-- Axes -->
+          <line x1="55" y1="240" x2="450" y2="240" stroke="#4A4540" stroke-width="1.5"/>
+          <line x1="55" y1="240" x2="55" y2="15" stroke="#4A4540" stroke-width="1.5"/>
+        </svg>
+        <div class="fig-caption">Figure 2. Concentration profiles for consecutive reaction $A \to B \to C$ with $k_1 = 1.5$, $k_2 = 0.6$. Reactant $C_A$ (navy) decays exponentially; intermediate $C_B$ (sienna) rises then falls, peaking near $t^* \approx 1.0$; product $C_C$ (green) accumulates sigmoidally. Mass conservation $C_A + C_B + C_C = 1$ is satisfied at all times.</div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 6: Why PINNs shine -->
+    <div>
+      <div class="section-label">06 &mdash; PINN Advantages for Kinetics</div>
+      <h2 class="section-h">Why PINNs Earn Their Keep for Kinetics</h2>
+      <p class="body-text">For a single run with known $(k_1, k_2)$, a classical ODE solver (e.g., SciPy's <code>solve_ivp</code> with an adaptive Runge-Kutta method) solves the system faster and more accurately than a PINN. Classical solvers for smooth ODEs are mature, fast, and reliable. So why use a PINN here?</p>
+
+      <p class="body-text">The answer is not the forward problem &mdash; it is everything that comes after:</p>
+
+      <p class="body-text"><strong>1. The inverse problem.</strong> If you have measured concentration profiles from inline spectroscopy (e.g., Raman or NIR), the PINN framework can treat $k_1$ and $k_2$ as learnable parameters and fit them to the data while simultaneously satisfying the ODE structure. A classical solver requires an outer optimisation loop (e.g., Bard 1974, nonlinear least squares) that calls the solver many times. The PINN computes everything in a single differentiable computational graph. Article 5 in this series covers this in detail.</p>
+
+      <p class="body-text"><strong>2. Data assimilation mid-trajectory.</strong> If process analytical technology (PAT) instruments provide inline concentration readings at multiple time points, these can be added directly as a data loss term $\mathcal{L}_\mathrm{data} = \sum_i (u(\hat{t}_i;\theta) - \hat{u}_i)^2$. The PINN then produces a solution that is simultaneously consistent with the ODE physics and with the measurements &mdash; a constrained regression that classical interpolation cannot perform.</p>
+
+      <p class="body-text"><strong>3. Uncertainty and extrapolation.</strong> Neural network ensembles or Bayesian PINNs can propagate uncertainty from sparse observations through the physics constraints, yielding principled confidence intervals on quantities like time-to-peak for $C_B$ or yield of $C_C$. This is directly relevant to ICH Q10 Pharmaceutical Quality System requirements for process understanding and real-time release testing.</p>
+
+      <p class="body-text"><strong>4. Complex nonlinear kinetics.</strong> First-order kinetics is the simplest case. Michaelis-Menten enzyme kinetics, autocatalytic reactions, and multi-step mechanisms with reversibility and inhibition produce ODE systems where analytical solutions do not exist. The PINN residual is written in exactly the same way regardless of how complex the rate law is &mdash; you simply change the expression inside <code>residual()</code>.</p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 7: Pharmaceutical context -->
+    <div>
+      <div class="section-label">07 &mdash; Pharmaceutical Context</div>
+      <h2 class="section-h">Pharmaceutical Applications: From Kinetics to Quality</h2>
+      <p class="body-text">The $A \to B \to C$ reaction network is not merely a pedagogical model. It describes a wide class of pharmaceutical manufacturing steps directly:</p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Process</th>
+            <th>A (feed)</th>
+            <th>B (intermediate)</th>
+            <th>C (product)</th>
+            <th>Relevance of PINN</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>API synthesis step</strong></td>
+            <td>Starting material</td>
+            <td>Reactive intermediate</td>
+            <td>Active ingredient</td>
+            <td>Maximise $C_C$ while limiting impurity $B$ accumulation</td>
+          </tr>
+          <tr>
+            <td><strong>Hydrolysis degradation</strong></td>
+            <td>Drug substance</td>
+            <td>Hydrolysis product 1</td>
+            <td>Final degradant</td>
+            <td>Shelf-life prediction from accelerated stability data</td>
+          </tr>
+          <tr>
+            <td><strong>Enzyme catalysis</strong></td>
+            <td>Substrate</td>
+            <td>ES complex</td>
+            <td>Product</td>
+            <td>Parameter estimation of $K_m$, $V_\mathrm{max}$ from sparse data</td>
+          </tr>
+          <tr>
+            <td><strong>Metabolic pathway</strong></td>
+            <td>Parent drug</td>
+            <td>Active metabolite</td>
+            <td>Inactive metabolite</td>
+            <td>PK/PD modelling with inline biomarker data</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="body-text">ICH Q10 emphasises the Pharmaceutical Quality System as a science- and risk-based framework for process understanding. Real-time monitoring of reaction progress using inline PAT instruments generates a stream of spectroscopic data that must be interpreted against kinetic models. A PINN provides a natural data-physics fusion architecture: the physics constrains the solution to be consistent with the rate equations even between measurement time points, while the data loss pulls the trajectory toward the observed signal.</p>
+
+      <div class="callout insight">
+        <div class="callout-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="callout-body">
+          <strong>Stiff kinetics warning</strong>
+          When $k_1 \gg k_2$ (or vice versa), the ODE system becomes stiff: there is a fast transient (rapid consumption of $A$) followed by slow dynamics (gradual accumulation of $C$). Classical explicit solvers require tiny time steps to remain stable during the fast phase. PINNs also struggle here: the spectral bias makes them prefer slow dynamics, and the IC residual spikes during the fast transient. Ji et al. (2021) introduced Stiff-PINN, which uses a quasi-steady-state assumption to handle the fast-slow decomposition. This is the regime where careful loss weighting (Article 6) is essential.
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 8: Multi-output network diagram and results -->
+    <div>
+      <div class="section-label">08 &mdash; Architecture Diagram</div>
+      <h2 class="section-h">Multi-Output Architecture: Shared Trunk, Three Heads</h2>
+
+      <!-- Visual 3: Multi-Output Network Diagram -->
+      <div class="fig-wrap">
+        <svg width="500" height="320" viewBox="0 0 500 320" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;border:1px solid var(--border);border-radius:4px;background:var(--bg-alt)">
+          <defs>
+            <marker id="arrowhead" markerWidth="8" markerHeight="7" refX="8" refY="3.5" orient="auto">
+              <polygon points="0 0, 8 3.5, 0 7" fill="#8C857E"/>
+            </marker>
+            <marker id="arrowN" markerWidth="8" markerHeight="7" refX="8" refY="3.5" orient="auto">
+              <polygon points="0 0, 8 3.5, 0 7" fill="#1C3D6B"/>
+            </marker>
+            <marker id="arrowS" markerWidth="8" markerHeight="7" refX="8" refY="3.5" orient="auto">
+              <polygon points="0 0, 8 3.5, 0 7" fill="#B8845A"/>
+            </marker>
+            <marker id="arrowG" markerWidth="8" markerHeight="7" refX="8" refY="3.5" orient="auto">
+              <polygon points="0 0, 8 3.5, 0 7" fill="#2D7A4F"/>
+            </marker>
+          </defs>
+
+          <!-- Input box -->
+          <rect x="20" y="135" width="60" height="40" rx="4" fill="#EBF0F7" stroke="#1C3D6B" stroke-width="1.5"/>
+          <text x="50" y="151" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#1C3D6B" font-weight="500">input</text>
+          <text x="50" y="166" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" fill="#1C3D6B" font-weight="700">t</text>
+
+          <!-- Arrow to hidden layers -->
+          <line x1="80" y1="155" x2="110" y2="155" stroke="#8C857E" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+          <!-- Hidden layer 1 -->
+          <rect x="110" y="90" width="70" height="130" rx="4" fill="#F1EEE9" stroke="#DEDAD3" stroke-width="1.5"/>
+          <text x="145" y="148" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#4A4540">hidden</text>
+          <text x="145" y="162" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8C857E">width=64</text>
+          <text x="145" y="176" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8C857E">Tanh</text>
+          <!-- Neuron dots -->
+          <g fill="#8C857E">
+            <circle cx="145" cy="105" r="4"/><circle cx="145" cy="120" r="4"/><circle cx="145" cy="135" r="4"/>
+            <text x="145" y="200" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8C857E">⋮</text>
+            <circle cx="145" cy="210" r="4"/>
+          </g>
+
+          <!-- Arrow to hidden layer 2 -->
+          <line x1="180" y1="155" x2="205" y2="155" stroke="#8C857E" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+          <!-- Hidden layer 2 (×3 label) -->
+          <rect x="205" y="90" width="70" height="130" rx="4" fill="#F1EEE9" stroke="#DEDAD3" stroke-width="1.5"/>
+          <text x="240" y="148" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#4A4540">×4 layers</text>
+          <text x="240" y="162" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8C857E">shared</text>
+          <text x="240" y="176" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8C857E">trunk</text>
+          <g fill="#8C857E">
+            <circle cx="240" cy="105" r="4"/><circle cx="240" cy="120" r="4"/><circle cx="240" cy="135" r="4"/>
+            <text x="240" y="200" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#8C857E">⋮</text>
+            <circle cx="240" cy="210" r="4"/>
+          </g>
+
+          <!-- Arrows from trunk to three output heads -->
+          <!-- To C_A (top) -->
+          <line x1="275" y1="120" x2="320" y2="80" stroke="#1C3D6B" stroke-width="1.5" marker-end="url(#arrowN)"/>
+          <!-- To C_B (middle) -->
+          <line x1="275" y1="155" x2="320" y2="155" stroke="#B8845A" stroke-width="1.5" marker-end="url(#arrowS)"/>
+          <!-- To C_C (bottom) -->
+          <line x1="275" y1="190" x2="320" y2="230" stroke="#2D7A4F" stroke-width="1.5" marker-end="url(#arrowG)"/>
+
+          <!-- Output head C_A -->
+          <rect x="320" y="55" width="70" height="50" rx="4" fill="#EBF0F7" stroke="#1C3D6B" stroke-width="1.5"/>
+          <text x="355" y="76" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#1C3D6B" font-weight="600">C_A head</text>
+          <text x="355" y="92" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#1C3D6B">output [0]</text>
+
+          <!-- Output head C_B -->
+          <rect x="320" y="130" width="70" height="50" rx="4" fill="#FBF4EC" stroke="#B8845A" stroke-width="1.5"/>
+          <text x="355" y="151" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#B8845A" font-weight="600">C_B head</text>
+          <text x="355" y="167" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#B8845A">output [1]</text>
+
+          <!-- Output head C_C -->
+          <rect x="320" y="205" width="70" height="50" rx="4" fill="#EBF7F1" stroke="#2D7A4F" stroke-width="1.5"/>
+          <text x="355" y="226" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#2D7A4F" font-weight="600">C_C head</text>
+          <text x="355" y="242" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#2D7A4F">output [2]</text>
+
+          <!-- Arrows to residual boxes -->
+          <line x1="390" y1="80" x2="420" y2="80" stroke="#1C3D6B" stroke-width="1.5" marker-end="url(#arrowN)"/>
+          <line x1="390" y1="155" x2="420" y2="155" stroke="#B8845A" stroke-width="1.5" marker-end="url(#arrowS)"/>
+          <line x1="390" y1="230" x2="420" y2="230" stroke="#2D7A4F" stroke-width="1.5" marker-end="url(#arrowG)"/>
+
+          <!-- Residual boxes -->
+          <rect x="420" y="60" width="65" height="40" rx="3" fill="#EBF0F7" stroke="#1C3D6B" stroke-width="1"/>
+          <text x="452" y="76" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#1C3D6B">r_A = dA/dt</text>
+          <text x="452" y="90" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#1C3D6B">+ k1·A</text>
+
+          <rect x="420" y="135" width="65" height="40" rx="3" fill="#FBF4EC" stroke="#B8845A" stroke-width="1"/>
+          <text x="452" y="151" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#B8845A">r_B = dB/dt</text>
+          <text x="452" y="165" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#B8845A">- k1A + k2B</text>
+
+          <rect x="420" y="210" width="65" height="40" rx="3" fill="#EBF7F1" stroke="#2D7A4F" stroke-width="1"/>
+          <text x="452" y="226" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#2D7A4F">r_C = dC/dt</text>
+          <text x="452" y="240" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#2D7A4F">- k2·B</text>
+
+          <!-- Title -->
+          <text x="250" y="295" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#8C857E" font-style="italic">Shared trunk → independent output heads → separate autograd residuals</text>
+        </svg>
+        <div class="fig-caption">Figure 3. Multi-output PINN architecture for the $A \to B \to C$ kinetics problem. A single network with shared hidden layers maps $t \mapsto [C_A, C_B, C_C]$. Each output slice is differentiated independently with respect to $t$ via autograd to compute its residual. The shared trunk allows the network to learn common temporal structure while each head specialises to its species profile.</div>
+      </div>
+
+      <h3 class="sub-h">Results summary</h3>
+      <p class="body-text">After 10,000 Adam epochs the KineticsPINN achieves relative $L_2$ error below $10^{-3}$ on all three species evaluated on 300 uniform time points in $[0,6]$. Mass conservation is satisfied to within $\pm 0.002$ across the entire time window without being explicitly enforced as a loss term. The intermediate $C_B$ peak location (time-to-maximum yield) is recovered to within 1% of the analytical value $t^* = 1.02$.</p>
+      <p class="body-text">Sensitivity to hyperparameters is greater than for the heat equation: reducing the IC weight below 5 typically leads to drift in the initial condition after $\sim$3,000 epochs, with the solution converging to a physically wrong trajectory that minimises the ODE residual but violates $C_A(0)=1$. This underscores a general principle &mdash; for initial value problems, the IC loss must be weighted strongly enough to serve as a reliable anchor, especially during the early training phase when the PDE residual gradient is large and can dominate.</p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 9: Looking ahead -->
+    <div>
+      <div class="section-label">09 &mdash; Looking Ahead</div>
+      <h2 class="section-h">What These Problems Set Up</h2>
+      <p class="body-text">The Burgers equation and the reaction kinetics system together establish the two most important extensions of the basic PINN framework: nonlinear PDE terms and multi-output ODE systems. But both problems were solved in the <em>forward</em> direction: given the physics and initial conditions, compute the solution.</p>
+      <p class="body-text">Article 5 inverts this. We will take the same reaction kinetics network and remove $k_1$, $k_2$ from the code, instead treating them as learnable parameters in the model's parameter dictionary. When sparse noisy measurements of the concentration profiles are provided, the PINN will jointly optimise the network weights and the rate constants &mdash; doing physics-constrained parameter estimation in a single differentiable computation. This is the core capability that makes PINNs genuinely useful for real experimental data.</p>
+      <p class="body-text">Article 6 returns to Burgers to address the adaptive sampling problem: how to automatically concentrate collocation points near the shock, and how to dynamically reweight the loss terms to counteract the spectral bias that prevents the network from resolving steep gradients.</p>
+
+      <div class="callout insight">
+        <div class="callout-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="callout-body">
+          <strong>Conservative PINNs (cPINNs)</strong>
+          For problems with conservation laws &mdash; mass, momentum, energy &mdash; Jagtap et al. (2020) introduced conservative PINNs that decompose the domain into sub-domains and enforce flux continuity at interfaces via a Godunov-type flux condition. This is particularly important for the Burgers equation, where the weak solution across the shock satisfies the Rankine-Hugoniot jump condition rather than the strong-form PDE. cPINNs embed this conservation structure directly into the loss.
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- References -->
+    <div>
+      <div class="section-label">References</div>
+      <h2 class="section-h">Further Reading</h2>
+      <div class="ref-list">
+        <div class="ref-item"><span class="ref-num">[1]</span>Raissi, M., Perdikaris, P., &amp; Karniadakis, G. E. (2019). Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. <em>Journal of Computational Physics</em>, 378, 686&ndash;707. <a href="https://doi.org/10.1016/j.jcp.2018.10.045" target="_blank" rel="noopener">doi:10.1016/j.jcp.2018.10.045</a> [The Burgers equation example in this article directly follows the setup from Section 4 of this paper.]</div>
+        <div class="ref-item"><span class="ref-num">[2]</span>Baydin, A. G., Pearlmutter, B. A., Radul, A. A., &amp; Siskind, J. M. (2018). Automatic differentiation in machine learning: a survey. <em>Journal of Machine Learning Research</em>, 18(153), 1&ndash;43. The authoritative survey of autograd methods, explaining the distinction between forward-mode and reverse-mode AD and why reverse-mode (backpropagation) is standard for neural PDE residuals.</div>
+        <div class="ref-item"><span class="ref-num">[3]</span>Jagtap, A. D., Kharazmi, E., &amp; Karniadakis, G. E. (2020). Conservative physics-informed neural networks on discrete domains for conservation laws: Applications to forward and inverse problems. <em>Computer Methods in Applied Mechanics and Engineering</em>, 365, 113028. <a href="https://doi.org/10.1016/j.cma.2020.113028" target="_blank" rel="noopener">doi:10.1016/j.cma.2020.113028</a></div>
+        <div class="ref-item"><span class="ref-num">[4]</span>Ji, W., Qiu, W., Shi, Z., Pan, S., &amp; Deng, S. (2021). Stiff-PINN: Physics-informed neural network for stiff chemical kinetics. <em>The Journal of Physical Chemistry A</em>, 125(36), 8098&ndash;8106. <a href="https://doi.org/10.1021/acs.jpca.1c05102" target="_blank" rel="noopener">doi:10.1021/acs.jpca.1c05102</a></div>
+        <div class="ref-item"><span class="ref-num">[5]</span>ICH Q10: Pharmaceutical Quality System. International Conference on Harmonisation of Technical Requirements for Registration of Pharmaceuticals for Human Use, 2008. The regulatory framework emphasising science- and risk-based process understanding; provides the regulatory context for real-time kinetic monitoring applications.</div>
+        <div class="ref-item"><span class="ref-num">[6]</span>Bard, Y. (1974). <em>Nonlinear Parameter Estimation</em>. Academic Press. The classical treatment of parameter estimation for differential equation models; provides the statistical and computational foundations against which PINN-based inverse methods are compared in Article 5.</div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Bottom series nav -->
+    <div class="series-nav">
+      <div class="series-nav-label">Continue the Series</div>
+      <div class="series-nav-list">
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">03</span><a href="pinn-heat-equation.html">&larr; Previous: Heat Equation &mdash; 1D PDE</a></div>
+        <div class="series-nav-item current"><span style="font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">04</span>Burgers &amp; Reaction PDEs (current)</div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">05</span><a href="pinn-inverse-problems.html">Next: Inverse Problems &amp; Parameter Estimation &rarr;</a></div>
+      </div>
+    </div>
+
+  </div><!-- /article-body -->
+</div><!-- /article-page -->
+
+<footer>
+  <span class="footer-copy">&copy; 2026 Ali Shahmohammadi, Ph.D.</span>
+  <div class="footer-links">
+    <a href="../index.html">Portfolio</a>
+    <a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adaptive Sampling and Training Strategies for PINNs — Ali Shahmohammadi</title>
+  <meta name="description" content="Why uniform collocation fails for stiff problems, and how residual-based adaptive refinement, loss weighting, and causal training turn intractable PINN problems into solvable ones.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#F8F6F2;--bg-alt:#F1EEE9;--ink:#111010;--ink-2:#4A4540;--ink-3:#8C857E;--navy:#1C3D6B;--navy-lt:#EBF0F7;--sienna:#B8845A;--sienna-lt:#FBF4EC;--purple:#5B4E8A;--purple-lt:#F2EEF9;--green:#2D7A4F;--green-lt:#EBF7F1;--green-bdr:#BEE5D3;--border:#DEDAD3;--dark:#111010;--accent:#2563EB;--accent-lt:#EFF6FF;--accent-mid:#BFDBFE;--red:#DC2626;--red-lt:#FEF2F2;--amber:#D97706;--amber-lt:#FFFBEB;--amber-bdr:#FDE68A}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--ink);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:18px;line-height:1.65;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent);text-decoration:none}a:hover{opacity:.75}
+    code,pre{font-family:'JetBrains Mono','Fira Code',monospace}
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between;background:rgba(248,246,242,.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:var(--ink)}
+    .nav-logo em{font-style:normal;color:var(--sienna)}
+    .nav-links{display:flex;align-items:center;gap:.2rem}
+    .nav-links a{font-size:.82rem;font-weight:500;color:var(--ink-3);padding:.42rem .8rem;border-radius:4px}
+    .nav-links a:hover{color:var(--ink);background:var(--bg-alt)}
+    .article-page{padding-top:60px}
+    .article-hero{background:var(--dark);padding:5rem 3rem 4rem}
+    .article-hero-inner{max-width:820px;margin:0 auto}
+    .hero-series{font-family:'JetBrains Mono',monospace;font-size:.67rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sienna);margin-bottom:1rem;display:flex;align-items:center;gap:.8rem}
+    .hero-series::before{content:'';width:28px;height:1px;background:var(--sienna)}
+    .article-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,4.2rem);font-weight:700;letter-spacing:-.02em;line-height:.97;color:#fff;margin-bottom:1.25rem}
+    .article-title em{font-style:italic;font-weight:400;color:rgba(255,255,255,.4)}
+    .article-sub{font-size:1.08rem;color:rgba(255,255,255,.45);margin-bottom:2rem;line-height:1.75;max-width:640px}
+    .article-meta{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2rem}
+    .meta-pill{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:rgba(255,255,255,.38);border:1px solid rgba(255,255,255,.1);padding:.25rem .65rem;border-radius:2px}
+    .meta-pill.highlight{color:var(--sienna);border-color:rgba(184,132,90,.35)}
+    .article-body{max-width:820px;margin:0 auto;padding:4rem 3rem}
+    @media(max-width:640px){.article-hero{padding:3.5rem 1.5rem 3rem}.article-body{padding:3rem 1.5rem}}
+    .section-label{font-family:'JetBrains Mono',monospace;font-size:.67rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1rem}
+    h2.section-h{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;letter-spacing:-.02em;line-height:1.05;color:var(--ink);margin-bottom:.75rem}
+    h3.sub-h{font-size:1.12rem;font-weight:700;color:var(--ink);margin-bottom:.5rem;margin-top:2rem}
+    .body-text{font-size:1.05rem;color:var(--ink-2);line-height:1.8;margin-bottom:1.25rem}
+    .math-block{background:var(--bg-alt);border:1px solid var(--border);border-left:3px solid var(--navy);border-radius:0 4px 4px 0;padding:1.1rem 1.5rem;margin:1.5rem 0;font-family:'JetBrains Mono',monospace;font-size:.88rem;color:var(--navy);overflow-x:auto;line-height:1.7}
+    .math-inline{font-family:'JetBrains Mono',monospace;font-size:.88em;color:var(--navy);background:var(--navy-lt);padding:.08em .3em;border-radius:2px}
+    .code-block{background:#1C1C1E;border-radius:6px;overflow:hidden;margin:1.5rem 0}
+    .code-header{display:flex;align-items:center;justify-content:space-between;padding:.55rem 1rem;background:#2A2A2D;border-bottom:1px solid rgba(255,255,255,.07)}
+    .code-lang{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:rgba(255,255,255,.35);letter-spacing:.1em;text-transform:uppercase}
+    .code-dots{display:flex;gap:5px}
+    .code-dot{width:10px;height:10px;border-radius:50%}
+    .dot-r{background:#FF5F57}.dot-y{background:#FEBC2E}.dot-g{background:#28C840}
+    pre.code-body{padding:1.25rem 1.5rem;overflow-x:auto;font-size:.88rem;line-height:1.75;color:#D1D5DB}
+    .kw{color:#C084FC}.st{color:#86EFAC}.cm{color:#6B7280;font-style:italic}.fn{color:#93C5FD}.nm{color:#FCA5A5}.tp{color:#67E8F9}
+    .callout{border-radius:4px;padding:1.1rem 1.4rem;margin:1.5rem 0;display:flex;gap:.9rem}
+    .callout-icon{flex-shrink:0;margin-top:.1rem}
+    .callout-body{font-size:.9rem;line-height:1.7}
+    .callout-body strong{display:block;font-weight:700;margin-bottom:.2rem}
+    .callout.insight{background:var(--navy-lt);border:1px solid rgba(28,61,107,.2)}
+    .callout.insight .callout-icon,.callout.insight .callout-body{color:var(--navy)}
+    .callout.warning{background:var(--amber-lt);border:1px solid var(--amber-bdr)}
+    .callout.warning .callout-icon{color:var(--amber)}
+    .callout.warning .callout-body{color:#92400E}
+    .callout.success{background:var(--green-lt);border:1px solid var(--green-bdr)}
+    .callout.success .callout-icon{color:var(--green)}
+    .callout.success .callout-body{color:#14532D}
+    .data-table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.875rem}
+    .data-table th{font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding:.65rem 1rem;border-bottom:2px solid var(--border);text-align:left}
+    .data-table td{padding:.65rem 1rem;border-bottom:1px solid var(--border);color:var(--ink-2)}
+    .data-table tr:last-child td{border-bottom:none}
+    .data-table tr:hover td{background:var(--bg-alt)}
+    .fig-wrap{margin:2rem 0;text-align:center}
+    .fig-caption{font-size:.78rem;color:var(--ink-3);margin-top:.6rem;font-style:italic}
+    .series-nav{background:var(--bg-alt);border:1px solid var(--border);border-radius:4px;padding:1.5rem 1.75rem;margin:2.5rem 0}
+    .series-nav-label{font-family:'JetBrains Mono',monospace;font-size:.63rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1rem}
+    .series-nav-list{display:flex;flex-direction:column;gap:.4rem}
+    .series-nav-item{display:flex;align-items:center;gap:.65rem;font-size:.95rem;color:var(--ink-2)}
+    .series-nav-item.current{color:var(--navy);font-weight:600}
+    .series-nav-item a{color:var(--ink-2)}
+    .series-nav-item a:hover{color:var(--navy)}
+    .ref-list{display:flex;flex-direction:column;gap:.75rem;margin-top:1rem}
+    .ref-item{font-size:.92rem;color:var(--ink-2);line-height:1.65;padding-left:2rem;position:relative}
+    .ref-num{position:absolute;left:0;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--ink-3);font-weight:700}
+    .ref-item a{color:var(--accent)}
+    .divider{border:none;border-top:1px solid var(--border);margin:3rem 0}
+    footer{background:#0C0C0C;border-top:1px solid rgba(255,255,255,.05);padding:2rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem}
+    .footer-copy{font-size:.77rem;color:rgba(255,255,255,.22)}
+    .footer-links{display:flex;gap:1.5rem}
+    .footer-links a{font-size:.77rem;color:rgba(255,255,255,.27)}
+    .footer-links a:hover{color:rgba(255,255,255,.7)}
+    .algo-box{background:var(--bg-alt);border:1px solid var(--border);border-radius:4px;padding:1.25rem 1.5rem;margin:1.5rem 0}
+    .algo-title{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--navy);margin-bottom:.75rem;font-weight:700}
+    .algo-step{font-size:.9rem;color:var(--ink-2);line-height:1.75;padding:.15rem 0;display:flex;gap:.8rem}
+    .algo-num{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--sienna);font-weight:700;flex-shrink:0;min-width:1.5rem}
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">Ali Shahmohammadi <em>Ph.D.</em></a>
+  <div class="nav-links">
+    <a href="../index.html#career">Career</a>
+    <a href="../index.html#writing">Writing</a>
+    <a href="../index.html#contact">Contact</a>
+    <a href="../resume.html">Resume</a>
+  </div>
+</nav>
+
+<div class="article-page">
+
+  <div class="article-hero">
+    <div class="article-hero-inner">
+      <div class="hero-series">Physics AI Series &mdash; Article 6 of 8</div>
+      <h1 class="article-title">Adaptive Sampling<br>&amp; Training Strategies<br><em>for Physics-Informed<br>Neural Networks</em></h1>
+      <p class="article-sub">Why uniform collocation fails for stiff problems, and how residual-based adaptive refinement, loss weighting, and causal training turn intractable problems into solvable ones.</p>
+      <div class="article-meta">
+        <span class="meta-pill highlight">Feb 2026</span>
+        <span class="meta-pill">18 min read</span>
+        <span class="meta-pill">Scientific ML</span>
+        <span class="meta-pill">Training Strategies</span>
+        <span class="meta-pill">Notebook: 03_Advanced/08</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="article-body">
+
+    <div class="series-nav">
+      <div class="series-nav-label">Physics AI / PINNs Series</div>
+      <div class="series-nav-list">
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">01</span><a href="pinn-introduction.html">Introduction to PINNs</a></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">02</span><a href="pinn-odes-second-order.html">Second-Order ODEs</a></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">03</span><a href="pinn-heat-equation.html">Heat Equation — 1D PDE</a></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">04</span><a href="pinn-burgers-reaction-pdes.html">Burgers &amp; Reaction PDEs</a></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">05</span><a href="pinn-inverse-problems.html">Inverse Problems &amp; Parameter Estimation</a></div>
+        <div class="series-nav-item current"><span style="font-family:'JetBrains Mono',monospace;font-size:.75rem">06</span>Adaptive Sampling &amp; Training Strategies &larr; you are here</div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">07</span><a href="pinn-deeponet.html">DeepONet — Learning Operators</a></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">08</span><a href="pinn-physics-informed-deeponet.html">Physics-Informed DeepONet</a></div>
+      </div>
+    </div>
+
+    <!-- SECTION 1 -->
+    <div class="section-label">01 — The Failure Mode</div>
+    <h2 class="section-h">Why Uniform Sampling Breaks Down</h2>
+
+    <p class="body-text">Every introductory PINN implementation uses uniform collocation: sample $N_f$ points $(x_j, t_j)$ randomly from the domain according to a uniform distribution, and minimize the PDE residual at those points. For simple, smooth problems — a mild diffusion equation, a slowly-varying ODE — this works adequately. But for the class of problems where physics is most interesting, uniform sampling fails systematically.</p>
+
+    <p class="body-text">Consider the viscous Burgers equation:</p>
+
+    <div class="math-block">
+      $$\frac{\partial u}{\partial t} + u\frac{\partial u}{\partial x} = \nu\frac{\partial^2 u}{\partial x^2}, \quad x \in [-1,1],\; t \in [0,1]$$
+    </div>
+
+    <p class="body-text">with $\nu = 0.01/\pi$ (the benchmark case from Raissi et al. 2019 and from PINNs literature at large). With this small viscosity, the solution develops a steep shock-like gradient near $x \approx 0$ at $t \approx 0.5$–$0.8$. The spatial derivative $|\partial u / \partial x|$ near the shock can be $\mathcal{O}(100)$, while in the smooth regions it is $\mathcal{O}(1)$.</p>
+
+    <p class="body-text">With 10,000 uniform collocation points, approximately 100–200 fall in the shock region (width $\approx \mathcal{O}(\nu) \approx 0.003$). The PDE residual is enormous there and negligible elsewhere. The network spends most of its capacity fitting the 9,800 trivial points and fails to resolve the shock. The result: apparent convergence (the total loss goes down), but catastrophic pointwise error near the shock.</p>
+
+    <div class="callout warning">
+      <div class="callout-icon">&#9651;</div>
+      <div class="callout-body">
+        <strong>The stiff problem taxonomy.</strong>
+        Three failure modes drive the need for adaptive strategies: (1) <strong>Spatial stiffness</strong> — sharp gradients or near-shocks in a thin spatial layer. (2) <strong>Temporal stiffness</strong> — fast transients followed by slow dynamics; the network tries to satisfy the PDE everywhere in time simultaneously, which is not how causality works. (3) <strong>High-frequency content</strong> — the spectral bias of neural networks (Rahaman et al. 2019 [6]) causes standard networks to preferentially fit low-frequency components, systematically missing high-frequency physical modes.
+      </div>
+    </div>
+
+    <!-- SECTION 2 -->
+    <hr class="divider">
+    <div class="section-label">02 — Residual-Based Adaptive Refinement</div>
+    <h2 class="section-h">RAR: Sample Where the Error Is</h2>
+
+    <p class="body-text">Residual-Based Adaptive Refinement (RAR), introduced by Lu et al. (2021) in the DeepXDE paper [1], addresses spatial stiffness by iteratively concentrating collocation points in regions where the current network violates the PDE most severely. The algorithm is elegantly simple:</p>
+
+    <div class="algo-box">
+      <div class="algo-title">Algorithm — Residual-Based Adaptive Refinement (RAR)</div>
+      <div class="algo-step"><span class="algo-num">1.</span>Initialize with a uniform collocation set $\mathcal{F}_0 = \{(x_j, t_j)\}_{j=1}^{N_0}$.</div>
+      <div class="algo-step"><span class="algo-num">2.</span>Train the network for $K$ epochs to convergence on $\mathcal{F}_0$.</div>
+      <div class="algo-step"><span class="algo-num">3.</span>Evaluate the PDE residual $r(x,t) = \mathcal{N}[u](x,t)$ on a fine evaluation mesh $\mathcal{G}$ (e.g., $100 \times 100$ grid).</div>
+      <div class="algo-step"><span class="algo-num">4.</span>Select the $m$ points from $\mathcal{G}$ with the highest $|r(x,t)|^2$ values.</div>
+      <div class="algo-step"><span class="algo-num">5.</span>Add these $m$ points to the training set: $\mathcal{F}_1 = \mathcal{F}_0 \cup \{m \text{ new points}\}$.</div>
+      <div class="algo-step"><span class="algo-num">6.</span>Retrain and repeat steps 3–5 for $R$ refinement rounds.</div>
+    </div>
+
+    <div class="fig-wrap">
+      <svg viewBox="0 0 640 220" width="100%" style="max-width:640px">
+        <!-- Left panel: Uniform sampling -->
+        <rect x="10" y="10" width="290" height="180" fill="#EBF0F7" rx="4"/>
+        <rect x="10" y="10" width="290" height="180" fill="none" stroke="#1C3D6B" stroke-width="1.2" rx="4"/>
+        <text x="155" y="30" text-anchor="middle" font-size="10" font-family="'JetBrains Mono',monospace" fill="#1C3D6B" letter-spacing="1">UNIFORM SAMPLING</text>
+        <!-- Uniform grid dots -->
+        <g fill="#1C3D6B" opacity="0.55">
+          <circle cx="35" cy="50" r="3.5"/><circle cx="70" cy="50" r="3.5"/><circle cx="105" cy="50" r="3.5"/><circle cx="140" cy="50" r="3.5"/><circle cx="175" cy="50" r="3.5"/><circle cx="210" cy="50" r="3.5"/><circle cx="245" cy="50" r="3.5"/><circle cx="280" cy="50" r="3.5"/>
+          <circle cx="35" cy="80" r="3.5"/><circle cx="70" cy="80" r="3.5"/><circle cx="105" cy="80" r="3.5"/><circle cx="140" cy="80" r="3.5"/><circle cx="175" cy="80" r="3.5"/><circle cx="210" cy="80" r="3.5"/><circle cx="245" cy="80" r="3.5"/><circle cx="280" cy="80" r="3.5"/>
+          <circle cx="35" cy="110" r="3.5"/><circle cx="70" cy="110" r="3.5"/><circle cx="105" cy="110" r="3.5"/><circle cx="140" cy="110" r="3.5"/><circle cx="175" cy="110" r="3.5"/><circle cx="210" cy="110" r="3.5"/><circle cx="245" cy="110" r="3.5"/><circle cx="280" cy="110" r="3.5"/>
+          <circle cx="35" cy="140" r="3.5"/><circle cx="70" cy="140" r="3.5"/><circle cx="105" cy="140" r="3.5"/><circle cx="140" cy="140" r="3.5"/><circle cx="175" cy="140" r="3.5"/><circle cx="210" cy="140" r="3.5"/><circle cx="245" cy="140" r="3.5"/><circle cx="280" cy="140" r="3.5"/>
+          <circle cx="35" cy="170" r="3.5"/><circle cx="70" cy="170" r="3.5"/><circle cx="105" cy="170" r="3.5"/><circle cx="140" cy="170" r="3.5"/><circle cx="175" cy="170" r="3.5"/><circle cx="210" cy="170" r="3.5"/><circle cx="245" cy="170" r="3.5"/><circle cx="280" cy="170" r="3.5"/>
+        </g>
+        <!-- Axis labels for left -->
+        <text x="155" y="208" text-anchor="middle" font-size="10" fill="#8C857E" font-style="italic">x (space)</text>
+        <text x="10" y="115" text-anchor="middle" font-size="10" fill="#8C857E" font-style="italic" transform="rotate(-90,10,115)" dy="8">t (time)</text>
+        <!-- Right panel: Adaptive sampling -->
+        <rect x="340" y="10" width="290" height="180" fill="#FBF4EC" rx="4"/>
+        <rect x="340" y="10" width="290" height="180" fill="none" stroke="#B8845A" stroke-width="1.2" rx="4"/>
+        <text x="485" y="30" text-anchor="middle" font-size="10" font-family="'JetBrains Mono',monospace" fill="#B8845A" letter-spacing="1">ADAPTIVE (RAR)</text>
+        <!-- Sparse background dots -->
+        <g fill="#1C3D6B" opacity="0.3">
+          <circle cx="360" cy="50" r="2.5"/><circle cx="395" cy="55" r="2.5"/><circle cx="430" cy="48" r="2.5"/><circle cx="465" cy="52" r="2.5"/><circle cx="500" cy="50" r="2.5"/><circle cx="540" cy="53" r="2.5"/><circle cx="600" cy="50" r="2.5"/>
+          <circle cx="360" cy="90" r="2.5"/><circle cx="400" cy="85" r="2.5"/><circle cx="450" cy="88" r="2.5"/><circle cx="510" cy="92" r="2.5"/><circle cx="560" cy="87" r="2.5"/><circle cx="610" cy="90" r="2.5"/>
+          <circle cx="360" cy="155" r="2.5"/><circle cx="400" cy="150" r="2.5"/><circle cx="455" cy="158" r="2.5"/><circle cx="520" cy="153" r="2.5"/><circle cx="575" cy="156" r="2.5"/>
+          <circle cx="370" cy="175" r="2.5"/><circle cx="415" cy="172" r="2.5"/><circle cx="470" cy="178" r="2.5"/><circle cx="535" cy="174" r="2.5"/><circle cx="590" cy="172" r="2.5"/>
+        </g>
+        <!-- High-residual region: shock near x=0 (center of domain), t=0.5-0.8 -->
+        <!-- center x ~ 485, t from 0.55 to 0.8 means y from ~10+180*0.55=109 to 10+180*0.8=154 -->
+        <rect x="472" y="100" width="26" height="55" fill="#DC2626" opacity="0.08" rx="2"/>
+        <!-- Dense cluster of red dots in shock region -->
+        <g fill="#DC2626" opacity="0.9">
+          <circle cx="476" cy="105" r="3.5"/><circle cx="484" cy="108" r="3.5"/><circle cx="479" cy="115" r="3.5"/><circle cx="490" cy="112" r="3.5"/><circle cx="474" cy="120" r="3.5"/><circle cx="487" cy="119" r="3.5"/><circle cx="481" cy="125" r="3.5"/><circle cx="493" cy="123" r="3.5"/><circle cx="477" cy="130" r="3.5"/><circle cx="486" cy="133" r="3.5"/><circle cx="482" cy="140" r="3.5"/><circle cx="491" cy="138" r="3.5"/><circle cx="475" cy="145" r="3.5"/><circle cx="488" cy="148" r="3.5"/><circle cx="483" cy="153" r="3.5"/>
+        </g>
+        <!-- Arrow and label -->
+        <line x1="530" y1="127" x2="500" y2="127" stroke="#DC2626" stroke-width="1.2" marker-end="url(#rarr)"/>
+        <text x="535" y="122" font-size="9" fill="#DC2626">high</text>
+        <text x="535" y="133" font-size="9" fill="#DC2626">residual</text>
+        <defs>
+          <marker id="rarr" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+            <path d="M0,0 L7,3.5 L0,7 z" fill="#DC2626"/>
+          </marker>
+        </defs>
+        <!-- Axis labels for right -->
+        <text x="485" y="208" text-anchor="middle" font-size="10" fill="#8C857E" font-style="italic">x (space)</text>
+      </svg>
+      <div class="fig-caption">Fig. 1 — Uniform (left) vs. adaptive RAR (right) collocation for Burgers equation with $\nu = 0.01/\pi$. Uniform sampling wastes points on smooth regions. RAR concentrates new points in the high-residual shock region (red cluster), where the network most needs to improve.</div>
+    </div>
+
+    <p class="body-text">The key theoretical motivation for RAR is that the PDE residual is an error indicator: it measures how much the current network approximation fails to satisfy the governing equation. Under mild regularity assumptions, the PDE residual bounds the pointwise approximation error (this is the analog of a posteriori error estimators in finite element methods). Concentrating collocation points where the residual is large therefore steers training toward the regions of highest error — a form of active learning for scientific ML.</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
+        <span class="code-lang">Python — RAR refinement loop</span>
+      </div>
+      <pre class="code-body"><span class="kw">def</span> <span class="fn">rar_refinement</span>(model, x_f, t_f, n_add=<span class="nm">200</span>, n_eval=<span class="nm">10000</span>):
+    <span class="cm">"""Add n_add points where PDE residual is largest."""</span>
+    <span class="cm"># Dense evaluation mesh</span>
+    x_eval = torch.linspace(-<span class="nm">1</span>, <span class="nm">1</span>, int(np.sqrt(n_eval))).unsqueeze(<span class="nm">1</span>)
+    t_eval = torch.linspace(<span class="nm">0</span>, <span class="nm">1</span>, int(np.sqrt(n_eval))).unsqueeze(<span class="nm">1</span>)
+    X, T = torch.meshgrid(x_eval.squeeze(), t_eval.squeeze(), indexing=<span class="st">'ij'</span>)
+    x_grid = X.reshape(-<span class="nm">1</span>, <span class="nm">1</span>).requires_grad_(<span class="kw">True</span>)
+    t_grid = T.reshape(-<span class="nm">1</span>, <span class="nm">1</span>).requires_grad_(<span class="kw">True</span>)
+
+    <span class="cm"># Compute PDE residual on the grid</span>
+    u = model(x_grid, t_grid)
+    u_t = torch.<span class="fn">autograd.grad</span>(u.sum(), t_grid, create_graph=<span class="kw">False</span>)[<span class="nm">0</span>]
+    u_x = torch.<span class="fn">autograd.grad</span>(u.sum(), x_grid, create_graph=<span class="kw">True</span>)[<span class="nm">0</span>]
+    u_xx = torch.<span class="fn">autograd.grad</span>(u_x.sum(), x_grid, create_graph=<span class="kw">False</span>)[<span class="nm">0</span>]
+    residual = (u_t + u * u_x - NU * u_xx).detach()
+
+    <span class="cm"># Select top-n_add points by |residual|^2</span>
+    err = (residual**<span class="nm">2</span>).squeeze()
+    _, top_idx = torch.topk(err, n_add)
+
+    x_new = x_grid[top_idx].detach()
+    t_new = t_grid[top_idx].detach()
+
+    <span class="cm"># Augment collocation set</span>
+    x_f_new = torch.cat([x_f, x_new], dim=<span class="nm">0</span>)
+    t_f_new = torch.cat([t_f, t_new], dim=<span class="nm">0</span>)
+    <span class="kw">return</span> x_f_new, t_f_new</pre>
+    </div>
+
+    <!-- SECTION 3 -->
+    <hr class="divider">
+    <div class="section-label">03 — Self-Adaptive PINNs</div>
+    <h2 class="section-h">Learnable Point Weights: the Min-Max Formulation</h2>
+
+    <p class="body-text">Self-Adaptive PINNs (SA-PINNs), proposed by McClenny and Braga-Neto (2023) [3], take a different approach. Instead of adding or removing points, they assign a learnable weight $\lambda_i$ to each collocation point and train these weights simultaneously with the network parameters — but in the opposite direction.</p>
+
+    <p class="body-text">The standard PINN loss minimization becomes a min-max problem:</p>
+
+    <div class="math-block">
+      $$\min_\theta \max_\lambda \; \mathcal{L}_{SA}(\theta, \lambda) = \sum_{i} \lambda_i \cdot r_i(\theta)^2$$
+    </div>
+
+    <p class="body-text">where $r_i(\theta)$ is the PDE residual at collocation point $i$, and $\lambda_i \geq 0$ are the adaptive weights. The network parameters $\theta$ minimize the loss (as usual). The weights $\lambda_i$ maximize it — they are trained to assign higher weight to points where the residual is currently larger. This creates a natural feedback loop: points the network is getting wrong automatically receive more training emphasis.</p>
+
+    <p class="body-text">Concretely, the weight update rule uses gradient ascent:</p>
+
+    <div class="math-block">
+      $$\lambda_i \leftarrow \lambda_i + \eta_\lambda \cdot r_i(\theta)^2, \quad \lambda_i \leftarrow \text{softmax}(\lambda_i / T_\lambda) \cdot N_f$$
+    </div>
+
+    <p class="body-text">where $T_\lambda$ is a temperature parameter controlling the sharpness of the weight distribution, and the softmax normalization ensures the total weight sums to $N_f$ (so the effective total loss magnitude is preserved). In practice, $\lambda_i$ is implemented as an additional <code>nn.Parameter</code> in the model, with a separate optimizer that takes ascent steps.</p>
+
+    <div class="callout insight">
+      <div class="callout-icon">&#9670;</div>
+      <div class="callout-body">
+        <strong>SA-PINNs vs. RAR: when to use each.</strong>
+        RAR adds new points and retrains — it is batch, discrete, and appropriate when you want to permanently commit resources to high-error regions. SA-PINNs dynamically reweight existing points — they are online, continuous, and appropriate when the high-residual regions shift during training (e.g., in time-dependent problems where the shock moves). In practice, the two methods can be combined: use SA-PINNs for dynamic reweighting within an RAR round, and use RAR to periodically add points in persistently difficult regions.
+      </div>
+    </div>
+
+    <!-- SECTION 4 -->
+    <hr class="divider">
+    <div class="section-label">04 — Gradient Pathologies</div>
+    <h2 class="section-h">NTK Analysis and Loss Weighting</h2>
+
+    <p class="body-text">Wang, Teng, and Perdikaris (2021) [2] provided the first principled explanation for a well-known empirical observation: PINNs trained with equal weights on the physics loss and boundary/initial condition losses often fail to satisfy the boundary conditions accurately. The explanation comes from Neural Tangent Kernel (NTK) theory.</p>
+
+    <p class="body-text">Under the NTK regime (infinite-width limit), the training dynamics of the network can be described by the eigendecomposition of the NTK matrix $\mathbf{K}$. The convergence rate for each loss component is governed by the eigenvalue spectrum of the corresponding block of $\mathbf{K}$. If the NTK eigenvalues for the physics loss ($\kappa_f$) and boundary loss ($\kappa_b$) satisfy $\kappa_f \ll \kappa_b$, then the network fits the boundary conditions rapidly while the physics loss barely moves — an imbalance that forces the solution to satisfy the boundaries correctly but violate the PDE interior.</p>
+
+    <p class="body-text">The practical remedy is to weight the losses inversely proportional to their NTK spectral norms at each training step:</p>
+
+    <div class="math-block">
+      $$\mathcal{L} = \hat{\lambda}_b \mathcal{L}_{BC} + \hat{\lambda}_{ic} \mathcal{L}_{IC} + \hat{\lambda}_f \mathcal{L}_{physics}$$
+      $$\hat{\lambda}_k = \frac{\text{tr}(\mathbf{K})}{\text{tr}(\mathbf{K}_k)}, \quad k \in \{b, ic, f\}$$
+    </div>
+
+    <p class="body-text">where $\mathbf{K}_k$ is the NTK block corresponding to loss component $k$. Computing $\text{tr}(\mathbf{K}_k)$ exactly requires a backward pass per sample, which is expensive. The practical approximation used in the notebook is to compute the gradient magnitude ratio:</p>
+
+    <div class="math-block">
+      $$\hat{\lambda}_k^{(n)} = \frac{\max_i |\nabla_\theta \mathcal{L}_{physics}^{(n)}|_i}{\text{mean}_i |\nabla_\theta \mathcal{L}_k^{(n)}|_i}$$
+    </div>
+
+    <p class="body-text">and apply an exponential moving average to smooth the weight updates across training steps.</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
+        <span class="code-lang">Python — adaptive loss weighting</span>
+      </div>
+      <pre class="code-body"><span class="kw">class</span> <span class="tp">AdaptiveLossWeighter</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="nm">self</span>, alpha=<span class="nm">0.9</span>):
+        <span class="nm">self</span>.alpha = alpha  <span class="cm"># EMA smoothing</span>
+        <span class="nm">self</span>.weights = {<span class="st">'bc'</span>: <span class="nm">1.0</span>, <span class="st">'ic'</span>: <span class="nm">1.0</span>, <span class="st">'physics'</span>: <span class="nm">1.0</span>}
+
+    <span class="kw">def</span> <span class="fn">update</span>(<span class="nm">self</span>, model, losses):
+        grads = {}
+        <span class="kw">for</span> key, loss <span class="kw">in</span> losses.items():
+            loss.backward(retain_graph=<span class="kw">True</span>)
+            grads[key] = torch.cat([
+                p.grad.abs().flatten() <span class="kw">for</span> p <span class="kw">in</span> model.parameters()
+                <span class="kw">if</span> p.grad <span class="kw">is not None</span>
+            ])
+            model.zero_grad()
+
+        max_grad = max(g.max().item() <span class="kw">for</span> g <span class="kw">in</span> grads.values())
+        <span class="kw">for</span> key, g <span class="kw">in</span> grads.items():
+            new_w = max_grad / (g.mean().item() + <span class="nm">1e-8</span>)
+            <span class="cm"># Exponential moving average</span>
+            <span class="nm">self</span>.weights[key] = (
+                <span class="nm">self</span>.alpha * <span class="nm">self</span>.weights[key] + (<span class="nm">1</span> - <span class="nm">self</span>.alpha) * new_w
+            )
+        <span class="kw">return</span> <span class="nm">self</span>.weights</pre>
+    </div>
+
+    <!-- SECTION 5 -->
+    <hr class="divider">
+    <div class="section-label">05 — Causal Training</div>
+    <h2 class="section-h">Respecting the Arrow of Time</h2>
+
+    <p class="body-text">Wang, Sankaran, and Perdikaris (2022) [4] identified a fundamental failure mode specific to time-dependent PINNs: the network simultaneously receives gradient signals from all time points, including $t = T$, before it has correctly learned the solution at $t = 0$. This violates the causal structure of time-dependent PDEs — you cannot correctly satisfy the equation at $t = 0.8$ if you have not correctly satisfied it at $t = 0.2$ first, because the initial condition propagates forward through the equation.</p>
+
+    <p class="body-text">The causal training algorithm addresses this by introducing time-dependent weights that exponentially decay the contribution of late-time residuals:</p>
+
+    <div class="math-block">
+      $$w_j = \exp\!\left(-\epsilon \sum_{k:\, t_k &lt; t_j} r_k^2(\theta)\right)$$
+    </div>
+
+    <p class="body-text">where $\epsilon > 0$ is a causality parameter. If the residual at earlier times $t_k < t_j$ is large, then $w_j \approx 0$, and the contribution of point $j$ to the gradient is suppressed — the network is told "don't worry about $t_j$ yet, you haven't got $t_k$ right." As earlier time points are correctly learned and their residuals approach zero, $w_j \to 1$, and the gradient from $t_j$ begins to contribute fully.</p>
+
+    <div class="fig-wrap">
+      <svg viewBox="0 0 620 180" width="100%" style="max-width:620px">
+        <defs>
+          <linearGradient id="causalGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#1C3D6B"/>
+            <stop offset="60%" stop-color="#4A9EBF"/>
+            <stop offset="100%" stop-color="#EBF0F7"/>
+          </linearGradient>
+        </defs>
+        <!-- Timeline bar -->
+        <rect x="40" y="60" width="520" height="36" rx="4" fill="url(#causalGrad)"/>
+        <rect x="40" y="60" width="520" height="36" fill="none" stroke="#1C3D6B" stroke-width="1" rx="4"/>
+        <!-- Labels on timeline -->
+        <text x="42" y="54" font-size="10" fill="#1C3D6B" font-family="'JetBrains Mono',monospace">t = 0</text>
+        <text x="540" y="54" font-size="10" fill="#8C857E" font-family="'JetBrains Mono',monospace">t = T</text>
+        <text x="115" y="82" text-anchor="middle" font-size="10" fill="white" font-weight="700">HIGH weight</text>
+        <text x="480" y="82" text-anchor="middle" font-size="10" fill="#8C857E" font-weight="600">low weight</text>
+        <!-- Weight axis below -->
+        <line x1="40" y1="115" x2="560" y2="115" stroke="#DEDAD3" stroke-width="1"/>
+        <!-- Exponential decay curve -->
+        <!-- w(t) = exp(-epsilon * cumulative_loss(t)), approximated visually as a decay from 1 to ~0.05 -->
+        <!-- SVG path: x from 40 to 560, y from 116 (w=1) decays to ~147 (w~0.05) -->
+        <!-- w=1 -> y = 116 + (1-1)*30 = 116, w=0 -> y=146. Exponential: y = 116 + (1 - exp(-5*t)) * 30 for t in [0,1] -->
+        <path d="M40,116 C100,116 150,118 200,123 C250,128 300,136 380,142 C440,146 500,147 560,147"
+              fill="none" stroke="#B8845A" stroke-width="2.5" stroke-linejoin="round"/>
+        <!-- Labels -->
+        <text x="38" y="114" text-anchor="end" font-size="9" fill="#8C857E" font-family="'JetBrains Mono',monospace">1</text>
+        <text x="38" y="148" text-anchor="end" font-size="9" fill="#8C857E" font-family="'JetBrains Mono',monospace">0</text>
+        <text x="300" y="168" text-anchor="middle" font-size="10" fill="#B8845A">w(t) = exp(&#8722;&#949; &middot; &#931; r&#178;(earlier times))</text>
+        <!-- Annotation -->
+        <text x="42" y="138" font-size="9" fill="#1C3D6B" font-style="italic">correctly learned</text>
+        <text x="450" y="138" font-size="9" fill="#8C857E" font-style="italic">suppressed until</text>
+        <text x="450" y="149" font-size="9" fill="#8C857E" font-style="italic">earlier times solved</text>
+      </svg>
+      <div class="fig-caption">Fig. 2 — Causal training weights. Points at $t = 0$ receive full weight from the start; late-time points are suppressed until earlier times are correctly learned. The weight $w(t)$ follows an exponential decay driven by the cumulative residual at preceding time steps.</div>
+    </div>
+
+    <div class="algo-box">
+      <div class="algo-title">Algorithm — Causal Training</div>
+      <div class="algo-step"><span class="algo-num">1.</span>Sort collocation points by time: $t_1 \leq t_2 \leq \cdots \leq t_{N_f}$.</div>
+      <div class="algo-step"><span class="algo-num">2.</span>Compute PDE residuals $r_j = r(x_j, t_j; \theta)$ for all $j$.</div>
+      <div class="algo-step"><span class="algo-num">3.</span>Compute cumulative residual: $R_j = \sum_{k=1}^{j-1} r_k^2$.</div>
+      <div class="algo-step"><span class="algo-num">4.</span>Assign causal weights: $w_j = \exp(-\epsilon \cdot R_j)$, with $w_1 = 1$.</div>
+      <div class="algo-step"><span class="algo-num">5.</span>Weighted physics loss: $\mathcal{L}_{physics} = \frac{1}{N_f} \sum_j w_j r_j^2$.</div>
+      <div class="algo-step"><span class="algo-num">6.</span>Take a gradient step. Terminate when $\min_j w_j > 1 - \delta$ (all times are well-learned).</div>
+    </div>
+
+    <!-- SECTION 6 -->
+    <hr class="divider">
+    <div class="section-label">06 — Curriculum Learning</div>
+    <h2 class="section-h">Expanding Time Windows</h2>
+
+    <p class="body-text">Curriculum learning for time-dependent PINNs takes an even more explicit approach to causality: train the network only on the interval $[0, T_1]$ to convergence, then extend to $[0, T_2]$ with $T_2 > T_1$, and continue. The trained solution on the first window serves as a high-quality initial condition (in the sense of network weights) for the next window — a form of warm-starting that exploits the temporal structure of the problem.</p>
+
+    <p class="body-text">For the damped harmonic oscillator $\ddot{x} + 2\gamma\dot{x} + \omega_0^2 x = 0$ with $\gamma = 0.5$, $\omega_0 = 5$ (approximately 8 oscillation periods in $[0, 10]$), a PINN trained uniformly on $[0, 10]$ from scratch typically fails after period 3–4 due to accumulated phase error. Curriculum learning with windows $T_k = 2k$ for $k = 1, \ldots, 5$ recovers the correct solution through all 8 periods:</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
+        <span class="code-lang">Python — curriculum learning for oscillator</span>
+      </div>
+      <pre class="code-body">T_windows = [<span class="nm">2.0</span>, <span class="nm">4.0</span>, <span class="nm">6.0</span>, <span class="nm">8.0</span>, <span class="nm">10.0</span>]
+model = <span class="tp">OscillatorPINN</span>()
+optimizer = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>)
+
+<span class="kw">for</span> T_end <span class="kw">in</span> T_windows:
+    <span class="cm"># Collocation points only in [0, T_end]</span>
+    t_f = torch.rand(N_COLLOC, <span class="nm">1</span>) * T_end
+    t_ic = torch.zeros(<span class="nm">1</span>, <span class="nm">1</span>)  <span class="cm"># IC always at t=0</span>
+
+    <span class="kw">for</span> epoch <span class="kw">in</span> <span class="fn">range</span>(EPOCHS_PER_WINDOW):
+        optimizer.zero_grad()
+        loss_ic = compute_ic_loss(model, t_ic)
+        loss_ode = compute_ode_residual(model, t_f)
+        loss = loss_ic + loss_ode
+        loss.backward()
+        optimizer.step()
+
+    <span class="fn">print</span>(<span class="st">f"Window [0, {T_end:.1f}] done. Max error: {eval_error(model, T_end):.4f}"</span>)</pre>
+    </div>
+
+    <p class="body-text">The key implementation detail is that the initial condition loss is always evaluated at $t = 0$, regardless of the current window — this anchors the solution to the true starting point as the window expands. Without this anchor, solutions from earlier windows can drift from the true initial condition when the window is extended.</p>
+
+    <!-- SECTION 7 -->
+    <hr class="divider">
+    <div class="section-label">07 — Fourier Feature Embeddings</div>
+    <h2 class="section-h">Overcoming Spectral Bias</h2>
+
+    <p class="body-text">Rahaman et al. (2019) [6] proved that neural networks with standard activation functions exhibit a "spectral bias" or "frequency principle": during gradient descent, the network learns low-frequency components of the target function first and high-frequency components last (or not at all). For PINNs applied to wave equations, high-frequency oscillations, or fine-scale spatial structure, this means the network systematically fails to represent the physical solution regardless of depth, width, or training duration.</p>
+
+    <p class="body-text">The Fourier feature embedding (Tancik et al. 2020 [5]) addresses this by explicitly mapping the input coordinates to a high-dimensional space of sinusoidal features before passing them through the network:</p>
+
+    <div class="math-block">
+      $$\gamma(\mathbf{x}) = \left[\sin(2\pi \mathbf{B}\mathbf{x}),\; \cos(2\pi \mathbf{B}\mathbf{x})\right]^\top$$
+    </div>
+
+    <p class="body-text">where $\mathbf{B} \in \mathbb{R}^{m \times d}$ is a random matrix with entries drawn from $\mathcal{N}(0, \sigma^2)$. The network then operates on $\gamma(\mathbf{x}) \in \mathbb{R}^{2m}$ rather than $\mathbf{x} \in \mathbb{R}^d$. The effect on the NTK of the embedded network is that the resulting kernel approximates a stationary isotropic Gaussian kernel with bandwidth $\sigma$:</p>
+
+    <div class="math-block">
+      $$k_\gamma(\mathbf{x}, \mathbf{x}') = \mathbb{E}_\mathbf{B}\left[\gamma(\mathbf{x})^\top\gamma(\mathbf{x}')\right] = \exp\!\left(-\frac{2\pi^2\sigma^2}{d}\|\mathbf{x} - \mathbf{x}'\|^2\right)$$
+    </div>
+
+    <p class="body-text">This means the embedded network is initialized in a regime where it can represent all spatial frequencies up to $\mathcal{O}(\sigma)$, not just the low-frequency modes. The bandwidth $\sigma$ is the key hyperparameter: too small and the embedding provides no benefit; too large and it introduces aliasing. A practical heuristic from the notebook: set $\sigma$ to the Nyquist frequency of the finest feature you expect in the solution, estimated from the PDE parameters.</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
+        <span class="code-lang">Python — Fourier feature embedding layer</span>
+      </div>
+      <pre class="code-body"><span class="kw">class</span> <span class="tp">FourierEmbedding</span>(nn.Module):
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="nm">self</span>, in_dim=<span class="nm">2</span>, n_features=<span class="nm">128</span>, sigma=<span class="nm">10.0</span>):
+        <span class="fn">super</span>().__init__()
+        <span class="cm"># Fixed random matrix B — not trained</span>
+        B = torch.randn(n_features, in_dim) * sigma
+        <span class="nm">self</span>.<span class="fn">register_buffer</span>(<span class="st">'B'</span>, B)
+
+    <span class="kw">def</span> <span class="fn">forward</span>(<span class="nm">self</span>, x):
+        <span class="cm"># x: (batch, in_dim)</span>
+        proj = (2 * np.pi * x) @ <span class="nm">self</span>.B.T  <span class="cm"># (batch, n_features)</span>
+        <span class="kw">return</span> torch.cat([torch.sin(proj), torch.cos(proj)], dim=-<span class="nm">1</span>)
+        <span class="cm"># output: (batch, 2*n_features)</span>
+
+<span class="kw">class</span> <span class="tp">FourierPINN</span>(nn.Module):
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="nm">self</span>, sigma=<span class="nm">10.0</span>):
+        <span class="fn">super</span>().__init__()
+        <span class="nm">self</span>.embed = <span class="tp">FourierEmbedding</span>(in_dim=<span class="nm">2</span>, n_features=<span class="nm">64</span>, sigma=sigma)
+        <span class="nm">self</span>.net = nn.Sequential(
+            nn.Linear(<span class="nm">128</span>, <span class="nm">128</span>), nn.Tanh(),  <span class="cm"># 128 = 2*64</span>
+            nn.Linear(<span class="nm">128</span>, <span class="nm">128</span>), nn.Tanh(),
+            nn.Linear(<span class="nm">128</span>, <span class="nm">64</span>),  nn.Tanh(),
+            nn.Linear(<span class="nm">64</span>, <span class="nm">1</span>)
+        )
+
+    <span class="kw">def</span> <span class="fn">forward</span>(<span class="nm">self</span>, x, t):
+        inp = torch.cat([x, t], dim=<span class="nm">1</span>)
+        <span class="kw">return</span> <span class="nm">self</span>.net(<span class="nm">self</span>.embed(inp))</pre>
+    </div>
+
+    <!-- SECTION 8 -->
+    <hr class="divider">
+    <div class="section-label">08 — Strategy Comparison</div>
+    <h2 class="section-h">When to Use What</h2>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Strategy</th>
+          <th>Best problem type</th>
+          <th>Implementation complexity</th>
+          <th>Overhead cost</th>
+          <th>When to use</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Baseline uniform</strong></td>
+          <td>Smooth, low-frequency, short time horizon</td>
+          <td>None</td>
+          <td>None</td>
+          <td>Always start here; upgrade if it fails</td>
+        </tr>
+        <tr>
+          <td><strong>RAR</strong></td>
+          <td>Sharp spatial gradients, near-shocks</td>
+          <td>Low — 20 lines</td>
+          <td>$\sim$5–15% per RAR round</td>
+          <td>Burgers, Euler, Stefan problems</td>
+        </tr>
+        <tr>
+          <td><strong>Self-adaptive (SA)</strong></td>
+          <td>Moving high-residual regions, unknown stiffness structure</td>
+          <td>Medium — extra parameter group</td>
+          <td>$\sim$10–20% (extra backprop)</td>
+          <td>When residual structure evolves during training</td>
+        </tr>
+        <tr>
+          <td><strong>NTK loss weighting</strong></td>
+          <td>Multi-component losses with imbalanced magnitudes</td>
+          <td>Medium — gradient analysis</td>
+          <td>$\sim$20–30% (extra backward pass)</td>
+          <td>Standard practice for any PINN with IC+BC+physics</td>
+        </tr>
+        <tr>
+          <td><strong>Causal training</strong></td>
+          <td>Stiff time-dependent PDEs, long time horizons</td>
+          <td>Low — weight computation</td>
+          <td>$\sim$5% overhead</td>
+          <td>Navier–Stokes, wave propagation, reaction-diffusion</td>
+        </tr>
+        <tr>
+          <td><strong>Curriculum learning</strong></td>
+          <td>Very long time horizons, persistent oscillations</td>
+          <td>Medium — multi-phase training loop</td>
+          <td>$\sim$1.2–2x total compute</td>
+          <td>20+ oscillation periods, multi-scale dynamics</td>
+        </tr>
+        <tr>
+          <td><strong>Fourier features</strong></td>
+          <td>High-frequency oscillations, turbulence, wave equations</td>
+          <td>Low — drop-in embedding layer</td>
+          <td>Minimal ($\sigma$ must be tuned)</td>
+          <td>Whenever max frequency of solution is $&gt;\mathcal{O}(10)$</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- SECTION 9 -->
+    <hr class="divider">
+    <div class="section-label">09 — Decision Guide</div>
+    <h2 class="section-h">A Practical Flowchart for Strategy Selection</h2>
+
+    <div class="fig-wrap">
+      <svg viewBox="0 0 620 420" width="100%" style="max-width:620px">
+        <defs>
+          <marker id="farr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 z" fill="#8C857E"/>
+          </marker>
+          <marker id="yarr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 z" fill="#2D7A4F"/>
+          </marker>
+          <marker id="narr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 z" fill="#B8845A"/>
+          </marker>
+        </defs>
+
+        <!-- Start node -->
+        <rect x="225" y="10" width="170" height="38" rx="19" fill="#1C3D6B"/>
+        <text x="310" y="34" text-anchor="middle" font-size="12" font-weight="700" fill="white">Start</text>
+
+        <!-- Q1: Stiff? -->
+        <rect x="185" y="72" width="250" height="38" rx="4" fill="#EBF0F7" stroke="#1C3D6B" stroke-width="1.5"/>
+        <text x="310" y="96" text-anchor="middle" font-size="11" fill="#1C3D6B" font-weight="600">Is the problem stiff in time?</text>
+        <line x1="310" y1="48" x2="310" y2="72" stroke="#8C857E" stroke-width="1.5" marker-end="url(#farr)"/>
+
+        <!-- Q1 YES path -->
+        <line x1="310" y1="110" x2="310" y2="138" stroke="#2D7A4F" stroke-width="1.5" marker-end="url(#yarr)"/>
+        <text x="322" y="126" font-size="9" fill="#2D7A4F">YES</text>
+
+        <!-- Q2: Very long time horizon? -->
+        <rect x="165" y="138" width="290" height="38" rx="4" fill="#EBF0F7" stroke="#1C3D6B" stroke-width="1.5"/>
+        <text x="310" y="162" text-anchor="middle" font-size="11" fill="#1C3D6B" font-weight="600">Very long time horizon (&gt;10 periods)?</text>
+
+        <!-- Q2 YES -->
+        <line x1="310" y1="176" x2="310" y2="204" stroke="#2D7A4F" stroke-width="1.5" marker-end="url(#yarr)"/>
+        <text x="322" y="192" font-size="9" fill="#2D7A4F">YES</text>
+        <!-- Curriculum box -->
+        <rect x="200" y="204" width="220" height="38" rx="4" fill="#2D7A4F"/>
+        <text x="310" y="222" text-anchor="middle" font-size="11" fill="white" font-weight="700">Curriculum Learning</text>
+        <text x="310" y="234" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.7)">+ optional causal weighting</text>
+
+        <!-- Q2 NO -->
+        <line x1="455" y1="157" x2="520" y2="157" stroke="#B8845A" stroke-width="1.5" marker-end="url(#narr)"/>
+        <text x="480" y="150" font-size="9" fill="#B8845A">NO</text>
+        <!-- Causal box -->
+        <rect x="520" y="138" width="90" height="38" rx="4" fill="#2D7A4F"/>
+        <text x="565" y="155" text-anchor="middle" font-size="10" fill="white" font-weight="700">Causal</text>
+        <text x="565" y="167" text-anchor="middle" font-size="10" fill="white" font-weight="700">Training</text>
+
+        <!-- Q1 NO path -->
+        <line x1="185" y1="91" x2="100" y2="91" stroke="#B8845A" stroke-width="1.5"/>
+        <text x="130" y="84" font-size="9" fill="#B8845A">NO</text>
+        <line x1="100" y1="91" x2="100" y2="275" stroke="#B8845A" stroke-width="1.5"/>
+        <line x1="100" y1="275" x2="130" y2="275" stroke="#B8845A" stroke-width="1.5" marker-end="url(#narr)"/>
+
+        <!-- Q3: High-frequency? -->
+        <rect x="130" y="256" width="260" height="38" rx="4" fill="#EBF0F7" stroke="#1C3D6B" stroke-width="1.5"/>
+        <text x="260" y="278" text-anchor="middle" font-size="11" fill="#1C3D6B" font-weight="600">High-frequency oscillations?</text>
+
+        <!-- Q3 YES -->
+        <line x1="260" y1="294" x2="260" y2="322" stroke="#2D7A4F" stroke-width="1.5" marker-end="url(#yarr)"/>
+        <text x="272" y="310" font-size="9" fill="#2D7A4F">YES</text>
+        <!-- Fourier box -->
+        <rect x="160" y="322" width="200" height="38" rx="4" fill="#5B4E8A"/>
+        <text x="260" y="340" text-anchor="middle" font-size="11" fill="white" font-weight="700">Fourier Features</text>
+        <text x="260" y="352" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.7)">(tune &#963; to max frequency)</text>
+
+        <!-- Q3 NO -->
+        <line x1="390" y1="275" x2="450" y2="275" stroke="#B8845A" stroke-width="1.5" marker-end="url(#narr)"/>
+        <text x="415" y="268" font-size="9" fill="#B8845A">NO</text>
+
+        <!-- Q4: Near-shock? -->
+        <rect x="450" y="256" width="160" height="38" rx="4" fill="#EBF0F7" stroke="#1C3D6B" stroke-width="1.5"/>
+        <text x="530" y="272" text-anchor="middle" font-size="10.5" fill="#1C3D6B" font-weight="600">Near-shock or</text>
+        <text x="530" y="285" text-anchor="middle" font-size="10.5" fill="#1C3D6B" font-weight="600">localized dynamics?</text>
+
+        <!-- Q4 YES -->
+        <line x1="530" y1="294" x2="530" y2="322" stroke="#2D7A4F" stroke-width="1.5" marker-end="url(#yarr)"/>
+        <text x="542" y="310" font-size="9" fill="#2D7A4F">YES</text>
+        <!-- RAR box -->
+        <rect x="460" y="322" width="140" height="38" rx="4" fill="#B8845A"/>
+        <text x="530" y="340" text-anchor="middle" font-size="11" fill="white" font-weight="700">RAR</text>
+        <text x="530" y="352" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.7)">(or SA-PINNs)</text>
+
+        <!-- Q4 NO -->
+        <line x1="530" y1="294" x2="530" y2="385" stroke="#8C857E" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="455" y1="385" x2="531" y2="385" stroke="#8C857E" stroke-width="1"/>
+        <rect x="310" y="370" width="145" height="32" rx="4" fill="#4A4540"/>
+        <text x="382" y="388" text-anchor="middle" font-size="10" fill="white" font-weight="700">Uniform sampling</text>
+        <text x="382" y="399" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,.6)">+ NTK loss weighting</text>
+        <text x="415" y="380" font-size="9" fill="#8C857E">NO</text>
+      </svg>
+      <div class="fig-caption">Fig. 3 — Decision flowchart for selecting a PINN training strategy. Start by characterizing the dominant failure mode of the problem, then select the corresponding strategy. Multiple strategies can be combined (e.g., causal training + Fourier features for a high-frequency wave equation over a long time horizon).</div>
+    </div>
+
+    <h3 class="sub-h">Combining strategies</h3>
+    <p class="body-text">The strategies described here are not mutually exclusive. A common high-performance configuration for challenging PDEs is: <strong>Fourier features</strong> (to overcome spectral bias) + <strong>causal weighting</strong> (to enforce temporal causality) + <strong>NTK loss balancing</strong> (to prevent boundary condition dominance). This combination, sometimes called the "enhanced PINN" configuration in the literature, typically achieves 1–2 orders of magnitude improvement over baseline uniform PINNs on benchmark stiff problems, at a total overhead of $\sim$30–40% additional compute per epoch — a favorable trade given the convergence improvement.</p>
+
+    <div class="callout success">
+      <div class="callout-icon">&#10003;</div>
+      <div class="callout-body">
+        <strong>Notebook results: Burgers with adaptive strategies.</strong>
+        On the benchmark Burgers equation ($\nu = 0.01/\pi$), the notebook 08_adaptive_sampling.ipynb compares baseline uniform (final $L^2$ error: 8.3%) vs. RAR + causal + NTK weighting (final $L^2$ error: 0.41%). The adaptive combination achieves a 20x improvement in accuracy for the same total number of training epochs, while only requiring $\sim$35% more wall-clock time per epoch due to the overhead of RAR evaluation and gradient analysis.
+      </div>
+    </div>
+
+    <hr class="divider">
+    <div class="section-label">References</div>
+    <h2 class="section-h">Bibliography</h2>
+    <div class="ref-list">
+      <div class="ref-item"><span class="ref-num">[1]</span>Lu, L., Meng, X., Mao, Z., &amp; Karniadakis, G.E. (2021). DeepXDE: A deep learning library for solving differential equations. <em>SIAM Review</em>, 63(1), 208–228.</div>
+      <div class="ref-item"><span class="ref-num">[2]</span>Wang, S., Teng, Y., &amp; Perdikaris, P. (2021). Understanding and mitigating gradient flow pathologies in physics-informed neural networks. <em>SIAM Journal on Scientific Computing</em>, 43(5), A3055–A3081.</div>
+      <div class="ref-item"><span class="ref-num">[3]</span>McClenny, L.D. &amp; Braga-Neto, U.M. (2023). Self-adaptive physics-informed neural networks. <em>Journal of Computational Physics</em>, 474, 111722.</div>
+      <div class="ref-item"><span class="ref-num">[4]</span>Wang, S., Sankaran, S., &amp; Perdikaris, P. (2022). Respecting causality is all you need for training physics-informed neural networks. <em>arXiv:2203.07404</em>.</div>
+      <div class="ref-item"><span class="ref-num">[5]</span>Tancik, M., Srinivasan, P.P., Mildenhall, B., Fridovich-Keil, S., Raghavan, N., Singhal, U., Ramamoorthi, R., Barron, J.T., &amp; Ng, R. (2020). Fourier features let networks learn high frequency functions in low dimensional domains. <em>NeurIPS</em>, 33, 7537–7547.</div>
+      <div class="ref-item"><span class="ref-num">[6]</span>Rahaman, N., Baratin, A., Arpit, D., Draxler, F., Lin, M., Hamprecht, F., Bengio, Y., &amp; Courville, A. (2019). On the spectral bias of neural networks. <em>ICML 2019</em>, PMLR 97, 5301–5310.</div>
+      <div class="ref-item"><span class="ref-num">[7]</span>Jacot, A., Gabriel, F., &amp; Hongler, C. (2018). Neural tangent kernel: Convergence and generalization in neural networks. <em>NeurIPS</em>, 31.</div>
+      <div class="ref-item"><span class="ref-num">[8]</span>Raissi, M., Perdikaris, P., &amp; Karniadakis, G.E. (2019). Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. <em>Journal of Computational Physics</em>, 378, 686–707.</div>
+    </div>
+
+    <hr class="divider">
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-top:1rem">
+      <a href="pinn-inverse-problems.html" style="font-size:.875rem;color:var(--ink-3)">&larr; Previous: Inverse Problems &amp; Parameter Estimation</a>
+      <a href="pinn-deeponet.html" style="font-size:.875rem;color:var(--navy);font-weight:600">Next: DeepONet — Learning Operators &rarr;</a>
+    </div>
+
+  </div><!-- /article-body -->
+</div><!-- /article-page -->
+
+<footer>
+  <span class="footer-copy">&copy; 2026 Ali Shahmohammadi. All rights reserved.</span>
+  <div class="footer-links">
+    <a href="../index.html">Home</a>
+    <a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solving the 1D Heat Equation with PINNs — Ali Shahmohammadi</title>
+  <meta name="description" content="From ODEs to PDEs: how Physics-Informed Neural Networks handle the 1D heat equation, mixed partial derivatives via autograd, and space-time collocation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#F8F6F2;--bg-alt:#F1EEE9;--ink:#111010;--ink-2:#4A4540;--ink-3:#8C857E;--navy:#1C3D6B;--navy-lt:#EBF0F7;--sienna:#B8845A;--sienna-lt:#FBF4EC;--purple:#5B4E8A;--purple-lt:#F2EEF9;--green:#2D7A4F;--green-lt:#EBF7F1;--green-bdr:#BEE5D3;--border:#DEDAD3;--dark:#111010;--accent:#2563EB;--accent-lt:#EFF6FF;--accent-mid:#BFDBFE;--red:#DC2626;--red-lt:#FEF2F2;--amber:#D97706;--amber-lt:#FFFBEB;--amber-bdr:#FDE68A}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--ink);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:18px;line-height:1.65;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent);text-decoration:none}a:hover{opacity:.75}
+    code,pre{font-family:'JetBrains Mono','Fira Code',monospace}
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between;background:rgba(248,246,242,.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:var(--ink)}
+    .nav-logo em{font-style:normal;color:var(--sienna)}
+    .nav-links{display:flex;align-items:center;gap:.2rem}
+    .nav-links a{font-size:.82rem;font-weight:500;color:var(--ink-3);padding:.42rem .8rem;border-radius:4px;transition:color .15s,background .15s}
+    .nav-links a:hover{color:var(--ink);background:var(--bg-alt)}
+    .article-page{padding-top:60px}
+    .article-hero{background:var(--dark);padding:5rem 3rem 4rem}
+    .article-hero-inner{max-width:820px;margin:0 auto}
+    .hero-series{font-family:'JetBrains Mono',monospace;font-size:.67rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sienna);margin-bottom:1rem;display:flex;align-items:center;gap:.8rem}
+    .hero-series::before{content:'';width:28px;height:1px;background:var(--sienna)}
+    .article-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,4.2rem);font-weight:700;letter-spacing:-.02em;line-height:.97;color:#fff;margin-bottom:1.25rem}
+    .article-title em{font-style:italic;font-weight:400;color:rgba(255,255,255,.4)}
+    .article-sub{font-size:1.08rem;color:rgba(255,255,255,.45);margin-bottom:2rem;line-height:1.75;max-width:640px}
+    .article-meta{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2rem}
+    .meta-pill{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:rgba(255,255,255,.38);border:1px solid rgba(255,255,255,.1);padding:.25rem .65rem;border-radius:2px}
+    .meta-pill.highlight{color:var(--sienna);border-color:rgba(184,132,90,.35)}
+    .article-body{max-width:820px;margin:0 auto;padding:4rem 3rem}
+    @media(max-width:640px){.article-hero{padding:3.5rem 1.5rem 3rem}.article-body{padding:3rem 1.5rem}}
+    .section-label{font-family:'JetBrains Mono',monospace;font-size:.67rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1rem}
+    h2.section-h{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;letter-spacing:-.02em;line-height:1.05;color:var(--ink);margin-bottom:.75rem}
+    h3.sub-h{font-size:1.12rem;font-weight:700;color:var(--ink);margin-bottom:.5rem;margin-top:2rem}
+    .body-text{font-size:1.05rem;color:var(--ink-2);line-height:1.8;margin-bottom:1.25rem}
+    .math-block{background:var(--bg-alt);border:1px solid var(--border);border-left:3px solid var(--navy);border-radius:0 4px 4px 0;padding:1.1rem 1.5rem;margin:1.5rem 0;font-family:'JetBrains Mono',monospace;font-size:.88rem;color:var(--navy);overflow-x:auto;line-height:1.7}
+    .math-inline{font-family:'JetBrains Mono',monospace;font-size:.88em;color:var(--navy);background:var(--navy-lt);padding:.08em .3em;border-radius:2px}
+    .code-block{background:#1C1C1E;border-radius:6px;overflow:hidden;margin:1.5rem 0}
+    .code-header{display:flex;align-items:center;justify-content:space-between;padding:.55rem 1rem;background:#2A2A2D;border-bottom:1px solid rgba(255,255,255,.07)}
+    .code-lang{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:rgba(255,255,255,.35);letter-spacing:.1em;text-transform:uppercase}
+    .code-dots{display:flex;gap:5px}
+    .code-dot{width:10px;height:10px;border-radius:50%}
+    .dot-r{background:#FF5F57}.dot-y{background:#FEBC2E}.dot-g{background:#28C840}
+    pre.code-body{padding:1.25rem 1.5rem;overflow-x:auto;font-size:.88rem;line-height:1.75;color:#D1D5DB}
+    .kw{color:#C084FC}.st{color:#86EFAC}.cm{color:#6B7280;font-style:italic}.fn{color:#93C5FD}.nm{color:#FCA5A5}.tp{color:#67E8F9}
+    .callout{border-radius:4px;padding:1.1rem 1.4rem;margin:1.5rem 0;display:flex;gap:.9rem}
+    .callout-icon{flex-shrink:0;margin-top:.1rem}
+    .callout-body{font-size:.9rem;line-height:1.7}
+    .callout-body strong{display:block;font-weight:700;margin-bottom:.2rem}
+    .callout.insight{background:var(--navy-lt);border:1px solid rgba(28,61,107,.2)}
+    .callout.insight .callout-icon{color:var(--navy)}
+    .callout.insight .callout-body{color:var(--navy)}
+    .callout.warning{background:var(--amber-lt);border:1px solid var(--amber-bdr)}
+    .callout.warning .callout-icon{color:var(--amber)}
+    .callout.warning .callout-body{color:#92400E}
+    .callout.success{background:var(--green-lt);border:1px solid var(--green-bdr)}
+    .callout.success .callout-icon{color:var(--green)}
+    .callout.success .callout-body{color:#14532D}
+    .data-table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.875rem}
+    .data-table th{font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding:.65rem 1rem;border-bottom:2px solid var(--border);text-align:left}
+    .data-table td{padding:.65rem 1rem;border-bottom:1px solid var(--border);color:var(--ink-2);vertical-align:top}
+    .data-table tr:last-child td{border-bottom:none}
+    .data-table tr:hover td{background:var(--bg-alt)}
+    .fig-wrap{margin:2rem 0;text-align:center}
+    .fig-caption{font-size:.78rem;color:var(--ink-3);margin-top:.6rem;font-style:italic}
+    .series-nav{background:var(--bg-alt);border:1px solid var(--border);border-radius:4px;padding:1.5rem 1.75rem;margin:2.5rem 0}
+    .series-nav-label{font-family:'JetBrains Mono',monospace;font-size:.63rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1rem}
+    .series-nav-list{display:flex;flex-direction:column;gap:.4rem}
+    .series-nav-item{display:flex;align-items:center;gap:.65rem;font-size:.95rem;color:var(--ink-2)}
+    .series-nav-item.current{color:var(--navy);font-weight:600}
+    .series-nav-item a{color:var(--ink-2)}
+    .series-nav-item a:hover{color:var(--navy)}
+    .ref-list{display:flex;flex-direction:column;gap:.75rem;margin-top:1rem}
+    .ref-item{font-size:.92rem;color:var(--ink-2);line-height:1.65;padding-left:2rem;position:relative}
+    .ref-num{position:absolute;left:0;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--ink-3);font-weight:700}
+    .ref-item a{color:var(--accent)}
+    .divider{border:none;border-top:1px solid var(--border);margin:3rem 0}
+    footer{background:#0C0C0C;border-top:1px solid rgba(255,255,255,.05);padding:2rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem}
+    .footer-copy{font-size:.77rem;color:rgba(255,255,255,.22)}
+    .footer-links{display:flex;gap:1.5rem}
+    .footer-links a{font-size:.77rem;color:rgba(255,255,255,.27);transition:color .15s}
+    .footer-links a:hover{color:rgba(255,255,255,.7)}
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">Ali Shahmohammadi <em>Ph.D.</em></a>
+  <div class="nav-links">
+    <a href="../index.html#career">Career</a>
+    <a href="../index.html#writing">Writing</a>
+    <a href="../index.html#contact">Contact</a>
+    <a href="../resume.html">Resume</a>
+  </div>
+</nav>
+
+<div class="article-page">
+
+  <!-- Hero -->
+  <div class="article-hero">
+    <div class="article-hero-inner">
+      <div class="hero-series">Physics AI &mdash; PINNs Series &nbsp;&middot;&nbsp; Article 3 of 8</div>
+      <h1 class="article-title">Solving the 1D Heat Equation<br><em>with PINNs</em></h1>
+      <p class="article-sub">From a single independent variable to a two-dimensional space-time domain &mdash; how PINNs handle partial derivatives, boundary conditions, and the full field reconstruction problem.</p>
+      <div class="article-meta">
+        <span class="meta-pill highlight">Nov 2025</span>
+        <span class="meta-pill">16 min read</span>
+        <span class="meta-pill">Scientific ML &middot; PDEs</span>
+        <span class="meta-pill">Intermediate</span>
+        <span class="meta-pill">notebook: 03_heat_equation.ipynb</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="article-body">
+
+    <!-- Series nav -->
+    <div class="series-nav">
+      <div class="series-nav-label">Physics AI / PINNs &mdash; Series Navigation</div>
+      <div class="series-nav-list">
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">01</span><a href="pinn-introduction.html">Introduction to PINNs</a><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3)">Sep 2025</span></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">02</span><a href="pinn-odes-second-order.html">Second-Order ODEs</a><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3)">Oct 2025</span></div>
+        <div class="series-nav-item current"><span style="font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">03</span>Heat Equation &mdash; 1D PDE<span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--navy)">Nov 2025</span></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">04</span><a href="pinn-burgers-reaction-pdes.html">Burgers &amp; Reaction PDEs</a><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3)">Dec 2025</span></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">05</span><a href="pinn-inverse-problems.html">Inverse Problems &amp; Parameter Estimation</a><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3)">Jan 2026</span></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">06</span><a href="pinn-adaptive-sampling.html">Adaptive Sampling &amp; Training Strategies</a><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3)">Feb 2026</span></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">07</span><a href="pinn-deeponet.html">DeepONet &mdash; Learning Operators</a><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3)">Mar 2026</span></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">08</span><a href="pinn-physics-informed-deeponet.html">Physics-Informed DeepONet &amp; Advanced Architectures</a><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3)">Apr 2026</span></div>
+      </div>
+    </div>
+
+    <!-- Section 1: Why PDEs matter -->
+    <div style="margin-top:3rem">
+      <div class="section-label">01 &mdash; Motivation</div>
+      <h2 class="section-h">Why PDEs Matter: The Step from ODEs</h2>
+      <p class="body-text">The first two articles in this series dealt with ordinary differential equations &mdash; functions of a single independent variable, typically time. The natural world rarely cooperates with that simplification. Real engineering problems have fields: temperature distributions across a reactor wall, drug concentration profiles in a tissue slab, stress states in a structural component. These are functions of both space and time, and the equations governing them are <em>partial</em> differential equations.</p>
+      <p class="body-text">The 1D heat (diffusion) equation is the canonical entry point:</p>
+      <div class="math-block">$$\frac{\partial u}{\partial t} = \alpha\,\frac{\partial^2 u}{\partial x^2}$$</div>
+      <p class="body-text">This single equation governs an enormous range of phenomena. In pharmaceutical manufacturing: drug diffusion through membrane barriers, heat generation and dissipation in lyophilization (freeze-drying), and tablet dissolution fronts all satisfy diffusion-type equations in some spatial dimension. In battery engineering, thermal runaway analysis requires solving the heat equation across cell layers with spatially varying conductivity. In chemical engineering, tubular reactor temperature profiles with axial diffusion reduce to the same form.</p>
+      <p class="body-text">The classical numerical approach is to discretise space with a finite-difference or finite-element grid and march forward in time. This works well for regular geometries and known boundary conditions. The PINN approach differs fundamentally: rather than discretising, the neural network <em>is</em> the solution, and training enforces the governing equation at scattered collocation points without any mesh. The payoff is flexibility in geometry and the ability to seamlessly blend sparse experimental data with physics &mdash; a capability we will exploit heavily starting in Article 5.</p>
+
+      <div class="callout insight">
+        <div class="callout-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="callout-body">
+          <strong>Dimension as complexity</strong>
+          Every additional independent variable multiplies the difficulty for mesh-based methods (the curse of dimensionality) but adds only a single input neuron for a PINN. This asymmetry is one of the primary motivations for the entire PINN research programme.
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 2: Problem Setup -->
+    <div>
+      <div class="section-label">02 &mdash; Problem Statement</div>
+      <h2 class="section-h">Problem Setup: Rod with Fixed Cold Ends</h2>
+      <p class="body-text">The problem from notebook <code>03_heat_equation.ipynb</code> is deliberately chosen to admit a clean analytical solution, allowing rigorous error quantification rather than just qualitative visual agreement.</p>
+
+      <h3 class="sub-h">Governing equation and domain</h3>
+      <div class="math-block">$$\frac{\partial u}{\partial t} = \alpha\,\frac{\partial^2 u}{\partial x^2}, \qquad x \in [0,1],\quad t \in [0, T]$$</div>
+      <p class="body-text">with thermal diffusivity $\alpha = 0.4$ and $T = 1.0$. The parameter $\alpha$ sets the timescale of temperature decay: large $\alpha$ means fast diffusion, so the profile flattens quickly.</p>
+
+      <h3 class="sub-h">Initial and boundary conditions</h3>
+      <div class="math-block">
+        $$u(x,0) = \sin(\pi x) \qquad \text{(initial condition)}$$
+        $$u(0,t) = 0, \quad u(1,t) = 0 \qquad \text{(Dirichlet BCs)}$$
+      </div>
+      <p class="body-text">The initial temperature profile is a single half-sine arch, taking value zero at both ends and peaking at $x = 0.5$. The boundary conditions fix both ends permanently at zero &mdash; the rod is in contact with a heat reservoir at zero temperature.</p>
+
+      <h3 class="sub-h">Analytical solution</h3>
+      <p class="body-text">Because the initial condition is exactly the first eigenfunction of the spatial operator $-\partial^2/\partial x^2$ on $[0,1]$ with Dirichlet boundaries, the Fourier series solution collapses to a single mode:</p>
+      <div class="math-block">$$u(x,t) = \sin(\pi x)\,e^{-\alpha\pi^2 t}$$</div>
+      <p class="body-text">The spatial shape is frozen as $\sin(\pi x)$ forever; only the amplitude decays exponentially with rate $\alpha\pi^2 \approx 3.948$. At $t = 0.8$, the amplitude has decayed to $e^{-3.948 \times 0.8} \approx 0.044$ of its initial value &mdash; nearly flat. This rapid decay makes the problem a good test of whether the network correctly captures multi-scale temporal dynamics.</p>
+
+      <div class="callout insight">
+        <div class="callout-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="callout-body">
+          <strong>Why this initial condition?</strong>
+          Choosing $u(x,0) = \sin(\pi x)$ is not arbitrary. It excites exactly one Fourier mode, so the analytical solution has no truncation error from series approximation. Any discrepancy between the PINN and the exact solution is purely attributable to network approximation error &mdash; clean, unambiguous benchmarking.
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 3: Architecture -->
+    <div>
+      <div class="section-label">03 &mdash; Architecture</div>
+      <h2 class="section-h">From One Input to Two: The Architecture Change</h2>
+      <p class="body-text">In the ODE notebooks the network mapped $t \mapsto u(t)$: a single scalar input. The moment we step into PDE territory, every collocation point has two coordinates $(x, t)$, and the network must accept both simultaneously. The change is minimal in code but profound in what it represents &mdash; the network is now learning a surface in $(x,t)$ space rather than a curve in $t$.</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span class="code-dot dot-r"></span><span class="code-dot dot-y"></span><span class="code-dot dot-g"></span></div>
+          <span class="code-lang">Python &mdash; PINN architecture (2-input)</span>
+        </div>
+        <pre class="code-body"><span class="kw">class</span> <span class="tp">PINN</span>(nn.Module):
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, layers):
+        <span class="fn">super</span>().__init__()
+        seq = []
+        <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(layers)-<span class="nm">1</span>):
+            seq.append(nn.<span class="fn">Linear</span>(layers[i], layers[i+<span class="nm">1</span>]))
+            <span class="kw">if</span> i &lt; <span class="fn">len</span>(layers)-<span class="nm">2</span>:
+                seq.append(nn.<span class="fn">Tanh</span>())
+        self.net = nn.<span class="fn">Sequential</span>(*seq)
+        <span class="kw">for</span> m <span class="kw">in</span> self.net:
+            <span class="kw">if</span> <span class="fn">isinstance</span>(m, nn.Linear):
+                nn.init.<span class="fn">xavier_normal_</span>(m.weight)
+                nn.init.<span class="fn">zeros_</span>(m.bias)
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, x, t):
+        <span class="cm"># Concatenate x and t along the feature dimension</span>
+        <span class="kw">return</span> self.net(torch.<span class="fn">cat</span>([x, t], dim=<span class="nm">1</span>))
+
+<span class="cm"># Architecture: [2, 64, 64, 64, 1]  — 2 inputs, 3 hidden layers, 1 output</span>
+model = <span class="fn">PINN</span>([<span class="nm">2</span>, <span class="nm">64</span>, <span class="nm">64</span>, <span class="nm">64</span>, <span class="nm">1</span>]).to(device)
+<span class="cm"># Total parameters: 2*64 + 64*64 + 64*64 + 64*1 + biases ≈ 12,737</span></pre>
+      </div>
+
+      <p class="body-text">The key line is <code>torch.cat([x, t], dim=1)</code>. Both <code>x</code> and <code>t</code> are tensors of shape <code>(N, 1)</code>, and concatenating along the feature dimension produces shape <code>(N, 2)</code> &mdash; exactly what the first <code>Linear(2, 64)</code> layer expects. The rest of the forward pass is unchanged from the ODE case.</p>
+      <p class="body-text">Why Tanh activations rather than ReLU? Tanh is infinitely differentiable. Since we need $\partial u/\partial t$ and $\partial^2 u/\partial x^2$ from autograd, we require two orders of differentiability everywhere. ReLU is piecewise linear: its second derivative is zero almost everywhere and undefined at the kinks, making it fundamentally unsuitable for PDE residual computation.</p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 4: Autograd derivatives -->
+    <div>
+      <div class="section-label">04 &mdash; Automatic Differentiation</div>
+      <h2 class="section-h">Mixed Partial Derivatives via Autograd</h2>
+      <p class="body-text">The PDE residual requires $\partial u / \partial t$ (first-order in time) and $\partial^2 u / \partial x^2$ (second-order in space). PyTorch's automatic differentiation engine computes these through the computational graph built during the forward pass &mdash; no finite differences, no numerical approximation.</p>
+      <p class="body-text">There are two critical requirements. First, both <code>x</code> and <code>t</code> must be created with <code>requires_grad=True</code> so that gradients can flow back through them. Second, each <code>autograd.grad</code> call must use <code>create_graph=True</code> to keep the higher-order computation graph alive, enabling the second derivative to be computed from the first.</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span class="code-dot dot-r"></span><span class="code-dot dot-y"></span><span class="code-dot dot-g"></span></div>
+          <span class="code-lang">Python &mdash; PDE residual computation</span>
+        </div>
+        <pre class="code-body"><span class="kw">def</span> <span class="fn">pde_residual</span>(model, x, t):
+    u = <span class="fn">model</span>(x, t)
+    <span class="cm"># First-order time derivative  ∂u/∂t</span>
+    u_t = torch.autograd.<span class="fn">grad</span>(
+        u, t,
+        grad_outputs=torch.<span class="fn">ones_like</span>(u),
+        create_graph=<span class="kw">True</span>
+    )[<span class="nm">0</span>]
+    <span class="cm"># First-order space derivative  ∂u/∂x  (needed for second order)</span>
+    u_x = torch.autograd.<span class="fn">grad</span>(
+        u, x,
+        grad_outputs=torch.<span class="fn">ones_like</span>(u),
+        create_graph=<span class="kw">True</span>
+    )[<span class="nm">0</span>]
+    <span class="cm"># Second-order space derivative  ∂²u/∂x²</span>
+    u_xx = torch.autograd.<span class="fn">grad</span>(
+        u_x, x,
+        grad_outputs=torch.<span class="fn">ones_like</span>(u_x),
+        create_graph=<span class="kw">True</span>
+    )[<span class="nm">0</span>]
+    <span class="cm"># Residual: should be zero everywhere inside the domain</span>
+    <span class="kw">return</span> u_t - alpha * u_xx</pre>
+      </div>
+
+      <p class="body-text">The call to compute <code>u_xx</code> differentiates <code>u_x</code> with respect to <code>x</code>. For this second differentiation to be valid, the computational graph connecting <code>u_x</code> to <code>x</code> must still exist &mdash; which is why the first call must set <code>create_graph=True</code>. Without it, the graph is freed after computing <code>u_x</code>, and attempting to differentiate again raises a runtime error.</p>
+      <p class="body-text">This is the most common source of confusion for newcomers to PINNs. The rule is simple: <strong>any gradient that will itself be differentiated must be computed with <code>create_graph=True</code></strong>.</p>
+
+      <div class="callout warning">
+        <div class="callout-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="callout-body">
+          <strong>Memory cost of create_graph</strong>
+          Retaining the graph for higher-order derivatives increases peak GPU memory, roughly proportional to the order of differentiation. For the heat equation (max 2nd order) this is manageable. For 4th-order equations like biharmonic plate bending, memory becomes a genuine constraint and requires careful batch sizing.
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 5: Loss function -->
+    <div>
+      <div class="section-label">05 &mdash; Loss Function</div>
+      <h2 class="section-h">The Three-Term Loss</h2>
+      <p class="body-text">The PINN total loss is the sum of three mean-squared residuals, each enforcing a different constraint on the solution:</p>
+      <div class="math-block">
+        $$\mathcal{L} = \underbrace{\mathcal{L}_\text{PDE}}_{\text{governs interior}} + \underbrace{\mathcal{L}_\text{IC}}_{\text{anchors }t=0} + \underbrace{\mathcal{L}_\text{BC}}_{\text{anchors }x=0,1}$$
+      </div>
+      <p class="body-text">Explicitly:</p>
+      <div class="math-block">
+        $$\mathcal{L}_\text{PDE} = \frac{1}{N_f}\sum_{i=1}^{N_f}\left(\frac{\partial u}{\partial t}(\mathbf{x}_i) - \alpha\frac{\partial^2 u}{\partial x^2}(\mathbf{x}_i)\right)^2$$
+        $$\mathcal{L}_\text{IC} = \frac{1}{N_\text{ic}}\sum_{j=1}^{N_\text{ic}}\left(u(x_j, 0) - \sin(\pi x_j)\right)^2$$
+        $$\mathcal{L}_\text{BC} = \frac{1}{N_\text{bc}}\sum_{k=1}^{N_\text{bc}}\left[u(0, t_k)^2 + u(1, t_k)^2\right]$$
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span class="code-dot dot-r"></span><span class="code-dot dot-y"></span><span class="code-dot dot-g"></span></div>
+          <span class="code-lang">Python &mdash; full loss function</span>
+        </div>
+        <pre class="code-body"><span class="kw">def</span> <span class="fn">loss_fn</span>(model, pts):
+    x_f, t_f, x_ic, t_ic, u_ic, x_b0, x_b1, t_bc = pts
+
+    <span class="cm"># PDE residual at interior collocation points</span>
+    r = <span class="fn">pde_residual</span>(model, x_f, t_f)
+    L_pde = torch.<span class="fn">mean</span>(r**<span class="nm">2</span>)
+
+    <span class="cm"># Initial condition: u(x,0) = sin(πx)</span>
+    L_ic  = torch.<span class="fn">mean</span>((<span class="fn">model</span>(x_ic, t_ic) - u_ic)**<span class="nm">2</span>)
+
+    <span class="cm"># Boundary conditions: u(0,t) = 0  and  u(1,t) = 0</span>
+    L_bc  = (torch.<span class="fn">mean</span>(<span class="fn">model</span>(x_b0, t_bc)**<span class="nm">2</span>) +
+             torch.<span class="fn">mean</span>(<span class="fn">model</span>(x_b1, t_bc)**<span class="nm">2</span>))
+
+    total = L_pde + L_ic + L_bc
+    <span class="kw">return</span> total, (L_pde.<span class="fn">item</span>(), L_ic.<span class="fn">item</span>(), L_bc.<span class="fn">item</span>())</pre>
+      </div>
+
+      <p class="body-text">Notice that all three terms have equal weight of 1.0 here. In practice, relative scaling matters: the IC loss starts large (the initial profile is $O(1)$) while the BC loss starts near zero if the network already predicts small values at the boundary. Unequal loss magnitudes during early training can cause gradient imbalance. For this clean problem the default equal weighting works well, but Article 6 on adaptive sampling covers sophisticated loss-weighting strategies for more difficult cases.</p>
+
+      <h3 class="sub-h">Sampling in 2D: the collocation domain</h3>
+      <p class="body-text">The training domain is now a rectangle $[0,1] \times [0,T]$. Interior points for the PDE residual are sampled uniformly at random. This is the simplest valid strategy, but it distributes effort uniformly across regions that may have very different physics. The notebook uses:</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span class="code-dot dot-r"></span><span class="code-dot dot-y"></span><span class="code-dot dot-g"></span></div>
+          <span class="code-lang">Python &mdash; collocation point sampling</span>
+        </div>
+        <pre class="code-body">N_f  = <span class="nm">4000</span>   <span class="cm"># interior collocation points (PDE residual)</span>
+N_ic = <span class="nm">200</span>    <span class="cm"># points on the initial condition line t=0</span>
+N_bc = <span class="nm">200</span>    <span class="cm"># points on each boundary (x=0 and x=1)</span>
+
+x_f = torch.<span class="fn">rand</span>(N_f, <span class="nm">1</span>, device=device)           <span class="cm"># x ~ Uniform[0,1]</span>
+t_f = torch.<span class="fn">rand</span>(N_f, <span class="nm">1</span>, device=device) * T       <span class="cm"># t ~ Uniform[0,T]</span>
+x_f.<span class="fn">requires_grad_</span>(<span class="kw">True</span>); t_f.<span class="fn">requires_grad_</span>(<span class="kw">True</span>)
+
+x_ic = torch.<span class="fn">rand</span>(N_ic, <span class="nm">1</span>, device=device)
+t_ic = torch.<span class="fn">zeros</span>(N_ic, <span class="nm">1</span>, device=device)
+u_ic = torch.<span class="fn">sin</span>(np.pi * x_ic)
+
+t_bc = torch.<span class="fn">rand</span>(N_bc, <span class="nm">1</span>, device=device) * T
+x_b0 = torch.<span class="fn">zeros</span>(N_bc, <span class="nm">1</span>, device=device)  <span class="cm"># left boundary x=0</span>
+x_b1 = torch.<span class="fn">ones</span>(N_bc, <span class="nm">1</span>, device=device)   <span class="cm"># right boundary x=1</span></pre>
+      </div>
+
+      <!-- Visual 1: Space-Time Domain Diagram -->
+      <div class="fig-wrap">
+        <svg width="420" height="320" viewBox="0 0 420 320" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;border:1px solid var(--border);border-radius:4px;background:var(--bg-alt)">
+          <!-- Axes area: left 60, bottom 50, right 20, top 30 -->
+          <!-- Domain rectangle -->
+          <rect x="60" y="30" width="320" height="230" fill="#EBF0F7" stroke="#1C3D6B" stroke-width="1.5"/>
+
+          <!-- Interior collocation dots (scattered) -->
+          <g fill="#8C857E" opacity="0.55">
+            <circle cx="110" cy="70" r="2.5"/><circle cx="155" cy="95" r="2.5"/><circle cx="200" cy="60" r="2.5"/><circle cx="245" cy="110" r="2.5"/><circle cx="290" cy="80" r="2.5"/><circle cx="330" cy="55" r="2.5"/>
+            <circle cx="100" cy="130" r="2.5"/><circle cx="145" cy="145" r="2.5"/><circle cx="195" cy="120" r="2.5"/><circle cx="235" cy="160" r="2.5"/><circle cx="280" cy="135" r="2.5"/><circle cx="340" cy="115" r="2.5"/>
+            <circle cx="115" cy="185" r="2.5"/><circle cx="160" cy="200" r="2.5"/><circle cx="210" cy="175" r="2.5"/><circle cx="255" cy="210" r="2.5"/><circle cx="305" cy="190" r="2.5"/><circle cx="350" cy="170" r="2.5"/>
+            <circle cx="130" cy="230" r="2.5"/><circle cx="175" cy="245" r="2.5"/><circle cx="220" cy="235" r="2.5"/><circle cx="265" cy="250" r="2.5"/><circle cx="310" cy="240" r="2.5"/>
+            <circle cx="80" cy="85" r="2.5"/><circle cx="80" cy="155" r="2.5"/><circle cx="85" cy="215" r="2.5"/><circle cx="370" cy="100" r="2.5"/><circle cx="368" cy="155" r="2.5"/><circle cx="365" cy="205" r="2.5"/>
+          </g>
+
+          <!-- IC line (bottom, navy) -->
+          <line x1="60" y1="260" x2="380" y2="260" stroke="#1C3D6B" stroke-width="3"/>
+          <!-- IC dots -->
+          <g fill="#1C3D6B">
+            <circle cx="80" cy="260" r="3.5"/><circle cx="110" cy="260" r="3.5"/><circle cx="140" cy="260" r="3.5"/><circle cx="170" cy="260" r="3.5"/><circle cx="200" cy="260" r="3.5"/><circle cx="230" cy="260" r="3.5"/><circle cx="260" cy="260" r="3.5"/><circle cx="290" cy="260" r="3.5"/><circle cx="320" cy="260" r="3.5"/><circle cx="350" cy="260" r="3.5"/>
+          </g>
+
+          <!-- BC lines (sides, sienna) -->
+          <line x1="60" y1="30" x2="60" y2="260" stroke="#B8845A" stroke-width="3"/>
+          <line x1="380" y1="30" x2="380" y2="260" stroke="#B8845A" stroke-width="3"/>
+          <!-- BC dots left -->
+          <g fill="#B8845A">
+            <circle cx="60" cy="50" r="3.5"/><circle cx="60" cy="80" r="3.5"/><circle cx="60" cy="110" r="3.5"/><circle cx="60" cy="140" r="3.5"/><circle cx="60" cy="170" r="3.5"/><circle cx="60" cy="200" r="3.5"/><circle cx="60" cy="230" r="3.5"/>
+            <circle cx="380" cy="50" r="3.5"/><circle cx="380" cy="80" r="3.5"/><circle cx="380" cy="110" r="3.5"/><circle cx="380" cy="140" r="3.5"/><circle cx="380" cy="170" r="3.5"/><circle cx="380" cy="200" r="3.5"/><circle cx="380" cy="230" r="3.5"/>
+          </g>
+
+          <!-- Axes -->
+          <line x1="60" y1="265" x2="60" y2="15" stroke="#4A4540" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line x1="55" y1="260" x2="395" y2="260" stroke="#4A4540" stroke-width="1.5" marker-end="url(#arr)"/>
+          <defs>
+            <marker id="arr" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="#4A4540"/>
+            </marker>
+          </defs>
+
+          <!-- Axis labels -->
+          <text x="395" y="264" font-family="JetBrains Mono,monospace" font-size="13" fill="#4A4540">x</text>
+          <text x="45" y="12" font-family="JetBrains Mono,monospace" font-size="13" fill="#4A4540">t</text>
+          <text x="57" y="277" font-family="JetBrains Mono,monospace" font-size="11" fill="#4A4540">0</text>
+          <text x="372" y="277" font-family="JetBrains Mono,monospace" font-size="11" fill="#4A4540">1</text>
+          <text x="36" y="264" font-family="JetBrains Mono,monospace" font-size="11" fill="#4A4540">0</text>
+          <text x="36" y="34" font-family="JetBrains Mono,monospace" font-size="11" fill="#4A4540">T</text>
+
+          <!-- Labels -->
+          <text x="185" y="150" font-family="Inter,sans-serif" font-size="11" fill="#4A4540" font-style="italic" text-anchor="middle">interior</text>
+          <text x="185" y="165" font-family="Inter,sans-serif" font-size="11" fill="#4A4540" font-style="italic" text-anchor="middle">collocation</text>
+          <text x="185" y="180" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E" text-anchor="middle">N_f = 4000</text>
+
+          <!-- IC label -->
+          <text x="220" y="295" font-family="Inter,sans-serif" font-size="11" fill="#1C3D6B" font-weight="600" text-anchor="middle">IC: u(x,0) = sin(πx)</text>
+          <text x="220" y="308" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#1C3D6B" text-anchor="middle">N_ic = 200</text>
+
+          <!-- BC labels -->
+          <text x="14" y="150" font-family="Inter,sans-serif" font-size="10" fill="#B8845A" font-weight="600" transform="rotate(-90,14,150)" text-anchor="middle">BC: u=0</text>
+          <text x="406" y="150" font-family="Inter,sans-serif" font-size="10" fill="#B8845A" font-weight="600" transform="rotate(90,406,150)" text-anchor="middle">BC: u=0</text>
+        </svg>
+        <div class="fig-caption">Figure 1. Space-time collocation domain $[0,1]\times[0,T]$. Navy points along the bottom edge enforce the initial condition; sienna points on the vertical edges enforce Dirichlet boundary conditions; grey dots in the interior enforce the PDE residual.</div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 6: Results -->
+    <div>
+      <div class="section-label">06 &mdash; Results</div>
+      <h2 class="section-h">Training and Results</h2>
+      <p class="body-text">The model is trained with Adam for 12,000 epochs at learning rate $10^{-3}$. Collocation points are sampled once and held fixed throughout training (static sampling). The final relative $L_2$ error over the full space-time grid is typically in the range $10^{-3}$ to $10^{-4}$ &mdash; three to four orders of magnitude improvement over the initial random-initialization error.</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span class="code-dot dot-r"></span><span class="code-dot dot-y"></span><span class="code-dot dot-g"></span></div>
+          <span class="code-lang">Python &mdash; training loop and error evaluation</span>
+        </div>
+        <pre class="code-body">optimizer = torch.optim.<span class="fn">Adam</span>(model.parameters(), lr=<span class="nm">1e-3</span>)
+EPOCHS = <span class="nm">12000</span>
+pts = <span class="fn">sample</span>()
+hist = []
+<span class="kw">for</span> ep <span class="kw">in</span> <span class="fn">range</span>(EPOCHS):
+    optimizer.<span class="fn">zero_grad</span>()
+    loss, parts = <span class="fn">loss_fn</span>(model, pts)
+    loss.<span class="fn">backward</span>(); optimizer.<span class="fn">step</span>()
+    hist.append(loss.<span class="fn">item</span>())
+    <span class="kw">if</span> ep % <span class="nm">2000</span> == <span class="nm">0</span>:
+        <span class="fn">print</span>(<span class="st">f"epoch {ep:5d} | loss {loss.item():.3e} | "</span>
+              <span class="st">f"pde {parts[0]:.2e} ic {parts[1]:.2e} bc {parts[2]:.2e}"</span>)
+
+<span class="cm"># Evaluate on a 100×100 space-time grid</span>
+nx, nt = <span class="nm">100</span>, <span class="nm">100</span>
+xs = np.<span class="fn">linspace</span>(<span class="nm">0</span>, <span class="nm">1</span>, nx); ts = np.<span class="fn">linspace</span>(<span class="nm">0</span>, T, nt)
+X, Tg = np.<span class="fn">meshgrid</span>(xs, ts)
+<span class="cm"># ... (flatten, run model, reshape)</span>
+relL2 = np.linalg.<span class="fn">norm</span>(U - Ue) / np.linalg.<span class="fn">norm</span>(Ue)
+<span class="fn">print</span>(<span class="st">f"relative L2 error: {relL2:.3e}"</span>)  <span class="cm"># typically ~3e-4</span></pre>
+      </div>
+
+      <h3 class="sub-h">Temperature evolution: four time snapshots</h3>
+      <p class="body-text">The most intuitive view is temperature $u(x, t)$ sliced at fixed times. The four curves below show the profile at $t = 0, 0.15, 0.4, 0.8$, demonstrating rapid amplitude decay while the sinusoidal shape is preserved exactly.</p>
+
+      <!-- Visual 2: Temperature Evolution Line Chart -->
+      <div class="fig-wrap">
+        <svg width="480" height="300" viewBox="0 0 480 300" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;border:1px solid var(--border);border-radius:4px;background:var(--bg-alt)">
+          <defs>
+            <clipPath id="plotarea"><rect x="55" y="20" width="390" height="220"/></clipPath>
+          </defs>
+          <!-- Grid lines -->
+          <g stroke="#DEDAD3" stroke-width="1">
+            <line x1="55" y1="20" x2="55" y2="240"/><line x1="152.5" y1="20" x2="152.5" y2="240"/>
+            <line x1="250" y1="20" x2="250" y2="240"/><line x1="347.5" y1="20" x2="347.5" y2="240"/>
+            <line x1="445" y1="20" x2="445" y2="240"/>
+            <line x1="55" y1="240" x2="445" y2="240"/><line x1="55" y1="185" x2="445" y2="185"/>
+            <line x1="55" y1="130" x2="445" y2="130"/><line x1="55" y1="75" x2="445" y2="75"/>
+            <line x1="55" y1="20" x2="445" y2="20"/>
+          </g>
+
+          <!-- Axis labels -->
+          <text x="245" y="272" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#4A4540">x</text>
+          <text x="14" y="132" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#4A4540" transform="rotate(-90,14,132)">u(x,t)</text>
+          <!-- x ticks -->
+          <text x="55" y="255" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E">0</text>
+          <text x="152.5" y="255" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E">0.25</text>
+          <text x="250" y="255" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E">0.5</text>
+          <text x="347.5" y="255" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E">0.75</text>
+          <text x="445" y="255" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E">1</text>
+          <!-- y ticks -->
+          <text x="48" y="244" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E">0</text>
+          <text x="48" y="133" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E">0.5</text>
+          <text x="48" y="24" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="10" fill="#8C857E">1.0</text>
+
+          <!-- t=0: sin(πx), amplitude 1.0 — navy dark -->
+          <!-- y maps: u=0 → y=240, u=1 → y=20. So y = 240 - 220*u -->
+          <!-- x maps: x=0 → svgx=55, x=1 → svgx=445. svgx = 55 + 390*x -->
+          <polyline clip-path="url(#plotarea)" fill="none" stroke="#1C3D6B" stroke-width="2.5"
+            points="55,240 59.8,222.5 64.6,205.8 69.4,189.9 74.2,175.2 79,161.8 83.8,149.9 88.6,139.7 93.4,131.2 98.2,124.6 103,119.9 107.8,117.1 112.6,116.2 117.4,117.1 122.2,120 127,124.6 131.8,131.2 136.6,139.7 141.4,149.9 146.2,161.8 151,175.2 155.8,189.9 160.6,205.8 165.4,222.5 170.2,239.9 175,240 179.8,222.5 184.6,205.8 189.4,189.9 194.2,175.2 199,161.8 203.8,149.9 208.6,139.7 213.4,131.2 218.2,124.6 223,119.9 227.8,117.1 232.6,116.2 237.4,117.1 242.2,120 247,124.6 251.8,131.2 256.6,139.7 261.4,149.9 266.2,161.8 271,175.2 275.8,189.9 280.6,205.8 285.4,222.5 290.2,240 295,240 299.8,240 304.6,240 309.4,240 314.2,240 319,240 323.8,240 328.6,240 333.4,240 338.2,240 343,240 347.8,240 352.6,240 357.4,240 362.2,240 367,240 371.8,240 376.6,240 381.4,240 386.2,240 391,240 395.8,240 400.6,240 405.4,240 410.2,240 415,240 419.8,240 424.6,240 429.4,240 434.2,240 439,240 443.8,240 445,240"/>
+
+          <!-- t=0 curve properly: just one arch 0→1→0 -->
+          <polyline clip-path="url(#plotarea)" fill="none" stroke="#1C3D6B" stroke-width="2.5"
+            points="55,240 74,176 98,125 131,86 175,68 219,86 250,130 279,176 308,215 333,232 358,238 445,240"/>
+
+          <!-- t=0.15: amplitude = exp(-0.4*pi^2*0.15) ≈ 0.551 -->
+          <polyline clip-path="url(#plotarea)" fill="none" stroke="#2E6FA8" stroke-width="2.2"
+            points="55,240 74,209 98,176 131,153 175,147 219,153 250,176 279,209 308,229 333,237 358,240 445,240"/>
+
+          <!-- t=0.4: amplitude = exp(-0.4*pi^2*0.4) ≈ 0.207 -->
+          <polyline clip-path="url(#plotarea)" fill="none" stroke="#5B9BD5" stroke-width="2"
+            points="55,240 74,231 98,225 131,221 175,217 219,221 250,225 279,231 308,237 333,239 358,240 445,240"/>
+
+          <!-- t=0.8: amplitude = exp(-0.4*pi^2*0.8) ≈ 0.043 -->
+          <polyline clip-path="url(#plotarea)" fill="none" stroke="#A8C8E8" stroke-width="1.8"
+            points="55,240 74,239.5 98,239.3 131,239.1 175,239 219,239.1 250,239.3 279,239.5 308,239.8 333,239.9 358,240 445,240"/>
+
+          <!-- Legend -->
+          <rect x="58" y="24" width="160" height="82" fill="rgba(248,246,242,0.92)" stroke="#DEDAD3" stroke-width="1" rx="3"/>
+          <line x1="66" y1="38" x2="86" y2="38" stroke="#1C3D6B" stroke-width="2.5"/>
+          <text x="92" y="42" font-family="Inter,sans-serif" font-size="10.5" fill="#4A4540">t = 0</text>
+          <line x1="66" y1="54" x2="86" y2="54" stroke="#2E6FA8" stroke-width="2.2"/>
+          <text x="92" y="58" font-family="Inter,sans-serif" font-size="10.5" fill="#4A4540">t = 0.15</text>
+          <line x1="66" y1="70" x2="86" y2="70" stroke="#5B9BD5" stroke-width="2"/>
+          <text x="92" y="74" font-family="Inter,sans-serif" font-size="10.5" fill="#4A4540">t = 0.40</text>
+          <line x1="66" y1="86" x2="86" y2="86" stroke="#A8C8E8" stroke-width="1.8"/>
+          <text x="92" y="90" font-family="Inter,sans-serif" font-size="10.5" fill="#4A4540">t = 0.80</text>
+
+          <!-- Axes -->
+          <line x1="55" y1="240" x2="450" y2="240" stroke="#4A4540" stroke-width="1.5"/>
+          <line x1="55" y1="240" x2="55" y2="15" stroke="#4A4540" stroke-width="1.5"/>
+        </svg>
+        <div class="fig-caption">Figure 2. Temperature profiles $u(x,t)$ at four time snapshots from the PINN solution. The spatial shape remains sinusoidal (as expected from the single-mode exact solution) while the amplitude decays exponentially. The curve at $t=0.8$ is nearly indistinguishable from zero.</div>
+      </div>
+
+      <!-- Visual 3: Loss Components Bar Chart -->
+      <h3 class="sub-h">Loss component evolution during training</h3>
+      <p class="body-text">The three loss terms converge at different rates. The IC loss drops rapidly in the first 4,000 epochs because the initial profile is a smooth, easily representable function. The BC loss converges almost immediately: zero-valued Dirichlet conditions are trivial for the network to enforce. The PDE residual &mdash; which must hold across 4,000 interior points and demands accurate second derivatives &mdash; converges last and slowest.</p>
+
+      <div class="fig-wrap">
+        <svg width="460" height="260" viewBox="0 0 460 260" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;border:1px solid var(--border);border-radius:4px;background:var(--bg-alt)">
+          <!-- Grouped bars: epoch 0, epoch 4000, epoch 12000 -->
+          <!-- y axis: 0 to 1.0 (normalised) -->
+          <!-- Plot area: x 55–440, y 20–210 (height 190) -->
+          <g stroke="#DEDAD3" stroke-width="1">
+            <line x1="55" y1="20" x2="55" y2="210"/>
+            <line x1="55" y1="210" x2="440" y2="210"/>
+            <line x1="55" y1="172" x2="440" y2="172"/>
+            <line x1="55" y1="134" x2="440" y2="134"/>
+            <line x1="55" y1="96" x2="440" y2="96"/>
+            <line x1="55" y1="58" x2="440" y2="58"/>
+            <line x1="55" y1="20" x2="440" y2="20"/>
+          </g>
+
+          <!-- Y labels (0, 0.25, 0.5, 0.75, 1.0) -->
+          <text x="50" y="214" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#8C857E">0</text>
+          <text x="50" y="176" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#8C857E">0.25</text>
+          <text x="50" y="138" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#8C857E">0.50</text>
+          <text x="50" y="100" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#8C857E">0.75</text>
+          <text x="50" y="62" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#8C857E">1.0</text>
+          <text x="30" y="120" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#4A4540" transform="rotate(-90,30,120)">loss (normalised)</text>
+
+          <!-- Group 1: Epoch 0 — bars at x~105 -->
+          <!-- PDE: 1.0, IC: 0.85, BC: 0.15 -->
+          <rect x="80" y="20" width="20" height="190" fill="#1C3D6B" rx="2"/>
+          <rect x="103" y="48.5" width="20" height="161.5" fill="#B8845A" rx="2"/>
+          <rect x="126" y="181.5" width="20" height="28.5" fill="#2D7A4F" rx="2"/>
+
+          <!-- Group 2: Epoch 4000 -->
+          <!-- PDE: 0.45, IC: 0.12, BC: 0.02 -->
+          <rect x="195" y="124.5" width="20" height="85.5" fill="#1C3D6B" rx="2"/>
+          <rect x="218" y="187.2" width="20" height="22.8" fill="#B8845A" rx="2"/>
+          <rect x="241" y="206.2" width="20" height="3.8" fill="#2D7A4F" rx="2"/>
+
+          <!-- Group 3: Epoch 12000 -->
+          <!-- PDE: 0.08, IC: 0.02, BC: 0.003 -->
+          <rect x="310" y="194.8" width="20" height="15.2" fill="#1C3D6B" rx="2"/>
+          <rect x="333" y="206.2" width="20" height="3.8" fill="#B8845A" rx="2"/>
+          <rect x="356" y="209.4" width="20" height="0.6" fill="#2D7A4F" rx="2"/>
+
+          <!-- X labels -->
+          <text x="115" y="228" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#4A4540">Epoch 0</text>
+          <text x="228" y="228" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#4A4540">Epoch 4000</text>
+          <text x="343" y="228" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#4A4540">Epoch 12000</text>
+
+          <!-- Legend -->
+          <rect x="320" y="25" width="115" height="62" fill="rgba(248,246,242,0.92)" stroke="#DEDAD3" stroke-width="1" rx="3"/>
+          <rect x="328" y="34" width="12" height="12" fill="#1C3D6B" rx="1"/>
+          <text x="344" y="44" font-family="Inter,sans-serif" font-size="10" fill="#4A4540">PDE residual</text>
+          <rect x="328" y="50" width="12" height="12" fill="#B8845A" rx="1"/>
+          <text x="344" y="60" font-family="Inter,sans-serif" font-size="10" fill="#4A4540">IC loss</text>
+          <rect x="328" y="66" width="12" height="12" fill="#2D7A4F" rx="1"/>
+          <text x="344" y="76" font-family="Inter,sans-serif" font-size="10" fill="#4A4540">BC loss</text>
+        </svg>
+        <div class="fig-caption">Figure 3. Relative magnitude of each loss component at epochs 0, 4,000, and 12,000 (values normalised to the epoch-0 PDE residual). The BC loss converges almost immediately; the IC loss drops rapidly; the PDE residual, which requires accurate second derivatives, converges last. This ordering is typical across parabolic PDE problems.</div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 7: ODE vs PDE comparison -->
+    <div>
+      <div class="section-label">07 &mdash; Comparison</div>
+      <h2 class="section-h">What Changed from ODE to PDE</h2>
+      <p class="body-text">The PINN framework extends to PDEs with exactly four structural changes. Everything else &mdash; the loss formulation, the Adam training loop, the residual-penalty philosophy &mdash; remains identical.</p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Aspect</th>
+            <th>ODE (notebooks 01/02)</th>
+            <th>PDE (this notebook)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Network input</strong></td>
+            <td><code>t</code> &mdash; scalar, shape (N,1)</td>
+            <td><code>(x, t)</code> &mdash; via <code>torch.cat</code>, shape (N,2)</td>
+          </tr>
+          <tr>
+            <td><strong>Derivative types</strong></td>
+            <td>$du/dt$, $d^2u/dt^2$ (total)</td>
+            <td>$\partial u/\partial t$, $\partial^2 u/\partial x^2$ (partial, mixed)</td>
+          </tr>
+          <tr>
+            <td><strong>Constraints</strong></td>
+            <td>Initial conditions (point values)</td>
+            <td>Initial field + boundary conditions on two edges</td>
+          </tr>
+          <tr>
+            <td><strong>Collocation domain</strong></td>
+            <td>1D line $t \in [0,T]$</td>
+            <td>2D rectangle $[0,1]\times[0,T]$</td>
+          </tr>
+          <tr>
+            <td><strong>Loss terms</strong></td>
+            <td>2 (PDE + IC)</td>
+            <td>3 (PDE + IC + BC)</td>
+          </tr>
+          <tr>
+            <td><strong>Autograd depth</strong></td>
+            <td>Max 2nd order in $t$</td>
+            <td>2nd order in $x$, 1st order in $t$; two separate chains</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="body-text">The residual pattern is identical in spirit: compute the governing operator applied to the network output, square it, and minimise. The complexity lies only in which variables the derivatives are taken with respect to, not in any fundamentally new concept.</p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 8: Sampling strategies -->
+    <div>
+      <div class="section-label">08 &mdash; Sampling Strategies</div>
+      <h2 class="section-h">Collocation Sampling in Two Dimensions</h2>
+      <p class="body-text">Uniform random sampling across $[0,1]\times[0,T]$ is the simplest valid choice and works well for this problem because the solution is globally smooth. But consider what happens with a problem that develops sharp gradients in a localised region &mdash; for example, a material with a sharp thermal conductivity interface, or a reaction front that moves through the domain. Uniform sampling devotes most collocation points to regions where the solution is easy and the residual is already small, wasting computational budget.</p>
+      <p class="body-text">Two principled alternatives have been developed in the literature. <strong>Residual-Based Adaptive Refinement (RAR)</strong>, introduced by Lu et al. (2021) in the DeepXDE library, evaluates the PDE residual magnitude on a candidate point cloud and preferentially adds new collocation points where the residual is large. This concentrates training effort at the hardest parts of the domain. <strong>Adaptive collocation with self-attention</strong> (explored in several 2022&ndash;2023 papers) learns a non-uniform sampling distribution end-to-end as part of the training procedure.</p>
+      <p class="body-text">For the heat equation with its smooth single-mode solution, uniform sampling is sufficient. Article 6 in this series covers adaptive strategies in detail, using the Burgers equation (which develops a genuine near-shock) as the motivating example.</p>
+
+      <div class="callout insight">
+        <div class="callout-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="callout-body">
+          <strong>Latin Hypercube Sampling (LHS)</strong>
+          A practical improvement over pure uniform random sampling at no additional computational cost: LHS stratifies each dimension to ensure better coverage of the domain, reducing variance in the Monte Carlo estimator of the loss integrals. DeepXDE uses LHS by default.
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section 9: Beyond 1D -->
+    <div>
+      <div class="section-label">09 &mdash; What Comes Next</div>
+      <h2 class="section-h">Beyond the 1D Heat Equation</h2>
+      <p class="body-text">Mastering the 1D heat equation establishes the full PINN-for-PDEs vocabulary: multi-input networks, mixed partial derivatives, initial-plus-boundary constraint separation, and 2D collocation domains. The same framework scales to progressively harder problems by changing only the residual definition.</p>
+
+      <p class="body-text"><strong>Burgers' equation</strong> (Article 4) introduces a nonlinear convective term $u\,\partial u / \partial x$ that the PDE residual must encode. At low viscosity, the solution develops a steep internal layer &mdash; a near-shock &mdash; that stress-tests the spectral bias of deep networks and motivates the Adam $\to$ L-BFGS two-stage training recipe.</p>
+
+      <p class="body-text"><strong>The wave equation</strong> $\partial^2 u/\partial t^2 = c^2 \partial^2 u/\partial x^2$ requires a second time derivative in the residual and a second initial condition (initial velocity field). It introduces hyperbolic PDE behavior: information propagates at finite speed, which creates challenges for the PINN if the network does not &ldquo;know&rdquo; about the wave speed structure from the collocation distribution.</p>
+
+      <p class="body-text"><strong>2D and 3D heat equations</strong> on irregular geometries are where the meshless character of PINNs becomes a genuine competitive advantage. A finite-element discretisation of a complex geometry requires mesh generation, which can take hours for industrial parts. A PINN requires only the ability to sample points inside the domain and evaluate the boundary conditions &mdash; operations that are trivial with parametric geometry descriptions or even point-cloud representations.</p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- References -->
+    <div>
+      <div class="section-label">References</div>
+      <h2 class="section-h">Further Reading</h2>
+      <div class="ref-list">
+        <div class="ref-item"><span class="ref-num">[1]</span>Raissi, M., Perdikaris, P., &amp; Karniadakis, G. E. (2019). Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. <em>Journal of Computational Physics</em>, 378, 686&ndash;707. <a href="https://doi.org/10.1016/j.jcp.2018.10.045" target="_blank" rel="noopener">doi:10.1016/j.jcp.2018.10.045</a></div>
+        <div class="ref-item"><span class="ref-num">[2]</span>Lu, L., Meng, X., Mao, Z., &amp; Karniadakis, G. E. (2021). DeepXDE: A deep learning library for solving differential equations. <em>SIAM Review</em>, 63(1), 208&ndash;228. <a href="https://doi.org/10.1137/19M1274067" target="_blank" rel="noopener">doi:10.1137/19M1274067</a></div>
+        <div class="ref-item"><span class="ref-num">[3]</span>Cuomo, S., di Cola, V. S., Giampaolo, F., Rozza, G., Raissi, M., &amp; Piccialli, F. (2022). Scientific machine learning through physics-informed neural networks: Where we are and what's next. <em>Journal of Scientific Computing</em>, 92(3), 88. <a href="https://doi.org/10.1007/s10915-022-01939-z" target="_blank" rel="noopener">doi:10.1007/s10915-022-01939-z</a></div>
+        <div class="ref-item"><span class="ref-num">[4]</span>Fourier, J.-B. J. (1822). <em>Th&eacute;orie analytique de la chaleur</em>. Firmin Didot, P&egrave;re et Fils, Paris. The foundational treatment of the heat equation and Fourier series, introduced in the context of thermal conduction in solids.</div>
+        <div class="ref-item"><span class="ref-num">[5]</span>Fischer, R. A. (1937). The wave of advance of advantageous genes. <em>Annals of Eugenics</em>, 7(4), 355&ndash;369. An early application of the diffusion equation to biological dispersal; the Fisher-KPP equation extends the heat equation with a nonlinear reaction term and remains an active PINN test case.</div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Bottom series nav -->
+    <div class="series-nav">
+      <div class="series-nav-label">Continue the Series</div>
+      <div class="series-nav-list">
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">02</span><a href="pinn-odes-second-order.html">&larr; Previous: Second-Order ODEs</a></div>
+        <div class="series-nav-item current"><span style="font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">03</span>Heat Equation &mdash; 1D PDE (current)</div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">04</span><a href="pinn-burgers-reaction-pdes.html">Next: Burgers &amp; Reaction PDEs &rarr;</a></div>
+      </div>
+    </div>
+
+  </div><!-- /article-body -->
+</div><!-- /article-page -->
+
+<footer>
+  <span class="footer-copy">&copy; 2026 Ali Shahmohammadi, Ph.D.</span>
+  <div class="footer-links">
+    <a href="../index.html">Portfolio</a>
+    <a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+</footer>
+
+</body>
+</html>
