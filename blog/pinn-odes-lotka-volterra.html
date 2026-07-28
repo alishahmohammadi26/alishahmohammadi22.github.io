@@ -64,13 +64,16 @@
     .data-table td{padding:.65rem 1rem;border-bottom:1px solid var(--border);color:var(--ink-2);vertical-align:top}
     .data-table tr:last-child td{border-bottom:none}
     .data-table tr:hover td{background:var(--bg-alt)}
-    .series-nav{background:var(--bg-alt);border:1px solid var(--border);border-radius:4px;padding:1.5rem 1.75rem;margin:2.5rem 0}
-    .series-nav-label{font-family:'JetBrains Mono',monospace;font-size:.63rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1rem}
-    .series-nav-list{display:flex;flex-direction:column;gap:.4rem}
-    .series-nav-item{display:flex;align-items:center;gap:.65rem;font-size:.95rem;color:var(--ink-2)}
-    .series-nav-item.current{color:var(--navy);font-weight:600}
-    .series-nav-item a{color:var(--ink-2)}
-    .series-nav-item a:hover{color:var(--navy)}
+        .fig-wrap{margin:2rem 0;text-align:center}
+    .fig-wrap img{width:100%;max-width:900px;border-radius:6px;border:1px solid var(--border);display:block;margin:0 auto}
+    .fig-caption{font-size:.78rem;color:var(--ink-3);margin-top:.6rem;font-style:italic;line-height:1.6;text-align:left;max-width:860px;margin-left:auto;margin-right:auto}
+    
+    
+    
+    
+    
+    
+    
     .ref-list{display:flex;flex-direction:column;gap:.75rem;margin-top:1rem}
     .ref-item{font-size:.92rem;color:var(--ink-2);line-height:1.65;padding-left:2rem;position:relative}
     .ref-num{position:absolute;left:0;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--ink-3);font-weight:700}
@@ -81,6 +84,18 @@
     .footer-links{display:flex;gap:1.5rem}
     .footer-links a{font-size:.77rem;color:rgba(255,255,255,.27);transition:color .15s}
     .footer-links a:hover{color:rgba(255,255,255,.7)}
+      .series-nav{background:var(--bg-alt);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem;margin:2.5rem 0}
+    .series-nav-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:.9rem;display:block}
+    .sn-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 1.5rem}
+    @media(max-width:580px){.sn-cols{grid-template-columns:1fr}}
+    .sn-col-hdr{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:700;padding-bottom:.3rem;margin-bottom:.35rem;border-bottom:1px solid var(--border)}
+    .sn-row{display:flex;align-items:baseline;gap:.5rem;font-size:.82rem;color:var(--ink-2);line-height:1.45;padding:.06rem 0}
+    .sn-row.sn-cur{color:var(--navy);font-weight:700}
+    .sn-num{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3);flex-shrink:0;min-width:1.6rem}
+    .sn-row.sn-cur .sn-num{color:var(--sienna)}
+    .sn-row a{color:var(--ink-2);text-decoration:none}
+    .sn-row a:hover{color:var(--navy)}
+    .sn-extra{display:flex;gap:1.5rem;flex-wrap:wrap;margin-top:.75rem;padding-top:.6rem;border-top:1px solid var(--border)}
   </style>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -105,14 +120,36 @@
   </div>
   <div class="article-body">
 <div class="callout insight"><div class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="callout-body"><strong>Prerequisites</strong>Familiarity with the PINN loss structure and autograd from the <a href="pinn-introduction.html">introductory article</a>. This series applies those tools to seven real biotech and pharma ODE problems.</div></div>
-<div class="series-nav"><div class="series-nav-label">Physics AI · ODEs Series · 7 Biotech Problems</div><div class="series-nav-list"><div class="series-nav-item"><span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">01</span><a href="pinn-odes-logistic-growth.html">Logistic Population Growth, Pearl &amp; Reed 1920 U.S. Census</a></div>
-<div class="series-nav-item"><span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">02</span><a href="pinn-odes-consecutive-reactions.html">Consecutive Reactions A→B→C, Rate Constants from Process Data</a></div>
-<div class="series-nav-item current"><span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--sienna);min-width:2rem;">03</span>Lotka–Volterra, Real Lynx–Hare Hudson Bay Records 1900–1920</div>
-<div class="series-nav-item"><span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">04</span><a href="pinn-odes-sir-epidemic.html">SIR Epidemic, Hidden State Inference from Partial Observations</a></div>
-<div class="series-nav-item"><span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">05</span><a href="pinn-odes-van-der-pol.html">Van der Pol Oscillator, Nonlinear Damping from Vibration Data</a></div>
-<div class="series-nav-item"><span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">06</span><a href="pinn-odes-stiff-enzyme-kinetics.html">Stiff Enzyme Kinetics &amp; QSSA, Michaelis–Menten Progress Curve</a></div>
-<div class="series-nav-item"><span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">07</span><a href="pinn-odes-bioprocess-cell-density.html">Bioprocess Cell Density, Monod Kinetics &amp; IndPenSim Benchmark</a></div>
-</div></div>
+<div class="series-nav">
+      <span class="series-nav-label">Physics AI &mdash; Complete Series</span>
+      <div class="sn-cols">
+        <div>
+          <div class="sn-col-hdr">PINNs Series &mdash; 8 Articles</div>
+          <div class="sn-row"><span class="sn-num">01</span><a href="pinn-introduction.html">Introduction to PINNs</a></div>
+          <div class="sn-row"><span class="sn-num">02</span><a href="pinn-odes-second-order.html">Second-Order ODEs</a></div>
+          <div class="sn-row"><span class="sn-num">03</span><a href="pinn-heat-equation.html">Heat Equation</a></div>
+          <div class="sn-row"><span class="sn-num">04</span><a href="pinn-burgers-reaction-pdes.html">Burgers &amp; Reaction PDEs</a></div>
+          <div class="sn-row"><span class="sn-num">05</span><a href="pinn-inverse-problems.html">Inverse Problems</a></div>
+          <div class="sn-row"><span class="sn-num">06</span><a href="pinn-adaptive-sampling.html">Adaptive Sampling</a></div>
+          <div class="sn-row"><span class="sn-num">07</span><a href="pinn-deeponet.html">DeepONet, Learning Operators</a></div>
+          <div class="sn-row"><span class="sn-num">08</span><a href="pinn-physics-informed-deeponet.html">Physics-Informed DeepONet</a></div>
+        </div>
+        <div>
+          <div class="sn-col-hdr">ODEs Series &mdash; 7 Problems</div>
+          <div class="sn-row"><span class="sn-num">01</span><a href="pinn-odes-logistic-growth.html">Logistic Population Growth</a></div>
+          <div class="sn-row"><span class="sn-num">02</span><a href="pinn-odes-consecutive-reactions.html">Consecutive Reactions A&rarr;B&rarr;C</a></div>
+          <div class="sn-row sn-cur"><span class="sn-num">03</span>Lotka&ndash;Volterra &larr; you&nbsp;are&nbsp;here</div>
+          <div class="sn-row"><span class="sn-num">04</span><a href="pinn-odes-sir-epidemic.html">SIR Epidemic Model</a></div>
+          <div class="sn-row"><span class="sn-num">05</span><a href="pinn-odes-van-der-pol.html">Van der Pol Oscillator</a></div>
+          <div class="sn-row"><span class="sn-num">06</span><a href="pinn-odes-stiff-enzyme-kinetics.html">Stiff Enzyme Kinetics &amp; QSSA</a></div>
+          <div class="sn-row"><span class="sn-num">07</span><a href="pinn-odes-bioprocess-cell-density.html">Monod Bioprocess</a></div>
+        </div>
+      </div>
+      <div class="sn-extra">
+        <div class="sn-row"><span class="sn-num">&#9670;</span><a href="unified-pinn-ode-benchmark.html">Unified Benchmark Capstone</a></div>
+        <div class="sn-row"><span class="sn-num">&#9670;</span><a href="deeponet-vs-pinn-ode-analysis.html">DeepONet vs PINN Analysis</a></div>
+      </div>
+    </div></div>
 
     <div id="s1" style="margin-top:3rem;">
       <div class="section-label">01, The Problem</div>
@@ -127,7 +164,11 @@
       </ul>
       <div class="math-block">$$\frac{dH}{dt} = \alpha H - \beta HL, \qquad \frac{dL}{dt} = \delta HL - \gamma L$$</div>
     </div>
-    <hr class="divider">
+        <div class="fig-wrap">
+      <img src="../assets/images/blog/ode-series/comparison_lv.png" alt="Lotka–Volterra predator-prey dynamics: PINN vs reference trajectory" loading="lazy">
+      <p class="fig-caption">Fig. A &mdash; Lotka&ndash;Volterra predator&ndash;prey dynamics. The nonlinear coupling between hare ($H$) and lynx ($L$) produces cyclic trajectories that are challenging for standard PINNs due to spectral bias and the absence of a unique stable equilibrium.</p>
+    </div>
+<hr class="divider">
     <div id="s2">
       <div class="section-label">02, The Data &amp; Paper</div>
       <h2 class="section-h">21 Annual Points, A Genuinely Hard Inverse Problem</h2>

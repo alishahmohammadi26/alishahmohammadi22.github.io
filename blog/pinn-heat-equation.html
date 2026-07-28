@@ -68,13 +68,13 @@
     .data-table tr:hover td{background:var(--bg-alt)}
     .fig-wrap{margin:2rem 0;text-align:center}
     .fig-caption{font-size:.78rem;color:var(--ink-3);margin-top:.6rem;font-style:italic}
-    .series-nav{background:var(--bg-alt);border:1px solid var(--border);border-radius:4px;padding:1.5rem 1.75rem;margin:2.5rem 0}
-    .series-nav-label{font-family:'JetBrains Mono',monospace;font-size:.63rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1rem}
-    .series-nav-list{display:flex;flex-direction:column;gap:.4rem}
-    .series-nav-item{display:flex;align-items:center;gap:.65rem;font-size:.95rem;color:var(--ink-2)}
-    .series-nav-item.current{color:var(--navy);font-weight:600}
-    .series-nav-item a{color:var(--ink-2)}
-    .series-nav-item a:hover{color:var(--navy)}
+    
+    
+    
+    
+    
+    
+    
     .ref-list{display:flex;flex-direction:column;gap:.75rem;margin-top:1rem}
     .ref-item{font-size:.92rem;color:var(--ink-2);line-height:1.65;padding-left:2rem;position:relative}
     .ref-num{position:absolute;left:0;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--ink-3);font-weight:700}
@@ -85,6 +85,18 @@
     .footer-links{display:flex;gap:1.5rem}
     .footer-links a{font-size:.77rem;color:rgba(255,255,255,.27);transition:color .15s}
     .footer-links a:hover{color:rgba(255,255,255,.7)}
+      .series-nav{background:var(--bg-alt);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem;margin:2.5rem 0}
+    .series-nav-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:.9rem;display:block}
+    .sn-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 1.5rem}
+    @media(max-width:580px){.sn-cols{grid-template-columns:1fr}}
+    .sn-col-hdr{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:700;padding-bottom:.3rem;margin-bottom:.35rem;border-bottom:1px solid var(--border)}
+    .sn-row{display:flex;align-items:baseline;gap:.5rem;font-size:.82rem;color:var(--ink-2);line-height:1.45;padding:.06rem 0}
+    .sn-row.sn-cur{color:var(--navy);font-weight:700}
+    .sn-num{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3);flex-shrink:0;min-width:1.6rem}
+    .sn-row.sn-cur .sn-num{color:var(--sienna)}
+    .sn-row a{color:var(--ink-2);text-decoration:none}
+    .sn-row a:hover{color:var(--navy)}
+    .sn-extra{display:flex;gap:1.5rem;flex-wrap:wrap;margin-top:.75rem;padding-top:.6rem;border-top:1px solid var(--border)}
   </style>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -125,17 +137,35 @@
 
     <!-- Series nav -->
     <div class="series-nav">
-      <div class="series-nav-label">Physics AI / PINNs &mdash; Series Navigation</div>
-      <div class="series-nav-list">
-        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">01</span><a href="pinn-introduction.html">Introduction to PINNs</a><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3)">Sep 2025</span></div>
-        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">02</span><a href="pinn-odes-second-order.html">Second-Order ODEs</a><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3)">Oct 2025</span></div>
-        <div class="series-nav-item current"><span style="font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">03</span>Heat Equation &mdash; 1D PDE<span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--navy)">Nov 2025</span></div>
-        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">04</span><a href="pinn-burgers-reaction-pdes.html">Burgers &amp; Reaction PDEs</a><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3)">Dec 2025</span></div>
-        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">05</span><a href="pinn-inverse-problems.html">Inverse Problems &amp; Parameter Estimation</a><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3)">Jan 2026</span></div>
-        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">06</span><a href="pinn-adaptive-sampling.html">Adaptive Sampling &amp; Training Strategies</a><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3)">Feb 2026</span></div>
-        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">07</span><a href="pinn-deeponet.html">DeepONet &mdash; Learning Operators</a><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3)">Mar 2026</span></div>
-        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.72rem;min-width:1.8rem">08</span><a href="pinn-physics-informed-deeponet.html">Physics-Informed DeepONet &amp; Advanced Architectures</a><span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3)">Apr 2026</span></div>
+      <span class="series-nav-label">Physics AI &mdash; Complete Series</span>
+      <div class="sn-cols">
+        <div>
+          <div class="sn-col-hdr">PINNs Series &mdash; 8 Articles</div>
+          <div class="sn-row"><span class="sn-num">01</span><a href="pinn-introduction.html">Introduction to PINNs</a></div>
+          <div class="sn-row"><span class="sn-num">02</span><a href="pinn-odes-second-order.html">Second-Order ODEs</a></div>
+          <div class="sn-row sn-cur"><span class="sn-num">03</span>Heat Equation &larr; you&nbsp;are&nbsp;here</div>
+          <div class="sn-row"><span class="sn-num">04</span><a href="pinn-burgers-reaction-pdes.html">Burgers &amp; Reaction PDEs</a></div>
+          <div class="sn-row"><span class="sn-num">05</span><a href="pinn-inverse-problems.html">Inverse Problems</a></div>
+          <div class="sn-row"><span class="sn-num">06</span><a href="pinn-adaptive-sampling.html">Adaptive Sampling</a></div>
+          <div class="sn-row"><span class="sn-num">07</span><a href="pinn-deeponet.html">DeepONet, Learning Operators</a></div>
+          <div class="sn-row"><span class="sn-num">08</span><a href="pinn-physics-informed-deeponet.html">Physics-Informed DeepONet</a></div>
+        </div>
+        <div>
+          <div class="sn-col-hdr">ODEs Series &mdash; 7 Problems</div>
+          <div class="sn-row"><span class="sn-num">01</span><a href="pinn-odes-logistic-growth.html">Logistic Population Growth</a></div>
+          <div class="sn-row"><span class="sn-num">02</span><a href="pinn-odes-consecutive-reactions.html">Consecutive Reactions A&rarr;B&rarr;C</a></div>
+          <div class="sn-row"><span class="sn-num">03</span><a href="pinn-odes-lotka-volterra.html">Lotka&ndash;Volterra</a></div>
+          <div class="sn-row"><span class="sn-num">04</span><a href="pinn-odes-sir-epidemic.html">SIR Epidemic Model</a></div>
+          <div class="sn-row"><span class="sn-num">05</span><a href="pinn-odes-van-der-pol.html">Van der Pol Oscillator</a></div>
+          <div class="sn-row"><span class="sn-num">06</span><a href="pinn-odes-stiff-enzyme-kinetics.html">Stiff Enzyme Kinetics &amp; QSSA</a></div>
+          <div class="sn-row"><span class="sn-num">07</span><a href="pinn-odes-bioprocess-cell-density.html">Monod Bioprocess</a></div>
+        </div>
       </div>
+      <div class="sn-extra">
+        <div class="sn-row"><span class="sn-num">&#9670;</span><a href="unified-pinn-ode-benchmark.html">Unified Benchmark Capstone</a></div>
+        <div class="sn-row"><span class="sn-num">&#9670;</span><a href="deeponet-vs-pinn-ode-analysis.html">DeepONet vs PINN Analysis</a></div>
+      </div>
+    </div>
     </div>
 
     <!-- Section 1: Why PDEs matter -->

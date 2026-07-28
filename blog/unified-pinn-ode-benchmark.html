@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unified Benchmark: PINNs, Adaptive Sampling &amp; DeepONet Across Nine ODE Systems | Ali Shahmohammadi</title>
+  <meta name="description" content="A reproducible, single-notebook comparative study of standard PINNs, residual-based adaptive refinement (RAR), residual-adaptive sampling (RAS), DeepONet, and PI-DeepONet across nine classical ODE benchmarks. Every table and figure is generated directly from executed experiment cells.">
+  <meta property="og:title" content="Unified Benchmark: PINNs, Adaptive Sampling &amp; DeepONet Across Nine ODE Systems" />
+  <meta property="og:description" content="A reproducible comparative study of five physics-informed methods on nine ODE benchmarks including exponential decay, Lotka–Volterra, SIR, Van der Pol, and Monod bioprocess kinetics." />
+  <meta property="og:image" content="https://alishahmohammadi22.github.io/assets/images/og-preview.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://alishahmohammadi22.github.io/assets/images/og-preview.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#F8F6F2;--bg-alt:#F1EEE9;--ink:#111010;--ink-2:#4A4540;--ink-3:#8C857E;--navy:#1C3D6B;--navy-lt:#EBF0F7;--sienna:#B8845A;--sienna-lt:#FBF4EC;--purple:#5B4E8A;--purple-lt:#F2EEF9;--green:#2D7A4F;--green-lt:#EBF7F1;--green-bdr:#BEE5D3;--border:#DEDAD3;--dark:#111010;--accent:#2563EB;--accent-lt:#EFF6FF;--accent-mid:#BFDBFE;--red:#DC2626;--red-lt:#FEF2F2;--amber:#D97706;--amber-lt:#FFFBEB;--amber-bdr:#FDE68A}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--ink);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:18px;line-height:1.65;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent);text-decoration:none}a:hover{opacity:.75}
+    code,pre{font-family:'JetBrains Mono','Fira Code',monospace}
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between;background:rgba(248,246,242,.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:var(--ink)}
+    .nav-logo em{font-style:normal;color:var(--sienna)}
+    .nav-links{display:flex;align-items:center;gap:.2rem}
+    .nav-links a{font-size:.82rem;font-weight:500;color:var(--ink-3);padding:.42rem .8rem;border-radius:4px}
+    .nav-links a:hover{color:var(--ink);background:var(--bg-alt)}
+    .article-page{padding-top:60px}
+    .article-hero{background:var(--dark);padding:5rem 3rem 4rem}
+    .article-hero-inner{max-width:860px;margin:0 auto}
+    .hero-series{font-family:'JetBrains Mono',monospace;font-size:.67rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sienna);margin-bottom:1rem;display:flex;align-items:center;gap:.8rem}
+    .hero-series::before{content:'';width:28px;height:1px;background:var(--sienna)}
+    .article-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,4rem);font-weight:700;letter-spacing:-.02em;line-height:.97;color:#fff;margin-bottom:1.25rem}
+    .article-title em{font-style:italic;font-weight:400;color:rgba(255,255,255,.4)}
+    .article-sub{font-size:1.05rem;color:rgba(255,255,255,.45);margin-bottom:2rem;line-height:1.8;max-width:680px}
+    .article-meta{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2rem}
+    .meta-pill{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:rgba(255,255,255,.38);border:1px solid rgba(255,255,255,.1);padding:.25rem .65rem;border-radius:2px}
+    .meta-pill.highlight{color:var(--sienna);border-color:rgba(184,132,90,.35)}
+    .article-body{max-width:860px;margin:0 auto;padding:4rem 3rem}
+    @media(max-width:640px){.article-hero{padding:3.5rem 1.5rem 3rem}.article-body{padding:3rem 1.5rem}}
+    .section-label{font-family:'JetBrains Mono',monospace;font-size:.67rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1rem}
+    h2.section-h{font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,3.5vw,2.6rem);font-weight:700;letter-spacing:-.02em;line-height:1.05;color:var(--ink);margin-bottom:.75rem}
+    h3.sub-h{font-size:1.1rem;font-weight:700;color:var(--ink);margin-bottom:.5rem;margin-top:2rem}
+    .body-text{font-size:1.02rem;color:var(--ink-2);line-height:1.8;margin-bottom:1.25rem}
+    .math-block{background:var(--bg-alt);border:1px solid var(--border);border-left:3px solid var(--navy);border-radius:0 4px 4px 0;padding:1.1rem 1.5rem;margin:1.5rem 0;font-size:.9rem;color:var(--navy);overflow-x:auto;line-height:1.7}
+    .callout{border-radius:4px;padding:1.1rem 1.4rem;margin:1.5rem 0;display:flex;gap:.9rem}
+    .callout-icon{flex-shrink:0;margin-top:.1rem}
+    .callout-body{font-size:.9rem;line-height:1.7}
+    .callout-body strong{display:block;font-weight:700;margin-bottom:.2rem}
+    .callout.insight{background:var(--navy-lt);border:1px solid rgba(28,61,107,.2)}
+    .callout.insight .callout-icon,.callout.insight .callout-body{color:var(--navy)}
+    .callout.warning{background:var(--amber-lt);border:1px solid var(--amber-bdr)}
+    .callout.warning .callout-icon{color:var(--amber)}
+    .callout.warning .callout-body{color:#92400E}
+    .callout.success{background:var(--green-lt);border:1px solid var(--green-bdr)}
+    .callout.success .callout-icon{color:var(--green)}
+    .callout.success .callout-body{color:#14532D}
+    .data-table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.875rem}
+    .data-table th{font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding:.65rem 1rem;border-bottom:2px solid var(--border);text-align:left}
+    .data-table td{padding:.6rem 1rem;border-bottom:1px solid var(--border);color:var(--ink-2)}
+    .data-table tr:last-child td{border-bottom:none}
+    .data-table tr:hover td{background:var(--bg-alt)}
+    td.win{color:var(--green);font-weight:600}
+    td.warn{color:var(--red);font-weight:500}
+    td.mid{color:var(--amber);font-weight:500}
+    .fig-wrap{margin:2.2rem 0;text-align:center}
+    .fig-wrap img{width:100%;max-width:100%;border-radius:6px;border:1px solid var(--border);display:block;margin:0 auto}
+    .fig-caption{font-size:.79rem;color:var(--ink-3);margin-top:.7rem;font-style:italic;line-height:1.6;text-align:left;max-width:780px;margin-left:auto;margin-right:auto}
+    .fig-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin:2rem 0}
+    .fig-grid .fig-wrap{margin:0}
+    @media(max-width:640px){.fig-grid{grid-template-columns:1fr}}
+    .divider{border:none;border-top:1px solid var(--border);margin:3rem 0}
+    .method-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;margin:1.5rem 0}
+    .method-card{background:var(--bg-alt);border:1px solid var(--border);border-radius:6px;padding:1.2rem 1.4rem}
+    .method-card-tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sienna);margin-bottom:.4rem;font-weight:700}
+    .method-card h4{font-size:.97rem;font-weight:700;color:var(--ink);margin-bottom:.4rem}
+    .method-card p{font-size:.87rem;color:var(--ink-3);line-height:1.6}
+    .decision-box{background:var(--bg-alt);border:1px solid var(--border);border-radius:6px;padding:1.5rem 2rem;margin:1.5rem 0}
+    .decision-row{display:grid;grid-template-columns:auto 1fr auto;gap:.75rem;align-items:start;padding:.5rem 0;border-bottom:1px solid var(--border)}
+    .decision-row:last-child{border-bottom:none}
+    .decision-cond{font-size:.9rem;color:var(--ink-2)}
+    .decision-arrow{color:var(--ink-3);font-size:.8rem;padding-top:.05rem}
+    .decision-rec{font-size:.9rem;font-weight:600;color:var(--navy)}
+    
+    
+    
+    
+    
+    
+    
+    .ref-list{display:flex;flex-direction:column;gap:.75rem;margin-top:1rem}
+    .ref-item{font-size:.9rem;color:var(--ink-2);line-height:1.65;padding-left:2rem;position:relative}
+    .ref-num{position:absolute;left:0;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--ink-3);font-weight:700}
+    .ref-item a{color:var(--accent)}
+    footer{background:#0C0C0C;border-top:1px solid rgba(255,255,255,.05);padding:2rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem}
+    .footer-copy{font-size:.77rem;color:rgba(255,255,255,.22)}
+    .footer-links{display:flex;gap:1.5rem}
+    .footer-links a{font-size:.77rem;color:rgba(255,255,255,.27)}
+    .footer-links a:hover{color:rgba(255,255,255,.7)}
+      .series-nav{background:var(--bg-alt);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem;margin:2.5rem 0}
+    .series-nav-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:.9rem;display:block}
+    .sn-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 1.5rem}
+    @media(max-width:580px){.sn-cols{grid-template-columns:1fr}}
+    .sn-col-hdr{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:700;padding-bottom:.3rem;margin-bottom:.35rem;border-bottom:1px solid var(--border)}
+    .sn-row{display:flex;align-items:baseline;gap:.5rem;font-size:.82rem;color:var(--ink-2);line-height:1.45;padding:.06rem 0}
+    .sn-row.sn-cur{color:var(--navy);font-weight:700}
+    .sn-num{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink-3);flex-shrink:0;min-width:1.6rem}
+    .sn-row.sn-cur .sn-num{color:var(--sienna)}
+    .sn-row a{color:var(--ink-2);text-decoration:none}
+    .sn-row a:hover{color:var(--navy)}
+    .sn-extra{display:flex;gap:1.5rem;flex-wrap:wrap;margin-top:.75rem;padding-top:.6rem;border-top:1px solid var(--border)}
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">Ali Shahmohammadi <em>Ph.D.</em></a>
+  <div class="nav-links">
+    <a href="../index.html#career">Career</a>
+    <a href="../index.html#writing">Writing</a>
+    <a href="../index.html#contact">Contact</a>
+    <a href="../resume.html">Resume</a>
+  </div>
+</nav>
+
+<div class="article-page">
+
+  <div class="article-hero">
+    <div class="article-hero-inner">
+      <div class="hero-series">Physics AI &mdash; ODEs + PINNs Series &nbsp;&middot;&nbsp; Unified Capstone Study</div>
+      <h1 class="article-title">Unified Benchmark:<br>PINNs, Adaptive Sampling<br>&amp; DeepONet<br><em>Across Nine ODE Systems</em></h1>
+      <p class="article-sub">A reproducible, self-contained comparison of five physics-informed methods — standard PINNs, RAR, RAS, DeepONet, and PI-DeepONet — on nine classical ordinary differential equation benchmarks. Every number, figure, and table in this post was generated directly from executed notebook cells.</p>
+      <div class="article-meta">
+        <span class="meta-pill highlight">July 2026</span>
+        <span class="meta-pill">24 min read</span>
+        <span class="meta-pill">Scientific ML</span>
+        <span class="meta-pill">PINNs · DeepONet · Adaptive Sampling</span>
+        <span class="meta-pill">Notebook: 08-Unified_PINN_Study</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="article-body">
+
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <!-- SECTION 1: CONTEXT AND MOTIVATION                           -->
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <div class="section-label">Section 01</div>
+    <h2 class="section-h">Why a Unified Benchmark?</h2>
+
+    <p class="body-text">
+      The two previous series — <em>PINNs</em> (articles 1–8) and <em>ODEs</em> (articles 1–7) — each explored methods in isolation: a single problem per notebook, hand-tuned hyperparameters, no shared baseline. The seven ODE notebooks collectively benchmark exponential decay, damped oscillators, logistic growth, consecutive reaction kinetics, Lotka–Volterra dynamics, SIR epidemics, Van der Pol oscillations, enzyme QSSA kinetics, and Monod bioprocess growth. The eight PINN notebooks developed standard collocation training, adaptive refinement, DeepONet, and PI-DeepONet. This capstone study asks a straightforward question that neither series answered: <strong>when all five methods compete under identical hyperparameters, seeds, normalization, and evaluation protocol, who wins — and why?</strong>
+    </p>
+
+    <p class="body-text">
+      The short answer from the data: <em>no method dominates</em>. The winning approach depends on the problem structure, available data, and how many parameter queries are needed. The long answer — the mechanism behind each win and loss — is what this article unpacks.
+    </p>
+
+    <div class="callout insight">
+      <div class="callout-icon">📋</div>
+      <div class="callout-body">
+        <strong>Reproducibility guarantee</strong>
+        Every figure, table, and quoted number below was generated by a single top-to-bottom execution of <code>08-Unified_PINN_Adaptive_Sampling_DeepONet_ODE_Study.ipynb</code> with <code>PINN_STUDY_PROFILE=quick</code> and global seed <code>20260727</code>. The quick profile uses 260 Adam epochs, width-32/depth-3 networks, and 64 collocation points — intentionally small for CPU reproducibility. Numbers should be treated as diagnostic, not publication-ready.
+      </div>
+    </div>
+
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <!-- SECTION 2: BENCHMARK SUITE                                  -->
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <div class="section-label">Section 02</div>
+    <h2 class="section-h">The Nine ODE Benchmarks</h2>
+
+    <p class="body-text">
+      The benchmarks span the range of phenomena that scientific ML practitioners actually encounter: single-scale decay, oscillation, saturation, mass-conserving coupled networks, nonlinear cycles, sharp transients, and coupled growth-substrate dynamics. Where exact solutions exist, they are used for evaluation. Otherwise, tightly-toleranced <code>DOP853 solve_ivp</code> trajectories (rtol=1e-10, atol=1e-12) serve as references. Crucially, <strong>reference trajectories never enter any training loss</strong> — they are evaluation tools only.
+    </p>
+
+    <div class="fig-wrap">
+      <img src="../assets/images/blog/unified-pinn-study/reference_trajectories.png"
+           alt="Reference trajectories for all nine ODE benchmarks: exponential decay, damped oscillator, logistic growth, consecutive reaction A→B→C, Lotka–Volterra, SIR epidemic, Van der Pol oscillator, QSSA enzyme, and Monod bioprocess">
+      <div class="fig-caption">Fig. 1 &mdash; Reference trajectories for all nine benchmark systems, shown in physical units. Top row: exponential decay, damped oscillator, logistic growth. Middle row: A→B→C consecutive reaction, Lotka–Volterra predator-prey, SIR epidemic. Bottom row: Van der Pol oscillator, QSSA enzyme progress curve, Monod viable-cell-density bioprocess. The variety of temporal scales, amplitude ranges, and qualitative dynamics is intentional — a method that handles exponential decay trivially may fail on a nonlinear limit cycle.</div>
+    </div>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Benchmark</th>
+          <th>State Dim</th>
+          <th>Param Dim</th>
+          <th>Horizon</th>
+          <th>Reference</th>
+          <th>Primary Challenge</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Exponential decay</td><td>1</td><td>1 (λ)</td><td>5 s</td><td>Analytical</td><td>Single-scale sanity check</td></tr>
+        <tr><td>Damped oscillator</td><td>2</td><td>2 (ω₀, ζ)</td><td>6 s</td><td>Analytical</td><td>Oscillation and second-order dynamics</td></tr>
+        <tr><td>Logistic growth</td><td>1</td><td>2 (r, K)</td><td>150 yr</td><td>Analytical</td><td>Saturation; sparse-data inverse extension</td></tr>
+        <tr><td>A→B→C kinetics</td><td>3</td><td>2 (k₁, k₂)</td><td>6 s</td><td>Analytical</td><td>Coupling, transient intermediate, conservation</td></tr>
+        <tr><td>Lotka–Volterra</td><td>2</td><td>4 (α, β, γ, δ)</td><td>20 yr</td><td>DOP853</td><td>Nonlinear coupling and cyclic trajectories</td></tr>
+        <tr><td>SIR epidemic</td><td>3</td><td>2 (β, γ)</td><td>14 d</td><td>DOP853</td><td>Small infected compartment; conservation</td></tr>
+        <tr><td>Van der Pol</td><td>2</td><td>1 (μ)</td><td>16 s</td><td>DOP853</td><td>Nonlinear oscillation; temporal scale separation</td></tr>
+        <tr><td>QSSA enzyme</td><td>1</td><td>2 (V<sub>max</sub>, K<sub>m</sub>)</td><td>30 s</td><td>DOP853</td><td>Stiff-like saturation kinetics</td></tr>
+        <tr><td>Monod bioprocess</td><td>2</td><td>3 (μ<sub>max</sub>, K<sub>s</sub>, Y)</td><td>30 h</td><td>DOP853</td><td>Coupled growth / substrate depletion; scale imbalance</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <!-- SECTION 3: METHODS                                          -->
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <div class="section-label">Section 03</div>
+    <h2 class="section-h">Five Methods, One Framework</h2>
+
+    <p class="body-text">
+      All five methods share a common hard-initial-condition ansatz $\hat{x}(\tau) = x_0 + \tau \, N_\theta(\tau)$, which enforces $\hat{x}(0) = x_0$ exactly and isolates the optimizer from any IC trade-off. Normalized coordinates $\tau = t/T$ and $x = y/s$ are used throughout. The physics residual for all methods is therefore:
+    </p>
+
+    <div class="math-block">
+      $$\mathcal{L}_r = \frac{1}{N_c} \sum_{j=1}^{N_c} \left\| \frac{d\hat{x}}{d\tau}(\tau_j) - \frac{T}{s} f(s \cdot \hat{x}(\tau_j), T\tau_j; \lambda) \right\|_2^2$$
+    </div>
+
+    <div class="method-grid">
+      <div class="method-card">
+        <div class="method-card-tag">Baseline</div>
+        <h4>PINN-LHS</h4>
+        <p>Standard PINN with Latin hypercube sampling for collocation. 64 fixed points drawn once. tanh MLP (width 32, depth 3). Adam only. Represents the "set and forget" collocation baseline.</p>
+      </div>
+      <div class="method-card">
+        <div class="method-card-tag">Adaptive — Accumulate</div>
+        <h4>RAR (Residual Adaptive Refinement)</h4>
+        <p>Starts with 24 LHS points. After each of 3 training rounds (100 epochs each), greedily adds the 14 highest-residual candidates from a pool of 480 uniform samples. Points accumulate — the set only grows.</p>
+      </div>
+      <div class="method-card">
+        <div class="method-card-tag">Adaptive — Resample</div>
+        <h4>RAS (Residual-Adaptive Sampling)</h4>
+        <p>Maintains a fixed-size collocation set (64 points). Every 35 steps, resamples from a residual-proportional distribution over 480 candidates with a 20% uniform exploration mixture. The set resets — it can forget.</p>
+      </div>
+      <div class="method-card">
+        <div class="method-card-tag">Operator Learning</div>
+        <h4>DeepONet</h4>
+        <p>Branch network maps normalized ODE parameters to a state-specific latent vector; trunk maps τ to the same latent space. Trained on 48 parameter–trajectory pairs with supervised data loss. Online prediction for new parameters requires only a forward pass — no re-optimization.</p>
+      </div>
+      <div class="method-card">
+        <div class="method-card-tag">Operator + Physics</div>
+        <h4>PI-DeepONet</h4>
+        <p>Augments DeepONet training with a physics residual term at freshly sampled parameter–time collocation pairs (weight 0.30). Intended to improve physical consistency between observed trajectory samples. Higher offline training cost due to automatic differentiation through the branch-trunk product.</p>
+      </div>
+    </div>
+
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <!-- SECTION 4: STUDY-WIDE RESULTS                               -->
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <div class="section-label">Section 04</div>
+    <h2 class="section-h">Study-Wide Results: Three Views</h2>
+
+    <p class="body-text">
+      The primary summary figure shows all 45 method–benchmark runs from three angles simultaneously: relative L2 error distribution (left), accuracy–training-time scatter (center), and a per-problem accuracy heatmap (right). These are the three plots you need to read before trusting any single aggregate ranking.
+    </p>
+
+    <div class="fig-wrap">
+      <img src="../assets/images/blog/unified-pinn-study/study_summary_accuracy_efficiency.png"
+           alt="Three-panel summary: boxplot of relative L2 errors by method, accuracy–training-time scatter, and benchmark heatmap">
+      <div class="fig-caption">Fig. 2 &mdash; Study-wide summary. <strong>Left:</strong> Relative L2 error distributions across all nine benchmarks, log scale. The spread within each method is larger than the spread between methods — problem difficulty dominates. <strong>Center:</strong> Accuracy vs. offline training time, log-log. All five methods complete in under one second in the quick profile (CPU). <strong>Right:</strong> Log₁₀(relative L2) heatmap — darker cells are better. No method achieves uniformly dark cells. The Lotka–Volterra, Van der Pol, and Monod rows are bright (all methods struggle), while the consecutive-reaction and enzyme rows are dark for the top-performing methods.</div>
+    </div>
+
+    <p class="body-text">
+      Three observations immediately stand out from Fig. 2:
+    </p>
+    <ol style="margin:.5rem 0 1.25rem 1.5rem">
+      <li class="body-text" style="margin-bottom:.4rem">The <strong>within-method spread</strong> (different benchmarks) is far larger than the <strong>between-method spread</strong> (same benchmark, different methods). Method selection matters less than problem structure.</li>
+      <li class="body-text" style="margin-bottom:.4rem">Training time is <strong>roughly similar</strong> across all five methods at this budget — the key cost difference lies in what each method produces. PINNs and adaptive PINNs produce a per-instance solver; DeepONet and PI-DeepONet produce an operator that can answer new parameter queries without re-training.</li>
+      <li class="body-text" style="margin-bottom:.4rem">Three benchmarks (Lotka–Volterra, Van der Pol, Monod bioprocess) are visibly hard for <em>all</em> methods at the quick-profile budget. This is a diagnostic signal that 260 epochs and width-32 networks are insufficient for these problems — not that the methods are fundamentally broken.</li>
+    </ol>
+
+    <!-- Full results table -->
+    <h3 class="sub-h">Per-Benchmark Winner Table</h3>
+    <p class="body-text">The table below shows the winning method and relative L2 error for each benchmark, followed by the full ranking. Bold indicates the best method; the runner-up is shown parenthetically.</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Benchmark</th>
+          <th>Winner</th>
+          <th>Rel. L2 (winner)</th>
+          <th>Runner-up (rel. L2)</th>
+          <th>Hardest method</th>
+          <th>Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Exponential decay</td>
+          <td class="win">PI-DeepONet</td>
+          <td class="win">0.0577</td>
+          <td>RAR (0.0615)</td>
+          <td>RAS (0.381)</td>
+          <td>Near-tie; both methods near analytical</td>
+        </tr>
+        <tr>
+          <td>Damped oscillator</td>
+          <td class="mid">RAR</td>
+          <td class="warn">0.775</td>
+          <td>PINN-LHS (0.849)</td>
+          <td>DeepONet (1.14)</td>
+          <td>All methods fail — budget too small</td>
+        </tr>
+        <tr>
+          <td>Logistic growth</td>
+          <td class="win">DeepONet</td>
+          <td class="win">0.1046</td>
+          <td>PI-DeepONet (0.121)</td>
+          <td>PINN-LHS (0.961)</td>
+          <td>Operator methods leverage parameter family</td>
+        </tr>
+        <tr>
+          <td>Consecutive reaction A→B→C</td>
+          <td class="win">RAR</td>
+          <td class="win">0.0321</td>
+          <td>PINN-LHS (0.110)</td>
+          <td>DeepONet (0.203)</td>
+          <td>Clear RAR advantage; residual targets transient B</td>
+        </tr>
+        <tr>
+          <td>Lotka–Volterra</td>
+          <td class="mid">RAS</td>
+          <td class="warn">0.597</td>
+          <td>PI-DeepONet (0.600)</td>
+          <td>DeepONet (0.631)</td>
+          <td>Near-tie at high error; all methods struggle</td>
+        </tr>
+        <tr>
+          <td>SIR epidemic</td>
+          <td class="win">DeepONet</td>
+          <td class="win">0.2122</td>
+          <td>PI-DeepONet (0.387)</td>
+          <td>RAR (1.069)</td>
+          <td>Operator wins; adaptive PINNs over-focus on small I</td>
+        </tr>
+        <tr>
+          <td>Van der Pol</td>
+          <td class="warn">PI-DeepONet</td>
+          <td class="warn">1.007</td>
+          <td>DeepONet (1.007)</td>
+          <td>PINN-LHS (1.684)</td>
+          <td>All methods fail — limit cycle budget insufficient</td>
+        </tr>
+        <tr>
+          <td>QSSA enzyme</td>
+          <td class="win">PINN-LHS</td>
+          <td class="win">0.0426</td>
+          <td>RAR (0.0526)</td>
+          <td>PI-DeepONet (0.963)</td>
+          <td>Fixed LHS wins; smooth saturation suits uniform sampling</td>
+        </tr>
+        <tr>
+          <td>Monod bioprocess</td>
+          <td class="mid">DeepONet</td>
+          <td class="warn">0.1850</td>
+          <td>PI-DeepONet (0.590)</td>
+          <td>RAR (1.003)</td>
+          <td>Operator partially captures family structure</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <!-- SECTION 5: PER-BENCHMARK DEEP DIVES                         -->
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <div class="section-label">Section 05</div>
+    <h2 class="section-h">Per-Benchmark Deep Dives</h2>
+
+    <p class="body-text">
+      For each benchmark, four diagnostic panels were generated automatically: (1) solution comparison in physical units, (2) pointwise state-vector error along time, (3) recorded training objective, and (4) recorded physics-residual diagnostic. Selected benchmarks are shown below; the complete set of 18 figures (9 solution/error/training + 9 sampling distribution) is archived in the study outputs directory.
+    </p>
+
+    <!-- CONSECUTIVE REACTION -->
+    <h3 class="sub-h">A→B→C Consecutive Reaction — RAR's Best Case</h3>
+    <p class="body-text">
+      The consecutive reaction is the clearest win for adaptive refinement. Species B is a transient intermediate that peaks near $t = \ln(k_2/k_1)/(k_2-k_1)$ and then depletes — a localized feature in time that uniform sampling naturally under-resolves. RAR's greedy mechanism identifies this region through residual evaluation and concentrates new collocation points precisely there.
+    </p>
+
+    <div class="fig-grid">
+      <div class="fig-wrap">
+        <img src="../assets/images/blog/unified-pinn-study/consecutive_reaction_solutions_errors_training.png"
+             alt="Consecutive reaction A→B→C: solution comparison, pointwise error, training loss, and residual history for all five methods">
+        <div class="fig-caption">Fig. 3a &mdash; A→B→C results. RAR (red) tracks the reference closely on species B. PINN-LHS diverges near the B-peak. DeepONet and PI-DeepONet show systematic offset across all three species. The residual diagnostic (bottom right) confirms RAR drives physics residual to the lowest level.</div>
+      </div>
+      <div class="fig-wrap">
+        <img src="../assets/images/blog/unified-pinn-study/consecutive_reaction_sampling_distribution.png"
+             alt="Sampling distributions for A→B→C: PINN-LHS uniform, RAR concentrated in middle, RAS periodically redistributed">
+        <div class="fig-caption">Fig. 3b &mdash; Final collocation-point distribution for A→B→C. PINN-LHS (blue) is evenly spread. RAR (red) has visibly concentrated points in the $\tau \in [0.2, 0.5]$ region where intermediate B peaks. RAS (purple) shows a mixed distribution reflecting its last resampling cycle.</div>
+      </div>
+    </div>
+
+    <!-- LOGISTIC GROWTH -->
+    <h3 class="sub-h">Logistic Growth — When the Operator Wins</h3>
+    <p class="body-text">
+      Logistic growth is the benchmark where the operator approaches shine. The solution family $P(t; r, K)$ is near rank-1 in its parameter-to-trajectory structure — a mild scaling and shift accounts for most of the variation across $(r, K)$ pairs. This is exactly the setting where DeepONet's branch-trunk factorization is well-matched: the branch captures the parameter-dependent amplitude and timescale, the trunk captures the smooth sigmoidal shape. PINN-LHS, which fits a single $(\hat{r}, \hat{K})$ instance with no amortization, achieves a relative L2 of 0.961 — near-total failure — at the quick-profile budget, because 260 epochs are too few for the optimizer to converge from a cold start on a 150-year horizon.
+    </p>
+
+    <div class="fig-wrap">
+      <img src="../assets/images/blog/unified-pinn-study/logistic_growth_solutions_errors_training.png"
+           alt="Logistic growth: solution comparison, pointwise error, and training diagnostics for all five methods">
+      <div class="fig-caption">Fig. 4 &mdash; Logistic growth results. DeepONet (green) and PI-DeepONet (orange) track the sigmoidal reference closely. RAR (red) achieves moderate accuracy by concentrating points in the rapid-growth phase. PINN-LHS (blue) with 260 epochs fails to converge — the 150-year horizon and wide parameter range require more training than the quick profile budget allows.</div>
+    </div>
+
+    <!-- SIR -->
+    <h3 class="sub-h">SIR Epidemic — Small Compartment, Big Problem</h3>
+    <p class="body-text">
+      The SIR model presents a different challenge: the infected compartment $I(t)$ starts at $1/763 \approx 0.0013$, peaks briefly around day 7–8, and returns to near-zero. This tiny initial value and the nonlinear bilinear coupling $\beta S I$ make it one of the hardest single-instance problems in the benchmark. Adaptive PINNs (RAR and RAS) achieve relative L2 above 1.0 — effectively predicting near-constant zero — because their residual-based sampling over-focuses on the peak and neglects the recovery tail. DeepONet, having seen 48 parameter trajectories including a range of $\beta$ and $\gamma$ values, captures the epidemic shape more reliably at the target parameters.
+    </p>
+
+    <div class="fig-wrap">
+      <img src="../assets/images/blog/unified-pinn-study/sir_solutions_errors_training.png"
+           alt="SIR epidemic: solution comparison showing all compartments, pointwise error, training loss and residual for all five methods">
+      <div class="fig-caption">Fig. 5 &mdash; SIR epidemic results (susceptible compartment S shown). DeepONet and PI-DeepONet correctly capture the epidemic progression. RAR and RAS both fail — the residual-targeting mechanism does not rescue them when the infected fraction is initially tiny and the physics loss signal is dominated by the much-larger S compartment.</div>
+    </div>
+
+    <!-- VAN DER POL -->
+    <h3 class="sub-h">Van der Pol — The Universal Failure Case</h3>
+    <p class="body-text">
+      The Van der Pol oscillator with $\mu = 1.0$ over 16 time units is the single benchmark where <em>all</em> five methods record relative L2 near or above 1.0 in the quick profile. The system undergoes a transition toward a stable limit cycle, with a relaxation timescale $\sim \mu$ operating simultaneously with fast oscillation. At only 260 epochs, width-32 networks cannot represent the multi-frequency trajectory. This is expected behavior — it is the honest cost of using an intentionally small diagnostic profile. With the paper profile (4 hidden layers, width 64, 2200 Adam + 250 L-BFGS steps), this benchmark becomes tractable.
+    </p>
+
+    <div class="fig-wrap">
+      <img src="../assets/images/blog/unified-pinn-study/van_der_pol_solutions_errors_training.png"
+           alt="Van der Pol oscillator: all five methods fail to track the reference trajectory at the quick-profile budget">
+      <div class="fig-caption">Fig. 6 &mdash; Van der Pol oscillator. All five methods produce relative L2 ≥ 1.0 at the quick profile. The training loss does decrease (bottom left), confirming optimization is running, but 260 epochs and 64 collocation points are structurally insufficient for a 16-unit nonlinear oscillation. This is a diagnostic result, not a method indictment.</div>
+    </div>
+
+    <!-- QSSA ENZYME -->
+    <h3 class="sub-h">QSSA Enzyme — PINN-LHS Surprises</h3>
+    <p class="body-text">
+      The quasi-steady-state substrate progress curve $S' = -V_\text{max} S / (K_m + S)$ is smooth, monotone, and saturating — a single-state system with no sharp features. This is the benchmark where the plain fixed-collocation PINN wins. The reason: uniform sampling is sufficient when residual mass is spread evenly across the domain (smooth saturation), and the simplicity of the problem means 260 epochs on a single scalar ODE is enough. DeepONet achieves moderate accuracy (relative L2 = 0.095) but PI-DeepONet's physics loss adds noise at this budget, pushing it to near-total failure.
+    </p>
+
+    <div class="fig-wrap">
+      <img src="../assets/images/blog/unified-pinn-study/qssa_enzyme_solutions_errors_training.png"
+           alt="QSSA enzyme progress curve: PINN-LHS wins, PI-DeepONet fails, RAR is a close second">
+      <div class="fig-caption">Fig. 7 &mdash; QSSA enzyme progress curve. PINN-LHS (blue) achieves the lowest error at 0.043 — a case where fixed collocation is not a liability, because the substrate depletion is smooth. PI-DeepONet (orange, bottom-right residual panel) shows a high and increasing residual, indicating the physics loss destabilizes rather than assists training at this budget.</div>
+    </div>
+
+    <!-- MONOD -->
+    <h3 class="sub-h">Monod Bioprocess — Scale Imbalance</h3>
+    <p class="body-text">
+      The Monod bioprocess couples viable cell density $X$ (scale ∼1 g/L) with substrate $S$ (scale ∼20 g/L) through a nonlinear growth term. The ten-fold scale difference between states, combined with a 30-hour horizon and 3-parameter family, makes this one of the harder benchmarks for all methods. DeepONet achieves the best result (relative L2 = 0.185) by leveraging the 48 pre-solved parameter trajectories, but its error remains substantial. Adaptive PINNs (RAR, RAS) and plain PINN-LHS all fail with relative L2 near 1.0.
+    </p>
+
+    <div class="fig-grid">
+      <div class="fig-wrap">
+        <img src="../assets/images/blog/unified-pinn-study/monod_bioprocess_solutions_errors_training.png"
+             alt="Monod bioprocess: viable cell density and substrate depletion, solution comparison and training diagnostics">
+        <div class="fig-caption">Fig. 8a &mdash; Monod bioprocess. DeepONet (green) partially captures the growth and substrate depletion, with visible error in the late-time substrate plateau. All other methods show poor trajectory tracking from the first few time steps.</div>
+      </div>
+      <div class="fig-wrap">
+        <img src="../assets/images/blog/unified-pinn-study/monod_bioprocess_sampling_distribution.png"
+             alt="Sampling distributions for Monod bioprocess: RAR concentrates in early growth phase">
+        <div class="fig-caption">Fig. 8b &mdash; Monod sampling distributions. RAR concentrates points in $\tau \in [0, 0.3]$ corresponding to the rapid early growth phase, where the residual is largest. Despite correct point placement, the network capacity at this budget is insufficient to resolve the coupled dynamics.</div>
+      </div>
+    </div>
+
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <!-- SECTION 6: ADAPTIVE SAMPLING MECHANICS                      -->
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <div class="section-label">Section 06</div>
+    <h2 class="section-h">Adaptive Sampling: What the Distributions Tell You</h2>
+
+    <p class="body-text">
+      The sampling distribution figures are as informative as the accuracy numbers. A useful diagnostic heuristic: if an adaptive method achieves better accuracy than PINN-LHS <em>and</em> its point distribution is visibly concentrated in a region that coincides with a physically meaningful feature (transient intermediate, initial saturation, oscillation peak), the adaptation is doing useful work. If points concentrate but accuracy does not improve, the residual-sampling mechanism may be targeting a transient artifact from early training rather than a genuine difficulty.
+    </p>
+
+    <div class="fig-grid">
+      <div class="fig-wrap">
+        <img src="../assets/images/blog/unified-pinn-study/logistic_growth_sampling_distribution.png"
+             alt="Logistic growth sampling distributions: RAR concentrates in the rapid-growth transition region">
+        <div class="fig-caption">Fig. 9a &mdash; Logistic growth sampling. RAR (red) concentrates heavily around $\tau \in [0.1, 0.4]$ — the rapid-growth phase. RAS (purple) redistributes more broadly. The PINN-LHS baseline is uniform by construction.</div>
+      </div>
+      <div class="fig-wrap">
+        <img src="../assets/images/blog/unified-pinn-study/sir_sampling_distribution.png"
+             alt="SIR sampling distributions: RAR and RAS concentrate on the epidemic peak, missing the recovery tail">
+        <div class="fig-caption">Fig. 9b &mdash; SIR epidemic sampling. Both RAR and RAS over-concentrate on $\tau \approx 0.5$ (the infected-peak region). The recovery tail ($\tau > 0.7$) is under-sampled, explaining why both methods fail despite appearing to target the hardest region.</div>
+      </div>
+    </div>
+
+    <div class="callout warning">
+      <div class="callout-icon">⚠</div>
+      <div class="callout-body">
+        <strong>The residual is an imperfect error indicator for coupled systems</strong>
+        In multi-compartment systems (SIR, A→B→C, Lotka–Volterra), the residual of the dominant compartment can mask failures in smaller compartments. RAR and RAS sample to minimize aggregate residual MSE, not per-state error. The result is that the small infected compartment $I$ in SIR receives proportionally fewer points than the large susceptible compartment $S$ — even though $I$ is the harder state to track.
+      </div>
+    </div>
+
+    <h3 class="sub-h">RAR vs. RAS: Accumulate vs. Resample</h3>
+    <p class="body-text">
+      The fundamental difference between RAR and RAS is memory. RAR's greedy addition keeps every historical high-residual point — a beneficial property when the hard region is stable (e.g., the B-peak in A→B→C, which is always around the same $\tau$). RAS forgets previous collocation points at each resampling step, replaced by a fresh residual-proportional draw. This is better suited to problems where the hard region <em>moves</em> through training (e.g., a PINN progressively learning a limit cycle from left to right in time), but it introduces variance and can occasionally discard useful previously-learned coverage. In this benchmark, RAR outperforms RAS on 5 of 9 problems; RAS wins on 2. Neither is universally superior.
+    </p>
+
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <!-- SECTION 7: DEEPONET AND PI-DEEPONET                         -->
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <div class="section-label">Section 07</div>
+    <h2 class="section-h">Operator Learning: When Amortization Pays Off</h2>
+
+    <p class="body-text">
+      DeepONet and PI-DeepONet win on three benchmarks each in this study (exponential decay and logistic growth and SIR for different variants), and fail completely on three (damped oscillator, Van der Pol, Monod — where all methods fail). The key question is not "does DeepONet win?" but "when is its cost structure favorable?"
+    </p>
+
+    <p class="body-text">
+      The cost argument is asymmetric: a PINN or adaptive PINN requires a complete optimization from scratch for every new parameter instance. DeepONet pays a larger upfront offline training cost (solving 48 trajectories + training) but answers new parameter queries with a single forward pass. In this benchmark's quick profile, the offline costs are roughly comparable (sub-second on CPU), which means the comparison is not yet about inference speed — it is about generalization. DeepONet generalizes across the parameter family; PINN-LHS does not.
+    </p>
+
+    <div class="callout insight">
+      <div class="callout-icon">💡</div>
+      <div class="callout-body">
+        <strong>The fairness caveat</strong>
+        PINN-LHS, RAR, and RAS train on the exact target parameter $\lambda$. DeepONet and PI-DeepONet train on a family that <em>includes</em> the target. This is not an unfair advantage — it is the intended operational distinction. But it means accuracy comparisons measure different things: single-instance optimizer vs. parameter-family generalizer. The correct question is whether the cost of generating 48 training trajectories and training the operator is worth the accuracy gain at the target parameter.
+      </div>
+    </div>
+
+    <h3 class="sub-h">Where PI-DeepONet Adds Value (and Where It Doesn't)</h3>
+    <p class="body-text">
+      PI-DeepONet outperforms vanilla DeepONet on exponential decay and achieves comparable performance on logistic growth, but underperforms on QSSA enzyme (near total failure, rel. L2 = 0.963 vs. 0.095 for plain DeepONet) and on Monod bioprocess. The physics residual term adds automatic differentiation cost through the branch-trunk dot product, effectively doubling the per-step gradient computation. At 260 epochs this overhead is manageable, but the benefits only materialize when the residual constraint provides genuine regularization — that is, when the data-only operator would otherwise over-fit to noisy parameter samples or under-constrain the solution between observed parameter points. For smooth, well-posed problems with clean training trajectories (QSSA, Monod), the added physics noise destabilizes training at low budget.
+    </p>
+
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <!-- SECTION 8: INVERSE EXTENSION                                -->
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <div class="section-label">Section 08</div>
+    <h2 class="section-h">Inverse Extension: Recovering Logistic Parameters from Historical Census Data</h2>
+
+    <p class="body-text">
+      The previous series articles each ended with a data-informed inverse fit. This unified study adds a single structured inverse extension: fitting the logistic growth parameters $r$ (intrinsic growth rate) and $K$ (carrying capacity) to 16 U.S. census observations from 1790 to 1940. The method uses a hard-IC PINN with trainable parameters $r$ and $K$ mapped through a sigmoid to declared physical bounds, combined with a weighted physics + data loss:
+    </p>
+
+    <div class="math-block">
+      $$\mathcal{L}_\text{inverse} = \mathcal{L}_r(\theta, r, K) + 10 \cdot \frac{1}{N_d} \sum_{i=1}^{16} \left\| \hat{P}(t_i; r, K) - P_i^\text{obs} \right\|^2$$
+    </div>
+
+    <div class="fig-wrap">
+      <img src="../assets/images/blog/unified-pinn-study/inverse_logistic_extension.png"
+           alt="Logistic inverse extension: PINN fit to U.S. census data 1790–1940 and loss component evolution">
+      <div class="fig-caption">Fig. 10 &mdash; Logistic inverse extension. <strong>Left:</strong> The data-informed PINN (orange) fits the 16 census observations well across the 1790–1940 period, capturing both the initial slow growth and the post-1880 acceleration. <strong>Right:</strong> Loss component evolution — the physics (blue), data (orange), and total (grey) losses all decrease; the data term dominates early training and the physics term provides regularization in the sparse-data regions.</div>
+    </div>
+
+    <div class="callout success">
+      <div class="callout-icon">✓</div>
+      <div class="callout-body">
+        <strong>Interpretation note</strong>
+        The recovered parameters represent a best-fit logistic model to the historical data, not ground truth biological constants. The logistic model is itself an approximation — it ignores wars, immigration, land availability, and economic cycles. The reported "absolute difference from reference" compares the PINN estimate to the reference parameter vector used to define the benchmark, not to a verified historical value. Parameter identifiability and confidence intervals require separate analysis.
+      </div>
+    </div>
+
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <!-- SECTION 9: METHOD SELECTION GUIDE                           -->
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <div class="section-label">Section 09</div>
+    <h2 class="section-h">A Decision Framework for Method Selection</h2>
+
+    <p class="body-text">
+      Synthesizing the nine-problem benchmark into actionable guidance requires separating problem structure, data availability, query volume, and verification budget. The framework below is a heuristic derived from the observed patterns — it is not a substitute for a problem-specific pilot study.
+    </p>
+
+    <div class="decision-box">
+      <div class="decision-row">
+        <span class="decision-cond">Single parameter instance needed, smooth monotone dynamics, &lt;5 states</span>
+        <span class="decision-arrow">→</span>
+        <span class="decision-rec">PINN-LHS (fast, predictable, no candidate overhead)</span>
+      </div>
+      <div class="decision-row">
+        <span class="decision-cond">Localized transient or sharp feature visible in reference trajectory</span>
+        <span class="decision-arrow">→</span>
+        <span class="decision-rec">RAR (accumulates points at persistent hard regions)</span>
+      </div>
+      <div class="decision-row">
+        <span class="decision-cond">Hard region shifts during training (e.g., progressive limit cycle)</span>
+        <span class="decision-arrow">→</span>
+        <span class="decision-rec">RAS (resamples to follow evolving residual mass)</span>
+      </div>
+      <div class="decision-row">
+        <span class="decision-cond">Many parameter queries needed; can afford 50–200 reference trajectories upfront</span>
+        <span class="decision-arrow">→</span>
+        <span class="decision-rec">DeepONet (amortizes cost; each query is a forward pass)</span>
+      </div>
+      <div class="decision-row">
+        <span class="decision-cond">Same as above but labeled data is sparse or noisy</span>
+        <span class="decision-arrow">→</span>
+        <span class="decision-rec">PI-DeepONet (physics residual fills gaps between parameter samples)</span>
+      </div>
+      <div class="decision-row">
+        <span class="decision-cond">Long horizon, nonlinear oscillation, or scale-stiff coupled system</span>
+        <span class="decision-arrow">→</span>
+        <span class="decision-rec">Use paper profile; consider FBPINNs, causal training, or domain decomposition</span>
+      </div>
+      <div class="decision-row">
+        <span class="decision-cond">Inverse parameter estimation with sparse experimental data</span>
+        <span class="decision-arrow">→</span>
+        <span class="decision-rec">PINN with trainable bounded physics parameters + data loss + multiple seeds</span>
+      </div>
+    </div>
+
+    <div class="callout warning">
+      <div class="callout-icon">⚠</div>
+      <div class="callout-body">
+        <strong>Single-seed results are diagnostic, not decisive</strong>
+        Every result in this benchmark comes from a single seed (20260727). The quick profile uses 260 epochs and width-32/depth-3 networks. Before using any ranking to justify a deployment decision, re-run with 5–10 seeds, report median ± IQR, and validate against a classical solver baseline (e.g., DOP853 runtime at the target tolerance).
+      </div>
+    </div>
+
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <!-- SECTION 10: CONCLUSIONS                                     -->
+    <!-- ──────────────────────────────────────────────────────────── -->
+    <div class="section-label">Section 10</div>
+    <h2 class="section-h">Conclusions</h2>
+
+    <p class="body-text">
+      This unified study closes both the ODEs series and the PINNs series with a single reproducible benchmark. Six high-level conclusions emerge from the 45 method–benchmark runs:
+    </p>
+
+    <ol style="margin:.5rem 0 1.5rem 1.5rem">
+      <li class="body-text" style="margin-bottom:.7rem">
+        <strong>Problem difficulty dominates method selection.</strong> The within-method spread across benchmarks is orders of magnitude larger than the between-method spread on any single benchmark. The right question is "what does this problem need?" not "which method is generally better?"
+      </li>
+      <li class="body-text" style="margin-bottom:.7rem">
+        <strong>RAR has a genuine mechanism when it works.</strong> Its advantage on A→B→C (rel. L2 = 0.032 vs. 0.110 for PINN-LHS) is supported by a visually verifiable point distribution concentrated at the transient intermediate peak. When point concentration coincides with a physically meaningful feature, RAR's benefit is credible.
+      </li>
+      <li class="body-text" style="margin-bottom:.7rem">
+        <strong>DeepONet and PI-DeepONet answer a different question.</strong> They are not better single-instance solvers — they are parameter-family generalists. Their advantage on logistic growth and SIR reflects the low intrinsic rank of those solution families, which the branch-trunk factorization exploits efficiently.
+      </li>
+      <li class="body-text" style="margin-bottom:.7rem">
+        <strong>Three benchmarks exposed budget limitations honestly.</strong> Damped oscillator, Van der Pol, and Monod bioprocess all failed across all methods at the quick profile. This is a truthful finding, not a failure of the benchmark design — it is precisely the kind of diagnostic that motivates the paper profile and architecture upgrades.
+      </li>
+      <li class="body-text" style="margin-bottom:.7rem">
+        <strong>Residual-based sampling has a known failure mode in multi-compartment systems.</strong> In SIR and Lotka–Volterra, adaptive methods concentrated points on dominant compartments and starved smaller ones. A per-state residual weighting or compartment-normalized loss would mitigate this.
+      </li>
+      <li class="body-text" style="margin-bottom:.7rem">
+        <strong>Reproducibility is achievable.</strong> A single-seed, top-to-bottom-executable notebook with declared hyperparameters, shared random seeds, normalized coordinates, exact or high-accuracy references, and auto-generated figures is a practical standard. The notebook supporting this post meets all six criteria.
+      </li>
+    </ol>
+
+    <hr class="divider">
+
+    <!-- SERIES NAV -->
+    <div class="series-nav">
+      <span class="series-nav-label">Physics AI &mdash; Complete Series</span>
+      <div class="sn-cols">
+        <div>
+          <div class="sn-col-hdr">PINNs Series &mdash; 8 Articles</div>
+          <div class="sn-row"><span class="sn-num">01</span><a href="pinn-introduction.html">Introduction to PINNs</a></div>
+          <div class="sn-row"><span class="sn-num">02</span><a href="pinn-odes-second-order.html">Second-Order ODEs</a></div>
+          <div class="sn-row"><span class="sn-num">03</span><a href="pinn-heat-equation.html">Heat Equation</a></div>
+          <div class="sn-row"><span class="sn-num">04</span><a href="pinn-burgers-reaction-pdes.html">Burgers &amp; Reaction PDEs</a></div>
+          <div class="sn-row"><span class="sn-num">05</span><a href="pinn-inverse-problems.html">Inverse Problems</a></div>
+          <div class="sn-row"><span class="sn-num">06</span><a href="pinn-adaptive-sampling.html">Adaptive Sampling</a></div>
+          <div class="sn-row"><span class="sn-num">07</span><a href="pinn-deeponet.html">DeepONet, Learning Operators</a></div>
+          <div class="sn-row"><span class="sn-num">08</span><a href="pinn-physics-informed-deeponet.html">Physics-Informed DeepONet</a></div>
+        </div>
+        <div>
+          <div class="sn-col-hdr">ODEs Series &mdash; 7 Problems</div>
+          <div class="sn-row"><span class="sn-num">01</span><a href="pinn-odes-logistic-growth.html">Logistic Population Growth</a></div>
+          <div class="sn-row"><span class="sn-num">02</span><a href="pinn-odes-consecutive-reactions.html">Consecutive Reactions A&rarr;B&rarr;C</a></div>
+          <div class="sn-row"><span class="sn-num">03</span><a href="pinn-odes-lotka-volterra.html">Lotka&ndash;Volterra</a></div>
+          <div class="sn-row"><span class="sn-num">04</span><a href="pinn-odes-sir-epidemic.html">SIR Epidemic Model</a></div>
+          <div class="sn-row"><span class="sn-num">05</span><a href="pinn-odes-van-der-pol.html">Van der Pol Oscillator</a></div>
+          <div class="sn-row"><span class="sn-num">06</span><a href="pinn-odes-stiff-enzyme-kinetics.html">Stiff Enzyme Kinetics &amp; QSSA</a></div>
+          <div class="sn-row"><span class="sn-num">07</span><a href="pinn-odes-bioprocess-cell-density.html">Monod Bioprocess</a></div>
+        </div>
+      </div>
+      <div class="sn-extra">
+        <div class="sn-row sn-cur"><span class="sn-num">&#9670;</span>Unified Benchmark Capstone &larr; you&nbsp;are&nbsp;here</div>
+        <div class="sn-row"><span class="sn-num">&#9670;</span><a href="deeponet-vs-pinn-ode-analysis.html">DeepONet vs PINN Analysis</a></div>
+      </div>
+    </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- REFERENCES -->
+    <div class="section-label">References</div>
+    <h2 class="section-h">References</h2>
+
+    <div class="ref-list">
+      <div class="ref-item"><span class="ref-num">[1]</span>Raissi, M., Perdikaris, P., &amp; Karniadakis, G. E. (2019). Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear PDEs. <em>Journal of Computational Physics, 378</em>, 686–707. <a href="https://doi.org/10.1016/j.jcp.2018.10.045">doi:10.1016/j.jcp.2018.10.045</a></div>
+      <div class="ref-item"><span class="ref-num">[2]</span>Lu, L., Jin, P., Pang, G., Zhang, Z., &amp; Karniadakis, G. E. (2021). Learning nonlinear operators via DeepONet based on the universal approximation theorem of operators. <em>Nature Machine Intelligence, 3</em>, 218–229. <a href="https://doi.org/10.1038/s42256-021-00302-5">doi:10.1038/s42256-021-00302-5</a></div>
+      <div class="ref-item"><span class="ref-num">[3]</span>Wang, S., Wang, H., &amp; Perdikaris, P. (2021). Learning the solution operator of parametric PDEs with physics-informed DeepONets. <em>Science Advances, 7</em>, eabi8605. <a href="https://doi.org/10.1126/sciadv.abi8605">doi:10.1126/sciadv.abi8605</a></div>
+      <div class="ref-item"><span class="ref-num">[4]</span>Wu, C., Zhu, M., Tan, Q., Kartha, Y., &amp; Lu, L. (2023). A comprehensive study of non-adaptive and residual-based adaptive sampling for physics-informed neural networks. <em>Computer Methods in Applied Mechanics and Engineering, 403</em>, 115671. <a href="https://doi.org/10.1016/j.cma.2022.115671">doi:10.1016/j.cma.2022.115671</a></div>
+      <div class="ref-item"><span class="ref-num">[5]</span>Wang, S., Teng, Y., &amp; Perdikaris, P. (2021). Understanding and mitigating gradient flow pathologies in physics-informed neural networks. <em>SIAM Journal on Scientific Computing, 43</em>(5), A3055–A3081. <a href="https://doi.org/10.1137/20M1318043">doi:10.1137/20M1318043</a></div>
+      <div class="ref-item"><span class="ref-num">[6]</span>Lagaris, I. E., Likas, A., &amp; Fotiadis, D. I. (1998). Artificial neural networks for solving ordinary and partial differential equations. <em>IEEE Transactions on Neural Networks, 9</em>(5), 987–1000. <a href="https://doi.org/10.1109/72.712178">doi:10.1109/72.712178</a></div>
+      <div class="ref-item"><span class="ref-num">[7]</span>Hao, Z., Yao, J., Su, C., et al. (2024). PINNacle: A comprehensive benchmark of physics-informed neural networks for solving PDEs. <em>Advances in Neural Information Processing Systems</em> (Datasets and Benchmarks). <a href="https://proceedings.neurips.cc/paper_files/paper/2024/hash/8c63299fb2820ef41cb05e2ff11836f5-Abstract-Datasets_and_Benchmarks_Track.html">NeurIPS 2024</a></div>
+      <div class="ref-item"><span class="ref-num">[8]</span>Rathore, P., Lei, W., Frangella, Z., Lu, L., &amp; Udell, M. (2024). Challenges in training PINNs: A loss landscape perspective. <em>International Conference on Machine Learning</em>. <a href="https://arxiv.org/abs/2402.01868">arXiv:2402.01868</a></div>
+      <div class="ref-item"><span class="ref-num">[9]</span>Lu, L., Meng, X., Mao, Z., &amp; Karniadakis, G. E. (2021). DeepXDE: A deep learning library for solving differential equations. <em>SIAM Review, 63</em>(1), 208–228. <a href="https://doi.org/10.1137/19M1274067">doi:10.1137/19M1274067</a></div>
+      <div class="ref-item"><span class="ref-num">[10]</span>Karniadakis, G. E., Kevrekidis, I. G., Lu, L., Perdikaris, P., Wang, S., &amp; Yang, L. (2021). Physics-informed machine learning. <em>Nature Reviews Physics, 3</em>, 422–440. <a href="https://doi.org/10.1038/s42254-021-00314-5">doi:10.1038/s42254-021-00314-5</a></div>
+    </div>
+
+  </div><!-- /article-body -->
+</div><!-- /article-page -->
+
+<footer>
+  <span class="footer-copy">&copy; 2026 Ali Shahmohammadi. All rights reserved.</span>
+  <div class="footer-links">
+    <a href="../index.html">Home</a>
+    <a href="../index.html#writing">Writing</a>
+    <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</footer>
+
+</body>
+</html>
