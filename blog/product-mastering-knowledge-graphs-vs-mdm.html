@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Product Mastering Across R&D-to-Commercial: Why Knowledge Graphs Beat Traditional MDM — Ali Shahmohammadi</title>
-  <meta name="description" content="A practitioner's view on why the row-and-column gold record breaks down for medicinal products across the R&D-to-commercial lifecycle — and what to build instead with knowledge graphs, ontologies, and agentic AI." />
+  <title>Product Mastering Across R&D-to-Commercial: Why Knowledge Graphs Beat Traditional MDM | Ali Shahmohammadi</title>
+  <meta name="description" content="A practitioner's view on why the row-and-column gold record breaks down for medicinal products across the R&D-to-commercial lifecycle, and what to build instead with knowledge graphs, ontologies, and agentic AI." />
   <meta property="og:title" content="Product Mastering: Why Knowledge Graphs Beat Traditional MDM" />
-  <meta property="og:description" content="Why hub-and-spoke MDM breaks down for pharma product mastering — and how knowledge graphs, ISO IDMP, and agentic AI fix it." />
+  <meta property="og:description" content="Why hub-and-spoke MDM breaks down for pharma product mastering, and how knowledge graphs, ISO IDMP, and agentic AI fix it." />
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://alishahmohammadi22.github.io/blog/product-mastering-knowledge-graphs-vs-mdm.html" />
   <meta property="og:image" content="https://alishahmohammadi22.github.io/assets/images/og-preview.png" />
@@ -318,14 +318,14 @@
 </div>
 
 <!-- ══════════════════════════════════════ -->
-<!-- §1 — Problem                          -->
+<!-- §1, Problem                          -->
 <!-- ══════════════════════════════════════ -->
 <section class="section" id="problem">
   <div class="container">
     <div class="section-header">
       <div class="eyebrow">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        01 — The Problem
+        01, The Problem
       </div>
       <h2 class="section-title">The Product Mastering Problem in Pharma</h2>
       <p class="section-sub">In most industries, &ldquo;product&rdquo; is a stable thing. Pharma does not fit that world &mdash; the entity is not a thing, it is a <strong>trajectory</strong>.</p>
@@ -382,14 +382,14 @@
 </section>
 
 <!-- ══════════════════════════════════════ -->
-<!-- §2 — MDM Failures                     -->
+<!-- §2, MDM Failures                     -->
 <!-- ══════════════════════════════════════ -->
 <section class="section section-alt" id="mdm-failures">
   <div class="container">
     <div class="section-header">
       <div class="eyebrow red">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-        02 — Why MDM Fails
+        02, Why MDM Fails
       </div>
       <h2 class="section-title">Why Hub-and-Spoke MDM Breaks Down</h2>
       <p class="section-sub">Classical MDM&rsquo;s four implementation styles &mdash; registry, consolidation, coexistence, centralized &mdash; all assume the same primitive: a denormalized &ldquo;golden&rdquo; row chosen by survivorship rules. When the entity is relational and evolving, they all fail in the same ways.</p>
@@ -401,7 +401,7 @@
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
           Lossy denormalization of multi-cardinality
         </div>
-        <p class="fail-desc">An MPID maps to multiple PhPIDs (strengths/forms), each PhPID to multiple substances, each substance to multiple specified-substance variants. Forcing this into a flat hub schema either <strong>explodes row counts</strong> or hides cardinality in a JSON blob the stewardship workflow can&rsquo;t reason over. ISO IDMP is structurally a network — a graph published as five interlocking standards.<sup><a href="#ref-3">3</a></sup></p>
+        <p class="fail-desc">An MPID maps to multiple PhPIDs (strengths/forms), each PhPID to multiple substances, each substance to multiple specified-substance variants. Forcing this into a flat hub schema either <strong>explodes row counts</strong> or hides cardinality in a JSON blob the stewardship workflow can&rsquo;t reason over. ISO IDMP is structurally a network, a graph published as five interlocking standards.<sup><a href="#ref-3">3</a></sup></p>
       </div>
 
       <div class="fail-card">
@@ -436,14 +436,14 @@
 </section>
 
 <!-- ══════════════════════════════════════ -->
-<!-- §3 — KG Alternative                   -->
+<!-- §3, KG Alternative                   -->
 <!-- ══════════════════════════════════════ -->
 <section class="section" id="kg-alternative">
   <div class="container">
     <div class="section-header">
       <div class="eyebrow green">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-        03 — The Alternative
+        03, The Alternative
       </div>
       <h2 class="section-title">The Knowledge Graph Alternative</h2>
       <p class="section-sub">A knowledge graph inverts the MDM primitive. Instead of a denormalized row, the unit of mastering is the <strong>triple</strong>: (subject, predicate, object). Four properties of the graph model do real work that MDM cannot.</p>
@@ -457,7 +457,7 @@
       <span class="triple-subj">devCandidate:DC-2017-44</span>  <span class="triple-pred">:assertedBy</span>  <span class="triple-meta">agentRun:OntoCurator-v2.1-20170612</span>  .<br/>
       <span class="triple-subj">devCandidate:DC-2017-44</span>  <span class="triple-pred">:assertedAt</span>  <span class="triple-meta">"2017-06-12T14:22:01Z"^^xsd:dateTime</span>  .<br/>
       <br/>
-      <span class="triple-cmt"># Both identities survive — nothing is overwritten</span><br/>
+      <span class="triple-cmt"># Both identities survive, nothing is overwritten</span><br/>
       <span class="triple-subj">compound:CHEMBL1234</span>  <span class="triple-pred">owl:sameAs</span>  <span class="triple-obj">unii:ABCD1234EF</span>  .<br/>
     </div>
 
@@ -467,7 +467,7 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
         </div>
         <div class="kg-title">Entities are persistent across lifecycle states</div>
-        <p class="kg-desc">A discovery compound and the marketed substance are <strong>linked by an edge</strong> — not collapsed into one row. Both identities survive. A pharmacovigilance query in 2030 can resolve the 2014 entity exactly as it stood, because nothing was overwritten.</p>
+        <p class="kg-desc">A discovery compound and the marketed substance are <strong>linked by an edge</strong>, not collapsed into one row. Both identities survive. A pharmacovigilance query in 2030 can resolve the 2014 entity exactly as it stood, because nothing was overwritten.</p>
       </div>
 
       <div class="kg-card">
@@ -475,7 +475,7 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><line x1="3" y1="3" x2="12" y2="12"/><line x1="21" y1="3" x2="12" y2="12"/><line x1="12" y1="12" x2="12" y2="21"/></svg>
         </div>
         <div class="kg-title">Lifecycle transitions are edges, not status columns</div>
-        <p class="kg-desc">&ldquo;Compound X was nominated as development candidate on 2017-06-12 under decision D-2017-44&rdquo; becomes a <strong>typed edge with provenance and an effective interval</strong>. The graph encodes the <em>event</em> of transition — which is precisely what ICH E6(R3) audit trails require.<sup><a href="#ref-7">7</a></sup></p>
+        <p class="kg-desc">&ldquo;Compound X was nominated as development candidate on 2017-06-12 under decision D-2017-44&rdquo; becomes a <strong>typed edge with provenance and an effective interval</strong>. The graph encodes the <em>event</em> of transition, which is precisely what ICH E6(R3) audit trails require.<sup><a href="#ref-7">7</a></sup></p>
       </div>
 
       <div class="kg-card">
@@ -483,7 +483,7 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         </div>
         <div class="kg-title">Semantic versioning replaces survivorship</div>
-        <p class="kg-desc">Each fact is asserted by a named source graph with a version and validity interval. The same property can hold different values for different consumers simultaneously — clinical ops reads the protocol-locked definition while commercial reads the current marketed config, <strong>from the same graph</strong>, by selecting the appropriate named graph or VALID-AT timestamp.</p>
+        <p class="kg-desc">Each fact is asserted by a named source graph with a version and validity interval. The same property can hold different values for different consumers simultaneously, clinical ops reads the protocol-locked definition while commercial reads the current marketed config, <strong>from the same graph</strong>, by selecting the appropriate named graph or VALID-AT timestamp.</p>
       </div>
 
       <div class="kg-card">
@@ -502,14 +502,14 @@
 </section>
 
 <!-- ══════════════════════════════════════ -->
-<!-- §4 — Ontology Stack                   -->
+<!-- §4, Ontology Stack                   -->
 <!-- ══════════════════════════════════════ -->
 <section class="section section-alt" id="ontology-stack">
   <div class="container">
     <div class="section-header">
       <div class="eyebrow purple">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-        04 — Ontology Stack
+        04, Ontology Stack
       </div>
       <h2 class="section-title">Connecting MDM to Ontologies</h2>
       <p class="section-sub">The right pattern is to let the ontologies become the master, and have what used to be MDM serve as the operational read model for systems that still need a flat view.</p>
@@ -565,7 +565,7 @@
           <tr>
             <td><strong>End-to-end product identity</strong></td>
             <td><span class="onto-badge ob-purple">IDMP-O</span> (Pistoia)</td>
-            <td>The <em>integrating layer</em> — realizes ISO 11238/11239/11240/11615/11616/21090 in OWL; engineered to bridge chemistry ontologies upstream and regulatory identifiers downstream<sup><a href="#ref-5">5</a></sup></td>
+            <td>The <em>integrating layer</em>, realizes ISO 11238/11239/11240/11615/11616/21090 in OWL; engineered to bridge chemistry ontologies upstream and regulatory identifiers downstream<sup><a href="#ref-5">5</a></sup></td>
             <td style="font-family:'JetBrains Mono',monospace;font-size:.78rem;">MPID / PhPID</td>
           </tr>
         </tbody>
@@ -580,14 +580,14 @@
 </section>
 
 <!-- ══════════════════════════════════════ -->
-<!-- §5 — Architecture                     -->
+<!-- §5, Architecture                     -->
 <!-- ══════════════════════════════════════ -->
 <section class="section" id="architecture">
   <div class="container">
     <div class="section-header">
       <div class="eyebrow">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/><line x1="15" y1="9" x2="15" y2="21"/></svg>
-        05 — Reference Architecture
+        05, Reference Architecture
       </div>
       <h2 class="section-title">A Reference Architecture</h2>
       <p class="section-sub">The shape that emerges in practice &mdash; across discovery, development, regulatory, and commercial &mdash; with three architectural choices that distinguish it from &ldquo;another KG on top of the data lake.&rdquo;</p>
@@ -703,31 +703,31 @@
       <div class="kg-card">
         <div class="kg-icon blue"><span style="font-weight:800;font-size:.95rem;">1</span></div>
         <div class="kg-title">Ontology layer is governed independently</div>
-        <p class="kg-desc">Ontology releases are versioned (SemVer) and the graph carries <code>usedOntologyVersion</code> provenance on every assertion. A MedDRA v27.0 → v27.1 upgrade does not silently change historical safety queries — it produces a new named graph the consumer can opt into.</p>
+        <p class="kg-desc">Ontology releases are versioned (SemVer) and the graph carries <code>usedOntologyVersion</code> provenance on every assertion. A MedDRA v27.0 → v27.1 upgrade does not silently change historical safety queries, it produces a new named graph the consumer can opt into.</p>
       </div>
       <div class="kg-card">
         <div class="kg-icon purple"><span style="font-weight:800;font-size:.95rem;">2</span></div>
         <div class="kg-title">Named graphs partition the lifecycle</div>
-        <p class="kg-desc">Discovery, clinical, regulatory, and commercial facts each live in their own named graph with explicit cross-graph edges. This makes &ldquo;authoritative for attribute X only after milestone Y&rdquo; expressible <em>declaratively</em> — not as a status column.</p>
+        <p class="kg-desc">Discovery, clinical, regulatory, and commercial facts each live in their own named graph with explicit cross-graph edges. This makes &ldquo;authoritative for attribute X only after milestone Y&rdquo; expressible <em>declaratively</em>, not as a status column.</p>
       </div>
       <div class="kg-card">
         <div class="kg-icon amber"><span style="font-weight:800;font-size:.95rem;">3</span></div>
         <div class="kg-title">Materialized read models are deliverables, not the master</div>
-        <p class="kg-desc">IDMP submission XML, the safety data warehouse, the commercial product hierarchy — all <strong>generated from the graph by query</strong>, all reproducible from a graph snapshot. The MDM hub, where one still exists, becomes a cache.</p>
+        <p class="kg-desc">IDMP submission XML, the safety data warehouse, the commercial product hierarchy, all <strong>generated from the graph by query</strong>, all reproducible from a graph snapshot. The MDM hub, where one still exists, becomes a cache.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ══════════════════════════════════════ -->
-<!-- §6 — Agentic AI                       -->
+<!-- §6, Agentic AI                       -->
 <!-- ══════════════════════════════════════ -->
 <section class="section section-alt" id="agentic-ai">
   <div class="container">
     <div class="section-header">
       <div class="eyebrow">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/><path d="M22 2 12 12"/></svg>
-        06 — Agentic AI
+        06, Agentic AI
       </div>
       <h2 class="section-title">Agentic AI for First-Pass Mastering, Human-in-the-Loop for the Rest</h2>
       <p class="section-sub">Foundation models change the economics of entity resolution. Three peer-reviewed results carry the load &mdash; and the workable pattern is agentic first-pass with structured handoff.</p>
@@ -735,7 +735,7 @@
 
     <!-- Evidence callout -->
     <div class="callout blue" style="margin-bottom:2rem;">
-      <p><strong>Research foundation:</strong> Narayan et al. (Stanford, PVLDB 2022) showed foundation models match or exceed task-specific SOTA on five data wrangling tasks including entity matching and schema matching — accessed only via in-context learning.<sup><a href="#ref-18">18</a></sup> Peeters &amp; Bizer (Mannheim, 2023) confirmed ChatGPT reaches fine-tuned model performance on entity-matching benchmarks <em>without any task-specific training data</em>.<sup><a href="#ref-19">19</a></sup> Fernandez et al. (Chicago, PVLDB 2023) grounded the broader thesis: LLMs have &ldquo;unprecedented ability to ground database tuples, schemas, and queries in real-world concepts.&rdquo;<sup><a href="#ref-20">20</a></sup></p>
+      <p><strong>Research foundation:</strong> Narayan et al. (Stanford, PVLDB 2022) showed foundation models match or exceed task-specific SOTA on five data wrangling tasks including entity matching and schema matching, accessed only via in-context learning.<sup><a href="#ref-18">18</a></sup> Peeters &amp; Bizer (Mannheim, 2023) confirmed ChatGPT reaches fine-tuned model performance on entity-matching benchmarks <em>without any task-specific training data</em>.<sup><a href="#ref-19">19</a></sup> Fernandez et al. (Chicago, PVLDB 2023) grounded the broader thesis: LLMs have &ldquo;unprecedented ability to ground database tuples, schemas, and queries in real-world concepts.&rdquo;<sup><a href="#ref-20">20</a></sup></p>
     </div>
 
     <!-- Agentic workflow -->
@@ -767,7 +767,7 @@
       <div class="flow-step" style="border-top:3px solid var(--red);">
         <div class="flow-num">Step 05</div>
         <div class="flow-title">Feedback Loop</div>
-        <p class="flow-desc">Steward decisions feed back into the agent&rsquo;s few-shot context for the next batch — a closed loop that compounds quality over time</p>
+        <p class="flow-desc">Steward decisions feed back into the agent&rsquo;s few-shot context for the next batch, a closed loop that compounds quality over time</p>
       </div>
     </div>
 
@@ -778,14 +778,14 @@
 </section>
 
 <!-- ══════════════════════════════════════ -->
-<!-- §7 — AI-Readiness & Regulatory        -->
+<!-- §7, AI-Readiness & Regulatory        -->
 <!-- ══════════════════════════════════════ -->
 <section class="section" id="regulatory">
   <div class="container">
     <div class="section-header">
       <div class="eyebrow green">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        07 — AI-Readiness &amp; Regulatory
+        07, AI-Readiness &amp; Regulatory
       </div>
       <h2 class="section-title">What This Means for AI-Readiness and Regulatory Submissions</h2>
       <p class="section-sub">Two regulatory currents are converging on the same conclusion: product data needs to be machine-processable, traceable, and FAIR. The harder half of &ldquo;AI-readiness&rdquo; is data-side, not model-side.</p>
@@ -825,21 +825,21 @@
 </section>
 
 <!-- ══════════════════════════════════════ -->
-<!-- §8 — Roadmap                          -->
+<!-- §8, Roadmap                          -->
 <!-- ══════════════════════════════════════ -->
 <section class="section section-alt" id="roadmap">
   <div class="container">
     <div class="section-header">
       <div class="eyebrow amber">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        08 — Implementation Roadmap
+        08, Implementation Roadmap
       </div>
       <h2 class="section-title">Implementation Roadmap</h2>
       <p class="section-sub">A staged path that has survived contact with reality. Workable budget for phases 0–2: a core team of 4–6 engineers, 1–2 ontologists, 1–2 stewards per domain, and 9–12 months.</p>
     </div>
 
     <div class="callout amber" style="margin-bottom:1.75rem;">
-      <p><strong>The most common failure mode is not technical</strong> — it&rsquo;s treating the ontology as an IT artifact instead of a regulated piece of master data with its own governance. <strong>Fund the ontologists.</strong></p>
+      <p><strong>The most common failure mode is not technical</strong>, it&rsquo;s treating the ontology as an IT artifact instead of a regulated piece of master data with its own governance. <strong>Fund the ontologists.</strong></p>
     </div>
 
     <div class="roadmap">
@@ -897,7 +897,7 @@
         </div>
         <div class="phase-body">
           <div class="phase-title">Generate the First Downstream Deliverable from the Graph</div>
-          <p class="phase-desc">Pick one — IDMP submission XML, a pharmacovigilance line listing, or a commercial product hierarchy — and replace its existing pipeline with a query against the graph. This is the moment that proves the architecture commercially and funds the remaining phases.</p>
+          <p class="phase-desc">Pick one, IDMP submission XML, a pharmacovigilance line listing, or a commercial product hierarchy, and replace its existing pipeline with a query against the graph. This is the moment that proves the architecture commercially and funds the remaining phases.</p>
           <div class="phase-tags">
             <span class="phase-tag">SPARQL / Cypher query</span>
             <span class="phase-tag">IDMP XML generation</span>
@@ -928,7 +928,7 @@
         </div>
         <div class="phase-body">
           <div class="phase-title">Expand Transitions and Named Graphs</div>
-          <p class="phase-desc">Each subsequent lifecycle transition adds a named graph and a small number of typed edges. The cost of adding the <em>n</em>+1th transition is sublinear in <em>n</em> — the architectural payoff that hub-and-spoke MDM never delivered. Scale the agentic mastering loop across all source domains.</p>
+          <p class="phase-desc">Each subsequent lifecycle transition adds a named graph and a small number of typed edges. The cost of adding the <em>n</em>+1th transition is sublinear in <em>n</em>, the architectural payoff that hub-and-spoke MDM never delivered. Scale the agentic mastering loop across all source domains.</p>
           <div class="phase-tags">
             <span class="phase-tag">Named graph expansion</span>
             <span class="phase-tag">Cross-lifecycle edges</span>
@@ -948,7 +948,7 @@
     <div class="eyebrow" style="margin-bottom:.75rem;">Closing Thought</div>
     <h2 class="section-title" style="margin-bottom:1.25rem;">The Trajectory Is Not a Row</h2>
     <div class="prose">
-      <p>The interesting question is no longer <em>whether</em> graphs will replace traditional MDM for pharma product mastering — the regulators, the standards bodies, and eleven of the top twenty pharma companies have already answered that with IDMP-O. The interesting question is whether your organization will treat the next IDMP wave, the next AI regulation, and the next R&amp;D-to-commercial handoff as another point fix to the hub — or as the moment to invest in the architecture the next decade of pharma data already presupposes.</p>
+      <p>The interesting question is no longer <em>whether</em> graphs will replace traditional MDM for pharma product mastering, the regulators, the standards bodies, and eleven of the top twenty pharma companies have already answered that with IDMP-O. The interesting question is whether your organization will treat the next IDMP wave, the next AI regulation, and the next R&amp;D-to-commercial handoff as another point fix to the hub, or as the moment to invest in the architecture the next decade of pharma data already presupposes.</p>
       <p><strong>The trajectory is not a row. Stop trying to flatten it.</strong></p>
     </div>
     <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--border);display:flex;gap:1rem;flex-wrap:wrap;">
@@ -975,12 +975,12 @@
     <ol class="refs-list">
       <li id="ref-1"><span class="ref-num">1</span>Gartner. <em>Master Data Management (MDM)</em>, IT Glossary. <a href="https://www.gartner.com/en/information-technology/glossary/master-data-management-mdm" target="_blank" rel="noopener">gartner.com</a></li>
       <li id="ref-2"><span class="ref-num">2</span>U.S. Food and Drug Administration. <em>FDA&rsquo;s Global Substance Registration System (GSRS) / UNII</em>. <a href="https://gsrs.ncats.nih.gov/" target="_blank" rel="noopener">gsrs.ncats.nih.gov</a></li>
-      <li id="ref-3"><span class="ref-num">3</span>International Organization for Standardization. <em>ISO 11615:2017 — Identification of medicinal products</em>. <a href="https://www.iso.org/standard/70150.html" target="_blank" rel="noopener">iso.org</a></li>
+      <li id="ref-3"><span class="ref-num">3</span>International Organization for Standardization. <em>ISO 11615:2017, Identification of medicinal products</em>. <a href="https://www.iso.org/standard/70150.html" target="_blank" rel="noopener">iso.org</a></li>
       <li id="ref-4"><span class="ref-num">4</span>European Medicines Agency. <em>Data on medicines (ISO IDMP standards): overview</em>. <a href="https://www.ema.europa.eu/en/human-regulatory-overview/data-medicines-iso-idmp-standards-overview" target="_blank" rel="noopener">ema.europa.eu</a></li>
-      <li id="ref-5"><span class="ref-num">5</span>Pistoia Alliance. <em>IDMP-O — IDMP Ontology project page</em>. <a href="https://pistoiaalliance.org/project/idmp-o/" target="_blank" rel="noopener">pistoiaalliance.org</a></li>
+      <li id="ref-5"><span class="ref-num">5</span>Pistoia Alliance. <em>IDMP-O, IDMP Ontology project page</em>. <a href="https://pistoiaalliance.org/project/idmp-o/" target="_blank" rel="noopener">pistoiaalliance.org</a></li>
       <li id="ref-6"><span class="ref-num">6</span>Pistoia Alliance Ontologies. <em>IDMP-O GitHub repository</em>. <a href="https://github.com/Pistoia-Alliance-Inc/Pistoia-Alliance-Ontologies/tree/main/IDMP-O" target="_blank" rel="noopener">github.com</a></li>
-      <li id="ref-7"><span class="ref-num">7</span>ICH. <em>E6(R3) Good Clinical Practice — Final Guideline</em>, adopted 6 January 2025. <a href="https://database.ich.org/sites/default/files/ICH_E6%28R3%29_Step4_FinalGuideline_2025_0106.pdf" target="_blank" rel="noopener">ich.org</a></li>
-      <li id="ref-8"><span class="ref-num">8</span>EMBL-EBI. <em>ChEBI — Chemical Entities of Biological Interest</em>. <a href="https://www.ebi.ac.uk/chebi/" target="_blank" rel="noopener">ebi.ac.uk/chebi</a></li>
+      <li id="ref-7"><span class="ref-num">7</span>ICH. <em>E6(R3) Good Clinical Practice, Final Guideline</em>, adopted 6 January 2025. <a href="https://database.ich.org/sites/default/files/ICH_E6%28R3%29_Step4_FinalGuideline_2025_0106.pdf" target="_blank" rel="noopener">ich.org</a></li>
+      <li id="ref-8"><span class="ref-num">8</span>EMBL-EBI. <em>ChEBI, Chemical Entities of Biological Interest</em>. <a href="https://www.ebi.ac.uk/chebi/" target="_blank" rel="noopener">ebi.ac.uk/chebi</a></li>
       <li id="ref-9"><span class="ref-num">9</span>Geleta D., Nikolov A., et al. (AstraZeneca). <em>Biological Insights Knowledge Graph: an integrated knowledge graph to support drug development</em>. bioRxiv 2021. <a href="https://doi.org/10.1101/2021.10.28.466262" target="_blank" rel="noopener">doi.org</a></li>
       <li id="ref-10"><span class="ref-num">10</span>Ochoa D., et al. <em>Open Targets Platform: supporting systematic drug-target identification and prioritisation</em>. Nucleic Acids Research, 2020. <a href="https://doi.org/10.1093/nar/gkaa1027" target="_blank" rel="noopener">doi.org</a></li>
       <li id="ref-11"><span class="ref-num">11</span>Himmelstein D.S., et al. <em>Systematic integration of biomedical knowledge prioritizes drugs for repurposing (Hetionet)</em>. eLife, 2017. <a href="https://doi.org/10.7554/eLife.26726" target="_blank" rel="noopener">doi.org</a></li>
@@ -988,13 +988,13 @@
       <li id="ref-13"><span class="ref-num">13</span>Bonner S., et al. <em>A Review of Biomedical Datasets Relating to Drug Discovery: A Knowledge Graph Perspective</em>. Briefings in Bioinformatics, 2022. <a href="https://doi.org/10.1093/bib/bbac404" target="_blank" rel="noopener">doi.org</a></li>
       <li id="ref-14"><span class="ref-num">14</span>Hanna J., et al. <em>Building a drug ontology based on RxNorm and other sources (DrON)</em>. Journal of Biomedical Semantics 4:44, 2013. <a href="https://doi.org/10.1186/2041-1480-4-44" target="_blank" rel="noopener">doi.org</a></li>
       <li id="ref-15"><span class="ref-num">15</span>U.S. National Library of Medicine. <em>RxNorm</em>. <a href="https://www.nlm.nih.gov/research/umls/rxnorm/index.html" target="_blank" rel="noopener">nlm.nih.gov</a></li>
-      <li id="ref-16"><span class="ref-num">16</span>ICH MSSO. <em>MedDRA — Medical Dictionary for Regulatory Activities</em>. <a href="https://www.meddra.org/" target="_blank" rel="noopener">meddra.org</a></li>
+      <li id="ref-16"><span class="ref-num">16</span>ICH MSSO. <em>MedDRA, Medical Dictionary for Regulatory Activities</em>. <a href="https://www.meddra.org/" target="_blank" rel="noopener">meddra.org</a></li>
       <li id="ref-17"><span class="ref-num">17</span>National Cancer Institute. <em>NCI Thesaurus (NCIt)</em>. <a href="https://ncit.nci.nih.gov/ncitbrowser/" target="_blank" rel="noopener">ncit.nci.nih.gov</a></li>
       <li id="ref-18"><span class="ref-num">18</span>Narayan A., et al. <em>Can Foundation Models Wrangle Your Data?</em> PVLDB Vol. 16, 2022. <a href="https://arxiv.org/abs/2205.09911" target="_blank" rel="noopener">arxiv.org</a></li>
       <li id="ref-19"><span class="ref-num">19</span>Peeters R., Bizer C. <em>Using ChatGPT for Entity Matching</em>. ADBIS 2023. <a href="https://arxiv.org/abs/2305.03423" target="_blank" rel="noopener">arxiv.org</a></li>
       <li id="ref-20"><span class="ref-num">20</span>Fernandez R.C., et al. <em>How Large Language Models Will Disrupt Data Management</em>. PVLDB 16(11), 2023. <a href="https://doi.org/10.14778/3611479.3611527" target="_blank" rel="noopener">doi.org</a></li>
       <li id="ref-21"><span class="ref-num">21</span>EMA. <em>Reflection paper on the use of AI in the medicinal product lifecycle</em>. EMA/CHMP/CVMP/83833/2023, Sep 2024. <a href="https://www.ema.europa.eu/en/documents/scientific-guideline/reflection-paper-use-artificial-intelligence-ai-medicinal-product-lifecycle_en.pdf" target="_blank" rel="noopener">ema.europa.eu</a></li>
-      <li id="ref-22"><span class="ref-num">22</span>FDA. <em>AI/ML in Drug Development — Discussion Paper</em>, 2023. <a href="https://www.fda.gov/science-research/science-and-research-special-topics/artificial-intelligence-and-machine-learning-aiml-drug-development" target="_blank" rel="noopener">fda.gov</a></li>
+      <li id="ref-22"><span class="ref-num">22</span>FDA. <em>AI/ML in Drug Development, Discussion Paper</em>, 2023. <a href="https://www.fda.gov/science-research/science-and-research-special-topics/artificial-intelligence-and-machine-learning-aiml-drug-development" target="_blank" rel="noopener">fda.gov</a></li>
       <li id="ref-23"><span class="ref-num">23</span>Wilkinson M.D., et al. <em>The FAIR Guiding Principles for scientific data management and stewardship</em>. Scientific Data 3:160018, 2016. <a href="https://doi.org/10.1038/sdata.2016.18" target="_blank" rel="noopener">doi.org</a></li>
       <li id="ref-24"><span class="ref-num">24</span>Yeh I. <em>Unified Under a Universal Language: The Pistoia Alliance&rsquo;s IDMP Ontology</em>. Bio-IT World, 25 June 2024. <a href="https://www.bio-itworld.com/news/2024/06/25/unified-under-a-universal-language-the-pistoia-alliance-s-idmp-ontology" target="_blank" rel="noopener">bio-itworld.com</a></li>
     </ol>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Second-Order ODEs with PINNs: The Damped Harmonic Oscillator — Ali Shahmohammadi</title>
+  <title>Second-Order ODEs with PINNs: The Damped Harmonic Oscillator | Ali Shahmohammadi</title>
   <meta name="description" content="Nested automatic differentiation, two initial conditions, and the spectral bias problem that makes oscillatory physics hard for neural networks. Article 2 of the Physics AI series.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -139,7 +139,7 @@
       <div class="series-nav-list">
         <div class="series-nav-item">
           <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">01</span>
-          <a href="pinn-introduction.html">Introduction to PINNs — first-order ODE, autograd, zero labeled data</a>
+          <a href="pinn-introduction.html">Introduction to PINNs, first-order ODE, autograd, zero labeled data</a>
         </div>
         <div class="series-nav-item current">
           <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--sienna);min-width:2rem;">02</span>
@@ -147,37 +147,37 @@
         </div>
         <div class="series-nav-item">
           <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">03</span>
-          <span style="color:var(--ink-3);">Heat Transfer Equation — 1D parabolic PDE</span>
+          <span style="color:var(--ink-3);">Heat Transfer Equation, 1D parabolic PDE</span>
         </div>
         <div class="series-nav-item">
           <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">04</span>
-          <span style="color:var(--ink-3);">Burger's Equation — shock formation and viscosity</span>
+          <span style="color:var(--ink-3);">Burger's Equation, shock formation and viscosity</span>
         </div>
         <div class="series-nav-item">
           <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">05</span>
-          <span style="color:var(--ink-3);">Reaction Kinetics — multi-species coupled ODEs</span>
+          <span style="color:var(--ink-3);">Reaction Kinetics, multi-species coupled ODEs</span>
         </div>
         <div class="series-nav-item">
           <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">06</span>
-          <span style="color:var(--ink-3);">Wave Equation — hyperbolic PDE, energy conservation</span>
+          <span style="color:var(--ink-3);">Wave Equation, hyperbolic PDE, energy conservation</span>
         </div>
         <div class="series-nav-item">
           <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">07</span>
-          <span style="color:var(--ink-3);">Inverse Parameter Estimation — learning rate constants from sparse data</span>
+          <span style="color:var(--ink-3);">Inverse Parameter Estimation, learning rate constants from sparse data</span>
         </div>
         <div class="series-nav-item">
           <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">08</span>
-          <span style="color:var(--ink-3);">Adaptive Sampling and DeepONet — beyond vanilla PINNs</span>
+          <span style="color:var(--ink-3);">Adaptive Sampling and DeepONet, beyond vanilla PINNs</span>
         </div>
       </div>
     </div>
 
     <!-- Section 1: Why Second-Order ODEs Matter -->
     <div id="section1" style="margin-top:3rem;">
-      <div class="section-label">01 — Why Second-Order ODEs Matter</div>
+      <div class="section-label">01, Why Second-Order ODEs Matter</div>
       <h2 class="section-h">From Springs to RLC Circuits</h2>
 
-      <p class="body-text">In Article 1, we solved $dy/dx = -y$ — a single scalar first-order ODE. Real engineering systems are rarely so simple. The vast majority of dynamic models in mechanical, electrical, chemical, and biomedical engineering are governed by <strong>second-order dynamics</strong>:</p>
+      <p class="body-text">In Article 1, we solved $dy/dx = -y$, a single scalar first-order ODE. Real engineering systems are rarely so simple. The vast majority of dynamic models in mechanical, electrical, chemical, and biomedical engineering are governed by <strong>second-order dynamics</strong>:</p>
 
       <ul style="margin-bottom:1.25rem;padding-left:1.5rem;color:var(--ink-2);font-size:.975rem;line-height:1.8;">
         <li><strong>Mechanical:</strong> spring-mass-damper systems, structural vibration, seismic response</li>
@@ -193,7 +193,7 @@
       <p class="body-text">where $m$ is mass, $c$ is the damping coefficient, $k$ is the spring constant, and $F(t)$ is the external forcing. Dividing through by $m$ and introducing the standard dimensionless parameters:</p>
       <div class="math-block">$$\frac{d^2u}{dt^2} + 2\zeta\omega_0\,\frac{du}{dt} + \omega_0^2 u = 0, \qquad \omega_0 = \sqrt{\frac{k}{m}}, \quad \zeta = \frac{c}{2\sqrt{km}}$$</div>
 
-      <p class="body-text">Here $\omega_0$ is the <strong>natural frequency</strong> (radians per second) — the oscillation frequency of the undamped system — and $\zeta$ is the <strong>damping ratio</strong>, which determines the qualitative character of the response. The three regimes are:</p>
+      <p class="body-text">Here $\omega_0$ is the <strong>natural frequency</strong> (radians per second), the oscillation frequency of the undamped system, and $\zeta$ is the <strong>damping ratio</strong>, which determines the qualitative character of the response. The three regimes are:</p>
 
       <table class="data-table">
         <thead>
@@ -226,25 +226,25 @@
         </tbody>
       </table>
 
-      <p class="body-text">This notebook focuses on the under-damped case ($\zeta = 0.20$, $\omega_0 = 3.0$), which produces oscillatory dynamics — the hardest regime for a PINN to learn, and the most interesting from a methodology standpoint.</p>
+      <p class="body-text">This notebook focuses on the under-damped case ($\zeta = 0.20$, $\omega_0 = 3.0$), which produces oscillatory dynamics, the hardest regime for a PINN to learn, and the most interesting from a methodology standpoint.</p>
     </div>
 
     <hr class="divider">
 
     <!-- Section 2: The Physics -->
     <div id="section2">
-      <div class="section-label">02 — The Physics</div>
+      <div class="section-label">02, The Physics</div>
       <h2 class="section-h">Exact Analytical Solution</h2>
 
       <p class="body-text">For the free-vibration under-damped case ($F(t) = 0$, $\zeta &lt; 1$) with initial conditions $u(0) = u_0$ and $\dot{u}(0) = v_0$, the exact closed-form solution is:</p>
 
       <div class="math-block">$$u(t) = e^{-\zeta\omega_0 t}\left[u_0\cos(\omega_d t) + \frac{v_0 + \zeta\omega_0 u_0}{\omega_d}\sin(\omega_d t)\right]$$</div>
 
-      <p class="body-text">where $\omega_d = \omega_0\sqrt{1-\zeta^2}$ is the <strong>damped natural frequency</strong> — always less than $\omega_0$, since damping reduces the oscillation rate. The solution is a product of an exponentially decaying envelope $e^{-\zeta\omega_0 t}$ and a sinusoidal oscillation at frequency $\omega_d$.</p>
+      <p class="body-text">where $\omega_d = \omega_0\sqrt{1-\zeta^2}$ is the <strong>damped natural frequency</strong>, always less than $\omega_0$, since damping reduces the oscillation rate. The solution is a product of an exponentially decaying envelope $e^{-\zeta\omega_0 t}$ and a sinusoidal oscillation at frequency $\omega_d$.</p>
 
       <p class="body-text">For the notebook parameters ($\omega_0 = 3.0$, $\zeta = 0.20$, $u_0 = 1.0$, $v_0 = 0.0$, $T = 6.0$ s):</p>
       <ul style="margin-bottom:1.25rem;padding-left:1.5rem;color:var(--ink-2);font-size:.975rem;line-height:1.8;">
-        <li>Damped frequency: $\omega_d = 3.0\sqrt{1 - 0.04} \approx 2.939$ rad/s</li>
+        <li>Damped frequency: $\omega_d = 3.0\sqrt{1, 0.04} \approx 2.939$ rad/s</li>
         <li>Decay envelope time constant: $1/(\zeta\omega_0) = 1/0.6 \approx 1.67$ s</li>
         <li>Period of oscillation: $T_d = 2\pi/\omega_d \approx 2.14$ s</li>
         <li>Roughly 2.8 full oscillations complete within the 6-second domain</li>
@@ -299,13 +299,13 @@
 
     <!-- Section 3: Nested Autograd -->
     <div id="section3">
-      <div class="section-label">03 — Nested Automatic Differentiation</div>
+      <div class="section-label">03, Nested Automatic Differentiation</div>
       <h2 class="section-h">Computing Second Derivatives Through the Network</h2>
 
       <p class="body-text">The ODE residual for the damped oscillator requires the second time-derivative $\ddot{u}$:</p>
       <div class="math-block">$$\mathcal{R}(t) = \ddot{u} + 2\zeta\omega_0\dot{u} + \omega_0^2 u = 0$$</div>
 
-      <p class="body-text">In Article 1, we computed one derivative: $\frac{d\hat{y}}{dx}$. Here we need two: first $\dot{u} = \frac{du}{dt}$, then $\ddot{u} = \frac{d^2u}{dt^2}$. PyTorch handles this by calling <code>torch.autograd.grad</code> twice in sequence — but the first call <strong>must</strong> use <code>create_graph=True</code>.</p>
+      <p class="body-text">In Article 1, we computed one derivative: $\frac{d\hat{y}}{dx}$. Here we need two: first $\dot{u} = \frac{du}{dt}$, then $\ddot{u} = \frac{d^2u}{dt^2}$. PyTorch handles this by calling <code>torch.autograd.grad</code> twice in sequence, but the first call <strong>must</strong> use <code>create_graph=True</code>.</p>
 
       <p class="body-text">Why? When <code>create_graph=True</code> is set, PyTorch does not free the intermediate computational graph after computing $\dot{u}$. This graph is then available for a second backward pass to compute $\ddot{u}$. Without it, the first differentiation discards the graph, and the second call raises a runtime error.</p>
 
@@ -380,7 +380,7 @@
     <span class="kw">return</span> u_tt + <span class="nm">2</span>*zeta*omega0*u_t + omega0**<span class="nm">2</span> * u</pre>
       </div>
 
-      <p class="body-text">Compared to the first-order case, the only change is one additional <code>autograd.grad</code> call. The computational overhead is modest — PyTorch simply extends the reverse-mode pass one level deeper. This pattern generalizes immediately: $n$-th order ODEs require $n$ nested calls, each with <code>create_graph=True</code> on all but the last.</p>
+      <p class="body-text">Compared to the first-order case, the only change is one additional <code>autograd.grad</code> call. The computational overhead is modest, PyTorch simply extends the reverse-mode pass one level deeper. This pattern generalizes immediately: $n$-th order ODEs require $n$ nested calls, each with <code>create_graph=True</code> on all but the last.</p>
 
       <div class="callout insight">
         <div class="callout-icon">
@@ -397,19 +397,19 @@
 
     <!-- Section 4: Two Initial Conditions -->
     <div id="section4">
-      <div class="section-label">04 — Two Initial Conditions</div>
+      <div class="section-label">04, Two Initial Conditions</div>
       <h2 class="section-h">Why One IC Is Not Enough</h2>
 
-      <p class="body-text">A second-order ODE requires <strong>two</strong> initial conditions to specify a unique solution. Geometrically: the phase space $(u, \dot{u})$ is two-dimensional, and specifying only $u(0) = u_0$ leaves the trajectory's direction — its initial velocity — entirely unconstrained. The result is infinitely many trajectories, all satisfying the equation and the single condition, but diverging immediately.</p>
+      <p class="body-text">A second-order ODE requires <strong>two</strong> initial conditions to specify a unique solution. Geometrically: the phase space $(u, \dot{u})$ is two-dimensional, and specifying only $u(0) = u_0$ leaves the trajectory's direction, its initial velocity, entirely unconstrained. The result is infinitely many trajectories, all satisfying the equation and the single condition, but diverging immediately.</p>
 
       <p class="body-text">The initial condition loss must therefore include both the initial displacement and the initial velocity:</p>
-      <div class="math-block">$$\mathcal{L}_{IC} = \left(u(0) - u_0\right)^2 + \left(\dot{u}(0) - v_0\right)^2$$</div>
+      <div class="math-block">$$\mathcal{L}_{IC} = \left(u(0), u_0\right)^2 + \left(\dot{u}(0), v_0\right)^2$$</div>
 
-      <p class="body-text">Note that computing $\dot{u}(0)$ uses exactly the same <code>autograd.grad</code> call as the residual computation — the derivative of the network at a specific point. This means the IC loss on the velocity shares the same computational infrastructure as the physics residual. There is no special treatment required; the network's derivative is already a first-class differentiable expression.</p>
+      <p class="body-text">Note that computing $\dot{u}(0)$ uses exactly the same <code>autograd.grad</code> call as the residual computation, the derivative of the network at a specific point. This means the IC loss on the velocity shares the same computational infrastructure as the physics residual. There is no special treatment required; the network's derivative is already a first-class differentiable expression.</p>
 
       <h3 class="sub-h">The weighting problem</h3>
 
-      <p class="body-text">In practice, the physics loss and the IC loss have different natural scales. Early in training, the physics loss is large (the network knows nothing about the ODE) and dominates the gradient. The IC loss — which starts at a moderate value and should be satisfied quickly — gets insufficient gradient budget and is learned slowly.</p>
+      <p class="body-text">In practice, the physics loss and the IC loss have different natural scales. Early in training, the physics loss is large (the network knows nothing about the ODE) and dominates the gradient. The IC loss, which starts at a moderate value and should be satisfied quickly, gets insufficient gradient budget and is learned slowly.</p>
 
       <p class="body-text">The notebook addresses this with a fixed weight of 20× on the IC loss:</p>
       <div class="math-block">$$\mathcal{L}_{total} = \mathcal{L}_{physics} + \underbrace{20 \cdot \mathcal{L}_{IC}}_{\text{up-weighted}}$$</div>
@@ -443,10 +443,10 @@
 
     <!-- Section 5: Hard Constraint Variant -->
     <div id="section5">
-      <div class="section-label">05 — Hard Constraint Variant</div>
+      <div class="section-label">05, Hard Constraint Variant</div>
       <h2 class="section-h">The Ansatz That Eliminates the IC Loss Entirely</h2>
 
-      <p class="body-text">The 20× weighting trick is a <em>soft constraint</em>: we encourage the network to satisfy the initial conditions, but we cannot guarantee it will. A more elegant approach — and one that provably satisfies both initial conditions by construction — is the <strong>hard-constraint ansatz</strong>.</p>
+      <p class="body-text">The 20× weighting trick is a <em>soft constraint</em>: we encourage the network to satisfy the initial conditions, but we cannot guarantee it will. A more elegant approach, and one that provably satisfies both initial conditions by construction, is the <strong>hard-constraint ansatz</strong>.</p>
 
       <p class="body-text">The idea: wrap the raw neural network $N(t)$ in a function that is guaranteed to satisfy $u(0) = u_0$ and $\dot{u}(0) = v_0$, regardless of $N$'s output. One such construction is:</p>
 
@@ -454,7 +454,7 @@
 
       <p class="body-text"><strong>Verification:</strong> At $t=0$: $\hat{u}(0) = u_0 + 0 + 0 = u_0$. Taking the time derivative: $\dot{\hat{u}} = v_0 + 2t \cdot N(t) + t^2 \cdot N'(t)$. At $t=0$: $\dot{\hat{u}}(0) = v_0 + 0 + 0 = v_0$. Both initial conditions are satisfied identically for any value of $N(0)$ and $N'(0)$.</p>
 
-      <p class="body-text">The training loss for the hard-constraint PINN contains <strong>only the physics residual</strong> — the IC terms are gone entirely, because the ansatz structure makes them structurally impossible to violate:</p>
+      <p class="body-text">The training loss for the hard-constraint PINN contains <strong>only the physics residual</strong>, the IC terms are gone entirely, because the ansatz structure makes them structurally impossible to violate:</p>
       <div class="math-block">$$\mathcal{L}_{total} = \mathcal{L}_{physics} = \frac{1}{N_c}\sum_{i=1}^{N_c} \mathcal{R}(t_i)^2$$</div>
 
       <div class="code-block">
@@ -516,7 +516,7 @@
           <!-- Y axis title -->
           <text x="14" y="115" text-anchor="middle" font-size="10" fill="#4A4540" transform="rotate(-90 14 115)">Relative L2 Error</text>
           <!-- Title -->
-          <text x="225" y="235" text-anchor="middle" font-size="9.5" fill="#8C857E">Relative L2 error after 6,000 epochs — lower is better</text>
+          <text x="225" y="235" text-anchor="middle" font-size="9.5" fill="#8C857E">Relative L2 error after 6,000 epochs, lower is better</text>
         </svg>
         <div class="fig-caption">Figure 3. Hard-constraint ansatz vs soft-constraint (×20 IC weighting) after equal training. The ansatz eliminates the IC loss term, freeing the optimizer to focus entirely on the physics residual and achieving approximately one additional decade of accuracy.</div>
       </div>
@@ -526,10 +526,10 @@
 
     <!-- Section 6: Spectral Bias -->
     <div id="section6">
-      <div class="section-label">06 — Spectral Bias</div>
+      <div class="section-label">06, Spectral Bias</div>
       <h2 class="section-h">Why High-Frequency Oscillations Break PINNs</h2>
 
-      <p class="body-text">The most important conceptual lesson of this notebook is not about nested derivatives or hard constraints — it is about a fundamental limitation of smooth neural networks called <strong>spectral bias</strong>.</p>
+      <p class="body-text">The most important conceptual lesson of this notebook is not about nested derivatives or hard constraints, it is about a fundamental limitation of smooth neural networks called <strong>spectral bias</strong>.</p>
 
       <p class="body-text">Rahaman et al. (2019) showed empirically and theoretically that neural networks with smooth activation functions (Tanh, sigmoid, GELU) preferentially learn <strong>low-frequency components of the target function first</strong>. The network explores its parameter space in a direction that minimizes the loss from large-scale, slowly-varying features before it is capable of representing rapid oscillations.</p>
 
@@ -548,19 +548,19 @@
           <tr>
             <td>$\omega_0 = 1.0$</td>
             <td>~1 cycle</td>
-            <td>Good — converges in ~3,000 epochs</td>
+            <td>Good, converges in ~3,000 epochs</td>
             <td>$\sim 10^{-3}$</td>
           </tr>
           <tr>
             <td>$\omega_0 = 3.0$ (notebook)</td>
             <td>~3 cycles</td>
-            <td>Moderate — converges in ~8,000 epochs</td>
+            <td>Moderate, converges in ~8,000 epochs</td>
             <td>$\sim 5\times10^{-3}$</td>
           </tr>
           <tr>
             <td>$\omega_0 = 10.0$</td>
             <td>~10 cycles</td>
-            <td>Poor — often fails to converge</td>
+            <td>Poor, often fails to converge</td>
             <td>$&gt;10^{-1}$</td>
           </tr>
         </tbody>
@@ -569,7 +569,7 @@
       <p class="body-text">The failure mode at $\omega_0 = 10$ is not a matter of insufficient training time. The network genuinely cannot represent rapid oscillations because the smooth activation functions create a spectral bottleneck: a Tanh layer with $n$ neurons cannot efficiently represent functions with spectral content much above $n/4$ cycles per unit length. For a 64-neuron layer, anything above ~16 cycles per unit domain width is effectively invisible to the network.</p>
 
       <h3 class="sub-h">Physical interpretation</h3>
-      <p class="body-text">The spectral bias is the neural network analog of aliasing in digital signal processing. Just as a sampled signal cannot represent frequencies above the Nyquist limit without aliasing artifacts, a finite-width smooth network cannot represent frequencies above an implicit bandwidth limit without systematic errors. The crucial difference is that in PINNs, the "bandwidth limit" is not set by a sampling rate but by the network architecture and activation function choice — and it is not obvious or easy to compute a priori.</p>
+      <p class="body-text">The spectral bias is the neural network analog of aliasing in digital signal processing. Just as a sampled signal cannot represent frequencies above the Nyquist limit without aliasing artifacts, a finite-width smooth network cannot represent frequencies above an implicit bandwidth limit without systematic errors. The crucial difference is that in PINNs, the "bandwidth limit" is not set by a sampling rate but by the network architecture and activation function choice, and it is not obvious or easy to compute a priori.</p>
 
       <h3 class="sub-h">Mitigations</h3>
       <p class="body-text">Active research is addressing spectral bias through multiple strategies:</p>
@@ -577,7 +577,7 @@
       <ul style="margin-bottom:1.25rem;padding-left:1.5rem;color:var(--ink-2);font-size:.975rem;line-height:1.8;">
         <li><strong>Fourier feature embeddings:</strong> Transform the input $t \mapsto [\cos(B t), \sin(B t)]$ for random or learnable frequencies $B$. This shifts the network's natural frequency response upward.</li>
         <li><strong>Multi-scale architectures:</strong> Run parallel network branches at different frequency scales and combine outputs.</li>
-        <li><strong>Curriculum training / causal learning:</strong> Wang, Sankaran &amp; Perdikaris (2022) showed that training the PINN to satisfy causality — learning the solution from $t=0$ forward in time — significantly reduces spectral artifacts at high frequencies.</li>
+        <li><strong>Curriculum training / causal learning:</strong> Wang, Sankaran &amp; Perdikaris (2022) showed that training the PINN to satisfy causality, learning the solution from $t=0$ forward in time, significantly reduces spectral artifacts at high frequencies.</li>
         <li><strong>Adaptive activation functions:</strong> Replace fixed Tanh with learnable activations $\tanh(a \cdot x)$ where $a$ is a trainable parameter. The network can tune its own frequency response.</li>
         <li><strong>Neural Operators (FNO, DeepONet):</strong> For high-frequency or multi-scale problems, operator learning architectures are often superior to vanilla PINNs.</li>
       </ul>
@@ -587,7 +587,7 @@
 
     <!-- Section 7: Results and Comparison -->
     <div id="section7">
-      <div class="section-label">07 — Results</div>
+      <div class="section-label">07, Results</div>
       <h2 class="section-h">Accuracy and What Changed from Article 1</h2>
 
       <p class="body-text">Training the soft-constraint PINN for 8,000 epochs with Adam at $\eta = 2\times10^{-3}$, the model converges to a relative L2 error of approximately $5\times10^{-3}$ for $\omega_0 = 3.0$, $\zeta = 0.20$. The hard-constraint variant requires only 6,000 epochs to achieve a lower error of approximately $8\times10^{-4}$.</p>
@@ -660,16 +660,16 @@
 
     <!-- Section 8: Conclusion -->
     <div id="section8">
-      <div class="section-label">08 — Conclusion</div>
+      <div class="section-label">08, Conclusion</div>
       <h2 class="section-h">Three Lessons for the Rest of the Series</h2>
 
       <p class="body-text">The damped harmonic oscillator introduces three concepts that appear repeatedly in every subsequent article in this series:</p>
 
       <p class="body-text"><strong>Nested autograd is the natural generalization.</strong> Going from first- to second-order dynamics requires exactly one additional <code>autograd.grad</code> call with <code>create_graph=True</code>. This pattern extends to any order and to mixed partial derivatives in PDEs. The engineering implication is that PINNs can natively handle Navier-Stokes, heat equations, and elasticity equations without any change to the fundamental training architecture.</p>
 
-      <p class="body-text"><strong>Hard constraints are better than soft constraints.</strong> Whenever the initial or boundary conditions can be encoded directly into the network's output layer through an ansatz, doing so eliminates loss terms, reduces optimizer conflict, and accelerates convergence. This is not always possible — complex geometries resist simple ansatz constructions — but when it is available, it should be used.</p>
+      <p class="body-text"><strong>Hard constraints are better than soft constraints.</strong> Whenever the initial or boundary conditions can be encoded directly into the network's output layer through an ansatz, doing so eliminates loss terms, reduces optimizer conflict, and accelerates convergence. This is not always possible, complex geometries resist simple ansatz constructions, but when it is available, it should be used.</p>
 
-      <p class="body-text"><strong>Spectral bias is the governing challenge.</strong> For smooth-activation networks, the effective resolution in frequency space is bounded by the network width. Any problem with high-frequency dynamics — fast oscillations, sharp fronts, thin boundary layers — will expose this limitation. The rest of this series is, in large part, a catalog of techniques developed to overcome it.</p>
+      <p class="body-text"><strong>Spectral bias is the governing challenge.</strong> For smooth-activation networks, the effective resolution in frequency space is bounded by the network width. Any problem with high-frequency dynamics, fast oscillations, sharp fronts, thin boundary layers, will expose this limitation. The rest of this series is, in large part, a catalog of techniques developed to overcome it.</p>
 
       <div class="callout insight">
         <div class="callout-icon">
@@ -692,19 +692,19 @@
       <div class="ref-list">
         <div class="ref-item">
           <span class="ref-num">[1]</span>
-          <strong>Raissi, M., Perdikaris, P., &amp; Karniadakis, G. E.</strong> (2019). Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. <em>Journal of Computational Physics</em>, 378, 686–707. <a href="https://doi.org/10.1016/j.jcp.2018.10.045" target="_blank" rel="noopener">DOI: 10.1016/j.jcp.2018.10.045</a> — The foundational paper establishing the PINN framework and demonstrating forward and inverse problems.
+          <strong>Raissi, M., Perdikaris, P., &amp; Karniadakis, G. E.</strong> (2019). Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. <em>Journal of Computational Physics</em>, 378, 686–707. <a href="https://doi.org/10.1016/j.jcp.2018.10.045" target="_blank" rel="noopener">DOI: 10.1016/j.jcp.2018.10.045</a>, The foundational paper establishing the PINN framework and demonstrating forward and inverse problems.
         </div>
         <div class="ref-item">
           <span class="ref-num">[2]</span>
-          <strong>Wang, S., Sankaran, S., &amp; Perdikaris, P.</strong> (2022). Respecting causality is all you need for training physics-informed neural networks. <a href="https://arxiv.org/abs/2203.07404" target="_blank" rel="noopener">arXiv: 2203.07404</a> — Demonstrates that temporal causality violations are a root cause of PINN failure on oscillatory and advection-dominated problems; proposes a causal training algorithm that dramatically improves convergence.
+          <strong>Wang, S., Sankaran, S., &amp; Perdikaris, P.</strong> (2022). Respecting causality is all you need for training physics-informed neural networks. <a href="https://arxiv.org/abs/2203.07404" target="_blank" rel="noopener">arXiv: 2203.07404</a>, Demonstrates that temporal causality violations are a root cause of PINN failure on oscillatory and advection-dominated problems; proposes a causal training algorithm that dramatically improves convergence.
         </div>
         <div class="ref-item">
           <span class="ref-num">[3]</span>
-          <strong>Rahaman, N., Baratin, A., Arpit, D., Draxler, F., Lin, M., Hamprecht, F. A., Bengio, Y., &amp; Courville, A.</strong> (2019). On the spectral bias of neural networks. <em>Proceedings of the 36th International Conference on Machine Learning (ICML 2019)</em>. <a href="https://arxiv.org/abs/1806.08734" target="_blank" rel="noopener">arXiv: 1806.08734</a> — Establishes the theoretical basis for spectral bias: smooth networks learn low frequencies first, with convergence rate decreasing with frequency. Foundational for understanding PINN limitations.
+          <strong>Rahaman, N., Baratin, A., Arpit, D., Draxler, F., Lin, M., Hamprecht, F. A., Bengio, Y., &amp; Courville, A.</strong> (2019). On the spectral bias of neural networks. <em>Proceedings of the 36th International Conference on Machine Learning (ICML 2019)</em>. <a href="https://arxiv.org/abs/1806.08734" target="_blank" rel="noopener">arXiv: 1806.08734</a>, Establishes the theoretical basis for spectral bias: smooth networks learn low frequencies first, with convergence rate decreasing with frequency. Foundational for understanding PINN limitations.
         </div>
         <div class="ref-item">
           <span class="ref-num">[4]</span>
-          <strong>Wang, S., Teng, Y., &amp; Perdikaris, P.</strong> (2021). Understanding and mitigating gradient flow pathologies in physics-informed neural networks. <em>SIAM Journal on Scientific Computing</em>, 43(5), A3055–A3081. <a href="https://doi.org/10.1137/20M1318043" target="_blank" rel="noopener">DOI: 10.1137/20M1318043</a> — Analyzes gradient imbalance between physics and IC/BC loss terms using neural tangent kernel theory; motivates adaptive loss weighting.
+          <strong>Wang, S., Teng, Y., &amp; Perdikaris, P.</strong> (2021). Understanding and mitigating gradient flow pathologies in physics-informed neural networks. <em>SIAM Journal on Scientific Computing</em>, 43(5), A3055–A3081. <a href="https://doi.org/10.1137/20M1318043" target="_blank" rel="noopener">DOI: 10.1137/20M1318043</a>, Analyzes gradient imbalance between physics and IC/BC loss terms using neural tangent kernel theory; motivates adaptive loss weighting.
         </div>
       </div>
     </div>

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DeepONet: Learning Solution Operators — Ali Shahmohammadi</title>
-  <meta name="description" content="From solving one PDE at a time to learning the map from any input function to its corresponding output — the architecture behind amortised scientific computation.">
+  <title>DeepONet: Learning Solution Operators | Ali Shahmohammadi</title>
+  <meta name="description" content="From solving one PDE at a time to learning the map from any input function to its corresponding output, the architecture behind amortised scientific computation.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -106,7 +106,7 @@
     <div class="article-hero-inner">
       <div class="hero-series">Physics AI · PINNs Series · Article 7 of 8</div>
       <h1 class="article-title">DeepONet: Learning Solution Operators <em>Instead of Individual Solutions</em></h1>
-      <p class="article-sub">From solving one PDE at a time to learning the map from any input function to its corresponding output — the architecture behind amortised scientific computation.</p>
+      <p class="article-sub">From solving one PDE at a time to learning the map from any input function to its corresponding output, the architecture behind amortised scientific computation.</p>
       <div class="article-meta">
         <span class="meta-pill highlight">Mar 2026</span>
         <span class="meta-pill">26 min read</span>
@@ -130,7 +130,7 @@
         <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">04</span><a href="pinn-burgers-reaction-pdes.html">Burgers &amp; Reaction PDEs</a></div>
         <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">05</span><a href="pinn-inverse-problems.html">Inverse Problems</a></div>
         <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">06</span><a href="pinn-adaptive-sampling.html">Adaptive Sampling</a></div>
-        <div class="series-nav-item current"><span style="font-family:'JetBrains Mono',monospace;font-size:.75rem">07</span>DeepONet — Learning Operators &larr; you are here</div>
+        <div class="series-nav-item current"><span style="font-family:'JetBrains Mono',monospace;font-size:.75rem">07</span>DeepONet, Learning Operators &larr; you are here</div>
         <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">08</span><a href="pinn-physics-informed-deeponet.html">Physics-Informed DeepONet</a></div>
       </div>
     </div>
@@ -139,9 +139,9 @@
     <div class="section-label">Section 01</div>
     <h2 class="section-h">The Fundamental Limitation of PINNs</h2>
 
-    <p class="body-text">Every notebook and article in this series up to now has trained a neural network to represent <em>one</em> solution to <em>one</em> problem instance. The network approximates $u(x,t;\theta^*)$ for a specific set of initial conditions, boundary conditions, and PDE parameters — and does it remarkably well. But change any of those inputs, even slightly, and you discard the trained weights and start from scratch.</p>
+    <p class="body-text">Every notebook and article in this series up to now has trained a neural network to represent <em>one</em> solution to <em>one</em> problem instance. The network approximates $u(x,t;\theta^*)$ for a specific set of initial conditions, boundary conditions, and PDE parameters, and does it remarkably well. But change any of those inputs, even slightly, and you discard the trained weights and start from scratch.</p>
 
-    <p class="body-text">Consider what this costs in practice. Design exploration over 1,000 initial condition variations for a pharmaceutical reactor: $1{,}000 \times 45\text{s} \approx 12.5$ hours of training. Uncertainty quantification via Monte Carlo over 10,000 parameter samples: weeks of GPU time. Real-time digital twin control with millisecond update requirements: completely out of reach. The PINN paradigm — however powerful — is fundamentally a <em>per-instance</em> solver.</p>
+    <p class="body-text">Consider what this costs in practice. Design exploration over 1,000 initial condition variations for a pharmaceutical reactor: $1{,}000 \times 45\text{s} \approx 12.5$ hours of training. Uncertainty quantification via Monte Carlo over 10,000 parameter samples: weeks of GPU time. Real-time digital twin control with millisecond update requirements: completely out of reach. The PINN paradigm, however powerful, is fundamentally a <em>per-instance</em> solver.</p>
 
     <div class="callout warning">
       <span class="callout-icon">
@@ -153,7 +153,7 @@
       </div>
     </div>
 
-    <p class="body-text">The root cause is how PINNs are parameterised. The network maps <em>coordinates</em> $(x,t)$ to a solution value — it is a function approximator in the classical sense. What we need instead is a machine that takes the problem specification (the initial condition function, the forcing function, the parameter values) and outputs the corresponding solution function. That is not a function approximator. It is an <em>operator approximator</em>.</p>
+    <p class="body-text">The root cause is how PINNs are parameterised. The network maps <em>coordinates</em> $(x,t)$ to a solution value, it is a function approximator in the classical sense. What we need instead is a machine that takes the problem specification (the initial condition function, the forcing function, the parameter values) and outputs the corresponding solution function. That is not a function approximator. It is an <em>operator approximator</em>.</p>
 
     <!-- Section 2: Operators vs functions -->
     <hr class="divider">
@@ -166,7 +166,7 @@
       $$f: \mathbb{R}^n \to \mathbb{R}^m, \quad f(x) = y$$
     </div>
 
-    <p class="body-text">An <em>operator</em> maps a function to a function — it is a map between infinite-dimensional spaces:</p>
+    <p class="body-text">An <em>operator</em> maps a function to a function, it is a map between infinite-dimensional spaces:</p>
 
     <div class="math-block">
       $$\mathcal{G}: \bigl(\mathcal{X} \to \mathbb{R}\bigr) \;\longrightarrow\; \bigl(\mathcal{Y} \to \mathbb{R}\bigr), \quad \mathcal{G}[u] = s$$
@@ -174,7 +174,7 @@
 
     <p class="body-text">The input $u$ is an entire function; the output $s$ is an entire function. Three canonical examples build intuition:</p>
 
-    <p class="body-text"><strong>The differential operator:</strong> $\mathcal{L}[u](x) = \frac{du}{dx}$ — maps a differentiable function to its derivative.</p>
+    <p class="body-text"><strong>The differential operator:</strong> $\mathcal{L}[u](x) = \frac{du}{dx}$, maps a differentiable function to its derivative.</p>
 
     <p class="body-text"><strong>The integral (antiderivative) operator:</strong></p>
     <div class="math-block">
@@ -182,9 +182,9 @@
     </div>
     <p class="body-text">Given any integrable function $u$, the operator returns its antiderivative $s$ satisfying $s(0)=0$. This is the benchmark problem in Lu et al. 2021 and in the notebook for this article.</p>
 
-    <p class="body-text"><strong>The solution operator of a PDE:</strong> Given an initial condition $u_0(x)$, the solution operator $\mathcal{G}$ returns the full space-time field $s(x,t)$ satisfying the governing equation. This is the most valuable example — it maps any admissible IC to the corresponding solution, amortising the cost of solving the PDE across all possible inputs.</p>
+    <p class="body-text"><strong>The solution operator of a PDE:</strong> Given an initial condition $u_0(x)$, the solution operator $\mathcal{G}$ returns the full space-time field $s(x,t)$ satisfying the governing equation. This is the most valuable example, it maps any admissible IC to the corresponding solution, amortising the cost of solving the PDE across all possible inputs.</p>
 
-    <!-- Visual 2 — Operator vs Function Concept -->
+    <!-- Visual 2, Operator vs Function Concept -->
     <div class="fig-wrap">
       <svg viewBox="0 0 600 210" width="100%" style="max-width:600px;font-family:'Inter',sans-serif">
         <!-- Left panel: Function mapping -->
@@ -256,7 +256,7 @@
       </div>
     </div>
 
-    <p class="body-text">The theorem guarantees that a network of the form $\sum_k b_k(u) \cdot t_k(y)$ can approximate any continuous operator to arbitrary precision. The $b_k$ functions are evaluated on the input function $u$ sampled at $m$ fixed sensors; the $t_k$ functions depend on the query location $y$ alone. This dot-product structure is not an architectural choice made for computational convenience — it emerges directly from the theoretical guarantee.</p>
+    <p class="body-text">The theorem guarantees that a network of the form $\sum_k b_k(u) \cdot t_k(y)$ can approximate any continuous operator to arbitrary precision. The $b_k$ functions are evaluated on the input function $u$ sampled at $m$ fixed sensors; the $t_k$ functions depend on the query location $y$ alone. This dot-product structure is not an architectural choice made for computational convenience, it emerges directly from the theoretical guarantee.</p>
 
     <p class="body-text">The approximation is in the <em>uniform</em> norm over the entire function space: the network must be simultaneously accurate for all admissible input functions $u$ and all query locations $y$. This is a much stronger guarantee than pointwise approximation, and it is what makes DeepONet a principled tool rather than an ad hoc regression.</p>
 
@@ -267,7 +267,7 @@
 
     <p class="body-text">Lu et al. 2021 (Nature Machine Intelligence) operationalise the Chen &amp; Chen theorem into a practical neural architecture with two sub-networks connected by a dot product. The architecture is elegantly minimal yet expressive enough to handle a wide class of PDE solution operators.</p>
 
-    <!-- Visual 1 — DeepONet Architecture -->
+    <!-- Visual 1, DeepONet Architecture -->
     <div class="fig-wrap">
       <svg viewBox="0 0 740 320" width="100%" style="max-width:740px;font-family:'Inter',sans-serif">
         <!-- Background -->
@@ -361,14 +361,14 @@
           <marker id="arrowOut" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#4A4540"/></marker>
         </defs>
       </svg>
-      <p class="fig-caption">Figure 2. DeepONet architecture (Lu et al. 2021). The branch network encodes the input function evaluated at $m$ fixed sensors; the trunk network encodes the query location $y$. The output is a dot product of the two embeddings plus a bias — a weighted sum of $p$ learned basis functions.</p>
+      <p class="fig-caption">Figure 2. DeepONet architecture (Lu et al. 2021). The branch network encodes the input function evaluated at $m$ fixed sensors; the trunk network encodes the query location $y$. The output is a dot product of the two embeddings plus a bias, a weighted sum of $p$ learned basis functions.</p>
     </div>
 
     <h3 class="sub-h">The Branch Network</h3>
-    <p class="body-text">The branch network takes the input function $u$ evaluated at $m$ fixed sensor locations $\{x_1, \ldots, x_m\}$ as a finite-dimensional vector $[u(x_1), \ldots, u(x_m)] \in \mathbb{R}^m$. It encodes this into a coefficient vector $\mathbf{b}(u) \in \mathbb{R}^p$. The branch can be any feed-forward architecture; a three-layer tanh MLP with hidden width 80 is standard for the antiderivative benchmark. The branch weights encode information about the entire input function — effectively, they are the "context encoder."</p>
+    <p class="body-text">The branch network takes the input function $u$ evaluated at $m$ fixed sensor locations $\{x_1, \ldots, x_m\}$ as a finite-dimensional vector $[u(x_1), \ldots, u(x_m)] \in \mathbb{R}^m$. It encodes this into a coefficient vector $\mathbf{b}(u) \in \mathbb{R}^p$. The branch can be any feed-forward architecture; a three-layer tanh MLP with hidden width 80 is standard for the antiderivative benchmark. The branch weights encode information about the entire input function, effectively, they are the "context encoder."</p>
 
     <h3 class="sub-h">The Trunk Network</h3>
-    <p class="body-text">The trunk network takes a scalar query location $y \in \mathbb{R}$ and encodes it into $\mathbf{t}(y) \in \mathbb{R}^p$. Crucially, the trunk's final activation is a Tanh (not linear), ensuring that the basis functions $\{t_k(y)\}$ are bounded. The trunk learns a set of $p$ basis functions over the output domain — what amounts to a learned, PDE-adapted basis analogous to Fourier modes or POD eigenfunctions, but without any prior specification.</p>
+    <p class="body-text">The trunk network takes a scalar query location $y \in \mathbb{R}$ and encodes it into $\mathbf{t}(y) \in \mathbb{R}^p$. Crucially, the trunk's final activation is a Tanh (not linear), ensuring that the basis functions $\{t_k(y)\}$ are bounded. The trunk learns a set of $p$ basis functions over the output domain, what amounts to a learned, PDE-adapted basis analogous to Fourier modes or POD eigenfunctions, but without any prior specification.</p>
 
     <h3 class="sub-h">The Dot Product Output</h3>
     <p class="body-text">The output is:</p>
@@ -382,7 +382,7 @@
     <div class="section-label">Section 05</div>
     <h2 class="section-h">Implementation: The Antiderivative Operator</h2>
 
-    <p class="body-text">The canonical benchmark from Lu et al. 2021 is the antiderivative operator: $\mathcal{G}[u](x) = \int_0^x u(\tau)\,d\tau$, $s(0)=0$. Input functions are smooth random draws from a Gaussian process with squared-exponential kernel and length scale 0.2. This produces a rich diversity of smooth but highly variable functions — exactly the kind of distribution over which we want the operator to generalise.</p>
+    <p class="body-text">The canonical benchmark from Lu et al. 2021 is the antiderivative operator: $\mathcal{G}[u](x) = \int_0^x u(\tau)\,d\tau$, $s(0)=0$. Input functions are smooth random draws from a Gaussian process with squared-exponential kernel and length scale 0.2. This produces a rich diversity of smooth but highly variable functions, exactly the kind of distribution over which we want the operator to generalise.</p>
 
     <h3 class="sub-h">Dataset Generation</h3>
     <p class="body-text">The dataset generation uses a Gaussian process to sample random input functions, then computes their antiderivatives via cumulative trapezoid integration. The GP covariance structure ensures the generated functions are smooth (controlled by the length scale) but cover a wide range of shapes.</p>
@@ -503,7 +503,7 @@ N = br_tr.shape[<span class="nm">0</span>]
     <div class="section-label">Section 06</div>
     <h2 class="section-h">Why the Dot Product Works: Learned Basis Expansions</h2>
 
-    <p class="body-text">The output $\sum_k b_k(u) \cdot t_k(y)$ is a <em>functional basis expansion</em> — a weighted sum of $p$ functions $\{t_k(y)\}$ over the output domain, where the weights $\{b_k(u)\}$ depend on the input function. This structure has a long history in scientific computing:</p>
+    <p class="body-text">The output $\sum_k b_k(u) \cdot t_k(y)$ is a <em>functional basis expansion</em>, a weighted sum of $p$ functions $\{t_k(y)\}$ over the output domain, where the weights $\{b_k(u)\}$ depend on the input function. This structure has a long history in scientific computing:</p>
 
     <table class="data-table">
       <thead>
@@ -517,26 +517,26 @@ N = br_tr.shape[<span class="nm">0</span>]
       <tbody>
         <tr>
           <td>Fourier Series</td>
-          <td>$\sin(k\pi y), \cos(k\pi y)$ — fixed</td>
+          <td>$\sin(k\pi y), \cos(k\pi y)$, fixed</td>
           <td>Computed analytically from $u$</td>
           <td>Universal for periodic functions</td>
         </tr>
         <tr>
           <td>POD / PCA</td>
-          <td>Eigenfunctions of empirical covariance — data-driven, fixed post-training</td>
+          <td>Eigenfunctions of empirical covariance, data-driven, fixed post-training</td>
           <td>Projected coefficients</td>
           <td>Optimal $L^2$ basis for the training ensemble</td>
         </tr>
         <tr>
           <td>DeepONet</td>
-          <td>Trunk outputs — learned jointly</td>
-          <td>Branch outputs — learned jointly</td>
+          <td>Trunk outputs, learned jointly</td>
+          <td>Branch outputs, learned jointly</td>
           <td>Jointly optimal; adapts to the PDE structure</td>
         </tr>
       </tbody>
     </table>
 
-    <p class="body-text">The key advantage over POD is that the DeepONet basis is not constrained to be linear in the input. The branch network can represent highly nonlinear dependence of the coefficients on the input function. The trunk learns basis functions that need not be orthogonal or satisfy any a priori constraint — they adapt to whatever representation minimises the total loss across the training distribution of input functions.</p>
+    <p class="body-text">The key advantage over POD is that the DeepONet basis is not constrained to be linear in the input. The branch network can represent highly nonlinear dependence of the coefficients on the input function. The trunk learns basis functions that need not be orthogonal or satisfy any a priori constraint, they adapt to whatever representation minimises the total loss across the training distribution of input functions.</p>
 
     <div class="callout insight">
       <span class="callout-icon">
@@ -544,7 +544,7 @@ N = br_tr.shape[<span class="nm">0</span>]
       </span>
       <div class="callout-body">
         <strong>Discretisation independence</strong>
-        Because the trunk takes a continuous query location $y$, a trained DeepONet can be evaluated at <em>any</em> point in the output domain — not just the grid on which it was trained. This is the "mesh-free" property: the output resolution is not fixed at training time. A PINN shares this property; FNO-family methods do not (they require a fixed discretisation).
+        Because the trunk takes a continuous query location $y$, a trained DeepONet can be evaluated at <em>any</em> point in the output domain, not just the grid on which it was trained. This is the "mesh-free" property: the output resolution is not fixed at training time. A PINN shares this property; FNO-family methods do not (they require a fixed discretisation).
       </div>
     </div>
 
@@ -577,7 +577,7 @@ y_full = torch.tensor(x_grid, dtype=torch.float32, device=device).view(-<span cl
 <span class="cm"># Unseen function #3: relative L2 error ≈ 7.2e-03</span></pre>
     </div>
 
-    <p class="body-text">Relative $L^2$ errors of $10^{-3}$ to $10^{-2}$ on completely unseen input functions represent genuine operator generalisation — the network has learned something structural about the antiderivative operation, not just memorised the training set. More importantly, each evaluation takes a <em>single forward pass</em> through the 27,681-parameter network, requiring less than 1 millisecond on CPU.</p>
+    <p class="body-text">Relative $L^2$ errors of $10^{-3}$ to $10^{-2}$ on completely unseen input functions represent genuine operator generalisation, the network has learned something structural about the antiderivative operation, not just memorised the training set. More importantly, each evaluation takes a <em>single forward pass</em> through the 27,681-parameter network, requiring less than 1 millisecond on CPU.</p>
 
     <p class="body-text">Compare this to training a PINN for each new input function from scratch: 30–60 seconds of gradient descent, every time. For a design sweep over 1,000 initial conditions, this difference is the distinction between a 1.5-second deployment and a 12-hour batch job.</p>
 
@@ -597,19 +597,19 @@ y_full = torch.tensor(x_grid, dtype=torch.float32, device=device).view(-<span cl
       </thead>
       <tbody>
         <tr>
-          <td>PINN — single solve</td>
+          <td>PINN, single solve</td>
           <td>~45 s</td>
           <td>~45,000 s (12.5 h)</td>
           <td>Full retraining required for each new IC/BC/parameter</td>
         </tr>
         <tr>
-          <td>DeepONet — offline training</td>
+          <td>DeepONet, offline training</td>
           <td>~600 s (once)</td>
           <td>~600 s (once)</td>
           <td>Paid once; amortised over all future queries</td>
         </tr>
         <tr>
-          <td>DeepONet — inference</td>
+          <td>DeepONet, inference</td>
           <td>&lt;1 ms</td>
           <td>~1.5 s</td>
           <td>Single forward pass; GPU parallelism makes it faster still</td>
@@ -623,12 +623,12 @@ y_full = torch.tensor(x_grid, dtype=torch.float32, device=device).view(-<span cl
       </tbody>
     </table>
 
-    <!-- Visual 3 — Speed comparison bar chart -->
+    <!-- Visual 3, Speed comparison bar chart -->
     <div class="fig-wrap">
       <svg viewBox="0 0 660 280" width="100%" style="max-width:660px;font-family:'Inter',sans-serif">
         <rect width="660" height="280" fill="#F8F6F2" rx="8"/>
         <text x="330" y="26" text-anchor="middle" font-size="13" font-weight="700" fill="#111010">Time cost: PINN vs DeepONet (N = 1,000 design sweep)</text>
-        <text x="330" y="42" text-anchor="middle" font-size="10" fill="#8C857E">Log scale — x-axis in seconds</text>
+        <text x="330" y="42" text-anchor="middle" font-size="10" fill="#8C857E">Log scale, x-axis in seconds</text>
 
         <!-- y-axis labels -->
         <text x="220" y="80" text-anchor="end" font-size="11" fill="#4A4540">PINN × 1000 sweeps</text>
@@ -689,7 +689,7 @@ y_full = torch.tensor(x_grid, dtype=torch.float32, device=device).view(-<span cl
     <p class="body-text">For parabolic and hyperbolic PDEs, the trunk query is extended to include both space and time: $y \to (x, t) \in \mathbb{R}^2$. The trunk becomes a 2-input MLP encoding spatial-temporal basis functions. The branch continues to encode the initial condition evaluated at $m$ spatial sensors. The antiderivative benchmark generalises: the operator maps $u_0(x)$ to the full space-time field $s(x,t)$. For the heat equation, for example, a single DeepONet handles all initial conditions simultaneously after training.</p>
 
     <h3 class="sub-h">Multi-Output DeepONet</h3>
-    <p class="body-text">For systems with multiple output fields — for example, the velocity components $(u, v)$ and pressure $p$ in Navier-Stokes — the output layer is extended to $q$ scalar outputs, each with its own dot product: $\mathcal{G}_j(u)(y) = \mathbf{b}_j(u) \cdot \mathbf{t}(y) + b_{0,j}$ for $j = 1, \ldots, q$. The trunk can be shared (same basis functions for all outputs) or separate (different bases per output). Shared trunk reduces parameter count; separate trunks allow each field to develop its own optimal basis.</p>
+    <p class="body-text">For systems with multiple output fields, for example, the velocity components $(u, v)$ and pressure $p$ in Navier-Stokes, the output layer is extended to $q$ scalar outputs, each with its own dot product: $\mathcal{G}_j(u)(y) = \mathbf{b}_j(u) \cdot \mathbf{t}(y) + b_{0,j}$ for $j = 1, \ldots, q$. The trunk can be shared (same basis functions for all outputs) or separate (different bases per output). Shared trunk reduces parameter count; separate trunks allow each field to develop its own optimal basis.</p>
 
     <h3 class="sub-h">Modified DeepONet and Improved Initialisation</h3>
     <p class="body-text">Wang et al. 2022 (arXiv:2204.13188) identified that the standard DeepONet initialization leads to gradient pathologies similar to those observed in PINNs. Their "Modified DeepONet" uses a gating mechanism between two encoders (analogous to the Modified MLP for PINNs), achieving more stable training and better accuracy with fewer epochs. The key modification introduces encoder outputs $U = \sigma(W_1 x + b_1)$ and $V = \sigma(W_2 x + b_2)$, then gates each hidden layer: $H^{(k)} = \sigma(W^{(k)} H^{(k-1)} + b^{(k)}) \odot U + (1 - \sigma(W^{(k)} H^{(k-1)} + b^{(k)})) \odot V$.</p>

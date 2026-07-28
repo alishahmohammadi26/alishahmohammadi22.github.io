@@ -546,6 +546,128 @@
 
     <div class="articles-grid">
 
+      <!-- ── Scientific ML · ODEs Series ── -->
+      <div class="article-card" data-cat="sciml">
+        <span class="article-cat cat-sciml">Scientific ML · Bioprocess Engineering</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">Feb 2026</span>
+          <span class="article-read">15 min read</span>
+        </div>
+        <div class="article-title">Bioprocess Viable Cell Density: Monod Kinetics &amp; Luedeking–Piret Model with PINNs</div>
+        <p class="article-excerpt">Estimating six kinetic parameters — μmax, Ks, kd, YX/S, α, β — from sparse offline CHO cell culture measurements. Directly applicable to mAb and mRNA vaccine process characterisation.</p>
+        <a href="blog/pinn-odes-bioprocess-cell-density.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <div class="article-card" data-cat="sciml">
+        <span class="article-cat cat-sciml">Scientific ML · Biochemical Engineering</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">Feb 2026</span>
+          <span class="article-read">15 min read</span>
+        </div>
+        <div class="article-title">Stiff Enzyme Kinetics &amp; QSSA: Why Plain PINNs Fail on Michaelis–Menten Systems</div>
+        <p class="article-excerpt">Stiffness ratio ≈ 10⁴ in the full enzyme mechanism defeats uniform collocation. Applying the quasi-steady-state assumption collapses the problem to one tractable non-stiff ODE — enabling stable PINN training.</p>
+        <a href="blog/pinn-odes-stiff-enzyme-kinetics.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <div class="article-card" data-cat="sciml">
+        <span class="article-cat cat-sciml">Scientific ML · Nonlinear Dynamics</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">Feb 2026</span>
+          <span class="article-read">14 min read</span>
+        </div>
+        <div class="article-title">Van der Pol Oscillator with PINNs: Recovering Nonlinear Damping from Sparse Data</div>
+        <p class="article-excerpt">Nested autograd for ẍ, time-scaling to keep residuals O(1), and recovering μ from 45 noisy samples. Plus why the plain MLP fails at μ = 5 — the spectral bias wall explained concretely.</p>
+        <a href="blog/pinn-odes-van-der-pol.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <div class="article-card" data-cat="sciml">
+        <span class="article-cat cat-sciml">Scientific ML · Epidemiology</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">Feb 2026</span>
+          <span class="article-read">13 min read</span>
+        </div>
+        <div class="article-title">SIR Epidemic Model with PINNs: Inferring Hidden States from Partial Observations</div>
+        <p class="article-excerpt">Recovering β and γ from the 1978 English boarding school influenza outbreak — with only the infectious count observed. The PINN reconstructs susceptible and recovered compartments from physics alone.</p>
+        <a href="blog/pinn-odes-sir-epidemic.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <div class="article-card" data-cat="sciml">
+        <span class="article-cat cat-sciml">Scientific ML · Ecology / Pharma</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">Feb 2026</span>
+          <span class="article-read">13 min read</span>
+        </div>
+        <div class="article-title">Lotka–Volterra Predator–Prey with PINNs: Parameter Estimation from Real Hudson Bay Data</div>
+        <p class="article-excerpt">All four kinetic parameters recovered from 21 years of real lynx–hare pelt records using a two-phase warm-start protocol. A genuinely hard inverse problem — imperfect data, approximate model, nonlinear coupling.</p>
+        <a href="blog/pinn-odes-lotka-volterra.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <div class="article-card" data-cat="sciml">
+        <span class="article-cat cat-sciml">Scientific ML · Reaction Engineering</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">Feb 2026</span>
+          <span class="article-read">14 min read</span>
+        </div>
+        <div class="article-title">Consecutive Reaction Kinetics A→B→C with PINNs: Recovering Rate Constants from Sparse Data</div>
+        <p class="article-excerpt">k₁ and k₂ recovered from 14 noisy concentration measurements — including the intermediate species peak. The physics loss implicitly enforces mass conservation throughout the domain.</p>
+        <a href="blog/pinn-odes-consecutive-reactions.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <!-- ── Research Analysis: DeepONet vs PINN ── -->
+      <div class="article-card" data-cat="sciml">
+        <span class="article-cat cat-sciml">Scientific ML · Research Analysis</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">Feb 2026</span>
+          <span class="article-read">12 min read</span>
+        </div>
+        <div class="article-title">Why DeepONet Underperforms on ODE Inverse Problems: A Deep Diagnostic Study</div>
+        <p class="article-excerpt">SVD rank analysis, training dynamics diagnosis, and a 5.7× architecture improvement — a research-quality investigation of why Pure PINN outperforms DeepONet on 6 of 7 ODE systems and what to use instead for multi-query ODE inference.</p>
+        <a href="blog/deeponet-vs-pinn-ode-analysis.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <div class="article-card" data-cat="sciml">
+        <span class="article-cat cat-sciml">Scientific ML · ODEs</span>
+        <div class="article-meta">
+          <span class="article-published">Published</span>
+          <span class="article-date">Feb 2026</span>
+          <span class="article-read">12 min read</span>
+        </div>
+        <div class="article-title">Logistic Population Growth with PINNs: S-Curve, Carrying Capacity, and Inverse Estimation</div>
+        <p class="article-excerpt">Forward solve and joint estimation of growth rate r and carrying capacity K from 15 sparse noisy measurements. Covers pharmaceutical dissolution profiles, microbial fermentation, and tumor growth models.</p>
+        <a href="blog/pinn-odes-logistic-growth.html" class="article-link">
+          Read Article
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
       <!-- ── Scientific ML · PINN Series ── -->
       <div class="article-card" data-cat="sciml">
         <span class="article-cat cat-sciml">Scientific ML · Physics-Informed AI</span>

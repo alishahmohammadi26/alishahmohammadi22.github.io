@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Physics-Informed DeepONet: Operator Learning Without Solution Data — Ali Shahmohammadi</title>
-  <meta name="description" content="Combining the universal approximation theorem for operators with physics-informed training — and using DeepONet to solve inverse problems across entire parameter families simultaneously.">
+  <title>Physics-Informed DeepONet: Operator Learning Without Solution Data | Ali Shahmohammadi</title>
+  <meta name="description" content="Combining the universal approximation theorem for operators with physics-informed training, and using DeepONet to solve inverse problems across entire parameter families simultaneously.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -116,7 +116,7 @@
     <div class="article-hero-inner">
       <div class="hero-series">Physics AI · PINNs Series · Article 8 of 8 · Series Finale</div>
       <h1 class="article-title">Physics-Informed DeepONet: Operator Learning <em>Without Solution Data,</em> and Parameter Estimation at Scale</h1>
-      <p class="article-sub">Combining the universal approximation theorem for operators with physics-informed training — and using DeepONet to solve inverse problems across entire parameter families simultaneously.</p>
+      <p class="article-sub">Combining the universal approximation theorem for operators with physics-informed training, and using DeepONet to solve inverse problems across entire parameter families simultaneously.</p>
       <div class="article-meta">
         <span class="meta-pill highlight">Apr 2026</span>
         <span class="meta-pill">30 min read</span>
@@ -141,7 +141,7 @@
         <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">04</span><a href="pinn-burgers-reaction-pdes.html">Burgers &amp; Reaction PDEs</a></div>
         <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">05</span><a href="pinn-inverse-problems.html">Inverse Problems</a></div>
         <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">06</span><a href="pinn-adaptive-sampling.html">Adaptive Sampling</a></div>
-        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">07</span><a href="pinn-deeponet.html">DeepONet — Learning Operators</a></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">07</span><a href="pinn-deeponet.html">DeepONet, Learning Operators</a></div>
         <div class="series-nav-item current"><span style="font-family:'JetBrains Mono',monospace;font-size:.75rem">08</span>Physics-Informed DeepONet &larr; you are here</div>
       </div>
     </div>
@@ -150,9 +150,9 @@
     <div class="section-label">Section 01</div>
     <h2 class="section-h">The Data Bottleneck in Standard DeepONet</h2>
 
-    <p class="body-text">The previous article established DeepONet's central capability: by learning the solution operator of a PDE, a single trained network can evaluate any input function-to-solution mapping in a millisecond forward pass. The economics are compelling — train once, deploy everywhere. But there is a hidden cost buried in the training phase that deserves scrutiny.</p>
+    <p class="body-text">The previous article established DeepONet's central capability: by learning the solution operator of a PDE, a single trained network can evaluate any input function-to-solution mapping in a millisecond forward pass. The economics are compelling, train once, deploy everywhere. But there is a hidden cost buried in the training phase that deserves scrutiny.</p>
 
-    <p class="body-text">Training a standard DeepONet requires a dataset of $(u_i, s_i)$ pairs: input functions and their <em>corresponding output functions</em>. For the antiderivative example, generating 1,000 pairs took negligible time because the antiderivative can be computed analytically. But for realistic PDE operators — the heat equation, reaction-diffusion, Navier-Stokes — each pair requires running a classical solver (FEM, FD, spectral method) to convergence. For a 3D CFD simulation, a single solve can take hours. Generating 1,000 training pairs means 1,000 solver runs, which can dwarf the DeepONet training time itself.</p>
+    <p class="body-text">Training a standard DeepONet requires a dataset of $(u_i, s_i)$ pairs: input functions and their <em>corresponding output functions</em>. For the antiderivative example, generating 1,000 pairs took negligible time because the antiderivative can be computed analytically. But for realistic PDE operators, the heat equation, reaction-diffusion, Navier-Stokes, each pair requires running a classical solver (FEM, FD, spectral method) to convergence. For a 3D CFD simulation, a single solve can take hours. Generating 1,000 training pairs means 1,000 solver runs, which can dwarf the DeepONet training time itself.</p>
 
     <div class="callout warning">
       <span class="callout-icon">
@@ -160,20 +160,20 @@
       </span>
       <div class="callout-body">
         <strong>The labeled data bottleneck</strong>
-        For standard DeepONet, generating N training pairs requires N full PDE solves. For expensive simulations (3D CFD, nonlinear FEM, multiphysics reactors), this upstream cost can be prohibitive — the same cost that operator learning was supposed to eliminate.
+        For standard DeepONet, generating N training pairs requires N full PDE solves. For expensive simulations (3D CFD, nonlinear FEM, multiphysics reactors), this upstream cost can be prohibitive, the same cost that operator learning was supposed to eliminate.
       </div>
     </div>
 
     <p class="body-text">This is not a theoretical concern. In pharmaceutical process modeling, a single coupled reaction-transport simulation of a continuous manufacturing reactor with realistic kinetics and heat effects can take 30–90 minutes on a CPU cluster. Building a training dataset of 1,000 such simulations is a 30,000–90,000 CPU-hour project. The question is: can we train a DeepONet with <em>little or no labeled solution data</em>?</p>
 
-    <p class="body-text">The answer, developed by Wang, Wang &amp; Perdikaris in 2021 (Science Advances), is yes — by applying the governing physics directly as the training signal for the operator. This is the core idea of <strong>Physics-Informed DeepONet (PI-DeepONet)</strong>.</p>
+    <p class="body-text">The answer, developed by Wang, Wang &amp; Perdikaris in 2021 (Science Advances), is yes, by applying the governing physics directly as the training signal for the operator. This is the core idea of <strong>Physics-Informed DeepONet (PI-DeepONet)</strong>.</p>
 
     <!-- Section 2: PI-DeepONet -->
     <hr class="divider">
     <div class="section-label">Section 02</div>
     <h2 class="section-h">Physics-Informed DeepONet</h2>
 
-    <p class="body-text">The key insight is exactly analogous to how PINNs eliminate the need for labeled solution data when training a function approximator: substitute the PDE residual for the data loss (or add it as a regulariser). Applied to an operator, the physics loss requires that the output of the DeepONet — which is a function of both the input function $u$ and the query location $y$ — satisfies the governing PDE at every collocation point, for every input function in the training distribution.</p>
+    <p class="body-text">The key insight is exactly analogous to how PINNs eliminate the need for labeled solution data when training a function approximator: substitute the PDE residual for the data loss (or add it as a regulariser). Applied to an operator, the physics loss requires that the output of the DeepONet, which is a function of both the input function $u$ and the query location $y$, satisfies the governing PDE at every collocation point, for every input function in the training distribution.</p>
 
     <p class="body-text">For a general PDE $\mathcal{R}[s] = 0$ with solution operator $\mathcal{G}: u \mapsto s$, the total loss is:</p>
 
@@ -191,7 +191,7 @@
 
     <p class="body-text">In the pure physics-informed limit ($\mathcal{L}_{\text{data}} = 0$), no labeled pairs $(u_i, s_i)$ are required at all. The network is supervised entirely by the governing equation and boundary/initial conditions. This is the setting demonstrated in the notebook for this article.</p>
 
-    <!-- Visual 1 — PI-DeepONet Loss Composition -->
+    <!-- Visual 1, PI-DeepONet Loss Composition -->
     <div class="fig-wrap">
       <svg viewBox="0 0 740 370" width="100%" style="max-width:740px;font-family:'Inter',sans-serif">
         <rect width="740" height="370" fill="#F8F6F2" rx="8"/>
@@ -296,10 +296,10 @@
     <div class="math-block">
       $$\frac{\partial}{\partial y}\mathcal{G}(u)(y) = \mathbf{b}(u) \cdot \frac{\partial \mathbf{t}(y)}{\partial y}$$
     </div>
-    <p class="body-text">This means the physics loss backpropagates through the trunk network but does not directly update the branch — the branch is only updated via the physics loss through the product $\mathbf{b}(u) \cdot \partial_y \mathbf{t}(y)$. This asymmetry in gradient flow can create training imbalances: the trunk may learn quickly (it is directly constrained by the PDE) while the branch updates slowly. Careful learning rate tuning and periodic activation functions in the trunk (which have better-behaved higher derivatives) help.</p>
+    <p class="body-text">This means the physics loss backpropagates through the trunk network but does not directly update the branch, the branch is only updated via the physics loss through the product $\mathbf{b}(u) \cdot \partial_y \mathbf{t}(y)$. This asymmetry in gradient flow can create training imbalances: the trunk may learn quickly (it is directly constrained by the PDE) while the branch updates slowly. Careful learning rate tuning and periodic activation functions in the trunk (which have better-behaved higher derivatives) help.</p>
 
     <h3 class="sub-h">3. The loss landscape is nested</h3>
-    <p class="body-text">The outer loop is over input functions $\{u_k\}$; the inner loop is over collocation points $\{y_j\}$ for each function. In practice this means the physics loss is a double sum — a mini-batch must cover both function diversity and spatial diversity to avoid gradient bias. A batch that samples only a single input function is equivalent to a PINN for that one instance; the operator generalisation requires that many diverse input functions appear in each gradient step.</p>
+    <p class="body-text">The outer loop is over input functions $\{u_k\}$; the inner loop is over collocation points $\{y_j\}$ for each function. In practice this means the physics loss is a double sum, a mini-batch must cover both function diversity and spatial diversity to avoid gradient bias. A batch that samples only a single input function is equivalent to a PINN for that one instance; the operator generalisation requires that many diverse input functions appear in each gradient step.</p>
 
     <!-- Section 4: Reaction-diffusion benchmark -->
     <hr class="divider">
@@ -314,7 +314,7 @@
 
     <p class="body-text">with homogeneous Neumann boundary conditions $\partial_x s(0,t) = \partial_x s(1,t) = 0$ and initial condition $s(x,0) = u(x)$. With $D = 0.01$ and $k = 1$, this equation describes Fisher's reaction-diffusion: a species that both diffuses spatially and grows logistically toward carrying capacity. The solution can exhibit complex transient profiles before settling to $s \equiv 1$.</p>
 
-    <p class="body-text">The operator to learn is $\mathcal{G}: u(x) \mapsto s(x,t)$ — the map from any initial condition to the full space-time solution field. The trunk takes $(x,t) \in \mathbb{R}^2$ as input, producing basis functions over the 2D output domain. The branch takes $u$ evaluated at $m$ spatial sensors.</p>
+    <p class="body-text">The operator to learn is $\mathcal{G}: u(x) \mapsto s(x,t)$, the map from any initial condition to the full space-time solution field. The trunk takes $(x,t) \in \mathbb{R}^2$ as input, producing basis functions over the 2D output domain. The branch takes $u$ evaluated at $m$ spatial sensors.</p>
 
     <p class="body-text">The antiderivative example from the notebook (notebook 11) uses this same architecture but with the simpler first-order ODE $ds/dy = u(y)$ as the PDE constraint, demonstrating the method with zero labeled solution data:</p>
 
@@ -369,14 +369,14 @@ opt = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>)
 <span class="cm"># Trained with ZERO solution labels — only the ODE and BC</span></pre>
     </div>
 
-    <p class="body-text">The crucial line is <code style="font-family:'JetBrains Mono',monospace;font-size:.85em;color:var(--navy)">s_y = torch.autograd.grad(s, y, ...)</code>. This differentiates the operator output with respect to the trunk query $y$ using PyTorch autograd — the gradient flows through the trunk network, computing $\partial_y \mathcal{G}(u)(y) = \mathbf{b}(u) \cdot \partial_y \mathbf{t}(y)$. The physics residual $\partial_y s - u(y) = 0$ then provides the training signal without requiring any labeled $(u_k, s_k)$ pairs.</p>
+    <p class="body-text">The crucial line is <code style="font-family:'JetBrains Mono',monospace;font-size:.85em;color:var(--navy)">s_y = torch.autograd.grad(s, y, ...)</code>. This differentiates the operator output with respect to the trunk query $y$ using PyTorch autograd, the gradient flows through the trunk network, computing $\partial_y \mathcal{G}(u)(y) = \mathbf{b}(u) \cdot \partial_y \mathbf{t}(y)$. The physics residual $\partial_y s, u(y) = 0$ then provides the training signal without requiring any labeled $(u_k, s_k)$ pairs.</p>
 
     <!-- Section 5: Parameter estimation -->
     <hr class="divider">
     <div class="section-label">Section 05</div>
     <h2 class="section-h">Parameter Estimation with Operator Learning</h2>
 
-    <p class="body-text">The most consequential application of PI-DeepONet is not forward prediction — it is inverse parameter estimation. Article 5 in this series demonstrated how a PINN can recover unknown PDE parameters by including them as learnable variables in the physics loss. The cost: a separate PINN must be trained for each new measurement dataset, each requiring 30–120 seconds of gradient descent.</p>
+    <p class="body-text">The most consequential application of PI-DeepONet is not forward prediction, it is inverse parameter estimation. Article 5 in this series demonstrated how a PINN can recover unknown PDE parameters by including them as learnable variables in the physics loss. The cost: a separate PINN must be trained for each new measurement dataset, each requiring 30–120 seconds of gradient descent.</p>
 
     <p class="body-text">Operator learning offers a fundamentally different paradigm. Instead of treating $D$ and $k$ as fixed physical constants, make them part of the branch input. The augmented branch encodes:</p>
 
@@ -384,17 +384,17 @@ opt = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>)
       $$\text{branch input} = [u(x_1),\, \ldots,\, u(x_m),\, D,\, k]$$
     </div>
 
-    <p class="body-text">Now the operator maps $(u, D, k, x, t) \to s(x,t)$: it is the solution operator over the entire parameter space simultaneously. Training this operator requires collocation tuples $(u_k, D_k, k_k, x_j, t_j)$ with the physics loss evaluated at each combination — but crucially, the same training run learns the operator for all $(D, k)$ in the training distribution.</p>
+    <p class="body-text">Now the operator maps $(u, D, k, x, t) \to s(x,t)$: it is the solution operator over the entire parameter space simultaneously. Training this operator requires collocation tuples $(u_k, D_k, k_k, x_j, t_j)$ with the physics loss evaluated at each combination, but crucially, the same training run learns the operator for all $(D, k)$ in the training distribution.</p>
 
     <p class="body-text">Once the operator is trained and its weights frozen, given new sensor measurements $\{s_{\text{obs}}(x_i, t_i)\}$, the inverse problem reduces to a small optimisation over the branch input alone:</p>
 
     <div class="math-block">
-      $$\min_{D, k} \sum_i \left|\mathcal{G}(u_0, D, k)(x_i, t_i) - s_{\text{obs}}(x_i, t_i)\right|^2$$
+      $$\min_{D, k} \sum_i \left|\mathcal{G}(u_0, D, k)(x_i, t_i), s_{\text{obs}}(x_i, t_i)\right|^2$$
     </div>
 
-    <p class="body-text">The operator weights are frozen — only $D$ and $k$ (two scalars) are optimised. This turns a nonlinear PDE inverse problem into a 2-parameter regression with a cheap-to-evaluate surrogate. Gradient descent on this 2D problem converges in seconds, compared to the 30–120 second full PINN inverse solve. More importantly, the same frozen operator can be used for unlimited new measurements without any retraining — it is a reusable inference engine for the entire parameter space.</p>
+    <p class="body-text">The operator weights are frozen, only $D$ and $k$ (two scalars) are optimised. This turns a nonlinear PDE inverse problem into a 2-parameter regression with a cheap-to-evaluate surrogate. Gradient descent on this 2D problem converges in seconds, compared to the 30–120 second full PINN inverse solve. More importantly, the same frozen operator can be used for unlimited new measurements without any retraining, it is a reusable inference engine for the entire parameter space.</p>
 
-    <!-- Visual 2 — Parameter Estimation Timeline -->
+    <!-- Visual 2, Parameter Estimation Timeline -->
     <div class="fig-wrap">
       <div class="phase-timeline">
         <div class="phase-block" style="background:var(--navy-lt);border-color:rgba(28,61,107,.25)">
@@ -416,20 +416,20 @@ opt = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>)
           </div>
           <div class="phase-num">PHASE 03</div>
           <div class="phase-title" style="color:#7A4A2A">Inverse Problem</div>
-          <div class="phase-body">New measurements arrive. Optimise only $(D, k)$ — 2 scalars — against frozen operator. Converges in seconds. Operator reused for any future dataset.</div>
+          <div class="phase-body">New measurements arrive. Optimise only $(D, k)$, 2 scalars, against frozen operator. Converges in seconds. Operator reused for any future dataset.</div>
         </div>
       </div>
       <p class="fig-caption">Figure 2. The three-phase deployment cycle for PI-DeepONet-based parameter estimation. The upstream training cost is paid once; all subsequent inverse queries use the frozen operator with only a 2-parameter optimisation.</p>
     </div>
 
-    <p class="body-text">The key mechanism that makes this possible is that the learned operator is a smooth, differentiable function of $(D, k)$ through the branch network. Gradients of the data misfit with respect to $(D, k)$ are computed via backpropagation through the frozen operator — the same mechanism used for regular gradient descent, but on a much smaller manifold (2D vs 27,000D for full PINN retraining).</p>
+    <p class="body-text">The key mechanism that makes this possible is that the learned operator is a smooth, differentiable function of $(D, k)$ through the branch network. Gradients of the data misfit with respect to $(D, k)$ are computed via backpropagation through the frozen operator, the same mechanism used for regular gradient descent, but on a much smaller manifold (2D vs 27,000D for full PINN retraining).</p>
 
     <!-- Section 6: Architecture improvements -->
     <hr class="divider">
     <div class="section-label">Section 06</div>
     <h2 class="section-h">Architecture Improvements for PI-DeepONet</h2>
 
-    <p class="body-text">Notebook 12 (Architectures and Training) documents the key upgrades that define current best practice for both PINNs and PI-DeepONet. These are not theoretical niceties — they are practical requirements for achieving accurate results on difficult problems.</p>
+    <p class="body-text">Notebook 12 (Architectures and Training) documents the key upgrades that define current best practice for both PINNs and PI-DeepONet. These are not theoretical niceties, they are practical requirements for achieving accurate results on difficult problems.</p>
 
     <h3 class="sub-h">Modified MLP with Gating</h3>
     <p class="body-text">Wang et al. 2022 identified that standard MLP initialization causes gradient pathologies in deep PDE networks. The "Modified MLP" introduces two encoder branches $U = \sigma(W_1 x + b_1)$ and $V = \sigma(W_2 x + b_2)$, then applies a gating transform at each hidden layer:</p>
@@ -438,10 +438,10 @@ opt = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>)
       $$H^{(k+1)} = \sigma\!\left(W^{(k)} H^{(k)} + b^{(k)}\right) \odot U + \left(1 - \sigma\!\left(W^{(k)} H^{(k)} + b^{(k)}\right)\right) \odot V$$
     </div>
 
-    <p class="body-text">The gate $\sigma(W H + b) \in (0,1)$ interpolates between the two encoder representations at each layer depth. This provides stable gradients throughout training — the encoders prevent signal vanishing — and empirically reduces the number of epochs required by 3–5x for stiff problems.</p>
+    <p class="body-text">The gate $\sigma(W H + b) \in (0,1)$ interpolates between the two encoder representations at each layer depth. This provides stable gradients throughout training, the encoders prevent signal vanishing, and empirically reduces the number of epochs required by 3–5x for stiff problems.</p>
 
     <h3 class="sub-h">Fourier Feature Embeddings</h3>
-    <p class="body-text">Spectral bias — the tendency of plain MLPs to learn low-frequency components first — is particularly damaging for the trunk network in PI-DeepONet, since the trunk must learn basis functions that capture the full frequency content of the PDE solutions. Random Fourier features (Tancik et al. 2020; Wang et al. 2021) map the trunk input through a random frequency embedding before the MLP:</p>
+    <p class="body-text">Spectral bias, the tendency of plain MLPs to learn low-frequency components first, is particularly damaging for the trunk network in PI-DeepONet, since the trunk must learn basis functions that capture the full frequency content of the PDE solutions. Random Fourier features (Tancik et al. 2020; Wang et al. 2021) map the trunk input through a random frequency embedding before the MLP:</p>
 
     <div class="math-block">
       $$\gamma(y) = \left[\cos(2\pi B_1 y),\, \sin(2\pi B_1 y),\, \ldots,\, \cos(2\pi B_n y),\, \sin(2\pi B_n y)\right]$$
@@ -475,10 +475,10 @@ opt = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>)
     </div>
 
     <h3 class="sub-h">POD-DeepONet</h3>
-    <p class="body-text">When a small number of labeled solutions is available (say, 50–200), the POD-DeepONet variant uses them constructively rather than as direct supervision. POD (Proper Orthogonal Decomposition, also known as PCA on the solution snapshots) extracts the empirically optimal basis functions from the available solutions. These POD basis functions are used to initialise or replace the trunk network outputs — the trunk is pre-conditioned to represent the relevant solution space before training begins. The branch network then learns to predict POD coefficients rather than raw function values, which is a substantially easier regression task. Wang et al. 2022 showed this variant achieves accuracy competitive with standard DeepONet trained on 10x more labeled data.</p>
+    <p class="body-text">When a small number of labeled solutions is available (say, 50–200), the POD-DeepONet variant uses them constructively rather than as direct supervision. POD (Proper Orthogonal Decomposition, also known as PCA on the solution snapshots) extracts the empirically optimal basis functions from the available solutions. These POD basis functions are used to initialise or replace the trunk network outputs, the trunk is pre-conditioned to represent the relevant solution space before training begins. The branch network then learns to predict POD coefficients rather than raw function values, which is a substantially easier regression task. Wang et al. 2022 showed this variant achieves accuracy competitive with standard DeepONet trained on 10x more labeled data.</p>
 
     <h3 class="sub-h">PirateNets and Deep Operator Networks</h3>
-    <p class="body-text">Wang et al. 2024 introduced PirateNets (Physics-Informed Residual Adaptive Networks) — a training protocol that uses physics-informed initialization for each residual block, ensuring that very deep networks (40+ layers) train stably. For PI-DeepONet applied to complex multi-scale PDEs, this enables substantially deeper architectures than the 3-layer MLPs in the baseline, capturing richer operator structure at the cost of more careful initialization.</p>
+    <p class="body-text">Wang et al. 2024 introduced PirateNets (Physics-Informed Residual Adaptive Networks), a training protocol that uses physics-informed initialization for each residual block, ensuring that very deep networks (40+ layers) train stably. For PI-DeepONet applied to complex multi-scale PDEs, this enables substantially deeper architectures than the 3-layer MLPs in the baseline, capturing richer operator structure at the cost of more careful initialization.</p>
 
     <!-- Section 7: Training tips -->
     <hr class="divider">
@@ -554,7 +554,7 @@ opt = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>)
           <td>0 (per solve)</td>
           <td>45–90 s per new IC</td>
           <td>&lt;1e-3 (per-instance)</td>
-          <td>N/A — must retrain</td>
+          <td>N/A, must retrain</td>
         </tr>
         <tr>
           <td>Standard DeepONet</td>
@@ -587,7 +587,7 @@ opt = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>)
       </tbody>
     </table>
 
-    <!-- Visual 3 — Data Efficiency Comparison -->
+    <!-- Visual 3, Data Efficiency Comparison -->
     <div class="fig-wrap">
       <svg viewBox="0 0 620 310" width="100%" style="max-width:620px;font-family:'Inter',sans-serif">
         <rect width="620" height="310" fill="#F8F6F2" rx="8"/>
@@ -670,7 +670,7 @@ opt = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>)
     <div class="section-label">Section 09</div>
     <h2 class="section-h">Industrial Application: Digital Twin for Pharmaceutical Manufacturing</h2>
 
-    <p class="body-text">The methods developed in this article series — from basic PINNs to PI-DeepONet — are not academic constructs. They address concrete engineering challenges in pharmaceutical manufacturing. Let me be specific about how this applies to continuous manufacturing reactor modeling.</p>
+    <p class="body-text">The methods developed in this article series, from basic PINNs to PI-DeepONet, are not academic constructs. They address concrete engineering challenges in pharmaceutical manufacturing. Let me be specific about how this applies to continuous manufacturing reactor modeling.</p>
 
     <h3 class="sub-h">The Process Problem</h3>
     <p class="body-text">A continuous pharmaceutical manufacturing reactor involves coupled transport phenomena: reactant concentration profiles $c(x,t)$ governed by a convection-diffusion-reaction PDE, temperature profiles $T(x,t)$ from the heat equation with reaction-generated source terms, and outlet concentration $c_{\text{out}}(t)$ measured by PAT (Process Analytical Technology) sensors in real time. The governing equations form a coupled system:</p>
@@ -680,7 +680,7 @@ opt = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>)
       $$\frac{\partial T}{\partial t} + v\frac{\partial T}{\partial x} = D_T \frac{\partial^2 T}{\partial x^2} + \Delta H_r \cdot r(c, T)$$
     </div>
 
-    <p class="body-text">where $r(c, T) = k_0 e^{-E_a/RT} c^n$ is an Arrhenius reaction rate. The parameters of interest — $k_0$, $E_a$, the reaction order $n$, heat of reaction $\Delta H_r$ — are often imprecisely known and may drift over time as raw material properties change between batches.</p>
+    <p class="body-text">where $r(c, T) = k_0 e^{-E_a/RT} c^n$ is an Arrhenius reaction rate. The parameters of interest, $k_0$, $E_a$, the reaction order $n$, heat of reaction $\Delta H_r$, are often imprecisely known and may drift over time as raw material properties change between batches.</p>
 
     <h3 class="sub-h">The DeepONet Digital Twin</h3>
     <p class="body-text">A DeepONet trained on this coupled system maps:</p>
@@ -692,10 +692,10 @@ opt = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>)
     <p class="body-text">The branch encodes the inlet concentration profile $c_{\text{in}}(t)$ (sampled at $m$ time points) plus the scalar process parameters concatenated into the branch input vector. The trunk encodes $(x, t)$. Once trained on a distribution of operating conditions using PI-DeepONet (with physics supervision from the PDE system and a small number of validated simulation pairs), the digital twin:</p>
 
     <ul style="list-style:none;display:flex;flex-direction:column;gap:.6rem;margin:1rem 0 1.5rem 0">
-      <li style="display:flex;gap:.75rem;font-size:.935rem;color:var(--ink-2)"><span style="color:var(--green);flex-shrink:0;margin-top:2px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><strong>Real-time prediction:</strong> given the current inlet profile from flow meters, predict $c_{\text{out}}(t)$ for the next 30 minutes in &lt;1 ms — enabling proactive control.</li>
-      <li style="display:flex;gap:.75rem;font-size:.935rem;color:var(--ink-2)"><span style="color:var(--green);flex-shrink:0;margin-top:2px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><strong>In-loop parameter estimation:</strong> when PAT sensor readings arrive, solve the inverse problem (recover $k_0$, $E_a$ from $c_{\text{out}}$ measurements) in seconds — early detection of raw material variability.</li>
-      <li style="display:flex;gap:.75rem;font-size:.935rem;color:var(--ink-2)"><span style="color:var(--green);flex-shrink:0;margin-top:2px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><strong>Design space exploration:</strong> sweep 10,000 combinations of flow rate, temperature setpoint, and feed concentration to identify the feasible operating region — completed in under 30 seconds.</li>
-      <li style="display:flex;gap:.75rem;font-size:.935rem;color:var(--ink-2)"><span style="color:var(--green);flex-shrink:0;margin-top:2px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><strong>Uncertainty quantification:</strong> sample 50,000 parameter draws from a prior distribution and propagate through the operator to obtain posterior predictive distributions — enabling probabilistic specification testing.</li>
+      <li style="display:flex;gap:.75rem;font-size:.935rem;color:var(--ink-2)"><span style="color:var(--green);flex-shrink:0;margin-top:2px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><strong>Real-time prediction:</strong> given the current inlet profile from flow meters, predict $c_{\text{out}}(t)$ for the next 30 minutes in &lt;1 ms, enabling proactive control.</li>
+      <li style="display:flex;gap:.75rem;font-size:.935rem;color:var(--ink-2)"><span style="color:var(--green);flex-shrink:0;margin-top:2px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><strong>In-loop parameter estimation:</strong> when PAT sensor readings arrive, solve the inverse problem (recover $k_0$, $E_a$ from $c_{\text{out}}$ measurements) in seconds, early detection of raw material variability.</li>
+      <li style="display:flex;gap:.75rem;font-size:.935rem;color:var(--ink-2)"><span style="color:var(--green);flex-shrink:0;margin-top:2px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><strong>Design space exploration:</strong> sweep 10,000 combinations of flow rate, temperature setpoint, and feed concentration to identify the feasible operating region, completed in under 30 seconds.</li>
+      <li style="display:flex;gap:.75rem;font-size:.935rem;color:var(--ink-2)"><span style="color:var(--green);flex-shrink:0;margin-top:2px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><strong>Uncertainty quantification:</strong> sample 50,000 parameter draws from a prior distribution and propagate through the operator to obtain posterior predictive distributions, enabling probabilistic specification testing.</li>
     </ul>
 
     <p class="body-text">This is precisely the application domain where the operator learning advantage is transformative. Classical mechanistic models take 30–90 minutes per solve; a PINN digital twin requires retraining for each new operating condition. A PI-DeepONet digital twin trained once covers the entire operating envelope at inference speeds compatible with real-time control loops and ICH Q13 continuous manufacturing process monitoring requirements.</p>
@@ -706,7 +706,7 @@ opt = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>)
       </span>
       <div class="callout-body">
         <strong>ICH Q13 &amp; real-time release relevance</strong>
-        Continuous manufacturing under ICH Q13 requires a Process Control Strategy with real-time monitoring and control capability. A PI-DeepONet digital twin provides the millisecond-speed physics-consistent surrogate needed for in-loop model predictive control and real-time release testing — replacing expensive CFD runs with a learned operator that respects the governing physics.
+        Continuous manufacturing under ICH Q13 requires a Process Control Strategy with real-time monitoring and control capability. A PI-DeepONet digital twin provides the millisecond-speed physics-consistent surrogate needed for in-loop model predictive control and real-time release testing, replacing expensive CFD runs with a learned operator that respects the governing physics.
       </div>
     </div>
 
@@ -724,13 +724,13 @@ opt = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>)
     <p class="body-text">Hyperbolic PDEs with shocks (Euler equations, conservation laws) remain difficult. The issue is structural: the solution operator is not continuous in the function topology assumed by the Chen &amp; Chen theorem when shocks form. The output function $s = \mathcal{G}(u)$ can have sharp discontinuities even when the input $u$ is smooth, which requires a very large $p$ to represent accurately. Current approaches use ENO-type numerical dissipation in the training loss or reformulate the problem in weak (integral) form to handle shocks.</p>
 
     <h3 class="sub-h">Open Problems</h3>
-    <p class="body-text"><strong>Geometry variation:</strong> current DeepONet formulations assume a fixed domain $\Omega$. Handling shape optimization (varying $\Omega$ as part of the operator input) is an active research direction — graph neural operators are better positioned for this, but at significant computational cost for complex 3D geometries.</p>
+    <p class="body-text"><strong>Geometry variation:</strong> current DeepONet formulations assume a fixed domain $\Omega$. Handling shape optimization (varying $\Omega$ as part of the operator input) is an active research direction, graph neural operators are better positioned for this, but at significant computational cost for complex 3D geometries.</p>
 
     <p class="body-text"><strong>Uncertainty quantification:</strong> a point-estimate operator does not quantify its own epistemic uncertainty (uncertainty due to limited training data) or aleatoric uncertainty (uncertainty in the PDE parameters). Bayesian neural operators (using variational inference or Monte Carlo dropout) are under active development, but the computational cost of propagating uncertainty through the operator training is substantial.</p>
 
     <p class="body-text"><strong>3D industrial geometries:</strong> the memory and computational requirements of PI-DeepONet scale with the dimension of the query space. For 3D geometries with $10^5$–$10^6$ degrees of freedom, the trunk must evaluate at high-dimensional $(x,y,z,t)$ inputs, which taxes standard MLP architectures. Combination with model-order reduction (POD-DeepONet for 3D) or attention-based architectures is likely needed.</p>
 
-    <p class="body-text"><strong>Multi-fidelity training:</strong> combining cheap low-fidelity simulations (coarse grid FEM) with expensive high-fidelity data in a unified operator learning framework — analogous to multi-fidelity GPs in the surrogate modeling literature — is an open and practically important problem.</p>
+    <p class="body-text"><strong>Multi-fidelity training:</strong> combining cheap low-fidelity simulations (coarse grid FEM) with expensive high-fidelity data in a unified operator learning framework, analogous to multi-fidelity GPs in the surrogate modeling literature, is an open and practically important problem.</p>
 
     <div class="callout success">
       <span class="callout-icon">
@@ -738,7 +738,7 @@ opt = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>)
       </span>
       <div class="callout-body">
         <strong>Series conclusion</strong>
-        This series has traced the arc from basic PINNs (a network that solves one PDE instance) through inverse problems, adaptive sampling, and finally to operator learning — the framework where a single trained network encodes an entire family of PDE solutions. The common thread is automatic differentiation as a physics-enforcement mechanism. Whether encoding boundary conditions in a single network or enforcing a PDE residual across millions of input functions, the same backpropagation machinery that powers deep learning turns out to be exactly what is needed to incorporate physical law into learned models. The next frontier — 3D multiphysics operators for industrial digital twins — is where this machinery will find its most consequential application.
+        This series has traced the arc from basic PINNs (a network that solves one PDE instance) through inverse problems, adaptive sampling, and finally to operator learning, the framework where a single trained network encodes an entire family of PDE solutions. The common thread is automatic differentiation as a physics-enforcement mechanism. Whether encoding boundary conditions in a single network or enforcing a PDE residual across millions of input functions, the same backpropagation machinery that powers deep learning turns out to be exactly what is needed to incorporate physical law into learned models. The next frontier, 3D multiphysics operators for industrial digital twins, is where this machinery will find its most consequential application.
       </div>
     </div>
 
@@ -763,10 +763,10 @@ opt = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>)
     <!-- Series complete -->
     <hr class="divider">
     <div class="series-nav">
-      <div class="series-nav-label">Series complete — return to start</div>
+      <div class="series-nav-label">Series complete, return to start</div>
       <div class="series-nav-list">
-        <div class="series-nav-item"><span style="color:var(--sienna);font-family:'JetBrains Mono',monospace;font-size:.75rem">01</span><a href="pinn-introduction.html">Introduction to PINNs — start from the beginning</a></div>
-        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">07</span><a href="pinn-deeponet.html">&larr; Previous: DeepONet — Learning Operators</a></div>
+        <div class="series-nav-item"><span style="color:var(--sienna);font-family:'JetBrains Mono',monospace;font-size:.75rem">01</span><a href="pinn-introduction.html">Introduction to PINNs, start from the beginning</a></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">07</span><a href="pinn-deeponet.html">&larr; Previous: DeepONet, Learning Operators</a></div>
       </div>
     </div>
 

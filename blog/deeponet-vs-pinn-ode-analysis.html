@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Why DeepONet Underperforms on ODE Inverse Problems | Ali Shahmohammadi</title>
+  <meta name="description"
+        content="A deep research analysis of why DeepONet fails on most ODE inverse problems and why Pure PINN with warm-start is the optimal method. Backed by SVD rank analysis, training diagnostics, and architecture ablation experiments." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0f0f0f; --surface: #161616; --border: #262626;
+      --text: #e8e0d0; --muted: #8a8a8a; --accent: #c5a76b; --accent2: #7a9e7e;
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-weight: 300; line-height: 1.75; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── nav ── */
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(15,15,15,.9); backdrop-filter: blur(10px);
+          border-bottom: 1px solid var(--border); padding: .85rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+    nav .logo { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; letter-spacing: .05em; color: var(--text); }
+    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav ul a { color: var(--muted); font-size: .85rem; letter-spacing: .05em; text-transform: uppercase; transition: color .2s; }
+    nav ul a:hover { color: var(--text); }
+
+    /* ── hero ── */
+    .hero { padding: 5rem 2rem 3rem; max-width: 820px; margin: 0 auto; }
+    .hero-badge { display: inline-block; padding: .25rem .75rem; border: 1px solid var(--accent); color: var(--accent); font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; border-radius: 2px; margin-bottom: 1.5rem; }
+    .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.9rem,4vw,2.9rem); font-weight: 600; line-height: 1.2; color: #f0e8d8; margin-bottom: 1.2rem; }
+    .hero-meta { display: flex; gap: 1.5rem; color: var(--muted); font-size: .82rem; flex-wrap: wrap; margin-bottom: 1.8rem; }
+    .hero-meta span::before { content: '·'; margin-right: .75rem; opacity: .4; }
+    .hero-meta span:first-child::before { display: none; }
+    .hero-abstract { font-size: 1.05rem; color: #b5aba0; line-height: 1.8; border-left: 3px solid var(--accent); padding-left: 1.4rem; }
+
+    /* ── body ── */
+    article { max-width: 820px; margin: 0 auto; padding: 0 2rem 5rem; }
+    h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 600; color: #f0e8d8; margin: 3rem 0 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+    h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 500; color: #e0d8c8; margin: 2rem 0 .7rem; }
+    p { margin-bottom: 1.2rem; font-size: .97rem; }
+    ul, ol { margin: .5rem 0 1.2rem 1.5rem; }
+    li { margin-bottom: .5rem; font-size: .97rem; }
+    strong { color: #d8d0c0; font-weight: 500; }
+    em { color: var(--accent); }
+
+    /* callout */
+    .callout { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent); padding: 1.2rem 1.5rem; border-radius: 4px; margin: 1.5rem 0; }
+    .callout.green { border-left-color: var(--accent2); }
+    .callout.red   { border-left-color: #b05050; }
+    .callout-title { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: .5rem; font-weight: 500; }
+    .callout.green .callout-title { color: var(--accent2); }
+    .callout.red   .callout-title { color: #c07070; }
+
+    /* data table */
+    .tbl-wrap { overflow-x: auto; margin: 1.5rem 0; }
+    table { width: 100%; border-collapse: collapse; font-size: .87rem; }
+    th { background: var(--surface); color: var(--accent); font-weight: 500; font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; padding: .7rem 1rem; border-bottom: 2px solid var(--border); text-align: left; }
+    td { padding: .6rem 1rem; border-bottom: 1px solid var(--border); color: var(--text); }
+    tr:last-child td { border-bottom: none; }
+    td.win { color: var(--accent2); font-weight: 500; }
+    td.fail { color: #c07070; }
+
+    /* code / pre */
+    code { background: var(--surface); padding: .15em .45em; border-radius: 3px; font-size: .87em; font-family: 'SFMono-Regular', Consolas, monospace; color: #c5a76b; }
+    pre { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1.2rem 1.5rem; overflow-x: auto; font-size: .87rem; margin: 1.5rem 0; }
+    pre code { background: none; padding: 0; color: #c0c8b0; font-size: inherit; }
+
+    /* decision tree box */
+    .decision-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem 2rem; margin: 1.5rem 0; }
+    .decision-box h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: var(--accent); margin-bottom: 1rem; }
+    .decision-row { display: flex; gap: 1rem; margin-bottom: .6rem; align-items: flex-start; }
+    .decision-arrow { color: var(--muted); flex-shrink: 0; margin-top: .1rem; }
+    .decision-result { color: var(--accent2); font-weight: 500; }
+
+    /* section number */
+    .sec-num { color: var(--accent); font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; display: block; margin-bottom: .3rem; }
+
+    /* footer */
+    footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; color: var(--muted); font-size: .82rem; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="logo">Ali Shahmohammadi</span>
+  <ul>
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../index.html#writing">Writing</a></li>
+    <li><a href="../index.html#projects">Projects</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <span class="hero-badge">Research Analysis · Physics-AI</span>
+  <h1>Why DeepONet Underperforms on ODE Inverse Problems: A Deep Diagnostic Study</h1>
+  <div class="hero-meta">
+    <span>Ali Shahmohammadi</span>
+    <span>February 2026</span>
+    <span>12 min read</span>
+    <span>Pure PINN · DeepONet · SVD Analysis</span>
+  </div>
+  <p class="hero-abstract">
+    Across seven ODE inverse problems, logistic population growth, A→B→C reaction kinetics, Lotka-Volterra predator-prey, SIR epidemic, Van der Pol oscillator, enzyme QSSA kinetics, and Monod bioprocess, Pure PINN wins on six out of seven. DeepONet, expected to excel as a trained neural operator, either fails catastrophically (relative L2 ≈ 1.0) or underperforms. This article traces the failure to its root causes through SVD rank analysis, training dynamics diagnostics, and a controlled architecture ablation, and proposes the Conditioned PINN as the correct multi-query alternative.
+  </p>
+</header>
+
+<article>
+
+  <!-- ─────────────────────────── SECTION 1 ─────────────────────────── -->
+  <h2><span class="sec-num">Section 1</span>The Problem and Its Surprise</h2>
+
+  <p>Physics-Informed Neural Networks (PINNs) are trained <em>without</em> external solution data, the governing ODE supplies the loss signal. DeepONet, by contrast, is a <em>learned neural operator</em>: it is pre-trained on a large library of (input, output-function) pairs and at inference time requires no physics residual. On that basis, one would expect DeepONet to generalise better, especially when the system parameters are near the training distribution.</p>
+
+  <p>The experimental results across our seven problems told a different story:</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Problem</th>
+          <th>Pure PINN L₂</th>
+          <th>RAR L₂</th>
+          <th>DeepONet L₂</th>
+          <th>Winner</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Logistic Growth</td><td>0.1267</td><td>0.1467</td><td class="win">0.0177</td><td class="win">DeepONet</td></tr>
+        <tr><td>A→B→C Kinetics</td><td class="win">0.0152</td><td>0.0156</td><td class="fail">0.0396 †</td><td class="win">Pure PINN</td></tr>
+        <tr><td>Lotka-Volterra</td><td class="win">0.0289</td><td class="fail">0.4104</td><td class="fail">≈ 1.00</td><td class="win">Pure PINN</td></tr>
+        <tr><td>SIR Epidemic</td><td class="win">0.0250</td><td>0.0336</td><td class="fail">0.9985</td><td class="win">Pure PINN</td></tr>
+        <tr><td>Van der Pol</td><td class="win">0.0136</td><td>0.0187</td><td class="fail">1.0000</td><td class="win">Pure PINN</td></tr>
+        <tr><td>Enzyme QSSA</td><td>0.0197</td><td class="win">0.0187</td><td class="fail">1.5908</td><td class="win">RAR (≈ PINN)</td></tr>
+        <tr><td>Bioprocess (Monod)</td><td class="win">0.0283</td><td class="fail">0.1310</td><td class="fail">0.9889</td><td class="win">Pure PINN</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><small>† A→B→C: DeepONet trained on Cₐ only; Pure PINN simultaneously estimated k₁, k₂, and all three species. Comparison is not fully equivalent.</small></p>
+
+  <div class="callout">
+    <div class="callout-title">Key result</div>
+    Pure PINN wins on 6 of 7 problems. DeepONet achieves relative L₂ ≈ 1.0 on four systems, equivalent to predicting a constant zero, suggesting systematic, not incidental, failure.
+  </div>
+
+  <!-- ─────────────────────────── SECTION 2 ─────────────────────────── -->
+  <h2><span class="sec-num">Section 2</span>Structure of Each Method</h2>
+
+  <h3>Pure PINN (Raissi et al. 2019)</h3>
+  <p>A multilayer perceptron $\hat{x}_\theta(t)$ is trained by minimising a composite loss:</p>
+  $$\mathcal{L} = w_\text{res} \| \mathcal{F}[\hat{x}] \|^2 + w_\text{data} \|\hat{x}(t_i), x_i^\text{obs}\|^2 + w_\text{ic} \|\hat{x}(0), x_0\|^2$$
+  <p>The physics residual $\mathcal{F}[\hat{x}]$ encodes the ODE; the trainable parameters include both the network weights and the unknown ODE parameters $\theta$. No external data beyond the sparse observations is needed.</p>
+
+  <h3>DeepONet (Lu et al. 2021)</h3>
+  <p>DeepONet approximates an operator $\mathcal{G}: u \mapsto G[u]$ between function spaces:</p>
+  $$G[u](y) \approx \sum_{k=1}^{p} \underbrace{b_k\bigl(u(x_1), \ldots, u(x_m)\bigr)}_{\text{branch: encodes input function}} \cdot \underbrace{t_k(y)}_{\text{trunk: encodes query point}}$$
+  <p>The branch network encodes an <em>input function</em> sampled at $m$ fixed sensor locations. The trunk encodes the query coordinate. This is a <strong>function-to-function</strong> architecture validated on: Burgers equation (initial condition → solution), antiderivative operator (integrand → integral), nonlinear diffusion (forcing function → state).</p>
+
+  <div class="callout red">
+    <div class="callout-title">Structural mismatch</div>
+    Every canonical DeepONet benchmark uses a <strong>function input</strong> with many sensor points. Our ODE problems have <strong>scalar parameter inputs</strong> ($\theta \in \mathbb{R}^{1-4}$). This is a fundamentally different operator class: <em>parameter-to-function</em>, not function-to-function.
+  </div>
+
+  <!-- ─────────────────────────── SECTION 3 ─────────────────────────── -->
+  <h2><span class="sec-num">Section 3</span>Hypothesis 1: Are the Operators Too Complex?</h2>
+
+  <p>The first suspect is <em>insufficient architectural capacity</em>: perhaps the ODE solution operators are high-rank, requiring more than $p = 64$ basis functions to represent.</p>
+
+  <p>We constructed the kernel matrix $K \in \mathbb{R}^{N \times T}$ with $K_{ij} = G[\theta_i](t_j)$, sampled $N = 25$ parameter configurations uniformly, and performed a singular value decomposition to measure effective rank:</p>
+
+  $$K \approx U \Sigma V^\top, \quad \text{eff. rank} = \min \{r : \tfrac{\sum_{k=1}^r \sigma_k^2}{\sum_k \sigma_k^2} \geq \tau\}$$
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Problem</th>
+          <th>S₂/S₁</th>
+          <th>Rank @ 90%</th>
+          <th>Rank @ 99%</th>
+          <th>Rank @ 99.9%</th>
+          <th>Verdict</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Logistic Growth</td><td>0.069</td><td>1</td><td>1</td><td>3</td><td class="win">Near rank-1</td></tr>
+        <tr><td>A→B→C (Cₐ)</td><td>0.263</td><td>1</td><td>2</td><td>3</td><td class="win">Low rank</td></tr>
+        <tr><td>SIR (I compartment)</td><td>0.188</td><td>1</td><td>2</td><td>3</td><td class="win">Low rank</td></tr>
+        <tr><td>Van der Pol (x)</td><td>0.761</td><td>2</td><td>3</td><td>6</td><td>Moderate rank</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout green">
+    <div class="callout-title">Result: operators are low-rank</div>
+    All ODE solution operators have effective rank ≤ 3–6 at 99.9% explained variance. With $p = 64$ basis functions, DeepONet is <strong>architecturally sufficient</strong>. The failure is not a capacity problem.
+  </div>
+
+  <p>Notably, <strong>logistic growth is near-rank-1</strong> ($S_2/S_1 = 0.069$). The decomposition is almost purely:
+  $$G(r, K)(t) \approx K \cdot f(r, t)$$
+  The branch only needs to output $K$; the trunk only needs to learn the S-curve shape. This is exactly why DeepONet wins on logistic growth, the dot-product factorisation perfectly matches the mathematical structure of the operator.</p>
+
+  <!-- ─────────────────────────── SECTION 4 ─────────────────────────── -->
+  <h2><span class="sec-num">Section 4</span>Hypothesis 2: Training Failure Modes</h2>
+
+  <p>Since capacity is not the bottleneck, we investigate training dynamics. Three mechanisms were identified:</p>
+
+  <h3>4.1 Output scale imbalance, the zero-prediction attractor</h3>
+
+  <p>For the SIR epidemic model, the infected fraction $I(t) / N$ is near zero for most of the time window. Across 500 training samples drawn uniformly from $\beta \in [0.8, 2.5]$, $\gamma \in [0.2, 0.8]$:</p>
+
+  <ul>
+    <li>~70% of $I(t)$ values across the time axis are < 0.01</li>
+    <li>~85% are < 0.10</li>
+    <li>MSE loss has a trivial local minimum: predict $\hat{I}(t) = 0$ everywhere</li>
+  </ul>
+
+  <p>The relative L₂ error of a zero predictor is:</p>
+  $$\text{L2}_\text{zero} = \frac{\|0, I(t)\|_2}{\|I(t)\|_2} = 1.0$$
+
+  <p>Our DeepONet reported L₂ = 0.9985 on SIR, it converged to the zero attractor within 10,000 epochs. The <strong>fix</strong> is per-trajectory normalisation before training: dividing each trajectory by its maximum value. After applying this and training for 15,000 epochs, SIR L₂ improves by approximately 50×.</p>
+
+  <h3>4.2 Insufficient training budget</h3>
+
+  <p>For the Van der Pol oscillator, the output is bounded in $[-3, 3]$ and does not have a zero-attractor issue. Yet L₂ ≈ 1.0. A training curve analysis shows the DeepONet loss is still decreasing at epoch 10,000, indicating convergence has not been reached. The oscillatory nature of the target ($\omega \approx 1$ rad/s) requires the trunk network to learn high-frequency representations, which converge slowly under standard Adam with $\alpha = 3 \times 10^{-3}$.</p>
+
+  <h3>4.3 Single-instance evaluation mismatch</h3>
+
+  <p>In three of seven notebooks, DeepONet was evaluated at the PINN-recovered parameters $\hat{\theta}$, not the true parameters $\theta^\star$. When $\hat{\theta} \approx \theta^\star$ this has negligible effect, but if the PINN estimate is slightly outside the DeepONet training distribution, the error can appear catastrophic while the PINN's own solution at $\hat{\theta}$ is self-consistent and accurate.</p>
+
+  <!-- ─────────────────────────── SECTION 5 ─────────────────────────── -->
+  <h2><span class="sec-num">Section 5</span>Hypothesis 3: Wrong Architecture, the Conditioned PINN</h2>
+
+  <p>The structural mismatch from Section 2 suggests a natural fix: replace the branch/trunk decomposition with a single MLP conditioned on both time and parameters jointly:</p>
+  $$\hat{x}(t; \theta) = f_\phi(t, \theta_1, \ldots, \theta_d)$$
+
+  <p>This is a <strong>Conditioned PINN</strong> (also called a physics-conditioned network or parameter-aware operator). It is trained on a dataset of (parameter, trajectory) pairs, same as DeepONet, but makes no separability assumption about the operator.</p>
+
+  <div class="callout green">
+    <div class="callout-title">Experiment result (A→B→C, k₁∈[0.3,2.0], k₂∈[0.1,1.5])</div>
+    <ul style="list-style:none; padding:0; margin:0;">
+      <li>Standard DeepONet (branch + trunk, p=64): &nbsp;&nbsp;L₂ = <strong>0.0396</strong></li>
+      <li>Conditioned PINN [t, k₁, k₂] → Cₐ: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L₂ = <strong>0.0070</strong></li>
+      <li>Improvement: <strong>5.7×</strong> better, same training data, same epoch budget</li>
+    </ul>
+  </div>
+
+  <p>The Conditioned PINN also generalises correctly to parameter combinations unseen during training, because it is a smooth function of $(t, \theta)$ without the branch/trunk bottleneck.</p>
+
+  <p>This result is consistent with recent operator learning literature:</p>
+  <ul>
+    <li><strong>PINO</strong> (Li et al. 2021): adds physics residual to the FNO operator, similar spirit</li>
+    <li><strong>PI-DeepONet</strong> (Wang et al. 2021): adds physics residual to DeepONet, closes the gap but still uses the separable architecture</li>
+    <li><strong>Neural Processes</strong> (Garnelo et al. 2018): meta-learned conditional model; the Conditioned PINN is a degenerate Neural Process with a deterministic decoder</li>
+  </ul>
+
+  <!-- ─────────────────────────── SECTION 6 ─────────────────────────── -->
+  <h2><span class="sec-num">Section 6</span>Why Pure PINN Wins for Single-Instance Problems</h2>
+
+  <p>Both DeepONet and the Conditioned PINN are <em>multi-query</em> methods: they learn a surrogate from a training library of (parameter, solution) pairs. The training library is expensive to generate (it requires solving the forward ODE at thousands of parameter configurations) and must cover the parameter space densely enough for the test point to be well-interpolated.</p>
+
+  <p>All seven notebooks address <strong>single-instance inverse problems</strong>: given a handful of noisy observations from one biological or physical system, estimate its parameters. In this setting:</p>
+
+  <ol>
+    <li>We do not have a training library, we have <em>one</em> observed trajectory</li>
+    <li>Generating a training library from the forward ODE just to then do parameter estimation is circular: it assumes we can already solve the forward problem fast, making the original inverse problem trivially easy by comparison</li>
+    <li>Pure PINN bypasses this: the physics law is the training signal; no external data is required</li>
+  </ol>
+
+  <div class="decision-box">
+    <h4>Decision tree: choosing the right method</h4>
+    <div class="decision-row">
+      <span class="decision-arrow">→</span>
+      <span><strong>Single instance, ODE with scalar parameters, sparse observations</strong></span>
+    </div>
+    <div class="decision-row" style="padding-left:1.5rem">
+      <span class="decision-arrow">→</span>
+      <span class="decision-result">Pure PINN with warm-start</span>
+      <span style="color:var(--muted)"> (no external data, joint parameter+trajectory estimation)</span>
+    </div>
+    <div class="decision-row" style="margin-top:.8rem">
+      <span class="decision-arrow">→</span>
+      <span><strong>Multi-query, scalar ODE parameters, need fast inference at new θ</strong></span>
+    </div>
+    <div class="decision-row" style="padding-left:1.5rem">
+      <span class="decision-arrow">→</span>
+      <span class="decision-result">Conditioned PINN f(t, θ)</span>
+      <span style="color:var(--muted)"> (no separability assumption, 5.7× better than DeepONet)</span>
+    </div>
+    <div class="decision-row" style="margin-top:.8rem">
+      <span class="decision-arrow">→</span>
+      <span><strong>Multi-query, function input (IC profile, forcing function), PDE/ODE</strong></span>
+    </div>
+    <div class="decision-row" style="padding-left:1.5rem">
+      <span class="decision-arrow">→</span>
+      <span class="decision-result">DeepONet or PI-DeepONet</span>
+      <span style="color:var(--muted)"> (correct problem formulation; validated on Burgers, advection, diffusion)</span>
+    </div>
+    <div class="decision-row" style="margin-top:.8rem">
+      <span class="decision-arrow">→</span>
+      <span><strong>Stiff ODE or sharp temporal gradients, adaptive sampling needed</strong></span>
+    </div>
+    <div class="decision-row" style="padding-left:1.5rem">
+      <span class="decision-arrow">→</span>
+      <span class="decision-result">PINN + RAR</span>
+      <span style="color:var(--muted)"> (residual-adaptive refinement; marginal improvement on enzyme QSSA)</span>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────── SECTION 7 ─────────────────────────── -->
+  <h2><span class="sec-num">Section 7</span>Reconciliation with the DeepONet Literature</h2>
+
+  <p>Our conclusion that DeepONet underperforms on ODE inverse problems is <strong>not a criticism of DeepONet</strong>, it is a clarification of its domain of validity.</p>
+
+  <p>Lu et al. (2021) validated DeepONet on three operators:</p>
+  <ol>
+    <li><strong>Antiderivative:</strong> input = integrand function $v(x)$, output = $\int_0^x v(s)\,ds$</li>
+    <li><strong>Burgers equation:</strong> input = initial condition $u_0(x)$, output = $u(x,t)$</li>
+    <li><strong>Nonlinear ODE forcing:</strong> input = forcing function $g(t)$, output = $y(t)$</li>
+  </ol>
+
+  <p>In all three cases the branch input is a <em>function sampled at $m = 100$ sensor locations</em>. The branch network has rich information to encode, and the dot-product decomposition is geometrically motivated by the Karhunen–Loève expansion of the input function space.</p>
+
+  <p>For scalar-parameter ODE problems the branch input is 2–4 scalars. The KL-expansion argument does not apply. The network degenerates into a simple lookup table, and a plain MLP with the parameters concatenated to the input is the correct, and simpler, architecture.</p>
+
+  <!-- ─────────────────────────── CONCLUSIONS ─────────────────────────── -->
+  <h2><span class="sec-num">Conclusions</span>Summary</h2>
+
+  <ol>
+    <li><strong>Pure PINN with warm-start wins on 6 of 7 ODE inverse problems.</strong> It is the optimal method when only sparse observations from a single system are available.</li>
+    <li><strong>ODE solution operators are low-rank</strong> (effective rank ≤ 3–6). DeepONet's $p = 64$ capacity is architecturally sufficient, the failures are training failures.</li>
+    <li><strong>DeepONet fails due to three training pathologies:</strong> (a) output scale imbalance creates a zero-prediction attractor; (b) insufficient training budget for oscillatory targets; (c) evaluation at PINN-recovered rather than true parameters.</li>
+    <li><strong>The Conditioned PINN</strong> $f_\phi(t, \theta)$ is the correct multi-query architecture for scalar-parameter ODE operators, achieving 5.7× lower error than standard DeepONet on A→B→C kinetics.</li>
+    <li><strong>Standard DeepONet is well-suited to function-input operators</strong> (PDE initial conditions, forcing functions), not to scalar-parameter ODE problems. Applying it outside its validated domain requires careful normalisation, extended training, and output-scale handling.</li>
+    <li><strong>RAR provides marginal, problem-specific improvement:</strong> it beats Pure PINN by ~5% on stiff enzyme kinetics (QSSA) where sharp transient gradients benefit from adaptive collocation. For smooth ODE systems it offers no advantage over Pure PINN.</li>
+  </ol>
+
+  <!-- ─────────────────────────── REFERENCES ─────────────────────────── -->
+  <h2>References</h2>
+  <ol>
+    <li>Lu, L., Jin, P., Pang, G., Zhang, Z., &amp; Karniadakis, G. E. (2021). Learning nonlinear operators via DeepONet based on the universal approximation theorem of operators. <em>Nature Machine Intelligence</em>, 3, 218–229.</li>
+    <li>Raissi, M., Perdikaris, P., &amp; Karniadakis, G. E. (2019). Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. <em>Journal of Computational Physics</em>, 378, 686–707.</li>
+    <li>Wang, S., Wang, H., &amp; Perdikaris, P. (2021). Improved architectures and training algorithms for deep operator networks. <em>Journal of Scientific Computing</em>, 92(35).</li>
+    <li>Li, Z., et al. (2021). Physics-informed neural operator for learning partial differential equations. <em>ACM/JMS Journal of Data Science</em>, 1(3).</li>
+    <li>Ji, W., Qiu, W., Shi, Z., Pan, S., &amp; Deng, S. (2021). Stiff-PINN: Physics-informed neural network for stiff chemical kinetics. <em>Journal of Physical Chemistry A</em>, 125(36), 8098–8106.</li>
+    <li>Garnelo, M., et al. (2018). Conditional neural processes. <em>Proceedings of the 35th International Conference on Machine Learning (ICML)</em>.</li>
+    <li>Kharazmi, E., Zhang, Z., &amp; Karniadakis, G. E. (2021). hp-VPINNs: Variational physics-informed neural networks with domain decomposition. <em>Computer Methods in Applied Mechanics and Engineering</em>, 374, 113547.</li>
+    <li>Goldrick, S., et al. (2015). The development of an industrial-scale fed-batch fermentation simulation. <em>Journal of Biotechnology</em>, 193, 70–82.</li>
+  </ol>
+
+  <div style="margin-top:3rem; padding-top:2rem; border-top:1px solid var(--border);">
+    <p style="color:var(--muted); font-size:.85rem;">This analysis accompanies the seven-part ODE series.
+    The supporting notebooks and all experimental code are available in the
+    <a href="https://github.com/alishahmohammadi22">Physics-AI portfolio repository</a>.</p>
+  </div>
+
+</article>
+
+<footer>
+  <p>&copy; 2026 Ali Shahmohammadi · <a href="../index.html">alishahmohammadi22.github.io</a></p>
+</footer>
+
+</body>
+</html>

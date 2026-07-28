@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Adaptive Sampling and Training Strategies for PINNs — Ali Shahmohammadi</title>
+  <title>Adaptive Sampling and Training Strategies for PINNs | Ali Shahmohammadi</title>
   <meta name="description" content="Why uniform collocation fails for stiff problems, and how residual-based adaptive refinement, loss weighting, and causal training turn intractable PINN problems into solvable ones.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -129,20 +129,20 @@
       <div class="series-nav-list">
         <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">01</span><a href="pinn-introduction.html">Introduction to PINNs</a></div>
         <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">02</span><a href="pinn-odes-second-order.html">Second-Order ODEs</a></div>
-        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">03</span><a href="pinn-heat-equation.html">Heat Equation — 1D PDE</a></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">03</span><a href="pinn-heat-equation.html">Heat Equation, 1D PDE</a></div>
         <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">04</span><a href="pinn-burgers-reaction-pdes.html">Burgers &amp; Reaction PDEs</a></div>
         <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">05</span><a href="pinn-inverse-problems.html">Inverse Problems &amp; Parameter Estimation</a></div>
         <div class="series-nav-item current"><span style="font-family:'JetBrains Mono',monospace;font-size:.75rem">06</span>Adaptive Sampling &amp; Training Strategies &larr; you are here</div>
-        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">07</span><a href="pinn-deeponet.html">DeepONet — Learning Operators</a></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">07</span><a href="pinn-deeponet.html">DeepONet, Learning Operators</a></div>
         <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">08</span><a href="pinn-physics-informed-deeponet.html">Physics-Informed DeepONet</a></div>
       </div>
     </div>
 
     <!-- SECTION 1 -->
-    <div class="section-label">01 — The Failure Mode</div>
+    <div class="section-label">01, The Failure Mode</div>
     <h2 class="section-h">Why Uniform Sampling Breaks Down</h2>
 
-    <p class="body-text">Every introductory PINN implementation uses uniform collocation: sample $N_f$ points $(x_j, t_j)$ randomly from the domain according to a uniform distribution, and minimize the PDE residual at those points. For simple, smooth problems — a mild diffusion equation, a slowly-varying ODE — this works adequately. But for the class of problems where physics is most interesting, uniform sampling fails systematically.</p>
+    <p class="body-text">Every introductory PINN implementation uses uniform collocation: sample $N_f$ points $(x_j, t_j)$ randomly from the domain according to a uniform distribution, and minimize the PDE residual at those points. For simple, smooth problems, a mild diffusion equation, a slowly-varying ODE, this works adequately. But for the class of problems where physics is most interesting, uniform sampling fails systematically.</p>
 
     <p class="body-text">Consider the viscous Burgers equation:</p>
 
@@ -158,19 +158,19 @@
       <div class="callout-icon">&#9651;</div>
       <div class="callout-body">
         <strong>The stiff problem taxonomy.</strong>
-        Three failure modes drive the need for adaptive strategies: (1) <strong>Spatial stiffness</strong> — sharp gradients or near-shocks in a thin spatial layer. (2) <strong>Temporal stiffness</strong> — fast transients followed by slow dynamics; the network tries to satisfy the PDE everywhere in time simultaneously, which is not how causality works. (3) <strong>High-frequency content</strong> — the spectral bias of neural networks (Rahaman et al. 2019 [6]) causes standard networks to preferentially fit low-frequency components, systematically missing high-frequency physical modes.
+        Three failure modes drive the need for adaptive strategies: (1) <strong>Spatial stiffness</strong>, sharp gradients or near-shocks in a thin spatial layer. (2) <strong>Temporal stiffness</strong>, fast transients followed by slow dynamics; the network tries to satisfy the PDE everywhere in time simultaneously, which is not how causality works. (3) <strong>High-frequency content</strong>, the spectral bias of neural networks (Rahaman et al. 2019 [6]) causes standard networks to preferentially fit low-frequency components, systematically missing high-frequency physical modes.
       </div>
     </div>
 
     <!-- SECTION 2 -->
     <hr class="divider">
-    <div class="section-label">02 — Residual-Based Adaptive Refinement</div>
+    <div class="section-label">02, Residual-Based Adaptive Refinement</div>
     <h2 class="section-h">RAR: Sample Where the Error Is</h2>
 
     <p class="body-text">Residual-Based Adaptive Refinement (RAR), introduced by Lu et al. (2021) in the DeepXDE paper [1], addresses spatial stiffness by iteratively concentrating collocation points in regions where the current network violates the PDE most severely. The algorithm is elegantly simple:</p>
 
     <div class="algo-box">
-      <div class="algo-title">Algorithm — Residual-Based Adaptive Refinement (RAR)</div>
+      <div class="algo-title">Algorithm, Residual-Based Adaptive Refinement (RAR)</div>
       <div class="algo-step"><span class="algo-num">1.</span>Initialize with a uniform collocation set $\mathcal{F}_0 = \{(x_j, t_j)\}_{j=1}^{N_0}$.</div>
       <div class="algo-step"><span class="algo-num">2.</span>Train the network for $K$ epochs to convergence on $\mathcal{F}_0$.</div>
       <div class="algo-step"><span class="algo-num">3.</span>Evaluate the PDE residual $r(x,t) = \mathcal{N}[u](x,t)$ on a fine evaluation mesh $\mathcal{G}$ (e.g., $100 \times 100$ grid).</div>
@@ -226,15 +226,15 @@
         <!-- Axis labels for right -->
         <text x="485" y="208" text-anchor="middle" font-size="10" fill="#8C857E" font-style="italic">x (space)</text>
       </svg>
-      <div class="fig-caption">Fig. 1 — Uniform (left) vs. adaptive RAR (right) collocation for Burgers equation with $\nu = 0.01/\pi$. Uniform sampling wastes points on smooth regions. RAR concentrates new points in the high-residual shock region (red cluster), where the network most needs to improve.</div>
+      <div class="fig-caption">Fig. 1, Uniform (left) vs. adaptive RAR (right) collocation for Burgers equation with $\nu = 0.01/\pi$. Uniform sampling wastes points on smooth regions. RAR concentrates new points in the high-residual shock region (red cluster), where the network most needs to improve.</div>
     </div>
 
-    <p class="body-text">The key theoretical motivation for RAR is that the PDE residual is an error indicator: it measures how much the current network approximation fails to satisfy the governing equation. Under mild regularity assumptions, the PDE residual bounds the pointwise approximation error (this is the analog of a posteriori error estimators in finite element methods). Concentrating collocation points where the residual is large therefore steers training toward the regions of highest error — a form of active learning for scientific ML.</p>
+    <p class="body-text">The key theoretical motivation for RAR is that the PDE residual is an error indicator: it measures how much the current network approximation fails to satisfy the governing equation. Under mild regularity assumptions, the PDE residual bounds the pointwise approximation error (this is the analog of a posteriori error estimators in finite element methods). Concentrating collocation points where the residual is large therefore steers training toward the regions of highest error, a form of active learning for scientific ML.</p>
 
     <div class="code-block">
       <div class="code-header">
         <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
-        <span class="code-lang">Python — RAR refinement loop</span>
+        <span class="code-lang">Python, RAR refinement loop</span>
       </div>
       <pre class="code-body"><span class="kw">def</span> <span class="fn">rar_refinement</span>(model, x_f, t_f, n_add=<span class="nm">200</span>, n_eval=<span class="nm">10000</span>):
     <span class="cm">"""Add n_add points where PDE residual is largest."""</span>
@@ -267,10 +267,10 @@
 
     <!-- SECTION 3 -->
     <hr class="divider">
-    <div class="section-label">03 — Self-Adaptive PINNs</div>
+    <div class="section-label">03, Self-Adaptive PINNs</div>
     <h2 class="section-h">Learnable Point Weights: the Min-Max Formulation</h2>
 
-    <p class="body-text">Self-Adaptive PINNs (SA-PINNs), proposed by McClenny and Braga-Neto (2023) [3], take a different approach. Instead of adding or removing points, they assign a learnable weight $\lambda_i$ to each collocation point and train these weights simultaneously with the network parameters — but in the opposite direction.</p>
+    <p class="body-text">Self-Adaptive PINNs (SA-PINNs), proposed by McClenny and Braga-Neto (2023) [3], take a different approach. Instead of adding or removing points, they assign a learnable weight $\lambda_i$ to each collocation point and train these weights simultaneously with the network parameters, but in the opposite direction.</p>
 
     <p class="body-text">The standard PINN loss minimization becomes a min-max problem:</p>
 
@@ -278,7 +278,7 @@
       $$\min_\theta \max_\lambda \; \mathcal{L}_{SA}(\theta, \lambda) = \sum_{i} \lambda_i \cdot r_i(\theta)^2$$
     </div>
 
-    <p class="body-text">where $r_i(\theta)$ is the PDE residual at collocation point $i$, and $\lambda_i \geq 0$ are the adaptive weights. The network parameters $\theta$ minimize the loss (as usual). The weights $\lambda_i$ maximize it — they are trained to assign higher weight to points where the residual is currently larger. This creates a natural feedback loop: points the network is getting wrong automatically receive more training emphasis.</p>
+    <p class="body-text">where $r_i(\theta)$ is the PDE residual at collocation point $i$, and $\lambda_i \geq 0$ are the adaptive weights. The network parameters $\theta$ minimize the loss (as usual). The weights $\lambda_i$ maximize it, they are trained to assign higher weight to points where the residual is currently larger. This creates a natural feedback loop: points the network is getting wrong automatically receive more training emphasis.</p>
 
     <p class="body-text">Concretely, the weight update rule uses gradient ascent:</p>
 
@@ -292,18 +292,18 @@
       <div class="callout-icon">&#9670;</div>
       <div class="callout-body">
         <strong>SA-PINNs vs. RAR: when to use each.</strong>
-        RAR adds new points and retrains — it is batch, discrete, and appropriate when you want to permanently commit resources to high-error regions. SA-PINNs dynamically reweight existing points — they are online, continuous, and appropriate when the high-residual regions shift during training (e.g., in time-dependent problems where the shock moves). In practice, the two methods can be combined: use SA-PINNs for dynamic reweighting within an RAR round, and use RAR to periodically add points in persistently difficult regions.
+        RAR adds new points and retrains, it is batch, discrete, and appropriate when you want to permanently commit resources to high-error regions. SA-PINNs dynamically reweight existing points, they are online, continuous, and appropriate when the high-residual regions shift during training (e.g., in time-dependent problems where the shock moves). In practice, the two methods can be combined: use SA-PINNs for dynamic reweighting within an RAR round, and use RAR to periodically add points in persistently difficult regions.
       </div>
     </div>
 
     <!-- SECTION 4 -->
     <hr class="divider">
-    <div class="section-label">04 — Gradient Pathologies</div>
+    <div class="section-label">04, Gradient Pathologies</div>
     <h2 class="section-h">NTK Analysis and Loss Weighting</h2>
 
     <p class="body-text">Wang, Teng, and Perdikaris (2021) [2] provided the first principled explanation for a well-known empirical observation: PINNs trained with equal weights on the physics loss and boundary/initial condition losses often fail to satisfy the boundary conditions accurately. The explanation comes from Neural Tangent Kernel (NTK) theory.</p>
 
-    <p class="body-text">Under the NTK regime (infinite-width limit), the training dynamics of the network can be described by the eigendecomposition of the NTK matrix $\mathbf{K}$. The convergence rate for each loss component is governed by the eigenvalue spectrum of the corresponding block of $\mathbf{K}$. If the NTK eigenvalues for the physics loss ($\kappa_f$) and boundary loss ($\kappa_b$) satisfy $\kappa_f \ll \kappa_b$, then the network fits the boundary conditions rapidly while the physics loss barely moves — an imbalance that forces the solution to satisfy the boundaries correctly but violate the PDE interior.</p>
+    <p class="body-text">Under the NTK regime (infinite-width limit), the training dynamics of the network can be described by the eigendecomposition of the NTK matrix $\mathbf{K}$. The convergence rate for each loss component is governed by the eigenvalue spectrum of the corresponding block of $\mathbf{K}$. If the NTK eigenvalues for the physics loss ($\kappa_f$) and boundary loss ($\kappa_b$) satisfy $\kappa_f \ll \kappa_b$, then the network fits the boundary conditions rapidly while the physics loss barely moves, an imbalance that forces the solution to satisfy the boundaries correctly but violate the PDE interior.</p>
 
     <p class="body-text">The practical remedy is to weight the losses inversely proportional to their NTK spectral norms at each training step:</p>
 
@@ -323,7 +323,7 @@
     <div class="code-block">
       <div class="code-header">
         <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
-        <span class="code-lang">Python — adaptive loss weighting</span>
+        <span class="code-lang">Python, adaptive loss weighting</span>
       </div>
       <pre class="code-body"><span class="kw">class</span> <span class="tp">AdaptiveLossWeighter</span>:
     <span class="kw">def</span> <span class="fn">__init__</span>(<span class="nm">self</span>, alpha=<span class="nm">0.9</span>):
@@ -352,10 +352,10 @@
 
     <!-- SECTION 5 -->
     <hr class="divider">
-    <div class="section-label">05 — Causal Training</div>
+    <div class="section-label">05, Causal Training</div>
     <h2 class="section-h">Respecting the Arrow of Time</h2>
 
-    <p class="body-text">Wang, Sankaran, and Perdikaris (2022) [4] identified a fundamental failure mode specific to time-dependent PINNs: the network simultaneously receives gradient signals from all time points, including $t = T$, before it has correctly learned the solution at $t = 0$. This violates the causal structure of time-dependent PDEs — you cannot correctly satisfy the equation at $t = 0.8$ if you have not correctly satisfied it at $t = 0.2$ first, because the initial condition propagates forward through the equation.</p>
+    <p class="body-text">Wang, Sankaran, and Perdikaris (2022) [4] identified a fundamental failure mode specific to time-dependent PINNs: the network simultaneously receives gradient signals from all time points, including $t = T$, before it has correctly learned the solution at $t = 0$. This violates the causal structure of time-dependent PDEs, you cannot correctly satisfy the equation at $t = 0.8$ if you have not correctly satisfied it at $t = 0.2$ first, because the initial condition propagates forward through the equation.</p>
 
     <p class="body-text">The causal training algorithm addresses this by introducing time-dependent weights that exponentially decay the contribution of late-time residuals:</p>
 
@@ -363,7 +363,7 @@
       $$w_j = \exp\!\left(-\epsilon \sum_{k:\, t_k &lt; t_j} r_k^2(\theta)\right)$$
     </div>
 
-    <p class="body-text">where $\epsilon > 0$ is a causality parameter. If the residual at earlier times $t_k < t_j$ is large, then $w_j \approx 0$, and the contribution of point $j$ to the gradient is suppressed — the network is told "don't worry about $t_j$ yet, you haven't got $t_k$ right." As earlier time points are correctly learned and their residuals approach zero, $w_j \to 1$, and the gradient from $t_j$ begins to contribute fully.</p>
+    <p class="body-text">where $\epsilon > 0$ is a causality parameter. If the residual at earlier times $t_k < t_j$ is large, then $w_j \approx 0$, and the contribution of point $j$ to the gradient is suppressed, the network is told "don't worry about $t_j$ yet, you haven't got $t_k$ right." As earlier time points are correctly learned and their residuals approach zero, $w_j \to 1$, and the gradient from $t_j$ begins to contribute fully.</p>
 
     <div class="fig-wrap">
       <svg viewBox="0 0 620 180" width="100%" style="max-width:620px">
@@ -387,7 +387,7 @@
         <!-- Exponential decay curve -->
         <!-- w(t) = exp(-epsilon * cumulative_loss(t)), approximated visually as a decay from 1 to ~0.05 -->
         <!-- SVG path: x from 40 to 560, y from 116 (w=1) decays to ~147 (w~0.05) -->
-        <!-- w=1 -> y = 116 + (1-1)*30 = 116, w=0 -> y=146. Exponential: y = 116 + (1 - exp(-5*t)) * 30 for t in [0,1] -->
+        <!-- w=1 -> y = 116 + (1-1)*30 = 116, w=0 -> y=146. Exponential: y = 116 + (1, exp(-5*t)) * 30 for t in [0,1] -->
         <path d="M40,116 C100,116 150,118 200,123 C250,128 300,136 380,142 C440,146 500,147 560,147"
               fill="none" stroke="#B8845A" stroke-width="2.5" stroke-linejoin="round"/>
         <!-- Labels -->
@@ -399,11 +399,11 @@
         <text x="450" y="138" font-size="9" fill="#8C857E" font-style="italic">suppressed until</text>
         <text x="450" y="149" font-size="9" fill="#8C857E" font-style="italic">earlier times solved</text>
       </svg>
-      <div class="fig-caption">Fig. 2 — Causal training weights. Points at $t = 0$ receive full weight from the start; late-time points are suppressed until earlier times are correctly learned. The weight $w(t)$ follows an exponential decay driven by the cumulative residual at preceding time steps.</div>
+      <div class="fig-caption">Fig. 2, Causal training weights. Points at $t = 0$ receive full weight from the start; late-time points are suppressed until earlier times are correctly learned. The weight $w(t)$ follows an exponential decay driven by the cumulative residual at preceding time steps.</div>
     </div>
 
     <div class="algo-box">
-      <div class="algo-title">Algorithm — Causal Training</div>
+      <div class="algo-title">Algorithm, Causal Training</div>
       <div class="algo-step"><span class="algo-num">1.</span>Sort collocation points by time: $t_1 \leq t_2 \leq \cdots \leq t_{N_f}$.</div>
       <div class="algo-step"><span class="algo-num">2.</span>Compute PDE residuals $r_j = r(x_j, t_j; \theta)$ for all $j$.</div>
       <div class="algo-step"><span class="algo-num">3.</span>Compute cumulative residual: $R_j = \sum_{k=1}^{j-1} r_k^2$.</div>
@@ -414,17 +414,17 @@
 
     <!-- SECTION 6 -->
     <hr class="divider">
-    <div class="section-label">06 — Curriculum Learning</div>
+    <div class="section-label">06, Curriculum Learning</div>
     <h2 class="section-h">Expanding Time Windows</h2>
 
-    <p class="body-text">Curriculum learning for time-dependent PINNs takes an even more explicit approach to causality: train the network only on the interval $[0, T_1]$ to convergence, then extend to $[0, T_2]$ with $T_2 > T_1$, and continue. The trained solution on the first window serves as a high-quality initial condition (in the sense of network weights) for the next window — a form of warm-starting that exploits the temporal structure of the problem.</p>
+    <p class="body-text">Curriculum learning for time-dependent PINNs takes an even more explicit approach to causality: train the network only on the interval $[0, T_1]$ to convergence, then extend to $[0, T_2]$ with $T_2 > T_1$, and continue. The trained solution on the first window serves as a high-quality initial condition (in the sense of network weights) for the next window, a form of warm-starting that exploits the temporal structure of the problem.</p>
 
     <p class="body-text">For the damped harmonic oscillator $\ddot{x} + 2\gamma\dot{x} + \omega_0^2 x = 0$ with $\gamma = 0.5$, $\omega_0 = 5$ (approximately 8 oscillation periods in $[0, 10]$), a PINN trained uniformly on $[0, 10]$ from scratch typically fails after period 3–4 due to accumulated phase error. Curriculum learning with windows $T_k = 2k$ for $k = 1, \ldots, 5$ recovers the correct solution through all 8 periods:</p>
 
     <div class="code-block">
       <div class="code-header">
         <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
-        <span class="code-lang">Python — curriculum learning for oscillator</span>
+        <span class="code-lang">Python, curriculum learning for oscillator</span>
       </div>
       <pre class="code-body">T_windows = [<span class="nm">2.0</span>, <span class="nm">4.0</span>, <span class="nm">6.0</span>, <span class="nm">8.0</span>, <span class="nm">10.0</span>]
 model = <span class="tp">OscillatorPINN</span>()
@@ -446,11 +446,11 @@ optimizer = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>
     <span class="fn">print</span>(<span class="st">f"Window [0, {T_end:.1f}] done. Max error: {eval_error(model, T_end):.4f}"</span>)</pre>
     </div>
 
-    <p class="body-text">The key implementation detail is that the initial condition loss is always evaluated at $t = 0$, regardless of the current window — this anchors the solution to the true starting point as the window expands. Without this anchor, solutions from earlier windows can drift from the true initial condition when the window is extended.</p>
+    <p class="body-text">The key implementation detail is that the initial condition loss is always evaluated at $t = 0$, regardless of the current window, this anchors the solution to the true starting point as the window expands. Without this anchor, solutions from earlier windows can drift from the true initial condition when the window is extended.</p>
 
     <!-- SECTION 7 -->
     <hr class="divider">
-    <div class="section-label">07 — Fourier Feature Embeddings</div>
+    <div class="section-label">07, Fourier Feature Embeddings</div>
     <h2 class="section-h">Overcoming Spectral Bias</h2>
 
     <p class="body-text">Rahaman et al. (2019) [6] proved that neural networks with standard activation functions exhibit a "spectral bias" or "frequency principle": during gradient descent, the network learns low-frequency components of the target function first and high-frequency components last (or not at all). For PINNs applied to wave equations, high-frequency oscillations, or fine-scale spatial structure, this means the network systematically fails to represent the physical solution regardless of depth, width, or training duration.</p>
@@ -472,7 +472,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>
     <div class="code-block">
       <div class="code-header">
         <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
-        <span class="code-lang">Python — Fourier feature embedding layer</span>
+        <span class="code-lang">Python, Fourier feature embedding layer</span>
       </div>
       <pre class="code-body"><span class="kw">class</span> <span class="tp">FourierEmbedding</span>(nn.Module):
     <span class="kw">def</span> <span class="fn">__init__</span>(<span class="nm">self</span>, in_dim=<span class="nm">2</span>, n_features=<span class="nm">128</span>, sigma=<span class="nm">10.0</span>):
@@ -505,7 +505,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>
 
     <!-- SECTION 8 -->
     <hr class="divider">
-    <div class="section-label">08 — Strategy Comparison</div>
+    <div class="section-label">08, Strategy Comparison</div>
     <h2 class="section-h">When to Use What</h2>
 
     <table class="data-table">
@@ -529,42 +529,42 @@ optimizer = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>
         <tr>
           <td><strong>RAR</strong></td>
           <td>Sharp spatial gradients, near-shocks</td>
-          <td>Low — 20 lines</td>
+          <td>Low, 20 lines</td>
           <td>$\sim$5–15% per RAR round</td>
           <td>Burgers, Euler, Stefan problems</td>
         </tr>
         <tr>
           <td><strong>Self-adaptive (SA)</strong></td>
           <td>Moving high-residual regions, unknown stiffness structure</td>
-          <td>Medium — extra parameter group</td>
+          <td>Medium, extra parameter group</td>
           <td>$\sim$10–20% (extra backprop)</td>
           <td>When residual structure evolves during training</td>
         </tr>
         <tr>
           <td><strong>NTK loss weighting</strong></td>
           <td>Multi-component losses with imbalanced magnitudes</td>
-          <td>Medium — gradient analysis</td>
+          <td>Medium, gradient analysis</td>
           <td>$\sim$20–30% (extra backward pass)</td>
           <td>Standard practice for any PINN with IC+BC+physics</td>
         </tr>
         <tr>
           <td><strong>Causal training</strong></td>
           <td>Stiff time-dependent PDEs, long time horizons</td>
-          <td>Low — weight computation</td>
+          <td>Low, weight computation</td>
           <td>$\sim$5% overhead</td>
           <td>Navier–Stokes, wave propagation, reaction-diffusion</td>
         </tr>
         <tr>
           <td><strong>Curriculum learning</strong></td>
           <td>Very long time horizons, persistent oscillations</td>
-          <td>Medium — multi-phase training loop</td>
+          <td>Medium, multi-phase training loop</td>
           <td>$\sim$1.2–2x total compute</td>
           <td>20+ oscillation periods, multi-scale dynamics</td>
         </tr>
         <tr>
           <td><strong>Fourier features</strong></td>
           <td>High-frequency oscillations, turbulence, wave equations</td>
-          <td>Low — drop-in embedding layer</td>
+          <td>Low, drop-in embedding layer</td>
           <td>Minimal ($\sigma$ must be tuned)</td>
           <td>Whenever max frequency of solution is $&gt;\mathcal{O}(10)$</td>
         </tr>
@@ -573,7 +573,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>
 
     <!-- SECTION 9 -->
     <hr class="divider">
-    <div class="section-label">09 — Decision Guide</div>
+    <div class="section-label">09, Decision Guide</div>
     <h2 class="section-h">A Practical Flowchart for Strategy Selection</h2>
 
     <div class="fig-wrap">
@@ -666,11 +666,11 @@ optimizer = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>
         <text x="382" y="399" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,.6)">+ NTK loss weighting</text>
         <text x="415" y="380" font-size="9" fill="#8C857E">NO</text>
       </svg>
-      <div class="fig-caption">Fig. 3 — Decision flowchart for selecting a PINN training strategy. Start by characterizing the dominant failure mode of the problem, then select the corresponding strategy. Multiple strategies can be combined (e.g., causal training + Fourier features for a high-frequency wave equation over a long time horizon).</div>
+      <div class="fig-caption">Fig. 3, Decision flowchart for selecting a PINN training strategy. Start by characterizing the dominant failure mode of the problem, then select the corresponding strategy. Multiple strategies can be combined (e.g., causal training + Fourier features for a high-frequency wave equation over a long time horizon).</div>
     </div>
 
     <h3 class="sub-h">Combining strategies</h3>
-    <p class="body-text">The strategies described here are not mutually exclusive. A common high-performance configuration for challenging PDEs is: <strong>Fourier features</strong> (to overcome spectral bias) + <strong>causal weighting</strong> (to enforce temporal causality) + <strong>NTK loss balancing</strong> (to prevent boundary condition dominance). This combination, sometimes called the "enhanced PINN" configuration in the literature, typically achieves 1–2 orders of magnitude improvement over baseline uniform PINNs on benchmark stiff problems, at a total overhead of $\sim$30–40% additional compute per epoch — a favorable trade given the convergence improvement.</p>
+    <p class="body-text">The strategies described here are not mutually exclusive. A common high-performance configuration for challenging PDEs is: <strong>Fourier features</strong> (to overcome spectral bias) + <strong>causal weighting</strong> (to enforce temporal causality) + <strong>NTK loss balancing</strong> (to prevent boundary condition dominance). This combination, sometimes called the "enhanced PINN" configuration in the literature, typically achieves 1–2 orders of magnitude improvement over baseline uniform PINNs on benchmark stiff problems, at a total overhead of $\sim$30–40% additional compute per epoch, a favorable trade given the convergence improvement.</p>
 
     <div class="callout success">
       <div class="callout-icon">&#10003;</div>
@@ -697,7 +697,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>
     <hr class="divider">
     <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-top:1rem">
       <a href="pinn-inverse-problems.html" style="font-size:.875rem;color:var(--ink-3)">&larr; Previous: Inverse Problems &amp; Parameter Estimation</a>
-      <a href="pinn-deeponet.html" style="font-size:.875rem;color:var(--navy);font-weight:600">Next: DeepONet — Learning Operators &rarr;</a>
+      <a href="pinn-deeponet.html" style="font-size:.875rem;color:var(--navy);font-weight:600">Next: DeepONet, Learning Operators &rarr;</a>
     </div>
 
   </div><!-- /article-body -->

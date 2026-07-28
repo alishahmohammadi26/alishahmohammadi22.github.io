@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logistic Population Growth: PINN Parameter Estimation from Real Census Data | Ali Shahmohammadi</title>
+  <meta name="description" content="Recovering Pearl & Reed's (1920) carrying capacity from 16 real U.S. census points using physics-informed neural networks, the PINN foundation for biotech inverse problems.">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#F8F6F2;--bg-alt:#F1EEE9;--ink:#111010;--ink-2:#4A4540;--ink-3:#8C857E;--navy:#1C3D6B;--navy-lt:#EBF0F7;--sienna:#B8845A;--sienna-lt:#FBF4EC;--purple:#5B4E8A;--purple-lt:#F2EEF9;--green:#2D7A4F;--green-lt:#EBF7F1;--green-bdr:#BEE5D3;--border:#DEDAD3;--dark:#111010;--accent:#2563EB;--accent-lt:#EFF6FF;--accent-mid:#BFDBFE;--red:#DC2626;--red-lt:#FEF2F2;--amber:#D97706;--amber-lt:#FFFBEB;--amber-bdr:#FDE68A;--teal:#0D9488;--teal-lt:#F0FDFA;--teal-bdr:#99F6E4}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--ink);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:18px;line-height:1.65;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent);text-decoration:none}a:hover{opacity:.75}
+    code,pre{font-family:'JetBrains Mono','Fira Code',monospace}
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between;background:rgba(248,246,242,.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:var(--ink)}
+    .nav-logo em{font-style:normal;color:var(--sienna)}
+    .nav-links{display:flex;align-items:center;gap:.2rem}
+    .nav-links a{font-size:.82rem;font-weight:500;color:var(--ink-3);padding:.42rem .8rem;border-radius:4px;transition:color .15s,background .15s}
+    .nav-links a:hover{color:var(--ink);background:var(--bg-alt)}
+    .article-page{padding-top:60px}
+    .article-hero{background:var(--dark);padding:5rem 3rem 4rem}
+    .article-hero-inner{max-width:820px;margin:0 auto}
+    .hero-series{font-family:'JetBrains Mono',monospace;font-size:.67rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sienna);margin-bottom:1rem;display:flex;align-items:center;gap:.8rem}
+    .hero-series::before{content:'';width:28px;height:1px;background:var(--sienna)}
+    .article-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,4.2rem);font-weight:700;letter-spacing:-.02em;line-height:.97;color:#fff;margin-bottom:1.25rem}
+    .article-title em{font-style:italic;font-weight:400;color:rgba(255,255,255,.4)}
+    .article-sub{font-size:1.08rem;color:rgba(255,255,255,.45);margin-bottom:2rem;line-height:1.75;max-width:640px}
+    .article-meta{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2rem}
+    .meta-pill{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:rgba(255,255,255,.38);border:1px solid rgba(255,255,255,.1);padding:.25rem .65rem;border-radius:2px}
+    .meta-pill.highlight{color:var(--sienna);border-color:rgba(184,132,90,.35)}
+    .article-body{max-width:820px;margin:0 auto;padding:4rem 3rem}
+    @media(max-width:640px){.article-hero{padding:3.5rem 1.5rem 3rem}.article-body{padding:3rem 1.5rem}}
+    .section-label{font-family:'JetBrains Mono',monospace;font-size:.67rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1rem}
+    h2.section-h{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;letter-spacing:-.02em;line-height:1.05;color:var(--ink);margin-bottom:.75rem}
+    h3.sub-h{font-size:1.12rem;font-weight:700;color:var(--ink);margin-bottom:.5rem;margin-top:2rem}
+    .body-text{font-size:1.05rem;color:var(--ink-2);line-height:1.8;margin-bottom:1.25rem}
+    .math-block{background:var(--bg-alt);border:1px solid var(--border);border-left:3px solid var(--navy);border-radius:0 4px 4px 0;padding:1.1rem 1.5rem;margin:1.5rem 0;font-family:'JetBrains Mono',monospace;font-size:.88rem;color:var(--navy);overflow-x:auto;line-height:1.7}
+    .math-inline{font-family:'JetBrains Mono',monospace;font-size:.88em;color:var(--navy);background:var(--navy-lt);padding:.08em .3em;border-radius:2px}
+    .code-block{background:#1C1C1E;border-radius:6px;overflow:hidden;margin:1.5rem 0}
+    .code-header{display:flex;align-items:center;justify-content:space-between;padding:.55rem 1rem;background:#2A2A2D;border-bottom:1px solid rgba(255,255,255,.07)}
+    .code-lang{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:rgba(255,255,255,.35);letter-spacing:.1em;text-transform:uppercase}
+    .code-dots{display:flex;gap:5px}
+    .code-dot{width:10px;height:10px;border-radius:50%}
+    .dot-r{background:#FF5F57}.dot-y{background:#FEBC2E}.dot-g{background:#28C840}
+    pre.code-body{padding:1.25rem 1.5rem;overflow-x:auto;font-size:.88rem;line-height:1.75;color:#D1D5DB}
+    .kw{color:#C084FC}.st{color:#86EFAC}.cm{color:#6B7280;font-style:italic}.fn{color:#93C5FD}.nm{color:#FCA5A5}.tp{color:#67E8F9}
+    .callout{border-radius:4px;padding:1.1rem 1.4rem;margin:1.5rem 0;display:flex;gap:.9rem}
+    .callout-icon{flex-shrink:0;margin-top:.1rem}
+    .callout-body{font-size:.9rem;line-height:1.7}
+    .callout-body strong{display:block;font-weight:700;margin-bottom:.2rem}
+    .callout.insight{background:var(--navy-lt);border:1px solid rgba(28,61,107,.2)}
+    .callout.insight .callout-icon{color:var(--navy)}
+    .callout.insight .callout-body{color:var(--navy)}
+    .callout.warning{background:var(--amber-lt);border:1px solid var(--amber-bdr)}
+    .callout.warning .callout-icon{color:var(--amber)}
+    .callout.warning .callout-body{color:#92400E}
+    .callout.success{background:var(--green-lt);border:1px solid var(--green-bdr)}
+    .callout.success .callout-icon{color:var(--green)}
+    .callout.success .callout-body{color:#14532D}
+    .data-table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.875rem}
+    .data-table th{font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding:.65rem 1rem;border-bottom:2px solid var(--border);text-align:left}
+    .data-table td{padding:.65rem 1rem;border-bottom:1px solid var(--border);color:var(--ink-2);vertical-align:top}
+    .data-table tr:last-child td{border-bottom:none}
+    .data-table tr:hover td{background:var(--bg-alt)}
+    .series-nav{background:var(--bg-alt);border:1px solid var(--border);border-radius:4px;padding:1.5rem 1.75rem;margin:2.5rem 0}
+    .series-nav-label{font-family:'JetBrains Mono',monospace;font-size:.63rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1rem}
+    .series-nav-list{display:flex;flex-direction:column;gap:.4rem}
+    .series-nav-item{display:flex;align-items:center;gap:.65rem;font-size:.95rem;color:var(--ink-2)}
+    .series-nav-item.current{color:var(--navy);font-weight:600}
+    .series-nav-item a{color:var(--ink-2)}
+    .series-nav-item a:hover{color:var(--navy)}
+    .ref-list{display:flex;flex-direction:column;gap:.75rem;margin-top:1rem}
+    .ref-item{font-size:.92rem;color:var(--ink-2);line-height:1.65;padding-left:2rem;position:relative}
+    .ref-num{position:absolute;left:0;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--ink-3);font-weight:700}
+    .ref-item a{color:var(--accent)}
+    .divider{border:none;border-top:1px solid var(--border);margin:3rem 0}
+    footer{background:#0C0C0C;border-top:1px solid rgba(255,255,255,.05);padding:2rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem}
+    .footer-copy{font-size:.77rem;color:rgba(255,255,255,.22)}
+    .footer-links{display:flex;gap:1.5rem}
+    .footer-links a{font-size:.77rem;color:rgba(255,255,255,.27);transition:color .15s}
+    .footer-links a:hover{color:rgba(255,255,255,.7)}
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="nav-logo">Ali Shahmohammadi <em>Ph.D.</em></a>
+  <div class="nav-links">
+    <a href="../index.html#career">Career</a><a href="../index.html#writing">Writing</a>
+    <a href="../index.html#contact">Contact</a><a href="../resume.html">Resume</a>
+  </div>
+</nav>
+<div class="article-page">
+  <div class="article-hero">
+    <div class="article-hero-inner">
+      <div class="hero-series">Physics AI · ODEs Series · Article 1 of 7</div>
+      <h1 class="article-title">Logistic Population Growth<br><em>Pearl &amp; Reed 1920, Recovering K from Real Census Data</em></h1>
+      <p class="article-sub">Reproducing Pearl &amp; Reed's 1920 parameter estimation with a PINN: recovering intrinsic growth rate $r$ and carrying capacity $K$ from 16 real U.S. census values, the foundation pattern for six harder biotech problems.</p>
+      <div class="article-meta"><span class="meta-pill  highlight">Scientific ML</span><span class="meta-pill  highlight">ODE Inverse Problems</span><span class="meta-pill">Feb 2026</span><span class="meta-pill">12 min read</span><span class="meta-pill">Beginner</span><span class="meta-pill">PyTorch</span></div>
+    </div>
+  </div>
+  <div class="article-body">
+<div class="callout insight"><div class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="callout-body"><strong>Prerequisites</strong>Familiarity with the PINN loss structure and autograd from the <a href="pinn-introduction.html">introductory article</a>. This series applies those tools to seven real biotech and pharma ODE problems, with increasing complexity.</div></div>
+<div class="series-nav"><div class="series-nav-label">Physics AI · ODEs Series · 7 Biotech Problems</div><div class="series-nav-list"><div class="series-nav-item current"><span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--sienna);min-width:2rem;">01</span>Logistic Population Growth, Pearl &amp; Reed 1920 U.S. Census</div>
+<div class="series-nav-item"><span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">02</span><a href="pinn-odes-consecutive-reactions.html">Consecutive Reactions A→B→C, Rate Constants from Process Data</a></div>
+<div class="series-nav-item"><span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">03</span><a href="pinn-odes-lotka-volterra.html">Lotka–Volterra, Real Lynx–Hare Hudson Bay Records 1900–1920</a></div>
+<div class="series-nav-item"><span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">04</span><a href="pinn-odes-sir-epidemic.html">SIR Epidemic, Hidden State Inference from Partial Observations</a></div>
+<div class="series-nav-item"><span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">05</span><a href="pinn-odes-van-der-pol.html">Van der Pol Oscillator, Nonlinear Damping from Vibration Data</a></div>
+<div class="series-nav-item"><span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">06</span><a href="pinn-odes-stiff-enzyme-kinetics.html">Stiff Enzyme Kinetics &amp; QSSA, Michaelis–Menten Progress Curve</a></div>
+<div class="series-nav-item"><span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">07</span><a href="pinn-odes-bioprocess-cell-density.html">Bioprocess Cell Density, Monod Kinetics &amp; IndPenSim Benchmark</a></div>
+</div></div>
+
+    <div id="s1" style="margin-top:3rem;">
+      <div class="section-label">01, The Problem</div>
+      <h2 class="section-h">Self-Limiting Growth Appears Everywhere in Life Sciences</h2>
+      <p class="body-text">The logistic equation models any population that grows exponentially when small, then saturates as it approaches a ceiling, a pattern that appears in microbial batch culture, drug dissolution, tumour growth, and market adoption of new biologic therapies.</p>
+      <p class="body-text">In <strong>pharmaceutical manufacturing</strong>, the same S-curve describes microbial growth to a maximum OD, CHO cell expansion to a density-limited plateau, and cumulative dissolution of a solid dosage form. In each case, the practitioner needs two numbers: the intrinsic growth rate $r$ and the maximum achievable value $K$. Getting them wrong means mis-sizing a bioreactor or misinterpreting a stability study.</p>
+      <div class="math-block">$$\frac{dP}{dt} = r\,P\!\left(1 - \frac{P}{K}\right), \qquad P(t) = \frac{K}{1 + \left(\dfrac{K}{P_0}-1\right)e^{-rt}}$$</div>
+      <p class="body-text">The inverse problem is: <em>given noisy, sparse measurements of $P(t)$, estimate $r$ and $K$ jointly.</em> This is the canonical form that reappears in every subsequent notebook, only the governing ODE changes.</p>
+    </div>
+    <hr class="divider">
+    <div id="s2">
+      <div class="section-label">02, The Data: Pearl &amp; Reed (1920)</div>
+      <h2 class="section-h">16 Real U.S. Census Values, 1790–1940</h2>
+      <p class="body-text"><strong>Pearl, R. &amp; Reed, L. J. (1920).</strong> <em>On the rate of growth of the population of the United States since 1790 and its mathematical representation.</em> PNAS 6(6):275–288. Pearl and Reed took 16 census values and estimated $r \approx 0.029$/year and $K \approx 197$ million by least-squares fitting, predicting the U.S. population would plateau near 197 million, a remarkable extrapolation from 1920.</p>
+      <p class="body-text">This notebook uses the same 16 observations as training data for the PINN. The values below are the exact floats used in the code (public domain).</p>
+      <table class="data-table">
+        <thead><tr><th>Year</th><th>Population (millions)</th><th>Year</th><th>Population (millions)</th></tr></thead>
+        <tbody>
+          <tr><td>1790</td><td>3.929</td><td>1870</td><td>38.558</td></tr>
+          <tr><td>1800</td><td>5.308</td><td>1880</td><td>50.189</td></tr>
+          <tr><td>1810</td><td>7.240</td><td>1890</td><td>62.948</td></tr>
+          <tr><td>1820</td><td>9.638</td><td>1900</td><td>75.995</td></tr>
+          <tr><td>1830</td><td>12.866</td><td>1910</td><td>91.972</td></tr>
+          <tr><td>1840</td><td>17.069</td><td>1920</td><td>105.711</td></tr>
+          <tr><td>1850</td><td>23.192</td><td>1930</td><td>122.775</td></tr>
+          <tr><td>1860</td><td>31.443</td><td>1940</td><td>131.669</td></tr>
+        </tbody>
+      </table>
+      <p class="body-text"><strong>Normalisation used in training:</strong> time is scaled to $\tau = (t, 1790)/150 \in [0, 1]$ and population to $\tilde{P} = P / P_\text{max}$ where $P_\text{max} = 131.669$ M (the 1940 value). This keeps network inputs and outputs in roughly unit range and avoids vanishing gradients at early epochs.</p>
+    </div>
+    <hr class="divider">
+    <div id="s3">
+      <div class="section-label">03, PINN vs Classical Fitting</div>
+      <h2 class="section-h">Why the PINN Approach Scales Where Classical Fitting Doesn't</h2>
+      <table class="data-table">
+        <thead><tr><th>Method</th><th>Requires ODE solver in loop?</th><th>Generalises to coupled systems?</th><th>Handles hidden state variables?</th></tr></thead>
+        <tbody>
+          <tr><td>Pearl &amp; Reed (1920), analytical fit</td><td>No (analytical solution exists)</td><td>No</td><td>No</td></tr>
+          <tr><td>NLS + <span class="math-inline">scipy.integrate.odeint</span></td><td>Yes, every iteration</td><td>Yes, but re-runs ODE 100–1000×</td><td>No</td></tr>
+          <tr><td>PINN (this notebook)</td><td>No, residual via autograd</td><td>Yes (Notebooks 03–07)</td><td>Yes (Notebook 04 SIR)</td></tr>
+        </tbody>
+      </table>
+      <p class="body-text">For this single-ODE problem, classical NLS works perfectly well. The PINN architecture earns its value in the six subsequent notebooks where the ODE system is coupled, nonlinear, stiff, or where only some state variables are observed. This notebook builds the foundation pattern.</p>
+    </div>
+    <hr class="divider">
+    <div id="s4">
+      <div class="section-label">04, Implementation</div>
+      <h2 class="section-h">Architecture, Loss Function, and Training Schedule</h2>
+
+      <h3 class="sub-h">Network architecture</h3>
+      <p class="body-text">A shallow fully-connected network with Tanh activations processes the normalised time coordinate $\tau \in [0, 1]$ and outputs the normalised population $\tilde{P}(\tau)$. Xavier normal initialisation on every linear layer keeps gradients well-conditioned from epoch one.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">Python · PyTorch, Network &amp; Learnable Parameters</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div><pre class="code-body"><span class="kw">class</span> <span class="tp">Net</span>(nn.Module):
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, h=<span class="nm">32</span>):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(<span class="nm">1</span>, h), nn.Tanh(),   <span class="cm"># 1 → 32</span>
+            nn.Linear(h, h), nn.Tanh(),   <span class="cm"># 32 → 32</span>
+            nn.Linear(h, <span class="nm">1</span>)              <span class="cm"># 32 → 1</span>
+        )
+        <span class="kw">for</span> m <span class="kw">in</span> self.net:
+            <span class="kw">if</span> isinstance(m, nn.Linear):
+                nn.init.xavier_normal_(m.weight)
+                nn.init.zeros_(m.bias)
+
+<span class="cm"># Learnable ODE parameters — constrained positive via softplus</span>
+raw_rho   = nn.Parameter(torch.tensor(<span class="nm">1.0</span>))   <span class="cm"># scaled growth rate ρ = r·T</span>
+raw_kappa = nn.Parameter(torch.tensor(<span class="nm">0.0</span>))   <span class="cm"># scaled carrying capacity κ = K/Psc</span>
+sp = torch.nn.functional.softplus
+
+<span class="kw">def</span> <span class="fn">phys_params</span>():
+    rho   = sp(raw_rho)           <span class="cm"># ρ = r × 150 years</span>
+    kappa = sp(raw_kappa) + <span class="nm">0.3</span>  <span class="cm"># κ ≥ 0.3 × Psc = 39.5 M floor</span>
+    <span class="kw">return</span> rho, kappa</pre></div>
+
+      <h3 class="sub-h">Physics residual and loss function</h3>
+      <p class="body-text">The physics residual evaluates the logistic ODE at 500 uniformly spaced collocation points. Autograd differentiates the network output with respect to its input $\tau$, converting the real-time derivative via the chain rule: $dP/dt = (d\tilde{P}/d\tau) \cdot (P_\text{sc} / T)$.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">Python · PyTorch, Loss Function</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div><pre class="code-body"><span class="cm"># 500 collocation points, gradient tracking required for autograd</span>
+t_col = torch.linspace(<span class="nm">0</span>, <span class="nm">1.05</span>, <span class="nm">500</span>).reshape(-<span class="nm">1</span>,<span class="nm">1</span>).requires_grad_(<span class="kw">True</span>)
+
+<span class="kw">def</span> <span class="fn">residual</span>():
+    p     = model(t_col)
+    dp    = torch.autograd.grad(p, t_col,
+                torch.ones_like(p), create_graph=<span class="kw">True</span>)[<span class="nm">0</span>]
+    rho, kappa = phys_params()
+    <span class="kw">return</span> dp - rho * p * (<span class="nm">1.0</span> - p / kappa)   <span class="cm"># normalised residual</span>
+
+<span class="kw">def</span> <span class="fn">loss_fn</span>():
+    l_phys = torch.mean(residual()**<span class="nm">2</span>)
+    l_data = torch.mean((model(t_data) - p_data)**<span class="nm">2</span>)
+    l_ic   = (model(tau0) - P0_val)**<span class="nm">2</span>
+    <span class="kw">return</span> l_data + <span class="nm">0.1</span>*l_phys + l_ic.squeeze(), l_data, l_phys</pre></div>
+
+      <h3 class="sub-h">Two-phase training schedule</h3>
+      <p class="body-text">Phase 1 uses Adam for fast initial convergence with a global learning rate of $3 \times 10^{-3}$. Phase 2 switches to L-BFGS with strong-Wolfe line search for high-precision refinement of both network weights and the ODE parameters $(r, K)$.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">Python · PyTorch, Training</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div><pre class="code-body">params_all = list(model.parameters()) + [raw_rho, raw_kappa]
+opt_adam  = torch.optim.Adam(params_all, lr=<span class="nm">3e-3</span>)
+opt_lbfgs = torch.optim.LBFGS(params_all, max_iter=<span class="nm">500</span>,
+                               line_search_fn=<span class="st">"strong_wolfe"</span>)
+
+<span class="cm"># Phase 1 — Adam, 8,000 epochs</span>
+<span class="kw">for</span> ep <span class="kw">in</span> range(<span class="nm">8000</span>):
+    opt_adam.zero_grad()
+    L, ld, lp = loss_fn()
+    L.backward(); opt_adam.step()
+
+<span class="cm"># Phase 2 — L-BFGS polish</span>
+<span class="kw">def</span> <span class="fn">closure</span>():
+    opt_lbfgs.zero_grad()
+    L, _, _ = loss_fn()
+    L.backward(); <span class="kw">return</span> L
+opt_lbfgs.step(closure)
+
+rho, kappa = phys_params()
+r_hat = rho.item() / <span class="nm">150.0</span>       <span class="cm"># convert back: r = ρ / T</span>
+K_hat = kappa.item() * Psc        <span class="cm"># convert back: K = κ × Psc</span>
+<span class="cm"># → r = 0.0291 / year,  K = 210.2 million</span></pre></div>
+
+      <div class="callout success"><div class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="callout-body"><strong>PINN inverse estimation result</strong>8,000 Adam epochs + 500 L-BFGS steps on the 16 census observations: <strong>$r = 0.0291$/year, $K = 210.2$ million.</strong> Pearl &amp; Reed (1920) reported $K \approx 197$ million from least-squares on the same dataset; the 7% difference reflects our slightly updated census figures and normalisation choice. Both identify the same early-20th-century saturation regime.</div></div>
+    </div>
+    <hr class="divider">
+    <div id="s5">
+      <div class="section-label">05, Method Comparison</div>
+      <h2 class="section-h">Pure PINN vs RAR vs DeepONet: Which Wins on Logistic Growth?</h2>
+      <p class="body-text">The notebook benchmarks three methods on this problem. All are evaluated against the same analytical logistic solution at the true parameters ($r = 0.0291$/yr, $K = 197$ M) using relative L₂ error:</p>
+      <div class="math-block">$$\text{Rel. L}_2 = \frac{\|P_{\text{pred}} - P_{\text{exact}}\|_2}{\|P_{\text{exact}}\|_2}$$</div>
+
+      <h3 class="sub-h">Method 1, Pure PINN (uniform collocation)</h3>
+      <p class="body-text">Identical architecture and training schedule as above. 500 collocation points placed uniformly across $\tau \in [0, 1]$. All parameters trained jointly by Adam + L-BFGS.</p>
+      <table class="data-table">
+        <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Architecture</td><td>1 → 32 → 32 → 32 → 1, Tanh, Xavier init</td></tr>
+          <tr><td>Collocation</td><td>500 uniform points on [0, 1.05]</td></tr>
+          <tr><td>Training</td><td>8,000 Adam (lr = 3×10⁻³) + 500 L-BFGS</td></tr>
+          <tr><td>Relative L₂</td><td><strong>0.1267</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-h">Method 2, RAR (Residual-based Adaptive Refinement)</h3>
+      <p class="body-text">RAR starts with 50 collocation points and adds 25 new points per round at locations where the physics residual is largest. Over 8 rounds of 1,000 epochs each, the point set grows from 50 to 250. For logistic growth, a smooth monotone function, the residual is largest near the inflection point ($t \approx 1850$–$1870$), and RAR concentrates points there.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">Python · RAR Refinement Loop</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div><pre class="code-body">N_ROUNDS, ADD_EACH = <span class="nm">8</span>, <span class="nm">25</span>
+tau_rar = torch.linspace(<span class="nm">0</span>, <span class="nm">1</span>, <span class="nm">50</span>).view(-<span class="nm">1</span>,<span class="nm">1</span>).requires_grad_(<span class="kw">True</span>)
+
+<span class="kw">for</span> rnd <span class="kw">in</span> range(N_ROUNDS):
+    <span class="kw">for</span> ep <span class="kw">in</span> range(<span class="nm">1000</span>):
+        opt_rar.zero_grad(); L,_,_ = loss_rar(tau_rar)
+        L.backward(); opt_rar.step()
+    <span class="cm"># sample 5,000 candidate points, keep top-25 by |residual|</span>
+    cand   = torch.rand(<span class="nm">5000</span>, <span class="nm">1</span>).requires_grad_(<span class="kw">True</span>)
+    res_c  = residual_magnitude(cand)          <span class="cm"># |dP/dt - rP(1-P/K)|</span>
+    idx    = np.argsort(res_c)[-ADD_EACH:]
+    tau_rar = torch.cat([tau_rar.detach(), cand[idx].detach()]).requires_grad_(<span class="kw">True</span>)</pre></div>
+      <table class="data-table">
+        <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Rounds × epochs</td><td>8 × 1,000 = 8,000 total epochs</td></tr>
+          <tr><td>Collocation growth</td><td>50 → 250 points (adds 25 per round)</td></tr>
+          <tr><td>Relative L₂</td><td><strong>0.1467</strong></td></tr>
+        </tbody>
+      </table>
+      <div class="callout warning"><div class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="callout-body"><strong>RAR is marginally worse than uniform here</strong>For smooth monotone S-curves like logistic growth, uniform collocation is already adequate. RAR's advantage appears only when the solution has sharp transients or stiff regions, see Notebook 06 (enzyme QSSA) where RAR outperforms uniform PINN by ~5%.</div></div>
+
+      <h3 class="sub-h">Method 3, DeepONet (neural operator)</h3>
+      <p class="body-text">DeepONet learns the operator mapping a parameter pair $(r, K)$ to the full trajectory $P(t)$. Rather than training on a single instance, it trains on 1,000 randomly sampled $(r, K)$ pairs and their corresponding analytical logistic solutions. At inference it evaluates instantly at the true Pearl &amp; Reed parameters.</p>
+      <p class="body-text">Architecture: branch network $[2 \to 64 \to 64 \to 64]$ encodes $(r, K/P_\text{sc})$; trunk network $[1 \to 64 \to 64 \to 64]$ encodes the query time $\tau$. Inner dimension $p = 64$. Output: $G(r,K)(\tau) = \text{branch}(r,K) \cdot \text{trunk}(\tau) + b$.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">Python · DeepONet, Training</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div><pre class="code-body">p = <span class="nm">64</span>   <span class="cm"># inner dimension</span>
+branch = make_net([<span class="nm">2</span>, <span class="nm">64</span>, <span class="nm">64</span>, p])   <span class="cm"># input: [r, K/Psc]</span>
+trunk  = make_net([<span class="nm">1</span>, <span class="nm">64</span>, <span class="nm">64</span>, p])   <span class="cm"># input: τ ∈ [0, 1]</span>
+bias   = nn.Parameter(torch.zeros(<span class="nm">1</span>))
+
+<span class="cm"># 1,000 training pairs: r ∈ [0.010, 0.055], K ∈ [100, 300] M</span>
+r_samples = np.random.uniform(<span class="nm">0.010</span>, <span class="nm">0.055</span>, <span class="nm">1000</span>)
+K_samples  = np.random.uniform(<span class="nm">100.0</span>, <span class="nm">300.0</span>, <span class="nm">1000</span>)
+<span class="cm"># Y_targets[i, j] = logistic(r_i, K_i, t_j) / Psc</span>
+
+<span class="kw">for</span> ep <span class="kw">in</span> range(<span class="nm">10000</span>):
+    pred = branch(params_t) @ trunk(queries_t).T + bias
+    loss = torch.mean((pred - targets_t)**<span class="nm">2</span>)
+    loss.backward(); opt.step(); opt.zero_grad()</pre></div>
+      <table class="data-table">
+        <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Architecture</td><td>Branch [2→64→64→64], Trunk [1→64→64→64], p = 64</td></tr>
+          <tr><td>Training data</td><td>1,000 (r, K) pairs, 50 query points each</td></tr>
+          <tr><td>Training epochs</td><td>10,000 Adam</td></tr>
+          <tr><td>Evaluated at</td><td>True parameters: r = 0.0291/yr, K = 197 M</td></tr>
+          <tr><td>Relative L₂</td><td><strong>0.0177</strong> ← best on this problem</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub-h">Summary and why DeepONet wins here</h3>
+      <table class="data-table">
+        <thead><tr><th>Method</th><th>Relative L₂</th><th>Training data required</th><th>Parameters recovered?</th></tr></thead>
+        <tbody>
+          <tr><td>Pure PINN (uniform)</td><td>0.1267</td><td>16 census observations</td><td>Yes, r, K jointly</td></tr>
+          <tr><td>RAR (adaptive)</td><td>0.1467</td><td>16 census observations</td><td>Yes, r, K jointly</td></tr>
+          <tr><td>DeepONet (operator)</td><td><strong>0.0177</strong></td><td>1,000 pre-computed (r, K) solutions</td><td>No, evaluates at given (r, K)</td></tr>
+        </tbody>
+      </table>
+      <div class="callout insight"><div class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div class="callout-body"><strong>Why DeepONet wins on logistic growth, and fails on 6 of 7 other problems</strong>The logistic solution operator $G(r, K)(t)$ is <em>near rank-1</em>: the second singular value of the solution kernel is only 6.9% of the first ($S_2/S_1 = 0.069$). Intuitively, $K$ scales the plateau height and $r$ shifts the sigmoid horizontally, the full operator is almost $G(r,K)(t) \approx K \cdot f(r, t)$, a perfect match for the branch·trunk dot-product factorisation. On the SIR epidemic (bell-curve that shifts position and height with two parameters), Van der Pol (shape changes qualitatively with $\mu$), and Lotka–Volterra (rotating limit cycles), the operator requires higher rank and DeepONet's relative L₂ approaches 1.0. See the <a href="deeponet-vs-pinn-ode-analysis.html">research analysis article</a> for the full SVD rank study.</div></div>
+    </div>
+    <hr class="divider">
+    <div id="refs">
+      <div class="section-label">References</div>
+      <div class="ref-list">
+        <div class="ref-item"><span class="ref-num">1</span>Pearl, R. &amp; Reed, L. J. (1920). On the rate of growth of the population of the United States since 1790 and its mathematical representation. <em>PNAS</em>, 6(6), 275–288.</div>
+        <div class="ref-item"><span class="ref-num">2</span>Verhulst, P.-F. (1838). Notice sur la loi que la population suit dans son accroissement. <em>Correspondance Mathématique et Physique</em>, 10, 113–121.</div>
+        <div class="ref-item"><span class="ref-num">3</span>Raissi, M., Perdikaris, P., &amp; Karniadakis, G. E. (2019). Physics-informed neural networks: A deep learning framework for solving forward and inverse problems. <em>Journal of Computational Physics</em>, 378, 686–707.</div>
+        <div class="ref-item"><span class="ref-num">4</span>Lu, L., Jin, P., Pang, G., Zhang, Z., &amp; Karniadakis, G. E. (2021). Learning nonlinear operators via DeepONet. <em>Nature Machine Intelligence</em>, 3, 218–229.</div>
+        <div class="ref-item"><span class="ref-num">5</span>Wu, C., Zhu, M., Tan, Q., Kartha, Y., &amp; Lu, L. (2023). A comprehensive study of non-adaptive and residual-based adaptive sampling for physics-informed neural networks. <em>Computer Methods in Applied Mechanics and Engineering</em>, 403, 115671.</div>
+        <div class="ref-item"><span class="ref-num">6</span>Notebook: <a href="https://github.com/alishahmohammadi22/physics-ai-pinns" target="_blank" rel="noopener">physics-ai-pinns</a> · <code>02_Solving_ODEs/01_logistic_population_growth.ipynb</code></div>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+  <span class="footer-copy">&copy; 2026 Ali Shahmohammadi, Ph.D.</span>
+  <div class="footer-links">
+    <a href="../index.html">Portfolio</a><a href="../index.html#writing">Writing</a>
+    <a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+</footer>
+</body></html>

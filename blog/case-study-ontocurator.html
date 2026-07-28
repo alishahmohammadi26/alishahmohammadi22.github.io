@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Case Study: Production Agentic AI for Ontology Curation in Pharmaceutical R&D — Ali Shahmohammadi</title>
-  <meta name="description" content="How a production multi-agent LangGraph system automates biomedical ontology curation at Takeda — extracting entities, mapping to BioPortal/OLS4, detecting conflicts, and routing governance decisions while keeping humans in the loop." />
+  <title>Case Study: Production Agentic AI for Ontology Curation in Pharmaceutical R&D | Ali Shahmohammadi</title>
+  <meta name="description" content="How a production multi-agent LangGraph system automates biomedical ontology curation at Takeda, extracting entities, mapping to BioPortal/OLS4, detecting conflicts, and routing governance decisions while keeping humans in the loop." />
   <meta property="og:title" content="Case Study: Production Agentic AI for Ontology Curation" />
   <meta property="og:description" content="How a multi-agent LangGraph system automates ontology curation in pharma R&D with human-in-the-loop governance." />
   <meta property="og:type" content="article" />
@@ -191,7 +191,7 @@
       Case Study &middot; Agentic AI &middot; Ontology Governance
     </div>
     <h1>Production <span class="accent">Agentic AI</span> for Ontology Curation<br>in Pharmaceutical R&amp;D</h1>
-    <p class="hero-sub">How a four-agent LangGraph pipeline automates biomedical ontology curation — extracting entities, mapping to BioPortal and OLS4, detecting conflicts, and routing governance decisions — while keeping human stewards in the loop on every ambiguous call.</p>
+    <p class="hero-sub">How a four-agent LangGraph pipeline automates biomedical ontology curation, extracting entities, mapping to BioPortal and OLS4, detecting conflicts, and routing governance decisions, while keeping human stewards in the loop on every ambiguous call.</p>
     <div class="hero-meta">
       <span class="meta-tag">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
@@ -240,7 +240,7 @@
   </div>
 </div>
 
-<!-- 01 — Problem -->
+<!-- 01, Problem -->
 <section class="section" id="problem">
   <div class="container">
     <div class="section-header">
@@ -253,7 +253,7 @@
     </div>
 
     <div class="prose" style="margin-bottom:2.5rem;">
-      <p>In any large pharmaceutical R&amp;D organization, thousands of data entities flow daily through laboratory systems — ELN entries, LIMS assay results, compound registrations, cell therapy readouts — each requiring precise ontological grounding before they can power analytics, AI models, or regulatory submissions.</p>
+      <p>In any large pharmaceutical R&amp;D organization, thousands of data entities flow daily through laboratory systems, ELN entries, LIMS assay results, compound registrations, cell therapy readouts, each requiring precise ontological grounding before they can power analytics, AI models, or regulatory submissions.</p>
       <p>The traditional approach: a small team of ontology curators manually reviews each new term request, queries reference ontologies (ChEBI, GO, MeSH, UniProt), resolves naming conflicts between data systems, and routes ambiguous cases to senior domain experts. This process is slow, under-documented, and fundamentally unscalable as the volume of digital data in pharma accelerates.</p>
       <p>Three core problems emerge at scale:</p>
     </div>
@@ -264,14 +264,14 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="12" y1="8" x2="12" y2="8"/></svg>
         </div>
         <div class="feat-title">Throughput Bottleneck</div>
-        <p class="feat-desc">Curator capacity limits how fast new terms can be onboarded. As data volumes scale, the backlog grows — delaying AI pipelines that depend on clean, harmonized ontology mappings.</p>
+        <p class="feat-desc">Curator capacity limits how fast new terms can be onboarded. As data volumes scale, the backlog grows, delaying AI pipelines that depend on clean, harmonized ontology mappings.</p>
       </div>
       <div class="feat-card">
         <div class="feat-icon amber">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         </div>
         <div class="feat-title">Inconsistent Mapping Quality</div>
-        <p class="feat-desc">Different curators apply subtly different rules for term selection, synonym resolution, and cross-ontology disambiguation — creating a fragmented semantic layer that undermines data interoperability.</p>
+        <p class="feat-desc">Different curators apply subtly different rules for term selection, synonym resolution, and cross-ontology disambiguation, creating a fragmented semantic layer that undermines data interoperability.</p>
       </div>
       <div class="feat-card">
         <div class="feat-icon purple">
@@ -284,7 +284,7 @@
   </div>
 </section>
 
-<!-- 02 — Constraints -->
+<!-- 02, Constraints -->
 <div class="section-alt" id="constraints">
   <div class="container" style="padding-top:5rem;padding-bottom:5rem;">
     <div class="section-header">
@@ -294,16 +294,16 @@
     </div>
     <div class="constraint-grid">
       <div class="constraint-card red">
-        <div class="constraint-title">Human in the Loop — Always</div>
+        <div class="constraint-title">Human in the Loop, Always</div>
         <p class="constraint-desc">The system must never make irreversible ontology decisions autonomously. All novel mappings and conflict resolutions require a steward's explicit approval before writing to the master ontology.</p>
       </div>
       <div class="constraint-card amber">
         <div class="constraint-title">Full Audit Trail</div>
-        <p class="constraint-desc">Every automated action — entity extraction, candidate ranking, conflict flag, routing decision — must be logged with timestamps, confidence scores, and rationale for regulatory and governance review.</p>
+        <p class="constraint-desc">Every automated action, entity extraction, candidate ranking, conflict flag, routing decision, must be logged with timestamps, confidence scores, and rationale for regulatory and governance review.</p>
       </div>
       <div class="constraint-card blue">
         <div class="constraint-title">Deterministic Routing Rules</div>
-        <p class="constraint-desc">Routing logic (auto-approve vs. human review vs. SME escalation) must be policy-driven and inspectable — not black-box. Rules must be editable by governance leads without code changes.</p>
+        <p class="constraint-desc">Routing logic (auto-approve vs. human review vs. SME escalation) must be policy-driven and inspectable, not black-box. Rules must be editable by governance leads without code changes.</p>
       </div>
       <div class="constraint-card purple">
         <div class="constraint-title">Integration with Reference Ontologies</div>
@@ -315,13 +315,13 @@
       </div>
       <div class="constraint-card amber">
         <div class="constraint-title">Preserve Existing Vocabulary</div>
-        <p class="constraint-desc">The system must treat the existing curated vocabulary as ground truth. New mappings must not silently overwrite approved terms — only flag inconsistencies for steward review.</p>
+        <p class="constraint-desc">The system must treat the existing curated vocabulary as ground truth. New mappings must not silently overwrite approved terms, only flag inconsistencies for steward review.</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- 03 — Architecture -->
+<!-- 03, Architecture -->
 <section class="section" id="architecture">
   <div class="container">
     <div class="section-header">
@@ -351,7 +351,7 @@
       <div class="arch-layer a4">
         <div class="arch-dot"></div>
         <span class="arch-lbl">Governance</span>
-        <span class="arch-detail">High-confidence mappings enter an async approval queue in the data catalog. Stewards receive contextualized review packets — term, evidence, alternatives, conflicts — and approve, reject, or escalate via a lightweight UI.</span>
+        <span class="arch-detail">High-confidence mappings enter an async approval queue in the data catalog. Stewards receive contextualized review packets, term, evidence, alternatives, conflicts, and approve, reject, or escalate via a lightweight UI.</span>
         <div class="arch-tags"><span class="arch-tag">Approval Queue</span><span class="arch-tag">Steward UI</span><span class="arch-tag">Audit Log</span><span class="arch-tag">DCAT</span></div>
       </div>
       <div class="arch-layer a5">
@@ -364,7 +364,7 @@
   </div>
 </section>
 
-<!-- 04 — Agents -->
+<!-- 04, Agents -->
 <section class="section-alt" id="agents">
   <div class="container" style="padding-top:5rem;padding-bottom:5rem;">
     <div class="section-header">
@@ -442,7 +442,7 @@
   </div>
 </section>
 
-<!-- 05 — Conflict Detection -->
+<!-- 05, Conflict Detection -->
 <section class="section" id="conflict">
   <div class="container">
     <div class="section-header">
@@ -484,26 +484,26 @@
       <div class="feat-card">
         <div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></div>
         <div class="feat-title">Novel Entity <span style="font-size:.75rem;color:var(--accent);font-weight:700;">LOW&ndash;MED</span></div>
-        <p class="feat-desc">No matching term found in any queried ontology. The system generates a structured draft term proposal — with suggested label, definition template, and parent class — and routes it for new term request submission.</p>
+        <p class="feat-desc">No matching term found in any queried ontology. The system generates a structured draft term proposal, with suggested label, definition template, and parent class, and routes it for new term request submission.</p>
         <div class="tag-row"><span class="tag blue">Steward Review</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 06 — Human Routing -->
+<!-- 06, Human Routing -->
 <div class="section-alt" id="routing">
   <div class="container" style="padding-top:5rem;padding-bottom:5rem;">
     <div class="section-header">
       <div class="eyebrow">06 &mdash; Human Routing</div>
       <h2 class="section-title">Governance Without Gatekeeping</h2>
-      <p class="section-sub">The hardest design challenge wasn't the AI — it was designing the human layer so that governance stays rigorous without becoming a bottleneck.</p>
+      <p class="section-sub">The hardest design challenge wasn't the AI, it was designing the human layer so that governance stays rigorous without becoming a bottleneck.</p>
     </div>
     <div class="prose" style="margin-bottom:2.5rem;">
-      <p>The GovernanceRouter applies a three-tier decision framework driven by configurable policy rules stored as YAML — editable by governance leads without code changes. The framework is intentionally biased toward human review: when in doubt, the system asks rather than acts.</p>
-      <p><strong>Tier 1 — Auto-Approve:</strong> Reserved for high-confidence, conflict-free mappings of entity types that governance leads have pre-approved for automation (e.g., standard chemical compound classes with SMILES-based identity checks). Logged with full evidence bundle but no human action required.</p>
-      <p><strong>Tier 2 — Steward Review:</strong> The most common path. A data steward receives a review packet containing: proposed mapping, confidence score, ranked alternatives, conflict summary, and source evidence. They can approve, reject, or promote to SME escalation with a single click and an optional free-text note.</p>
-      <p><strong>Tier 3 — SME Escalation:</strong> Reserved for high-severity conflicts or novel entity types that cross domain boundaries. The review packet is enriched with full semantic context from the knowledge graph — related terms, upstream data consumers, downstream AI pipeline dependencies — to give the SME the full picture before deciding.</p>
+      <p>The GovernanceRouter applies a three-tier decision framework driven by configurable policy rules stored as YAML, editable by governance leads without code changes. The framework is intentionally biased toward human review: when in doubt, the system asks rather than acts.</p>
+      <p><strong>Tier 1, Auto-Approve:</strong> Reserved for high-confidence, conflict-free mappings of entity types that governance leads have pre-approved for automation (e.g., standard chemical compound classes with SMILES-based identity checks). Logged with full evidence bundle but no human action required.</p>
+      <p><strong>Tier 2, Steward Review:</strong> The most common path. A data steward receives a review packet containing: proposed mapping, confidence score, ranked alternatives, conflict summary, and source evidence. They can approve, reject, or promote to SME escalation with a single click and an optional free-text note.</p>
+      <p><strong>Tier 3, SME Escalation:</strong> Reserved for high-severity conflicts or novel entity types that cross domain boundaries. The review packet is enriched with full semantic context from the knowledge graph, related terms, upstream data consumers, downstream AI pipeline dependencies, to give the SME the full picture before deciding.</p>
     </div>
     <div class="feat-grid">
       <div class="feat-card">
@@ -528,7 +528,7 @@
   </div>
 </div>
 
-<!-- 07 — Results -->
+<!-- 07, Results -->
 <section class="section" id="results">
   <div class="container">
     <div class="section-header">
@@ -547,7 +547,7 @@
       </div>
       <div class="result-card">
         <div class="result-num">100%</div>
-        <div class="result-label">Audit trail coverage — zero unlogged decisions</div>
+        <div class="result-label">Audit trail coverage, zero unlogged decisions</div>
       </div>
       <div class="result-card" style="border-color:var(--amber-bdr);background:var(--amber-bg);">
         <div class="result-num" style="color:var(--amber);">&lt;2s</div>
@@ -563,13 +563,13 @@
       </div>
     </div>
     <div class="prose">
-      <p>Beyond the numbers, the most significant outcome was a shift in how data stewards spend their time. Instead of doing repetitive first-pass lookup work, stewards now focus on the genuinely ambiguous cases — the ones where human judgment matters. Curation became a higher-value activity.</p>
+      <p>Beyond the numbers, the most significant outcome was a shift in how data stewards spend their time. Instead of doing repetitive first-pass lookup work, stewards now focus on the genuinely ambiguous cases, the ones where human judgment matters. Curation became a higher-value activity.</p>
       <p>The knowledge graph also gained a new property: provenance at the entity level. Every approved term in AWS Neptune now carries a structured provenance record: who approved it, when, with what evidence, and via which route. This became the foundation for downstream AI pipeline trust scoring.</p>
     </div>
   </div>
 </section>
 
-<!-- 08 — Lessons -->
+<!-- 08, Lessons -->
 <div class="section-alt" id="lessons">
   <div class="container" style="padding-top:5rem;padding-bottom:5rem;">
     <div class="section-header">
@@ -582,7 +582,7 @@
         <div class="lesson-num">01</div>
         <div class="lesson-body">
           <h4>Design the human layer first</h4>
-          <p>We initially over-invested in tuning the mapping algorithm before designing the steward review UX. The breakthrough came when we ran user research sessions with actual ontology curators and rebuilt the review packet around their mental model — not the system's output format.</p>
+          <p>We initially over-invested in tuning the mapping algorithm before designing the steward review UX. The breakthrough came when we ran user research sessions with actual ontology curators and rebuilt the review packet around their mental model, not the system's output format.</p>
         </div>
       </div>
       <div class="lesson-item">
@@ -596,14 +596,14 @@
         <div class="lesson-num">03</div>
         <div class="lesson-body">
           <h4>Confidence calibration is harder than model accuracy</h4>
-          <p>A mapping model with 94% accuracy is useless if its confidence scores aren't calibrated. Early on, the OntologyMapperAgent's scores were systematically overconfident on rare entity types, causing auto-approvals that stewards later flagged. Isotonic regression calibration on held-out data fixed this — but it took three iterations to get right.</p>
+          <p>A mapping model with 94% accuracy is useless if its confidence scores aren't calibrated. Early on, the OntologyMapperAgent's scores were systematically overconfident on rare entity types, causing auto-approvals that stewards later flagged. Isotonic regression calibration on held-out data fixed this, but it took three iterations to get right.</p>
         </div>
       </div>
       <div class="lesson-item">
         <div class="lesson-num">04</div>
         <div class="lesson-body">
           <h4>The audit log is a product feature, not a side effect</h4>
-          <p>We initially treated audit logging as a compliance checkbox. When governance leads started using the audit log to analyze curation patterns — which entity types generate the most conflicts, which stewards have the lowest agreement rate with the model — it became clear that the audit store was one of the most valuable outputs of the system.</p>
+          <p>We initially treated audit logging as a compliance checkbox. When governance leads started using the audit log to analyze curation patterns, which entity types generate the most conflicts, which stewards have the lowest agreement rate with the model, it became clear that the audit store was one of the most valuable outputs of the system.</p>
         </div>
       </div>
       <div class="lesson-item">

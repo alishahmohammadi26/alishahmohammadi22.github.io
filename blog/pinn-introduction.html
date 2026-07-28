@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Physics-Informed Neural Networks: Why Embedding Physical Laws Changes Everything — Ali Shahmohammadi</title>
-  <meta name="description" content="From the failure of pure data-driven ML in engineering to your first working PINN — a zero-labeled-data solver for a first-order ODE. Article 1 of the Physics AI series.">
+  <title>Physics-Informed Neural Networks: Why Embedding Physical Laws Changes Everything | Ali Shahmohammadi</title>
+  <meta name="description" content="From the failure of pure data-driven ML in engineering to your first working PINN, a zero-labeled-data solver for a first-order ODE. Article 1 of the Physics AI series.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -108,7 +108,7 @@
     <div class="article-hero-inner">
       <div class="hero-series">Physics AI · PINNs Series · Article 1 of 8</div>
       <h1 class="article-title">Physics-Informed Neural Networks<br><em>Why Embedding Physical Laws into Machine Learning Changes Everything</em></h1>
-      <p class="article-sub">From the failure of pure data-driven ML in engineering to your first working PINN — a zero-labeled-data solver for a first-order ODE that trains entirely on the governing equation itself.</p>
+      <p class="article-sub">From the failure of pure data-driven ML in engineering to your first working PINN, a zero-labeled-data solver for a first-order ODE that trains entirely on the governing equation itself.</p>
       <div class="article-meta">
         <span class="meta-pill highlight">Scientific ML</span>
         <span class="meta-pill highlight">Physics-Informed AI</span>
@@ -128,7 +128,7 @@
       <div class="series-nav-list">
         <div class="series-nav-item current">
           <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--sienna);min-width:2rem;">01</span>
-          Introduction to PINNs — first-order ODE, autograd, zero labeled data
+          Introduction to PINNs, first-order ODE, autograd, zero labeled data
         </div>
         <div class="series-nav-item">
           <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">02</span>
@@ -136,39 +136,39 @@
         </div>
         <div class="series-nav-item">
           <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">03</span>
-          <span style="color:var(--ink-3);">Heat Transfer Equation — 1D parabolic PDE</span>
+          <span style="color:var(--ink-3);">Heat Transfer Equation, 1D parabolic PDE</span>
         </div>
         <div class="series-nav-item">
           <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">04</span>
-          <span style="color:var(--ink-3);">Burger's Equation — shock formation and viscosity</span>
+          <span style="color:var(--ink-3);">Burger's Equation, shock formation and viscosity</span>
         </div>
         <div class="series-nav-item">
           <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">05</span>
-          <span style="color:var(--ink-3);">Reaction Kinetics — multi-species coupled ODEs</span>
+          <span style="color:var(--ink-3);">Reaction Kinetics, multi-species coupled ODEs</span>
         </div>
         <div class="series-nav-item">
           <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">06</span>
-          <span style="color:var(--ink-3);">Wave Equation — hyperbolic PDE, energy conservation</span>
+          <span style="color:var(--ink-3);">Wave Equation, hyperbolic PDE, energy conservation</span>
         </div>
         <div class="series-nav-item">
           <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">07</span>
-          <span style="color:var(--ink-3);">Inverse Parameter Estimation — learning rate constants from sparse data</span>
+          <span style="color:var(--ink-3);">Inverse Parameter Estimation, learning rate constants from sparse data</span>
         </div>
         <div class="series-nav-item">
           <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-3);min-width:2rem;">08</span>
-          <span style="color:var(--ink-3);">Adaptive Sampling and DeepONet — beyond vanilla PINNs</span>
+          <span style="color:var(--ink-3);">Adaptive Sampling and DeepONet, beyond vanilla PINNs</span>
         </div>
       </div>
     </div>
 
     <!-- Section 1 -->
     <div id="section1" style="margin-top:3rem;">
-      <div class="section-label">01 — The Engineering Data Problem</div>
+      <div class="section-label">01, The Engineering Data Problem</div>
       <h2 class="section-h">Why Traditional ML Struggles in Engineering</h2>
 
-      <p class="body-text">Large language models are trained on hundreds of billions of tokens of human text. The internet is saturated with language data. The statistical patterns in language are redundant, overlapping, and forgiving — if the model misses a nuance, the surrounding context usually compensates.</p>
+      <p class="body-text">Large language models are trained on hundreds of billions of tokens of human text. The internet is saturated with language data. The statistical patterns in language are redundant, overlapping, and forgiving, if the model misses a nuance, the surrounding context usually compensates.</p>
 
-      <p class="body-text">Now ask: how much labeled data does a pharmaceutical manufacturing process generate? A typical batch reactor might log temperature, pressure, and concentration at 10-second intervals. Run for a full year, that yields roughly 3 million data points — spread across dozens of operating variables, with process upsets, sensor drift, and changing feedstock composition corrupting a significant fraction of them. That is not internet-scale data. That is <em>sparse, expensive, physics-constrained</em> data.</p>
+      <p class="body-text">Now ask: how much labeled data does a pharmaceutical manufacturing process generate? A typical batch reactor might log temperature, pressure, and concentration at 10-second intervals. Run for a full year, that yields roughly 3 million data points, spread across dozens of operating variables, with process upsets, sensor drift, and changing feedstock composition corrupting a significant fraction of them. That is not internet-scale data. That is <em>sparse, expensive, physics-constrained</em> data.</p>
 
       <h3 class="sub-h">The structural asymmetry between language and engineering data</h3>
 
@@ -189,12 +189,12 @@
           <tr>
             <td>Acquisition cost</td>
             <td>Near-zero (scraped from web)</td>
-            <td>Expensive — sensors, experiments, simulations</td>
+            <td>Expensive, sensors, experiments, simulations</td>
           </tr>
           <tr>
             <td>Redundancy</td>
             <td>Extremely high; context heals errors</td>
-            <td>Low — each measurement is precious</td>
+            <td>Low, each measurement is precious</td>
           </tr>
           <tr>
             <td>Governing structure</td>
@@ -204,25 +204,25 @@
           <tr>
             <td>Extrapolation failure</td>
             <td>Risky but often recoverable</td>
-            <td>Catastrophic — negative concentrations, violated balances</td>
+            <td>Catastrophic, negative concentrations, violated balances</td>
           </tr>
         </tbody>
       </table>
 
       <h3 class="sub-h">Engineering systems are governed by differential equations</h3>
 
-      <p class="body-text">Almost every physical process in chemical, mechanical, or pharmaceutical engineering is described by an ODE or PDE. These equations encode centuries of accumulated physical understanding — not approximate statistical patterns, but precise mechanistic relationships.</p>
+      <p class="body-text">Almost every physical process in chemical, mechanical, or pharmaceutical engineering is described by an ODE or PDE. These equations encode centuries of accumulated physical understanding, not approximate statistical patterns, but precise mechanistic relationships.</p>
 
       <p class="body-text"><strong>Energy balance in a CSTR:</strong></p>
-      <div class="math-block">$$\rho C_p \frac{dT}{dt} = -\Delta H_r \cdot r(T, C) - \frac{UA}{V}(T - T_c)$$</div>
+      <div class="math-block">$$\rho C_p \frac{dT}{dt} = -\Delta H_r \cdot r(T, C) - \frac{UA}{V}(T, T_c)$$</div>
 
       <p class="body-text"><strong>Diffusion-reaction in a catalyst pellet:</strong></p>
-      <div class="math-block">$$D_e \nabla^2 C - r(C, T) = 0$$</div>
+      <div class="math-block">$$D_e \nabla^2 C, r(C, T) = 0$$</div>
 
       <p class="body-text"><strong>Navier-Stokes for incompressible flow:</strong></p>
       <div class="math-block">$$\rho\left(\frac{\partial \mathbf{u}}{\partial t} + \mathbf{u} \cdot \nabla \mathbf{u}\right) = -\nabla p + \mu \nabla^2 \mathbf{u}$$</div>
 
-      <p class="body-text">A standard neural network trained only on data will violate these relationships. It will predict reactors with more energy out than in, fail completely outside the training range of temperatures and concentrations, and produce physically implausible results. This is not a theoretical concern — it has been observed repeatedly in industrial ML deployments.</p>
+      <p class="body-text">A standard neural network trained only on data will violate these relationships. It will predict reactors with more energy out than in, fail completely outside the training range of temperatures and concentrations, and produce physically implausible results. This is not a theoretical concern, it has been observed repeatedly in industrial ML deployments.</p>
 
       <div class="callout insight">
         <div class="callout-icon">
@@ -230,7 +230,7 @@
         </div>
         <div class="callout-body">
           <strong>The core insight</strong>
-          Traditional AI: Data → Loss → Model. Physics-Informed AI: Data + Physical Laws → Loss → Model. The physical law is not an afterthought — it is baked directly into the training objective.
+          Traditional AI: Data → Loss → Model. Physics-Informed AI: Data + Physical Laws → Loss → Model. The physical law is not an afterthought, it is baked directly into the training objective.
         </div>
       </div>
     </div>
@@ -239,16 +239,16 @@
 
     <!-- Section 2 -->
     <div id="section2">
-      <div class="section-label">02 — What Is a PINN</div>
+      <div class="section-label">02, What Is a PINN</div>
       <h2 class="section-h">The Three-Term Loss Function</h2>
 
       <p class="body-text">A standard neural network learns a mapping $f_\theta: x \rightarrow y$ by minimizing the prediction error on labeled outputs:</p>
-      <div class="math-block">$$\mathcal{L}_{data} = \frac{1}{N}\sum_{i=1}^{N} \left| \hat{y}_i - y_i \right|^2$$</div>
+      <div class="math-block">$$\mathcal{L}_{data} = \frac{1}{N}\sum_{i=1}^{N} \left| \hat{y}_i, y_i \right|^2$$</div>
 
       <p class="body-text">A Physics-Informed Neural Network learns the same mapping, but adds the requirement that whatever the network predicts must also satisfy the governing differential equation. The training objective becomes:</p>
       <div class="math-block">$$\mathcal{L}_{total} = \underbrace{\mathcal{L}_{data}}_{\text{fits observations}} + \underbrace{\mathcal{L}_{physics}}_{\text{satisfies the ODE/PDE}} + \underbrace{\mathcal{L}_{BC}}_{\text{satisfies boundary/initial conditions}}$$</div>
 
-      <p class="body-text">In many engineering applications — and in the first example below — there are no labeled observations at all. The data term vanishes entirely, and the differential equation <em>is</em> the training signal.</p>
+      <p class="body-text">In many engineering applications, and in the first example below, there are no labeled observations at all. The data term vanishes entirely, and the differential equation <em>is</em> the training signal.</p>
 
       <h3 class="sub-h">A concrete example: the simplest first-order ODE</h3>
 
@@ -262,7 +262,7 @@
       <div class="math-block">$$\mathcal{L}_{physics} = \frac{1}{N_c}\sum_{i=1}^{N_c} r(x_i)^2$$</div>
 
       <p class="body-text">The boundary condition loss pins the initial value:</p>
-      <div class="math-block">$$\mathcal{L}_{BC} = \left(\hat{y}(0) - 1\right)^2$$</div>
+      <div class="math-block">$$\mathcal{L}_{BC} = \left(\hat{y}(0), 1\right)^2$$</div>
 
       <p class="body-text">No labeled $(x, y)$ pairs are needed anywhere in this training procedure. The differential equation <em>is</em> the training signal.</p>
 
@@ -332,7 +332,7 @@
 
     <!-- Section 3 -->
     <div id="section3">
-      <div class="section-label">03 — Automatic Differentiation</div>
+      <div class="section-label">03, Automatic Differentiation</div>
       <h2 class="section-h">Why Autograd Wins Over Finite Differences</h2>
 
       <p class="body-text">Enforcing $\frac{d\hat{y}}{dx} + \hat{y} = 0$ requires computing the derivative of the network's output with respect to its input. Three methods exist for this, with dramatically different tradeoffs:</p>
@@ -349,7 +349,7 @@
         <tbody>
           <tr>
             <td><strong>Finite Differences</strong></td>
-            <td>$\frac{f(x+h) - f(x)}{h}$</td>
+            <td>$\frac{f(x+h), f(x)}{h}$</td>
             <td>Approximate; $O(h)$ or $O(h^2)$</td>
             <td>Mesh dependency; truncation error accumulates with higher orders; unstable for small $h$</td>
           </tr>
@@ -368,7 +368,7 @@
         </tbody>
       </table>
 
-      <p class="body-text">When you compute $\hat{y} = f_\theta(x)$ in PyTorch with <code>requires_grad=True</code> on the input $x$, PyTorch constructs a <strong>computational graph</strong> recording every operation. Calling <code>torch.autograd.grad()</code> traverses this graph in reverse, applying the chain rule exactly — to machine floating-point precision. No mesh, no approximation, no truncation error.</p>
+      <p class="body-text">When you compute $\hat{y} = f_\theta(x)$ in PyTorch with <code>requires_grad=True</code> on the input $x$, PyTorch constructs a <strong>computational graph</strong> recording every operation. Calling <code>torch.autograd.grad()</code> traverses this graph in reverse, applying the chain rule exactly, to machine floating-point precision. No mesh, no approximation, no truncation error.</p>
 
       <p class="body-text">The key parameter is <code>create_graph=True</code> on the first derivative call. Without it, PyTorch frees the intermediate graph and second derivatives become unavailable. With it, the derivative itself is a differentiable expression, enabling nested calls for $\frac{d^2\hat{y}}{dx^2}$, Laplacians, and beyond.</p>
 
@@ -395,14 +395,14 @@ d2fdx2 = torch.autograd.grad(dfdx, x)[<span class="nm">0</span>]
 <span class="cm"># Output: 7.0  15.0  16.0</span></pre>
       </div>
 
-      <p class="body-text">When the simple polynomial above is replaced by the full neural network $f_\theta(x)$, autograd can still propagate the chain rule through all layers, activation functions, and weight matrices — automatically and exactly. This is the mathematical foundation that makes PINNs possible.</p>
+      <p class="body-text">When the simple polynomial above is replaced by the full neural network $f_\theta(x)$, autograd can still propagate the chain rule through all layers, activation functions, and weight matrices, automatically and exactly. This is the mathematical foundation that makes PINNs possible.</p>
     </div>
 
     <hr class="divider">
 
     <!-- Section 4 -->
     <div id="section4">
-      <div class="section-label">04 — Building the PINN</div>
+      <div class="section-label">04, Building the PINN</div>
       <h2 class="section-h">Architecture, Collocation, and Training</h2>
 
       <h3 class="sub-h">Network architecture</h3>
@@ -441,7 +441,7 @@ model = <span class="tp">PINN</span>([<span class="nm">1</span>, <span class="nm
 
       <h3 class="sub-h">Collocation points</h3>
 
-      <p class="body-text">Collocation points are the locations in the domain where the ODE residual is evaluated and penalized. They require no labels — only the $x$ coordinates. The key requirement is that <code>requires_grad_(True)</code> is set so that PyTorch can differentiate the network output with respect to these inputs.</p>
+      <p class="body-text">Collocation points are the locations in the domain where the ODE residual is evaluated and penalized. They require no labels, only the $x$ coordinates. The key requirement is that <code>requires_grad_(True)</code> is set so that PyTorch can differentiate the network output with respect to these inputs.</p>
 
       <!-- Visual 3: Collocation Points Diagram -->
       <div class="fig-wrap">
@@ -488,7 +488,7 @@ model = <span class="tp">PINN</span>([<span class="nm">1</span>, <span class="nm
           <polygon points="50,45 53,54 62,54 55,59 57,68 50,63 43,68 45,59 38,54 47,54" fill="#B8845A" stroke="#B8845A" stroke-width="1"/>
           <!-- Labels -->
           <text x="50" y="38" text-anchor="middle" font-size="9" fill="#B8845A" font-family="'JetBrains Mono',monospace">BC: y(0)=1</text>
-          <text x="320" y="25" text-anchor="middle" font-size="9" fill="#2D7A4F" font-family="'JetBrains Mono',monospace">collocation points (ODE residual enforced here — no labels needed)</text>
+          <text x="320" y="25" text-anchor="middle" font-size="9" fill="#2D7A4F" font-family="'JetBrains Mono',monospace">collocation points (ODE residual enforced here, no labels needed)</text>
         </svg>
         <div class="fig-caption">Figure 2. Collocation points distributed across $[0, 5]$. The ODE residual $r(x_i) = d\hat{y}/dx + \hat{y}$ is penalized at each green dot. The boundary condition is imposed at the single starred point $x=0$.</div>
       </div>
@@ -536,7 +536,7 @@ Epoch  4000 | Total: 4.13e-06 | Physics: 4.13e-06 | BC: 2.27e-11<br>
 Epoch  4500 | Total: 2.07e-06 | Physics: 2.07e-06 | BC: 5.55e-11
       </div>
 
-      <p class="body-text">Notice the characteristic pattern: the BC loss drops rapidly to near-zero within the first few hundred epochs — the network quickly learns to satisfy the single initial condition $y(0)=1$. The physics loss then dominates and drives the slow, steady improvement as the network learns to satisfy the ODE residual across the entire domain.</p>
+      <p class="body-text">Notice the characteristic pattern: the BC loss drops rapidly to near-zero within the first few hundred epochs, the network quickly learns to satisfy the single initial condition $y(0)=1$. The physics loss then dominates and drives the slow, steady improvement as the network learns to satisfy the ODE residual across the entire domain.</p>
 
       <!-- Visual 2: Training Loss SVG Plot -->
       <div class="fig-wrap">
@@ -600,7 +600,7 @@ Epoch  4500 | Total: 2.07e-06 | Physics: 2.07e-06 | BC: 5.55e-11
 
     <!-- Section 5 -->
     <div id="section5">
-      <div class="section-label">05 — Why This Is Revolutionary</div>
+      <div class="section-label">05, Why This Is Revolutionary</div>
       <h2 class="section-h">PINNs vs Classical Numerical Methods</h2>
 
       <table class="data-table">
@@ -653,35 +653,35 @@ Epoch  4500 | Total: 2.07e-06 | Physics: 2.07e-06 | BC: 5.55e-11
       </table>
 
       <h3 class="sub-h">Mesh-free computation</h3>
-      <p class="body-text">Creating a quality mesh for a complex 3D engineering geometry — a pharmaceutical tablet, a turbine blade, a reactor with internal baffles — can take days of preprocessing effort and requires specialized domain expertise. PINNs learn a continuous function over the domain without discretization, reducing geometry-to-simulation time dramatically.</p>
+      <p class="body-text">Creating a quality mesh for a complex 3D engineering geometry, a pharmaceutical tablet, a turbine blade, a reactor with internal baffles, can take days of preprocessing effort and requires specialized domain expertise. PINNs learn a continuous function over the domain without discretization, reducing geometry-to-simulation time dramatically.</p>
 
       <h3 class="sub-h">Inverse problems without an outer optimization loop</h3>
-      <p class="body-text">In classical PDE solvers, estimating an unknown parameter (a reaction rate constant, a diffusion coefficient, a thermal conductivity) requires solving a forward problem thousands of times inside an outer optimization loop — computationally expensive and prone to getting stuck in local minima. In a PINN, the unknown parameter becomes an additional trainable variable in the same loss function and the same training loop. The forward solve and the parameter estimation happen simultaneously.</p>
+      <p class="body-text">In classical PDE solvers, estimating an unknown parameter (a reaction rate constant, a diffusion coefficient, a thermal conductivity) requires solving a forward problem thousands of times inside an outer optimization loop, computationally expensive and prone to getting stuck in local minima. In a PINN, the unknown parameter becomes an additional trainable variable in the same loss function and the same training loop. The forward solve and the parameter estimation happen simultaneously.</p>
 
       <h3 class="sub-h">Data assimilation from sparse measurements</h3>
-      <p class="body-text">Adding 10 noisy experimental observations to the loss function — as a data term alongside the physics term — allows the PINN to incorporate real measurements while the physics automatically regularizes the solution between measurement points. The result is a physically consistent reconstruction that a pure data-driven model could not achieve with only 10 points.</p>
+      <p class="body-text">Adding 10 noisy experimental observations to the loss function, as a data term alongside the physics term, allows the PINN to incorporate real measurements while the physics automatically regularizes the solution between measurement points. The result is a physically consistent reconstruction that a pure data-driven model could not achieve with only 10 points.</p>
 
       <h3 class="sub-h">Continuous and differentiable everywhere</h3>
-      <p class="body-text">A classical finite difference solution is a lookup table — values at fixed grid points. A PINN is a differentiable function defined for any $x$ in the domain. It can be evaluated at arbitrary resolution without retraining. Derivatives, integrals, and sensitivity analyses over the domain are all available analytically from the network itself.</p>
+      <p class="body-text">A classical finite difference solution is a lookup table, values at fixed grid points. A PINN is a differentiable function defined for any $x$ in the domain. It can be evaluated at arbitrary resolution without retraining. Derivatives, integrals, and sensitivity analyses over the domain are all available analytically from the network itself.</p>
     </div>
 
     <hr class="divider">
 
     <!-- Section 6 -->
     <div id="section6">
-      <div class="section-label">06 — Honest Limitations</div>
+      <div class="section-label">06, Honest Limitations</div>
       <h2 class="section-h">Where PINNs Currently Struggle</h2>
 
       <p class="body-text">Most introductory articles stop after the success stories. That would be a disservice to anyone planning to deploy PINNs in production. Here are the well-documented failure modes, with concrete mitigations where they exist.</p>
 
       <h3 class="sub-h">Training instability</h3>
-      <p class="body-text">The PINN loss landscape is non-convex and poorly conditioned. Gradients from the physics loss and the boundary condition loss can point in conflicting directions, causing oscillations or premature plateauing. This is particularly severe when the physics loss and BC loss have different natural scales — one term dominates and the other is effectively ignored. Mitigation: adaptive loss weighting, learning rate scheduling, residual-based adaptive refinement (RAR) [Lu et al., 2021].</p>
+      <p class="body-text">The PINN loss landscape is non-convex and poorly conditioned. Gradients from the physics loss and the boundary condition loss can point in conflicting directions, causing oscillations or premature plateauing. This is particularly severe when the physics loss and BC loss have different natural scales, one term dominates and the other is effectively ignored. Mitigation: adaptive loss weighting, learning rate scheduling, residual-based adaptive refinement (RAR) [Lu et al., 2021].</p>
 
       <h3 class="sub-h">Stiff equations</h3>
       <p class="body-text">A stiff ODE has solution components that evolve on vastly different timescales. For example, $\frac{dC}{dt} = -10^6 C$ decays to near-zero within microseconds. Standard PINN training with uniform collocation points entirely misses the fast dynamics, and the physics loss at late times provides negligible gradient information about the early transient. Mitigation: adaptive collocation density, curriculum training (gradually expanding the time horizon), domain decomposition.</p>
 
       <h3 class="sub-h">Slow convergence compared to classical solvers</h3>
-      <p class="body-text">PINNs typically require tens of thousands of gradient descent steps to converge — orders of magnitude more computational work than a classical solver for equivalent accuracy on a simple well-posed problem:</p>
+      <p class="body-text">PINNs typically require tens of thousands of gradient descent steps to converge, orders of magnitude more computational work than a classical solver for equivalent accuracy on a simple well-posed problem:</p>
 
       <table class="data-table">
         <thead>
@@ -709,8 +709,8 @@ Epoch  4500 | Total: 2.07e-06 | Physics: 2.07e-06 | BC: 5.55e-11
         </thead>
         <tbody>
           <tr><td><strong>XPINNs</strong> (Extended PINNs)</td><td>Long time horizons and stiff systems via domain decomposition</td></tr>
-          <tr><td><strong>FNO</strong> (Fourier Neural Operator)</td><td>Amortized solution of PDE families — one model, any boundary condition</td></tr>
-          <tr><td><strong>DeepONet</strong></td><td>Operator learning — maps input functions to output functions</td></tr>
+          <tr><td><strong>FNO</strong> (Fourier Neural Operator)</td><td>Amortized solution of PDE families, one model, any boundary condition</td></tr>
+          <tr><td><strong>DeepONet</strong></td><td>Operator learning, maps input functions to output functions</td></tr>
           <tr><td><strong>PirateNets</strong></td><td>Training instability via adaptive residual connections [Wang et al., 2024]</td></tr>
           <tr><td><strong>APINNs</strong></td><td>Gating network soft domain decomposition [Hu et al., 2023]</td></tr>
         </tbody>
@@ -721,7 +721,7 @@ Epoch  4500 | Total: 2.07e-06 | Physics: 2.07e-06 | BC: 5.55e-11
 
     <!-- Section 7: Series Roadmap -->
     <div id="section7">
-      <div class="section-label">07 — Series Roadmap</div>
+      <div class="section-label">07, Series Roadmap</div>
       <h2 class="section-h">Eight Articles on PINNs</h2>
 
       <table class="data-table">
@@ -792,12 +792,12 @@ Epoch  4500 | Total: 2.07e-06 | Physics: 2.07e-06 | BC: 5.55e-11
 
     <!-- Section 8: Conclusion -->
     <div id="section8">
-      <div class="section-label">08 — Conclusion</div>
+      <div class="section-label">08, Conclusion</div>
       <h2 class="section-h">Physics Becomes Part of the Network</h2>
 
       <p class="body-text">The important idea is not that neural networks <em>replace</em> physics. The important idea is that physics becomes <em>part of</em> the neural network. For decades, engineers described systems through differential equations. For the last decade, AI described systems through data. PINNs represent the convergence of these two traditions.</p>
 
-      <p class="body-text">In this article, we built a network that solved $dy/dx = -y$ to better than $10^{-3}$ absolute error using zero labeled data — with a 2,209-parameter network, 5,000 training epochs, and the ODE itself as the sole training signal. The BC loss vanished to $10^{-11}$ while the physics loss drove systematic improvement across the entire domain.</p>
+      <p class="body-text">In this article, we built a network that solved $dy/dx = -y$ to better than $10^{-3}$ absolute error using zero labeled data, with a 2,209-parameter network, 5,000 training epochs, and the ODE itself as the sole training signal. The BC loss vanished to $10^{-11}$ while the physics loss drove systematic improvement across the entire domain.</p>
 
       <p class="body-text">This convergence is already transforming pharmaceutical manufacturing (real-time parameter estimation from PAT data), computational fluid dynamics (mesh-free solvers for complex geometries), reaction engineering (simultaneous kinetics and transport identification from sparse pilot data), and scientific discovery (identifying governing equations from experimental observations). The tools are open-source, documented, and runnable on a standard laptop.</p>
 
@@ -807,7 +807,7 @@ Epoch  4500 | Total: 2.07e-06 | Physics: 2.07e-06 | BC: 5.55e-11
         </div>
         <div class="callout-body">
           <strong>Next in the series</strong>
-          Article 2 extends the framework to second-order ODEs — the damped harmonic oscillator — introducing nested automatic differentiation, two initial conditions, the hard-constraint ansatz, and the spectral bias problem that underlies most of the advanced techniques in this field.
+          Article 2 extends the framework to second-order ODEs, the damped harmonic oscillator, introducing nested automatic differentiation, two initial conditions, the hard-constraint ansatz, and the spectral bias problem that underlies most of the advanced techniques in this field.
         </div>
       </div>
     </div>

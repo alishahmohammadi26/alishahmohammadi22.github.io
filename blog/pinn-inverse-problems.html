@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inverse Problems with PINNs: Discovering Physical Parameters from Data — Ali Shahmohammadi</title>
-  <meta name="description" content="Making unknown physical constants trainable variables — recovering diffusivity, reaction rates, and material properties from 40 noisy sensor readings using physics-informed neural networks.">
+  <title>Inverse Problems with PINNs: Discovering Physical Parameters from Data | Ali Shahmohammadi</title>
+  <meta name="description" content="Making unknown physical constants trainable variables, recovering diffusivity, reaction rates, and material properties from 40 noisy sensor readings using physics-informed neural networks.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -109,7 +109,7 @@
     <div class="article-hero-inner">
       <div class="hero-series">Physics AI Series &mdash; Article 5 of 8</div>
       <h1 class="article-title">Inverse Problems<br>with PINNs:<br><em>Discovering Physical Parameters<br>from Sparse, Noisy Data</em></h1>
-      <p class="article-sub">Making unknown physical constants trainable variables — recovering diffusivity, reaction rates, and material properties from 40 noisy sensor readings using physics-informed neural networks.</p>
+      <p class="article-sub">Making unknown physical constants trainable variables, recovering diffusivity, reaction rates, and material properties from 40 noisy sensor readings using physics-informed neural networks.</p>
       <div class="article-meta">
         <span class="meta-pill highlight">Jan 2026</span>
         <span class="meta-pill">22 min read</span>
@@ -127,17 +127,17 @@
       <div class="series-nav-list">
         <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">01</span><a href="pinn-introduction.html">Introduction to PINNs</a></div>
         <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">02</span><a href="pinn-odes-second-order.html">Second-Order ODEs</a></div>
-        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">03</span><a href="pinn-heat-equation.html">Heat Equation — 1D PDE</a></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">03</span><a href="pinn-heat-equation.html">Heat Equation, 1D PDE</a></div>
         <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">04</span><a href="pinn-burgers-reaction-pdes.html">Burgers &amp; Reaction PDEs</a></div>
         <div class="series-nav-item current"><span style="font-family:'JetBrains Mono',monospace;font-size:.75rem">05</span>Inverse Problems &amp; Parameter Estimation &larr; you are here</div>
         <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">06</span><a href="pinn-adaptive-sampling.html">Adaptive Sampling &amp; Training Strategies</a></div>
-        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">07</span><a href="pinn-deeponet.html">DeepONet — Learning Operators</a></div>
+        <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">07</span><a href="pinn-deeponet.html">DeepONet, Learning Operators</a></div>
         <div class="series-nav-item"><span style="color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:.75rem">08</span><a href="pinn-physics-informed-deeponet.html">Physics-Informed DeepONet</a></div>
       </div>
     </div>
 
     <!-- SECTION 1 -->
-    <div class="section-label">01 — Motivation</div>
+    <div class="section-label">01, Motivation</div>
     <h2 class="section-h">Forward vs. Inverse: The Real Engineering Question</h2>
     <p class="body-text">Most introductions to PDEs present what is called the <em>forward problem</em>: given a governing equation with fully known coefficients and initial/boundary conditions, compute the solution field. For the 1D heat equation, this reads: given thermal diffusivity $\alpha$, solve</p>
 
@@ -145,9 +145,9 @@
       $$\frac{\partial u}{\partial t} = \alpha \, \frac{\partial^2 u}{\partial x^2}, \quad u(x,0) = u_0(x), \quad u(0,t) = u(1,t) = 0$$
     </div>
 
-    <p class="body-text">for the temperature field $u(x,t)$. This is well-posed, and numerical methods — finite differences, finite elements, spectral methods — have been refined over decades to solve it efficiently and to guaranteed accuracy.</p>
+    <p class="body-text">for the temperature field $u(x,t)$. This is well-posed, and numerical methods, finite differences, finite elements, spectral methods, have been refined over decades to solve it efficiently and to guaranteed accuracy.</p>
 
-    <p class="body-text">The <em>inverse problem</em> runs in the opposite direction. You have sensor measurements $\{u(x_i, t_i)\}_{i=1}^{N}$, possibly corrupted by noise, and the parameter $\alpha$ is unknown. You want to infer $\alpha$ from the data. This reversal is not merely a notational switch — it changes the problem's mathematical character entirely. Inverse problems are generically ill-posed in the sense of Hadamard: existence, uniqueness, and continuous dependence on data may all fail without additional regularization.</p>
+    <p class="body-text">The <em>inverse problem</em> runs in the opposite direction. You have sensor measurements $\{u(x_i, t_i)\}_{i=1}^{N}$, possibly corrupted by noise, and the parameter $\alpha$ is unknown. You want to infer $\alpha$ from the data. This reversal is not merely a notational switch, it changes the problem's mathematical character entirely. Inverse problems are generically ill-posed in the sense of Hadamard: existence, uniqueness, and continuous dependence on data may all fail without additional regularization.</p>
 
     <div class="fig-wrap">
       <svg viewBox="0 0 680 200" width="100%" style="max-width:680px;font-family:'Inter',sans-serif">
@@ -186,7 +186,7 @@
         <!-- Given / Find labels -->
         <text x="440" y="118" text-anchor="middle" font-size="10" fill="#4A4540">Given</text>
         <text x="595" y="118" text-anchor="middle" font-size="10" fill="#4A4540">Find</text>
-        <text x="520" y="148" text-anchor="middle" font-size="9.5" fill="#B8845A" font-style="italic">Ill-posed — needs regularization</text>
+        <text x="520" y="148" text-anchor="middle" font-size="9.5" fill="#B8845A" font-style="italic">Ill-posed, needs regularization</text>
         <!-- Arrow definitions -->
         <defs>
           <marker id="arr1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
@@ -197,33 +197,33 @@
           </marker>
         </defs>
       </svg>
-      <div class="fig-caption">Fig. 1 — Forward vs. inverse problem structure. In the forward problem, $\alpha$ is given and $u$ is computed. In the inverse problem, noisy measurements of $u$ are used to infer the unknown $\alpha$. The PDE constraint remains central in both cases.</div>
+      <div class="fig-caption">Fig. 1, Forward vs. inverse problem structure. In the forward problem, $\alpha$ is given and $u$ is computed. In the inverse problem, noisy measurements of $u$ are used to infer the unknown $\alpha$. The PDE constraint remains central in both cases.</div>
     </div>
 
     <p class="body-text">The inverse problem is often the <em>real</em> engineering question. Consider a few motivating examples:</p>
 
     <ul style="margin:1rem 0 1.25rem 1.5rem;color:var(--ink-2);font-size:.975rem;line-height:1.9">
-      <li><strong>Pharmaceutical dissolution:</strong> You run a USP Apparatus II paddle test and measure drug concentration at a few time points. You want the effective diffusivity $D_{eff}$ of the active pharmaceutical ingredient through the polymer matrix — a parameter that governs bioavailability and is used to design controlled-release formulations.</li>
+      <li><strong>Pharmaceutical dissolution:</strong> You run a USP Apparatus II paddle test and measure drug concentration at a few time points. You want the effective diffusivity $D_{eff}$ of the active pharmaceutical ingredient through the polymer matrix, a parameter that governs bioavailability and is used to design controlled-release formulations.</li>
       <li><strong>Reaction kinetics from PAT:</strong> Inline Raman spectroscopy gives you concentration-time profiles of intermediates during a synthesis step. You want the individual rate constants $k_1, k_2, k_3$ without running a full design of experiments campaign.</li>
       <li><strong>Subsurface flow:</strong> Pressure transient measurements in boreholes encode information about the permeability field $K(x,y)$ of an aquifer. Recovering $K$ from sparse pressure data is the classic groundwater inverse problem.</li>
-      <li><strong>Fluid mechanics:</strong> Raissi, Yazdani, and Karniadakis (2020) demonstrated that sparse velocity measurements around a cylinder in crossflow allow recovery of the full pressure and velocity fields, including pressure gradients that are not directly measurable — "hidden fluid mechanics" [2].</li>
+      <li><strong>Fluid mechanics:</strong> Raissi, Yazdani, and Karniadakis (2020) demonstrated that sparse velocity measurements around a cylinder in crossflow allow recovery of the full pressure and velocity fields, including pressure gradients that are not directly measurable, "hidden fluid mechanics" [2].</li>
     </ul>
 
-    <p class="body-text">In each case, the physics is not just background knowledge — it is the mechanism that makes parameter identification possible from data that would otherwise be severely underdetermined.</p>
+    <p class="body-text">In each case, the physics is not just background knowledge, it is the mechanism that makes parameter identification possible from data that would otherwise be severely underdetermined.</p>
 
     <!-- SECTION 2 -->
     <hr class="divider">
-    <div class="section-label">02 — The PINN Inverse Setup</div>
+    <div class="section-label">02, The PINN Inverse Setup</div>
     <h2 class="section-h">Making Parameters Trainable Variables</h2>
 
-    <p class="body-text">The key conceptual move in PINN-based inverse problems is simple but powerful: treat the unknown physical parameter as an additional trainable variable in PyTorch, optimized jointly with the network weights. The parameter is no longer a hyperparameter or an input — it is a learnable scalar that participates in the automatic differentiation graph alongside every weight and bias.</p>
+    <p class="body-text">The key conceptual move in PINN-based inverse problems is simple but powerful: treat the unknown physical parameter as an additional trainable variable in PyTorch, optimized jointly with the network weights. The parameter is no longer a hyperparameter or an input, it is a learnable scalar that participates in the automatic differentiation graph alongside every weight and bias.</p>
 
     <p class="body-text">For the 1D heat equation with unknown diffusivity $\alpha^\star = 0.4$, initialized at $\alpha_{init} = 1.5$ (far from the truth), the network class becomes:</p>
 
     <div class="code-block">
       <div class="code-header">
         <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
-        <span class="code-lang">Python — PyTorch</span>
+        <span class="code-lang">Python, PyTorch</span>
       </div>
       <pre class="code-body"><span class="kw">class</span> <span class="tp">InversePINN</span>(nn.Module):
     <span class="kw">def</span> <span class="fn">__init__</span>(<span class="nm">self</span>, alpha_init=<span class="nm">1.5</span>):
@@ -254,7 +254,7 @@
     </div>
 
     <h3 class="sub-h">Why log-space parameterization?</h3>
-    <p class="body-text">Storing <span class="math-inline">log(α)</span> rather than <span class="math-inline">α</span> directly serves two purposes. First, it enforces the constraint $\alpha > 0$ unconditionally — exponentiation always returns a positive value, eliminating the need for clipping or projection steps that would break gradient flow. Second, it improves the optimization landscape. Physical parameters often span several orders of magnitude (think permeabilities from $10^{-3}$ to $10^{3}$ m²/s), and working in log-space makes the gradient-based search scale-invariant. A step of $0.1$ in log-space corresponds to a multiplicative factor of $e^{0.1} \approx 1.105$ regardless of the current magnitude of $\alpha$.</p>
+    <p class="body-text">Storing <span class="math-inline">log(α)</span> rather than <span class="math-inline">α</span> directly serves two purposes. First, it enforces the constraint $\alpha > 0$ unconditionally, exponentiation always returns a positive value, eliminating the need for clipping or projection steps that would break gradient flow. Second, it improves the optimization landscape. Physical parameters often span several orders of magnitude (think permeabilities from $10^{-3}$ to $10^{3}$ m²/s), and working in log-space makes the gradient-based search scale-invariant. A step of $0.1$ in log-space corresponds to a multiplicative factor of $e^{0.1} \approx 1.105$ regardless of the current magnitude of $\alpha$.</p>
 
     <p class="body-text">More formally, if the loss $\mathcal{L}$ is a function of $\alpha$, the gradient with respect to $\log\alpha$ is</p>
 
@@ -275,7 +275,7 @@
 
     <!-- SECTION 3 -->
     <hr class="divider">
-    <div class="section-label">03 — Loss Function</div>
+    <div class="section-label">03, Loss Function</div>
     <h2 class="section-h">Mutually Constraining Data and Physics</h2>
 
     <p class="body-text">The combined loss has two terms that work in concert:</p>
@@ -290,16 +290,16 @@
       <div class="callout-icon">&#9670;</div>
       <div class="callout-body">
         <strong>The mutual constraint is the key insight.</strong>
-        $\alpha$ is not just fit to match the 40 data points — it must simultaneously make those 40 points fit AND ensure that the reconstructed field $\hat{u}(x,t)$ satisfies the heat equation everywhere in the domain. These two requirements are only simultaneously satisfiable at the true parameter value $\alpha^\star$. Any other value of $\alpha$ forces a contradiction: either the physics is violated, or the data is not fitted.
+        $\alpha$ is not just fit to match the 40 data points, it must simultaneously make those 40 points fit AND ensure that the reconstructed field $\hat{u}(x,t)$ satisfies the heat equation everywhere in the domain. These two requirements are only simultaneously satisfiable at the true parameter value $\alpha^\star$. Any other value of $\alpha$ forces a contradiction: either the physics is violated, or the data is not fitted.
       </div>
     </div>
 
-    <p class="body-text">Backpropagation computes gradients with respect to both $\theta$ and $\log\alpha$ simultaneously. In PyTorch, both are <code>nn.Parameter</code> objects registered in the same module, so the optimizer sees them as part of the same parameter group. The gradient of the physics loss with respect to $\log\alpha$ carries information about which direction to move $\alpha$ to reduce the PDE residual — this is the signal that drives parameter identification.</p>
+    <p class="body-text">Backpropagation computes gradients with respect to both $\theta$ and $\log\alpha$ simultaneously. In PyTorch, both are <code>nn.Parameter</code> objects registered in the same module, so the optimizer sees them as part of the same parameter group. The gradient of the physics loss with respect to $\log\alpha$ carries information about which direction to move $\alpha$ to reduce the PDE residual, this is the signal that drives parameter identification.</p>
 
     <div class="code-block">
       <div class="code-header">
         <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
-        <span class="code-lang">Python — training loop</span>
+        <span class="code-lang">Python, training loop</span>
       </div>
       <pre class="code-body"><span class="kw">def</span> <span class="fn">train_step</span>(model, optimizer, x_data, t_data, u_data, x_f, t_f, lam=<span class="nm">1.0</span>):
     optimizer.zero_grad()
@@ -329,26 +329,26 @@
 
     <!-- SECTION 4 -->
     <hr class="divider">
-    <div class="section-label">04 — Why Physics Regularizes</div>
+    <div class="section-label">04, Why Physics Regularizes</div>
     <h2 class="section-h">Structural Constraint vs. Tikhonov Regularization</h2>
 
     <p class="body-text">A natural question: why not simply fit a neural network to the 40 data points without any physics term, and then estimate $\alpha$ from the fitted function by numerical differentiation? The answer is that 40 points in a continuous domain are radically insufficient to uniquely determine a smooth function, let alone its second spatial derivative. An unconstrained network will interpolate the data and produce a $u(x,t)$ that may be arbitrarily wiggly, making $\partial^2 u / \partial x^2$ meaningless.</p>
 
-    <p class="body-text">Classical regularization (Tikhonov, $L^2$ penalty on weights or on derivatives of $u$) enforces <em>smoothness</em> — it prevents the fit from being too wiggly. But smoothness is a geometric property unrelated to the physics. A smooth but physically inadmissible field can still yield a wildly wrong estimate of $\alpha$.</p>
+    <p class="body-text">Classical regularization (Tikhonov, $L^2$ penalty on weights or on derivatives of $u$) enforces <em>smoothness</em>, it prevents the fit from being too wiggly. But smoothness is a geometric property unrelated to the physics. A smooth but physically inadmissible field can still yield a wildly wrong estimate of $\alpha$.</p>
 
-    <p class="body-text">The physics loss enforces a <em>structural constraint</em>: the fitted field must belong to the solution manifold of the heat equation for some value of $\alpha$. This is a far stronger requirement than smoothness. The solution manifold of the heat equation is a much smaller subset of all smooth functions — it is parametrized by $\alpha$ (and the initial/boundary conditions), so fitting onto it simultaneously constrains both the field and the parameter.</p>
+    <p class="body-text">The physics loss enforces a <em>structural constraint</em>: the fitted field must belong to the solution manifold of the heat equation for some value of $\alpha$. This is a far stronger requirement than smoothness. The solution manifold of the heat equation is a much smaller subset of all smooth functions, it is parametrized by $\alpha$ (and the initial/boundary conditions), so fitting onto it simultaneously constrains both the field and the parameter.</p>
 
     <div class="callout warning">
       <div class="callout-icon">&#9651;</div>
       <div class="callout-body">
         <strong>Identifiability requires coverage.</strong>
-        If all 40 sensors are at a single spatial location, the problem loses spatial gradient information and $\alpha$ becomes unidentifiable — many diffusivities produce the same time trace at a single point. This is the observability condition: the sensor layout must provide sufficient spatial and temporal coverage to distinguish the parameter from all other possible parameter values.
+        If all 40 sensors are at a single spatial location, the problem loses spatial gradient information and $\alpha$ becomes unidentifiable, many diffusivities produce the same time trace at a single point. This is the observability condition: the sensor layout must provide sufficient spatial and temporal coverage to distinguish the parameter from all other possible parameter values.
       </div>
     </div>
 
     <!-- SECTION 5 -->
     <hr class="divider">
-    <div class="section-label">05 — Training Results</div>
+    <div class="section-label">05, Training Results</div>
     <h2 class="section-h">Alpha Converges: 1.5 → 0.4 over 12,000 Epochs</h2>
 
     <p class="body-text">The training log from notebook <code>07_inverse_parameter_estimation.ipynb</code> shows the convergence trajectory. The optimizer is L-BFGS for the final phase (after an Adam warm-up for 3,000 epochs), which is standard for PINN inverse problems because L-BFGS exploits second-order information and converges much faster once the network is in a good basin.</p>
@@ -443,12 +443,12 @@ Converged. True alpha: 0.4000 | Recovered alpha: 0.4007 | Relative error: 0.18%<
         <!-- Final annotation -->
         <text x="560" y="203" font-size="9" fill="#B8845A" font-family="'JetBrains Mono',monospace">0.4007</text>
       </svg>
-      <div class="fig-caption">Fig. 2 — Parameter convergence trajectory. Starting at $\hat{\alpha}_0 = 1.5$, the estimate descends toward the true value $\alpha^\star = 0.4$ over 12,000 epochs. Final relative error: 0.18%. The curve is smooth because $\log\alpha$ is the actual optimization variable; the plotted $\hat{\alpha} = e^{\widehat{\log\alpha}}$ inherits this smoothness.</div>
+      <div class="fig-caption">Fig. 2, Parameter convergence trajectory. Starting at $\hat{\alpha}_0 = 1.5$, the estimate descends toward the true value $\alpha^\star = 0.4$ over 12,000 epochs. Final relative error: 0.18%. The curve is smooth because $\log\alpha$ is the actual optimization variable; the plotted $\hat{\alpha} = e^{\widehat{\log\alpha}}$ inherits this smoothness.</div>
     </div>
 
     <!-- SECTION 6 -->
     <hr class="divider">
-    <div class="section-label">06 — Sensor Placement &amp; Identifiability</div>
+    <div class="section-label">06, Sensor Placement &amp; Identifiability</div>
     <h2 class="section-h">Not All Sensor Configurations Are Equally Informative</h2>
 
     <div class="fig-wrap">
@@ -476,9 +476,9 @@ Converged. True alpha: 0.4000 | Recovered alpha: 0.4007 | Relative error: 0.18%<
         <circle cx="55" cy="16" r="4" fill="#DC2626"/>
         <text x="63" y="20" font-size="10" fill="#4A4540">40 noisy sensors</text>
         <rect x="200" y="10" width="12" height="8" fill="url(#heatGrad)" rx="1" opacity="0.85"/>
-        <text x="216" y="20" font-size="10" fill="#4A4540">true field u(x,t) — dark = high temperature</text>
+        <text x="216" y="20" font-size="10" fill="#4A4540">true field u(x,t), dark = high temperature</text>
       </svg>
-      <div class="fig-caption">Fig. 3 — Sensor placement in the $(x, t)$ domain. The 40 sensors are scattered across both space and time, providing coverage of the spatial gradient structure (essential for estimating diffusivity). Clustering all sensors at a single $x$ location would make $\alpha$ unidentifiable from this data alone.</div>
+      <div class="fig-caption">Fig. 3, Sensor placement in the $(x, t)$ domain. The 40 sensors are scattered across both space and time, providing coverage of the spatial gradient structure (essential for estimating diffusivity). Clustering all sensors at a single $x$ location would make $\alpha$ unidentifiable from this data alone.</div>
     </div>
 
     <h3 class="sub-h">Observability and the Fisher Information Matrix</h3>
@@ -488,19 +488,19 @@ Converged. True alpha: 0.4000 | Recovered alpha: 0.4007 | Relative error: 0.18%<
       $$\mathcal{I}(\boldsymbol{\theta}) = \frac{1}{\sigma^2} \mathbf{J}^\top \mathbf{J}$$
     </div>
 
-    <p class="body-text">where $\mathbf{J}_{ij} = \partial f_i / \partial \theta_j$ is the Jacobian of the model outputs with respect to parameters. A parameter is identifiable if and only if $\mathcal{I}$ is positive definite. For the single parameter $\alpha$, this reduces to asking whether $\sum_i (\partial u / \partial \alpha)^2 > 0$ — i.e., whether the model output is sensitive to the parameter at the observed locations. The PINN computes this sensitivity automatically via backpropagation.</p>
+    <p class="body-text">where $\mathbf{J}_{ij} = \partial f_i / \partial \theta_j$ is the Jacobian of the model outputs with respect to parameters. A parameter is identifiable if and only if $\mathcal{I}$ is positive definite. For the single parameter $\alpha$, this reduces to asking whether $\sum_i (\partial u / \partial \alpha)^2 > 0$, i.e., whether the model output is sensitive to the parameter at the observed locations. The PINN computes this sensitivity automatically via backpropagation.</p>
 
     <p class="body-text">The inverse of the FIM gives the Cramér–Rao lower bound on parameter estimation variance: $\text{Var}(\hat{\alpha}) \geq 1/\mathcal{I}(\alpha)$. This bound is achievable by the maximum likelihood estimator asymptotically, and the PINN inverse problem can be interpreted as an approximate MLE when the noise is Gaussian and the physics loss is used as the likelihood rather than a penalty.</p>
 
     <!-- SECTION 7 -->
     <hr class="divider">
-    <div class="section-label">07 — ODE Inverse Problems</div>
+    <div class="section-label">07, ODE Inverse Problems</div>
     <h2 class="section-h">Recovering Reaction Rate Constants from Sparse Concentrations</h2>
 
     <p class="body-text">The inverse PINN framework extends naturally to ODE systems. Consider the consecutive reaction A &rarr; B &rarr; C with mass-action kinetics:</p>
 
     <div class="math-block">
-      $$\frac{d[A]}{dt} = -k_1 [A], \qquad \frac{d[B]}{dt} = k_1 [A] - k_2 [B], \qquad \frac{d[C]}{dt} = k_2 [B]$$
+      $$\frac{d[A]}{dt} = -k_1 [A], \qquad \frac{d[B]}{dt} = k_1 [A], k_2 [B], \qquad \frac{d[C]}{dt} = k_2 [B]$$
     </div>
 
     <p class="body-text">with initial conditions $[A](0) = 1$, $[B](0) = [C](0) = 0$. Suppose the true constants are $k_1^\star = 0.3$, $k_2^\star = 0.7$, and you have only 15 noisy concentration measurements for each species at scattered time points. The PINN inverse setup:</p>
@@ -508,7 +508,7 @@ Converged. True alpha: 0.4000 | Recovered alpha: 0.4007 | Relative error: 0.18%<
     <div class="code-block">
       <div class="code-header">
         <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
-        <span class="code-lang">Python — reaction kinetics inverse problem</span>
+        <span class="code-lang">Python, reaction kinetics inverse problem</span>
       </div>
       <pre class="code-body"><span class="kw">class</span> <span class="tp">KineticsInversePINN</span>(nn.Module):
     <span class="kw">def</span> <span class="fn">__init__</span>(<span class="nm">self</span>, k1_init=<span class="nm">1.0</span>, k2_init=<span class="nm">1.0</span>):
@@ -535,19 +535,19 @@ Converged. True alpha: 0.4000 | Recovered alpha: 0.4007 | Relative error: 0.18%<
         <span class="kw">return</span> r1, r2, r3</pre>
     </div>
 
-    <p class="body-text">The total loss is $\mathcal{L} = \mathcal{L}_{data,A} + \mathcal{L}_{data,B} + \mathcal{L}_{data,C} + \lambda(\mathcal{L}_{phys,A} + \mathcal{L}_{phys,B} + \mathcal{L}_{phys,C})$. With this setup and 4,000 L-BFGS steps, the notebook recovers $\hat{k}_1 = 0.298 \pm 0.004$ and $\hat{k}_2 = 0.703 \pm 0.006$ from 45 noisy data points — relative errors of 0.7% and 0.4% respectively.</p>
+    <p class="body-text">The total loss is $\mathcal{L} = \mathcal{L}_{data,A} + \mathcal{L}_{data,B} + \mathcal{L}_{data,C} + \lambda(\mathcal{L}_{phys,A} + \mathcal{L}_{phys,B} + \mathcal{L}_{phys,C})$. With this setup and 4,000 L-BFGS steps, the notebook recovers $\hat{k}_1 = 0.298 \pm 0.004$ and $\hat{k}_2 = 0.703 \pm 0.006$ from 45 noisy data points, relative errors of 0.7% and 0.4% respectively.</p>
 
     <div class="callout success">
       <div class="callout-icon">&#10003;</div>
       <div class="callout-body">
         <strong>Practical implication for pharmaceutical development.</strong>
-        This capability replaces a traditional design of experiments campaign. Recovering $k_1$ and $k_2$ classically requires 10–20 experiments across different initial concentrations and temperatures (each a batch run with full analytical workup). The PINN inverse approach recovers both parameters from a single run with inline PAT monitoring — a factor of 10–20x reduction in experimental burden, consistent with the FDA's PAT initiative objectives [7, 8].
+        This capability replaces a traditional design of experiments campaign. Recovering $k_1$ and $k_2$ classically requires 10–20 experiments across different initial concentrations and temperatures (each a batch run with full analytical workup). The PINN inverse approach recovers both parameters from a single run with inline PAT monitoring, a factor of 10–20x reduction in experimental burden, consistent with the FDA's PAT initiative objectives [7, 8].
       </div>
     </div>
 
     <!-- SECTION 8 -->
     <hr class="divider">
-    <div class="section-label">08 — Practical Considerations</div>
+    <div class="section-label">08, Practical Considerations</div>
     <h2 class="section-h">Making Inverse PINNs Work in Practice</h2>
 
     <h3 class="sub-h">Loss scaling</h3>
@@ -601,20 +601,20 @@ Converged. True alpha: 0.4000 | Recovered alpha: 0.4007 | Relative error: 0.18%<
 
     <!-- SECTION 9 -->
     <hr class="divider">
-    <div class="section-label">09 — Pharmaceutical Applications</div>
+    <div class="section-label">09, Pharmaceutical Applications</div>
     <h2 class="section-h">PAT and the Real-Time Release Testing Paradigm</h2>
 
     <p class="body-text">The FDA's Process Analytical Technology (PAT) guidance (2004) [7] defines PAT as "a system for designing, analyzing, and controlling manufacturing through timely measurements of critical quality and performance attributes of raw and in-process materials and processes, with the goal of ensuring final product quality." This is precisely the problem class that PINN inverse methods are designed to address.</p>
 
     <p class="body-text">Modern PAT installations include inline NIR and Raman spectrometers, focused beam reflectance measurement (FBRM) for particle size, and inline HPLC. These instruments generate high-frequency concentration-time profiles with a precision of $\pm 1$–$3\%$ relative error. The PINN inverse framework can exploit this data to recover kinetic parameters in near-real-time, closing the loop between measurement and process understanding.</p>
 
-    <p class="body-text">The pharmaceutical development context under ICH Q8(R2) [8] requires a Design Space to be established for critical process parameters (CPPs). Traditionally, this requires a formal DoE — a resource-intensive campaign that may require 16–50 batch runs at varied process conditions. Using PINN-based parameter estimation, a process engineer can recover the kinetic model parameters from a single batch run (with sufficient PAT coverage) and then use the calibrated mechanistic model to compute the Design Space analytically. This is a fundamentally different paradigm: <em>model-enabled</em> rather than <em>empirically enumerated</em> Design Space.</p>
+    <p class="body-text">The pharmaceutical development context under ICH Q8(R2) [8] requires a Design Space to be established for critical process parameters (CPPs). Traditionally, this requires a formal DoE, a resource-intensive campaign that may require 16–50 batch runs at varied process conditions. Using PINN-based parameter estimation, a process engineer can recover the kinetic model parameters from a single batch run (with sufficient PAT coverage) and then use the calibrated mechanistic model to compute the Design Space analytically. This is a fundamentally different paradigm: <em>model-enabled</em> rather than <em>empirically enumerated</em> Design Space.</p>
 
     <div class="callout insight">
       <div class="callout-icon">&#9670;</div>
       <div class="callout-body">
         <strong>Historical note: Psichogios and Ungar (1992).</strong>
-        The use of neural networks to identify parameters in mechanistic ODE models was proposed over 30 years ago by Psichogios and Ungar [9], who embedded neural networks as unknown rate terms inside biochemical reactor ODEs. PINN inverse problems are the natural extension of this "hybrid semi-parametric" approach — instead of replacing an unknown kinetic term with a neural network, the entire field $u(x,t)$ is represented by the network, and the physics provides the constraint that drives parameter identification.
+        The use of neural networks to identify parameters in mechanistic ODE models was proposed over 30 years ago by Psichogios and Ungar [9], who embedded neural networks as unknown rate terms inside biochemical reactor ODEs. PINN inverse problems are the natural extension of this "hybrid semi-parametric" approach, instead of replacing an unknown kinetic term with a neural network, the entire field $u(x,t)$ is represented by the network, and the physics provides the constraint that drives parameter identification.
       </div>
     </div>
 
@@ -628,7 +628,7 @@ Converged. True alpha: 0.4000 | Recovered alpha: 0.4007 | Relative error: 0.18%<
       <div class="ref-item"><span class="ref-num">[4]</span>Hadamard, J. (1902). Sur les problèmes aux dérivées partielles et leur signification physique. <em>Princeton University Bulletin</em>, 49–52.</div>
       <div class="ref-item"><span class="ref-num">[5]</span>Bard, Y. (1974). <em>Nonlinear Parameter Estimation</em>. Academic Press, New York.</div>
       <div class="ref-item"><span class="ref-num">[6]</span>Yang, L., Meng, X., &amp; Karniadakis, G.E. (2021). B-PINNs: Bayesian physics-informed neural networks for forward and inverse PDE problems with noisy data. <em>Journal of Computational Physics</em>, 425, 109913.</div>
-      <div class="ref-item"><span class="ref-num">[7]</span>U.S. Food and Drug Administration. (2004). <em>Guidance for Industry: PAT — A Framework for Innovative Pharmaceutical Development, Manufacturing, and Quality Assurance</em>. FDA, Rockville, MD.</div>
+      <div class="ref-item"><span class="ref-num">[7]</span>U.S. Food and Drug Administration. (2004). <em>Guidance for Industry: PAT, A Framework for Innovative Pharmaceutical Development, Manufacturing, and Quality Assurance</em>. FDA, Rockville, MD.</div>
       <div class="ref-item"><span class="ref-num">[8]</span>International Council for Harmonisation. (2009). <em>ICH Q8(R2): Pharmaceutical Development</em>. ICH Harmonised Tripartite Guideline.</div>
       <div class="ref-item"><span class="ref-num">[9]</span>Psichogios, D.C. &amp; Ungar, L.H. (1992). A hybrid neural network–first principles approach to process modeling. <em>AIChE Journal</em>, 38(10), 1499–1511.</div>
       <div class="ref-item"><span class="ref-num">[10]</span>Rackauckas, C., Ma, Y., Martensen, J., Warner, C., Zubov, K., Supekar, R., Skinner, D., &amp; Ramadhan, A. (2020). Universal differential equations for scientific machine learning. <em>arXiv:2001.04385</em>.</div>

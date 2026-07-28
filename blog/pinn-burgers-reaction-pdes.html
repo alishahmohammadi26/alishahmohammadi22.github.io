@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nonlinear PDEs with PINNs: Burgers Equation and Reaction Kinetics — Ali Shahmohammadi</title>
-  <meta name="description" content="Shock formation, viscous regularization, and coupled ODE systems for A→B→C reactions — where physics-informed training earns its keep.">
+  <title>Nonlinear PDEs with PINNs: Burgers Equation and Reaction Kinetics | Ali Shahmohammadi</title>
+  <meta name="description" content="Shock formation, viscous regularization, and coupled ODE systems for A→B→C reactions, where physics-informed training earns its keep.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -342,7 +342,7 @@ opt2.<span class="fn">step</span>(closure)
       <h3 class="sub-h">Governing equations</h3>
       <div class="math-block">
         $$\frac{dC_A}{dt} = -k_1 C_A$$
-        $$\frac{dC_B}{dt} = k_1 C_A - k_2 C_B$$
+        $$\frac{dC_B}{dt} = k_1 C_A, k_2 C_B$$
         $$\frac{dC_C}{dt} = k_2 C_B$$
       </div>
       <p class="body-text">With initial conditions $C_A(0) = 1$, $C_B(0) = C_C(0) = 0$ and rate constants $k_1 = 1.5$, $k_2 = 0.6$ from the notebook. Mass is conserved exactly: $C_A(t) + C_B(t) + C_C(t) = 1$ for all $t$.</p>
@@ -351,8 +351,8 @@ opt2.<span class="fn">step</span>(closure)
       <p class="body-text">For $k_1 \neq k_2$, the system admits a closed-form solution derived by successive integration of the first-order linear ODEs:</p>
       <div class="math-block">
         $$C_A(t) = e^{-k_1 t}$$
-        $$C_B(t) = \frac{k_1}{k_2 - k_1}\left(e^{-k_1 t} - e^{-k_2 t}\right)$$
-        $$C_C(t) = 1 - C_A(t) - C_B(t)$$
+        $$C_B(t) = \frac{k_1}{k_2, k_1}\left(e^{-k_1 t} - e^{-k_2 t}\right)$$
+        $$C_C(t) = 1, C_A(t), C_B(t)$$
       </div>
       <p class="body-text">With $k_1 = 1.5 > k_2 = 0.6$, species $B$ accumulates before $C_A$ is depleted because the formation rate ($k_1 C_A$) initially exceeds the consumption rate ($k_2 C_B$). The intermediate $C_B$ peaks at $t^* = \ln(k_1/k_2)/(k_1-k_2) \approx 1.02$ before decaying to zero as the reaction completes.</p>
     </div>
