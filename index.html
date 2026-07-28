@@ -26,7 +26,7 @@
   <script defer data-domain="alishahmohammadi22.github.io" src="https://plausible.io/js/script.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     /* ── Tokens ── */
     :root {
@@ -247,63 +247,128 @@
     }
     .exp-tag:hover { border-color: var(--navy); color: var(--navy); }
 
-    /* ── Writing filter ── */
-    .filter-row { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
-    .filter-btn {
-      font-size: .88rem; font-weight: 600; padding: .45rem 1rem; border-radius: 2px;
-      border: 1px solid var(--border); background: transparent; color: var(--ink-3);
-      cursor: pointer; transition: all .15s;
+    /* ── Writing section tokens (from design spec) ── */
+    #writing {
+      --w-accent:      #1f7a5c;
+      --w-accent-2:    #26986f;
+      --w-accent-wash: #e6f3ed;
+      --w-navy:        #1c2c4c;
+      --w-ink:         #141821;
+      --w-ink-2:       #3f4753;
+      --w-muted:       #69727d;
+      --w-surface:     #ffffff;
+      --w-surface-2:   #eef2f4;
+      --w-line:        #e2e7ea;
+      --w-line-strong: #cfd6da;
+      --w-box-off:     #d7dde1;
+      --w-shadow-1:    0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.05);
+      --w-shadow-2:    0 6px 22px rgba(16,24,40,.12);
+      --w-r:           10px;
+      --w-r-lg:        16px;
+      --w-font-display:"STIX Two Text",Georgia,serif;
+      --w-font-mono:   "JetBrains Mono",ui-monospace,Menlo,monospace;
     }
-    .filter-btn:hover { color: var(--ink); border-color: var(--ink-2); }
-    .filter-btn.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-    .filter-btn[data-cat="agentic"].active { background: var(--navy); border-color: var(--navy); color: #fff; }
-    .filter-btn[data-cat="data"].active    { background: var(--sienna); border-color: var(--sienna); color: #fff; }
-    .filter-btn[data-cat="sciml"].active   { background: var(--purple); border-color: var(--purple); color: #fff; }
 
-    /* ── Articles grid ── */
-    .articles-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 1px; background: var(--border);
+    /* ── Writing controls bar ── */
+    .w-controls {
+      display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: flex-end;
+      justify-content: space-between; margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem; border-bottom: 1px solid var(--w-line);
     }
-    @media (max-width: 960px) { .articles-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 580px) { .articles-grid { grid-template-columns: 1fr; } }
+    .w-ctl-group { display: flex; flex-direction: column; gap: .5rem; }
+    .w-ctl-label {
+      font-family: var(--w-font-mono); font-size: .78rem; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--w-muted);
+    }
+    .w-segmented {
+      display: inline-flex; flex-wrap: wrap; gap: 4px;
+      background: var(--w-surface-2); padding: 4px;
+      border-radius: 999px; border: 1px solid var(--w-line);
+    }
+    .w-seg {
+      appearance: none; border: 0; background: transparent; cursor: pointer;
+      font: 500 .875rem/1 'Inter',system-ui,sans-serif; color: var(--w-ink-2);
+      padding: 8px 14px; border-radius: 999px; white-space: nowrap;
+      transition: background .18s, color .18s;
+    }
+    .w-seg:hover { color: var(--w-navy); }
+    .w-seg[aria-pressed="true"] {
+      background: var(--w-surface); color: var(--w-navy);
+      box-shadow: var(--w-shadow-1);
+    }
+    .w-seg .n {
+      font-family: var(--w-font-mono); font-size: .72rem;
+      color: var(--w-muted); margin-left: 6px;
+    }
+    .w-seg[aria-pressed="true"] .n { color: var(--w-accent); }
+    .w-count { font-size: .875rem; color: var(--w-muted); align-self: center; }
+    .w-count b { color: var(--w-navy); font-weight: 600; }
 
-    .article-card {
-      background: var(--bg-alt); padding: 2rem;
-      display: flex; flex-direction: column; gap: .7rem;
-      transition: background .15s;
+    /* ── Writing card grid ── */
+    .w-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
     }
-    .article-card:hover { background: var(--bg); }
-    .article-card.hidden { display: none; }
+    @media (max-width: 680px) { .w-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 960px) {
+      .w-controls { flex-direction: column; align-items: stretch; }
+    }
 
-    .article-cat {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .63rem; font-weight: 500; letter-spacing: .09em; text-transform: uppercase;
-      padding: .2rem .5rem; border-radius: 2px; display: inline-block; width: fit-content;
+    .w-card {
+      position: relative; display: flex; flex-direction: column;
+      background: var(--w-surface); border: 1px solid var(--w-line);
+      border-radius: var(--w-r-lg); padding: 1.5rem;
+      transition: border-color .2s, box-shadow .2s;
+      color: var(--w-ink); text-decoration: none;
     }
-    .cat-agentic { color: var(--navy); background: var(--navy-lt); }
-    .cat-data    { color: var(--sienna); background: var(--sienna-lt); }
-    .cat-sciml   { color: var(--purple); background: var(--purple-lt); }
-
-    .article-meta { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
-    .article-published {
-      font-family: 'JetBrains Mono', monospace; font-size: .6rem; font-weight: 500;
-      letter-spacing: .08em; text-transform: uppercase;
-      color: var(--green); background: var(--green-lt); border: 1px solid var(--green-bdr);
-      padding: .15rem .45rem; border-radius: 2px;
+    .w-card:hover { border-color: var(--w-accent); box-shadow: var(--w-shadow-2); text-decoration: none; }
+    .w-card.coming { border-style: dashed; }
+    .w-card-top {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: .75rem; margin-bottom: .75rem;
     }
-    .article-date { font-family: 'JetBrains Mono', monospace; font-size: .67rem; color: var(--ink-3); }
-    .article-read { font-size: .72rem; color: var(--ink-3); }
-
-    .article-title { font-size: 1rem; font-weight: 600; color: var(--ink); line-height: 1.4; }
-    .article-excerpt { font-size: .92rem; color: var(--ink-2); line-height: 1.7; flex: 1; }
-    .article-link {
-      font-size: .9rem; font-weight: 600; color: var(--navy);
-      display: inline-flex; align-items: center; gap: .3rem;
-      margin-top: auto; transition: gap .15s;
+    .w-cat {
+      font-family: var(--w-font-mono); font-size: .78rem;
+      letter-spacing: .06em; text-transform: uppercase; color: var(--w-muted);
     }
-    .article-link:hover { gap: .55rem; }
-    .article-soon { font-size: .8rem; color: var(--ink-3); font-style: italic; }
+    .w-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--w-font-mono); font-size: .78rem;
+      color: var(--w-accent); border: 1px solid var(--w-line-strong);
+      border-radius: 999px; padding: 2px 9px; background: var(--w-surface);
+      white-space: nowrap;
+    }
+    .w-badge .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--w-accent); }
+    .w-card h3 {
+      font-family: var(--w-font-display); font-size: 1.1875rem; line-height: 1.25;
+      color: var(--w-navy); font-weight: 600; margin: 0 0 .5rem;
+    }
+    .w-blurb {
+      font-size: .875rem; color: var(--w-ink-2); line-height: 1.55;
+      margin: 0 0 1rem; flex: 1;
+    }
+    .w-meta {
+      display: flex; flex-wrap: wrap; align-items: center; gap: .75rem;
+      font-size: .78rem; color: var(--w-muted);
+      padding-top: .75rem; border-top: 1px solid var(--w-line);
+    }
+    .w-meta .sep { opacity: .5; }
+    .w-level { display: inline-flex; gap: 3px; align-items: center; }
+    .w-level i {
+      width: 9px; height: 9px; border-radius: 2px;
+      background: var(--w-box-off); display: block;
+    }
+    .w-level i.on { background: var(--w-accent); }
+    .w-level .lab { margin-left: 6px; color: var(--w-ink-2); font-weight: 500; }
+    .w-stretch { flex: 1; }
+    .w-readmore { font-weight: 600; color: var(--w-accent); font-size: .875rem; }
+    .w-card.coming .w-readmore { color: var(--w-muted); }
+    .w-chip {
+      font-family: var(--w-font-mono); font-size: .7rem; letter-spacing: .06em;
+      text-transform: uppercase; color: #b23a3a; border: 1px solid #b23a3a;
+      border-radius: 999px; padding: 2px 8px;
+    }
 
     /* ── Contact ── */
     .contact-section { background: var(--dark); padding: 8rem 0; }
@@ -535,409 +600,31 @@
   <div class="container">
     <div class="section-label">Writing</div>
     <h2 class="section-h">Articles &amp; Projects</h2>
-    <p class="section-sub">Technical writing on applied AI engineering, agentic systems, trustworthy scientific data, and deploying frontier AI in regulated life sciences.</p>
+    <p class="section-sub">Applied AI engineering, agentic systems, trustworthy scientific data, and physics-informed ML. Filter by topic, then sort for where you are — a learning path from the basics, or the latest first.</p>
 
-    <div class="filter-row">
-      <button class="filter-btn active" data-cat="all">All</button>
-      <button class="filter-btn" data-cat="agentic">Agentic AI</button>
-      <button class="filter-btn" data-cat="data">Data Governance &amp; FAIR</button>
-      <button class="filter-btn" data-cat="sciml">Scientific ML</button>
+    <div class="w-controls">
+      <div class="w-ctl-group">
+        <span class="w-ctl-label" id="w-filt-label">Topic</span>
+        <div class="w-segmented" role="group" aria-labelledby="w-filt-label" id="w-filters">
+          <button class="w-seg" data-filter="all" aria-pressed="true">All <span class="n" data-c="all"></span></button>
+          <button class="w-seg" data-filter="sciml" aria-pressed="false">Scientific ML <span class="n" data-c="sciml"></span></button>
+          <button class="w-seg" data-filter="agentic" aria-pressed="false">Agentic AI <span class="n" data-c="agentic"></span></button>
+          <button class="w-seg" data-filter="governance" aria-pressed="false">Data Governance &amp; FAIR <span class="n" data-c="governance"></span></button>
+        </div>
+      </div>
+      <div class="w-ctl-group">
+        <span class="w-ctl-label" id="w-sort-label">Sort</span>
+        <div class="w-segmented" role="group" aria-labelledby="w-sort-label" id="w-sorts">
+          <button class="w-seg" data-sort="path" aria-pressed="true">Beginner → Advanced</button>
+          <button class="w-seg" data-sort="pathDesc" aria-pressed="false">Advanced → Beginner</button>
+          <button class="w-seg" data-sort="newest" aria-pressed="false">Newest</button>
+          <button class="w-seg" data-sort="oldest" aria-pressed="false">Oldest</button>
+        </div>
+      </div>
     </div>
 
-    <div class="articles-grid">
-
-      <!-- ── Scientific ML · ODEs Series ── -->
-      <div class="article-card" data-cat="sciml">
-        <span class="article-cat cat-sciml">Scientific ML · Bioprocess Engineering</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">Feb 2026</span>
-          <span class="article-read">15 min read</span>
-        </div>
-        <div class="article-title">Bioprocess Viable Cell Density: Monod Kinetics &amp; Luedeking–Piret Model with PINNs</div>
-        <p class="article-excerpt">Estimating six kinetic parameters — μmax, Ks, kd, YX/S, α, β — from sparse offline CHO cell culture measurements. Directly applicable to mAb and mRNA vaccine process characterisation.</p>
-        <a href="blog/pinn-odes-bioprocess-cell-density.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <div class="article-card" data-cat="sciml">
-        <span class="article-cat cat-sciml">Scientific ML · Biochemical Engineering</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">Feb 2026</span>
-          <span class="article-read">15 min read</span>
-        </div>
-        <div class="article-title">Stiff Enzyme Kinetics &amp; QSSA: Why Plain PINNs Fail on Michaelis–Menten Systems</div>
-        <p class="article-excerpt">Stiffness ratio ≈ 10⁴ in the full enzyme mechanism defeats uniform collocation. Applying the quasi-steady-state assumption collapses the problem to one tractable non-stiff ODE — enabling stable PINN training.</p>
-        <a href="blog/pinn-odes-stiff-enzyme-kinetics.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <div class="article-card" data-cat="sciml">
-        <span class="article-cat cat-sciml">Scientific ML · Nonlinear Dynamics</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">Feb 2026</span>
-          <span class="article-read">14 min read</span>
-        </div>
-        <div class="article-title">Van der Pol Oscillator with PINNs: Recovering Nonlinear Damping from Sparse Data</div>
-        <p class="article-excerpt">Nested autograd for ẍ, time-scaling to keep residuals O(1), and recovering μ from 45 noisy samples. Plus why the plain MLP fails at μ = 5 — the spectral bias wall explained concretely.</p>
-        <a href="blog/pinn-odes-van-der-pol.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <div class="article-card" data-cat="sciml">
-        <span class="article-cat cat-sciml">Scientific ML · Epidemiology</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">Feb 2026</span>
-          <span class="article-read">13 min read</span>
-        </div>
-        <div class="article-title">SIR Epidemic Model with PINNs: Inferring Hidden States from Partial Observations</div>
-        <p class="article-excerpt">Recovering β and γ from the 1978 English boarding school influenza outbreak — with only the infectious count observed. The PINN reconstructs susceptible and recovered compartments from physics alone.</p>
-        <a href="blog/pinn-odes-sir-epidemic.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <div class="article-card" data-cat="sciml">
-        <span class="article-cat cat-sciml">Scientific ML · Ecology / Pharma</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">Feb 2026</span>
-          <span class="article-read">13 min read</span>
-        </div>
-        <div class="article-title">Lotka–Volterra Predator–Prey with PINNs: Parameter Estimation from Real Hudson Bay Data</div>
-        <p class="article-excerpt">All four kinetic parameters recovered from 21 years of real lynx–hare pelt records using a two-phase warm-start protocol. A genuinely hard inverse problem — imperfect data, approximate model, nonlinear coupling.</p>
-        <a href="blog/pinn-odes-lotka-volterra.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <div class="article-card" data-cat="sciml">
-        <span class="article-cat cat-sciml">Scientific ML · Reaction Engineering</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">Feb 2026</span>
-          <span class="article-read">14 min read</span>
-        </div>
-        <div class="article-title">Consecutive Reaction Kinetics A→B→C with PINNs: Recovering Rate Constants from Sparse Data</div>
-        <p class="article-excerpt">k₁ and k₂ recovered from 14 noisy concentration measurements — including the intermediate species peak. The physics loss implicitly enforces mass conservation throughout the domain.</p>
-        <a href="blog/pinn-odes-consecutive-reactions.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <!-- ── Research Analysis: DeepONet vs PINN ── -->
-      <div class="article-card" data-cat="sciml">
-        <span class="article-cat cat-sciml">Scientific ML · Research Analysis</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">Feb 2026</span>
-          <span class="article-read">12 min read</span>
-        </div>
-        <div class="article-title">Why DeepONet Underperforms on ODE Inverse Problems: A Deep Diagnostic Study</div>
-        <p class="article-excerpt">SVD rank analysis, training dynamics diagnosis, and a 5.7× architecture improvement — a research-quality investigation of why Pure PINN outperforms DeepONet on 6 of 7 ODE systems and what to use instead for multi-query ODE inference.</p>
-        <a href="blog/deeponet-vs-pinn-ode-analysis.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <div class="article-card" data-cat="sciml">
-        <span class="article-cat cat-sciml">Scientific ML · ODEs</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">Feb 2026</span>
-          <span class="article-read">12 min read</span>
-        </div>
-        <div class="article-title">Logistic Population Growth with PINNs: S-Curve, Carrying Capacity, and Inverse Estimation</div>
-        <p class="article-excerpt">Forward solve and joint estimation of growth rate r and carrying capacity K from 15 sparse noisy measurements. Covers pharmaceutical dissolution profiles, microbial fermentation, and tumor growth models.</p>
-        <a href="blog/pinn-odes-logistic-growth.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <!-- ── Scientific ML · PINN Series ── -->
-      <div class="article-card" data-cat="sciml">
-        <span class="article-cat cat-sciml">Scientific ML · Physics-Informed AI</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">Sep 2025</span>
-          <span class="article-read">18 min read</span>
-        </div>
-        <div class="article-title">Physics-Informed Neural Networks: Why Embedding Physical Laws into Machine Learning Changes Everything</div>
-        <p class="article-excerpt">From the failure of pure data-driven ML in engineering to your first working PINN — a zero-labeled-data solver for a first-order ODE using automatic differentiation and physics residuals.</p>
-        <a href="blog/pinn-introduction.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <div class="article-card" data-cat="sciml">
-        <span class="article-cat cat-sciml">Scientific ML · ODEs</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">Oct 2025</span>
-          <span class="article-read">14 min read</span>
-        </div>
-        <div class="article-title">Second-Order ODEs with PINNs: The Damped Harmonic Oscillator</div>
-        <p class="article-excerpt">Nested automatic differentiation, two initial conditions, and the spectral bias problem that makes oscillatory physics hard for neural networks — with a hard-constraint ansatz solution.</p>
-        <a href="blog/pinn-odes-second-order.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <div class="article-card" data-cat="sciml">
-        <span class="article-cat cat-sciml">Scientific ML · PDEs</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">Nov 2025</span>
-          <span class="article-read">16 min read</span>
-        </div>
-        <div class="article-title">Solving the 1D Heat Equation with PINNs: Your First Partial Differential Equation</div>
-        <p class="article-excerpt">From a single independent variable to a two-dimensional space-time domain — how PINNs handle partial derivatives, boundary conditions, and full field reconstruction from sparse measurements.</p>
-        <a href="blog/pinn-heat-equation.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <div class="article-card" data-cat="sciml">
-        <span class="article-cat cat-sciml">Scientific ML · Nonlinear PDEs</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">Dec 2025</span>
-          <span class="article-read">20 min read</span>
-        </div>
-        <div class="article-title">Nonlinear PDEs with PINNs: Burgers Equation and Reaction Kinetics</div>
-        <p class="article-excerpt">Shock formation, viscous regularization, and coupled ODE systems for A→B→C reactions — where physics-informed training earns its keep against classical finite-element solvers.</p>
-        <a href="blog/pinn-burgers-reaction-pdes.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <div class="article-card" data-cat="sciml">
-        <span class="article-cat cat-sciml">Scientific ML · Inverse Problems</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">Jan 2026</span>
-          <span class="article-read">22 min read</span>
-        </div>
-        <div class="article-title">Inverse Problems with PINNs: Discovering Physical Parameters from Sparse, Noisy Data</div>
-        <p class="article-excerpt">Making unknown physical constants trainable variables — recovering diffusivity, reaction rates, and material properties from 40 noisy sensor readings using joint data and physics optimization.</p>
-        <a href="blog/pinn-inverse-problems.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <div class="article-card" data-cat="sciml">
-        <span class="article-cat cat-sciml">Scientific ML · Training Strategies</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">Feb 2026</span>
-          <span class="article-read">18 min read</span>
-        </div>
-        <div class="article-title">Adaptive Sampling and Training Strategies for Physics-Informed Neural Networks</div>
-        <p class="article-excerpt">Why uniform collocation fails for stiff problems, and how residual-based adaptive refinement, loss weighting, causal training, and Fourier feature embeddings turn intractable problems into solvable ones.</p>
-        <a href="blog/pinn-adaptive-sampling.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <div class="article-card" data-cat="sciml">
-        <span class="article-cat cat-sciml">Scientific ML · Operator Learning</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">Mar 2026</span>
-          <span class="article-read">26 min read</span>
-        </div>
-        <div class="article-title">DeepONet: Learning Solution Operators Instead of Individual Solutions</div>
-        <p class="article-excerpt">From solving one PDE at a time to learning the map from any input function to its corresponding output — the branch/trunk architecture behind amortised scientific computation and design-space exploration.</p>
-        <a href="blog/pinn-deeponet.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <div class="article-card" data-cat="sciml">
-        <span class="article-cat cat-sciml">Scientific ML · Advanced Architectures</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">Apr 2026</span>
-          <span class="article-read">30 min read</span>
-        </div>
-        <div class="article-title">Physics-Informed DeepONet: Operator Learning Without Solution Data, and Parameter Estimation at Scale</div>
-        <p class="article-excerpt">Combining the universal approximation theorem for operators with physics-informed training — and using frozen operator networks for rapid inverse problems across entire parameter families simultaneously.</p>
-        <a href="blog/pinn-physics-informed-deeponet.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <!-- ── Agentic AI ── -->
-      <div class="article-card" data-cat="agentic">
-        <span class="article-cat cat-agentic">Agentic AI</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">May 2026</span>
-          <span class="article-read">14 min read</span>
-        </div>
-        <div class="article-title">Building Agentic AI Systems for Ontology Curation in Drug R&amp;D</div>
-        <p class="article-excerpt">How a four-agent LangGraph pipeline automates biomedical term extraction, ontology mapping, conflict detection, and governance routing — while preserving human oversight at every critical decision point.</p>
-        <a href="/blog/agentic-ontology-curation.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <div class="article-card" data-cat="agentic">
-        <span class="article-cat cat-agentic">Agentic AI · Data Governance</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">May 2026</span>
-          <span class="article-read">22 min read</span>
-        </div>
-        <div class="article-title">Agentic AI for Data Governance: A Production Pattern for First-Pass Curation with Human-in-the-Loop</div>
-        <p class="article-excerpt">How to design an audit-ready operating model where agents make bounded governance proposals, human stewards adjudicate the risky residue, and PROV-O provenance records every decision.</p>
-        <a href="/blog/agentic-ai-data-governance-pharma.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <div class="article-card" data-cat="agentic">
-        <span class="article-cat cat-agentic">Applied AI Engineering</span>
-        <div class="article-meta">
-          <span class="article-date">Coming Soon</span>
-        </div>
-        <div class="article-title">Making Messy Scientific Data Trustworthy for AI Agents</div>
-        <p class="article-excerpt">Architecture, implementation, and eval results from building an MCP server + agent + validation connector stack. Design decisions, measured hallucination rate, and what I learned about building AI systems that refuse rather than guess.</p>
-        <span class="article-soon">In progress</span>
-      </div>
-
-      <!-- ── Data Governance & FAIR ── -->
-      <div class="article-card" data-cat="data">
-        <span class="article-cat cat-data">Data Harmonization · AI Strategy</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">Jan 2026</span>
-          <span class="article-read">12 min read</span>
-        </div>
-        <div class="article-title">Bridging the Data Divide: AI-Driven Harmonization in Pharma</div>
-        <p class="article-excerpt">Why the most successful AI programs in pharma won't start with models — they'll start with harmonized data. Includes a reproducible Python case study: 44 raw lab terms to 8 LOINC concepts, 98% auto-mapping accuracy, cross-site findability from 35% to 99.9%.</p>
-        <a href="/blog/ai-driven-harmonization-pharma.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <div class="article-card" data-cat="data">
-        <span class="article-cat cat-data">MDM · Knowledge Graphs</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">May 2026</span>
-          <span class="article-read">25 min read</span>
-        </div>
-        <div class="article-title">Product Mastering Across the R&amp;D-to-Commercial Lifecycle: Why Knowledge Graphs Beat Traditional MDM</div>
-        <p class="article-excerpt">A practitioner's view on why the row-and-column gold record breaks down for medicinal products — and what to build instead. Covers ISO IDMP, bitemporal graphs, agentic entity resolution, and a deployable reference architecture.</p>
-        <a href="/blog/product-mastering-knowledge-graphs-vs-mdm.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <div class="article-card" data-cat="data">
-        <span class="article-cat cat-data">MDM · Semantic Layers</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">May 2026</span>
-          <span class="article-read">30 min read</span>
-        </div>
-        <div class="article-title">From Ontology to MDM: How Semantic Layers Are Replacing Hub-and-Spoke Master Data in Pharma</div>
-        <p class="article-excerpt">Why the next generation of pharma data architecture treats meaning as a first-class artifact. Covers OWL, SHACL, SKOS, data mesh federation, production exemplars from Bayer COLID and Roche EDIS, and a five-step migration pattern.</p>
-        <a href="/blog/semantic-layer-replacing-mdm-pharma.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <div class="article-card" data-cat="data">
-        <span class="article-cat cat-data">AI Governance · ISO Standards</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">May 2026</span>
-          <span class="article-read">28 min read</span>
-        </div>
-        <div class="article-title">AI Governance Without the Theater: Operationalizing ISO/IEC 23894 in Pharmaceutical R&amp;D</div>
-        <p class="article-excerpt">A practical implementation pattern for pharma AI risk that connects ISO/IEC 23894 to ICH Q9(R1), NIST AI RMF crosswalks, and FAIR plus ontology curation controls. Focused on evidence-ready operations over governance theater.</p>
-        <a href="/blog/iso-23894-pharma-rd.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <div class="article-card" data-cat="data">
-        <span class="article-cat cat-data">Data Catalog · FAIR Maturity</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">May 2026</span>
-          <span class="article-read">24 min read</span>
-        </div>
-        <div class="article-title">A 90-Day Maturity Assessment for Pharmaceutical R&amp;D Data Catalogs</div>
-        <p class="article-excerpt">A practical 90-day playbook for data leaders to baseline FAIR maturity, identify one high-leverage quick win, and ship a defensible 12-month roadmap before the first quarterly review.</p>
-        <a href="/blog/90-day-pharma-catalog-maturity.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <div class="article-card" data-cat="data">
-        <span class="article-cat cat-data">FAIR Data · 5-Part Series</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">May 2026</span>
-          <span class="article-read">~45 min · 5 notebooks</span>
-        </div>
-        <div class="article-title">What FAIR Data Actually Means for AI-Ready Pharmaceutical R&amp;D</div>
-        <p class="article-excerpt">A practitioner's deep-dive into FAIR data maturity frameworks — RDA FAIR Maturity Model (41 indicators) and Pistoia Alliance FAIR Maturity Matrix with a complete walkthrough on a CAR-T viability dataset and a semi-automated Python scorer.</p>
-        <a href="https://alishahmohammadi22.github.io/fair-data-toolkit" target="_blank" rel="noopener" class="article-link">
-          Read the Series
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <div class="article-card" data-cat="data">
-        <span class="article-cat cat-data">FAIR Data · Data Governance</span>
-        <div class="article-meta">
-          <span class="article-published">Published</span>
-          <span class="article-date">May 2026</span>
-          <span class="article-read">18 min read</span>
-        </div>
-        <div class="article-title">FAIR Data Principles: A Practical Guide to Making Your Data Findable, Accessible, Interoperable, and Reusable</div>
-        <p class="article-excerpt">A decade after their publication, the FAIR principles have quietly become the backbone of modern data strategy. What they actually mean, why they matter more than ever in the age of AI, and how to put them to work with a 5-step starter plan.</p>
-        <a href="/blog/fair-data-principles.html" class="article-link">
-          Read Article
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-
-    </div>
+    <p class="w-count" id="w-count" aria-live="polite"></p>
+    <div class="w-grid" id="w-grid"></div>
   </div>
 </section>
 
@@ -986,23 +673,167 @@
     });
   })();
 
+  /* ── Writing section: data-driven card grid ── */
   (function(){
-    var btns = document.querySelectorAll('.filter-btn');
-    var cards = document.querySelectorAll('.article-card');
-    btns.forEach(function(btn){
-      btn.addEventListener('click', function(){
-        btns.forEach(function(b){ b.classList.remove('active'); });
-        btn.classList.add('active');
-        var cat = btn.getAttribute('data-cat');
-        cards.forEach(function(card){
-          if(cat === 'all' || card.getAttribute('data-cat') === cat){
-            card.classList.remove('hidden');
-          } else {
-            card.classList.add('hidden');
-          }
+    var B = function(u){ return "https://alishahmohammadi.com/blog/"+u; };
+    var POSTS = [
+      // PINN Foundations 01–08
+      {t:"Physics-Informed Neural Networks: Why Embedding Physical Laws Changes Everything",cat:"sciml",series:"Foundations 01",level:1,seq:1,date:"2025-09",read:"18 min",
+       blurb:"From the failure of pure data-driven ML in engineering to your first working PINN — a zero-labeled-data solver for a first-order ODE.",url:B("pinn-introduction.html")},
+      {t:"Second-Order ODEs with PINNs: The Damped Harmonic Oscillator",cat:"sciml",series:"Foundations 02",level:1,seq:2,date:"2025-10",read:"14 min",
+       blurb:"Nested automatic differentiation, two initial conditions, and the spectral-bias problem — with a hard-constraint ansatz solution.",url:B("pinn-odes-second-order.html")},
+      {t:"Solving the 1D Heat Equation with PINNs: Your First PDE",cat:"sciml",series:"Foundations 03",level:2,seq:3,date:"2025-11",read:"16 min",
+       blurb:"From a single variable to a 2D space-time domain — partial derivatives, boundary conditions, and full field reconstruction from sparse data.",url:B("pinn-heat-equation.html")},
+      {t:"Nonlinear PDEs with PINNs: Burgers Equation and Reaction Kinetics",cat:"sciml",series:"Foundations 04",level:2,seq:4,date:"2025-12",read:"20 min",
+       blurb:"Shock formation, viscous regularization, and coupled A→B→C systems — where physics-informed training earns its keep against FEM.",url:B("pinn-burgers-reaction-pdes.html")},
+      {t:"Inverse Problems with PINNs: Discovering Physical Parameters from Sparse, Noisy Data",cat:"sciml",series:"Foundations 05",level:3,seq:5,date:"2026-01",read:"22 min",
+       blurb:"Making unknown constants trainable variables — recovering diffusivity, reaction rates, and material properties from 40 noisy readings.",url:B("pinn-inverse-problems.html")},
+      {t:"Adaptive Sampling and Training Strategies for PINNs",cat:"sciml",series:"Foundations 06",level:4,seq:6,date:"2026-02",read:"18 min",
+       blurb:"Why uniform collocation fails for stiff problems, and how RAR, loss weighting, causal training, and Fourier features fix it.",url:B("pinn-adaptive-sampling.html")},
+      {t:"DeepONet: Learning Solution Operators Instead of Individual Solutions",cat:"sciml",series:"Foundations 07",level:3,seq:7,date:"2026-03",read:"26 min",
+       blurb:"From solving one PDE at a time to learning the map from any input function to its output — the branch/trunk architecture.",url:B("pinn-deeponet.html")},
+      {t:"Physics-Informed DeepONet: Operator Learning Without Solution Data",cat:"sciml",series:"Foundations 08",level:4,seq:8,date:"2026-04",read:"30 min",
+       blurb:"Universal operator approximation with physics-informed training — frozen operator nets for rapid inverse problems across parameter families.",url:B("pinn-physics-informed-deeponet.html")},
+      // ODE Problems 01–07
+      {t:"Logistic Population Growth with PINNs: S-Curve, Carrying Capacity, Inverse Estimation",cat:"sciml",series:"ODE Problems 01",level:1,seq:9,date:"2026-02",read:"12 min",
+       blurb:"Forward solve and joint estimation of r and K from 16 real U.S. census points (Pearl &amp; Reed, 1920). The foundation pattern.",url:B("pinn-odes-logistic-growth.html")},
+      {t:"Consecutive Reaction Kinetics A→B→C with PINNs",cat:"sciml",series:"ODE Problems 02",level:2,seq:10,date:"2026-02",read:"14 min",
+       blurb:"k₁ and k₂ recovered from 14 noisy concentration measurements, including the intermediate peak. Physics loss enforces mass conservation.",url:B("pinn-odes-consecutive-reactions.html")},
+      {t:"Lotka–Volterra Predator–Prey with PINNs: Parameter Estimation from Real Hudson Bay Data",cat:"sciml",series:"ODE Problems 03",level:2,seq:11,date:"2026-02",read:"13 min",
+       blurb:"All four parameters recovered from 21 years of real lynx–hare pelt records via a two-phase warm-start protocol.",url:B("pinn-odes-lotka-volterra.html")},
+      {t:"SIR Epidemic Model with PINNs: Inferring Hidden States from Partial Observations",cat:"sciml",series:"ODE Problems 04",level:2,seq:12,date:"2026-02",read:"13 min",
+       blurb:"Recovering β and γ from the 1978 boarding-school flu outbreak with only infectious counts — physics reconstructs the hidden compartments.",url:B("pinn-odes-sir-epidemic.html")},
+      {t:"Van der Pol Oscillator with PINNs: Recovering Nonlinear Damping from Sparse Data",cat:"sciml",series:"ODE Problems 05",level:3,seq:13,date:"2026-02",read:"14 min",
+       blurb:"Nested autograd for ẍ, time-scaling to keep residuals O(1), and recovering μ from 45 noisy samples — plus the spectral-bias wall.",url:B("pinn-odes-van-der-pol.html")},
+      {t:"Stiff Enzyme Kinetics &amp; QSSA: Why Plain PINNs Fail on Michaelis–Menten Systems",cat:"sciml",series:"ODE Problems 06",level:3,seq:14,date:"2026-02",read:"15 min",
+       blurb:"A stiffness ratio ≈ 10⁴ defeats uniform collocation. The quasi-steady-state assumption collapses it to one tractable non-stiff ODE.",url:B("pinn-odes-stiff-enzyme-kinetics.html")},
+      {t:"Bioprocess Viable Cell Density: Monod Kinetics &amp; Luedeking–Piret with PINNs",cat:"sciml",series:"ODE Problems 07",level:3,seq:15,date:"2026-02",read:"15 min",
+       blurb:"Estimating six kinetic parameters from sparse offline CHO measurements — directly applicable to mAb and mRNA process characterisation.",url:B("pinn-odes-bioprocess-cell-density.html")},
+      // Capstones
+      {t:"Unified PINN–ODE Benchmark: Capstone Across Seven Systems",cat:"sciml",series:"Capstone",level:3,seq:16,date:"2026-02",read:"20 min",
+       blurb:"One harness benchmarking every ODE problem in the series under matched settings — the reproducible capstone tying the applied track together.",url:B("unified-pinn-ode-benchmark.html")},
+      {t:"Why DeepONet Underperforms on ODE Inverse Problems: A Deep Diagnostic Study",cat:"sciml",series:"Capstone",level:4,seq:17,date:"2026-02",read:"12 min",
+       blurb:"SVD rank analysis, training-dynamics diagnosis, and a 5.7× architecture improvement — why Pure PINN beats DeepONet on 6 of 7 systems.",url:B("deeponet-vs-pinn-ode-analysis.html")},
+      // Agentic AI
+      {t:"Building Agentic AI Systems for Ontology Curation in Drug R&amp;D",cat:"agentic",series:"Agentic AI",level:2,seq:18,date:"2026-05",read:"14 min",
+       blurb:"A four-agent LangGraph pipeline automating term extraction, ontology mapping, conflict detection, and governance routing — with human oversight throughout.",url:B("agentic-ontology-curation.html")},
+      {t:"Agentic AI for Data Governance: A Production Pattern for First-Pass Curation",cat:"agentic",series:"Agentic AI",level:3,seq:19,date:"2026-05",read:"22 min",
+       blurb:"An audit-ready operating model where agents make bounded proposals, stewards adjudicate the risky residue, and PROV-O records every decision.",url:B("agentic-ai-data-governance-pharma.html")},
+      {t:"Making Messy Scientific Data Trustworthy for AI Agents",cat:"agentic",series:"Agentic AI",level:3,seq:20,date:null,coming:true,read:"in progress",
+       blurb:"Architecture, implementation, and eval results from an MCP server + agent + validation connector stack: design decisions, measured hallucination rate, and building AI that refuses rather than guesses.",url:null},
+      // Data Governance & FAIR
+      {t:"FAIR Data Principles: A Practical Guide to Findable, Accessible, Interoperable, Reusable Data",cat:"governance",series:"FAIR",level:1,seq:21,date:"2026-05",read:"18 min",
+       blurb:"What the FAIR principles actually mean, why they matter more than ever in the age of AI, and a 5-step starter plan.",url:B("fair-data-principles.html")},
+      {t:"Bridging the Data Divide: AI-Driven Harmonization in Pharma",cat:"governance",series:"Harmonization",level:2,seq:22,date:"2026-01",read:"12 min",
+       blurb:"Why successful AI programs start with harmonized data, not models. Includes a case study: 44 raw lab terms → 8 LOINC concepts, 98% auto-mapping.",url:B("ai-driven-harmonization-pharma.html")},
+      {t:"A 90-Day Maturity Assessment for Pharmaceutical R&amp;D Data Catalogs",cat:"governance",series:"Data Catalog",level:2,seq:23,date:"2026-05",read:"24 min",
+       blurb:"A practical playbook to baseline FAIR maturity, find one high-leverage quick win, and ship a defensible 12-month roadmap.",url:B("90-day-pharma-catalog-maturity.html")},
+      {t:"AI Governance Without the Theater: Operationalizing ISO/IEC 23894 in Pharma R&amp;D",cat:"governance",series:"AI Governance",level:3,seq:24,date:"2026-05",read:"28 min",
+       blurb:"Connecting ISO/IEC 23894 to ICH Q9(R1), NIST AI RMF crosswalks, and FAIR controls — evidence-ready operations over governance theater.",url:B("iso-23894-pharma-rd.html")},
+      {t:"Product Mastering Across the R&amp;D-to-Commercial Lifecycle: Why Knowledge Graphs Beat Traditional MDM",cat:"governance",series:"MDM",level:3,seq:25,date:"2026-05",read:"25 min",
+       blurb:"Why the row-and-column gold record breaks down for medicinal products — ISO IDMP, bitemporal graphs, agentic entity resolution.",url:B("product-mastering-knowledge-graphs-vs-mdm.html")},
+      {t:"From Ontology to MDM: How Semantic Layers Are Replacing Hub-and-Spoke Master Data in Pharma",cat:"governance",series:"Semantic Layers",level:3,seq:26,date:"2026-05",read:"30 min",
+       blurb:"Treating meaning as a first-class artifact: OWL, SHACL, SKOS, data-mesh federation, exemplars from Bayer COLID and Roche EDIS.",url:B("semantic-layer-replacing-mdm-pharma.html")},
+      {t:"What FAIR Data Actually Means for AI-Ready Pharmaceutical R&amp;D (5-Part Series)",cat:"governance",series:"FAIR",level:2,seq:27,date:"2026-05",read:"~45 min",
+       blurb:"A deep-dive into FAIR maturity frameworks — RDA (41 indicators) and Pistoia — with a CAR-T viability walkthrough and a Python scorer.",url:"https://alishahmohammadi22.github.io/fair-data-toolkit"},
+    ];
+
+    var LEVELS = {1:"Beginner",2:"Intermediate",3:"Advanced",4:"Expert"};
+    var CATLABEL = {sciml:"Scientific ML",agentic:"Agentic AI",governance:"Data Governance & FAIR"};
+    var state = {filter:"all",sort:"path"};
+    var grid = document.getElementById("w-grid");
+    var countEl = document.getElementById("w-count");
+
+    function dateVal(p){ if(p.coming) return 999999; if(!p.date) return 0;
+      var parts=p.date.split("-"); return +parts[0]*100+ +parts[1]; }
+    function dateLabel(p){ if(p.coming) return "Coming soon";
+      var parts=p.date.split("-"); var m=+parts[1]-1;
+      return ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][m]+" "+parts[0]; }
+
+    function sortFn(){
+      if(state.sort==="path")     return function(a,b){ return a.level-b.level||a.seq-b.seq; };
+      if(state.sort==="pathDesc") return function(a,b){ return b.level-a.level||b.seq-a.seq; };
+      if(state.sort==="newest")   return function(a,b){ return dateVal(b)-dateVal(a)||a.seq-b.seq; };
+      return function(a,b){ return (a.coming?1:0)-(b.coming?1:0)||dateVal(a)-dateVal(b)||a.seq-b.seq; };
+    }
+
+    function levelHTML(lvl){
+      var boxes=""; for(var i=1;i<=4;i++) boxes+='<i class="'+(i<=lvl?"on":"")+'"></i>';
+      return '<span class="w-level" title="'+LEVELS[lvl]+'">'+boxes+'<span class="lab">'+LEVELS[lvl]+'</span></span>';
+    }
+
+    function cardHTML(p){
+      var tag=p.url?"a":"div";
+      var href=p.url?' href="'+p.url+'"':"";
+      var ext=p.url&&p.url.indexOf("github.io")!==-1?' target="_blank" rel="noopener"':"";
+      return '<'+tag+' class="w-card'+(p.coming?" coming":"")+'"'+href+ext+' data-cat="'+p.cat+'">'
+        +'<div class="w-card-top">'
+        +'<span class="w-cat">'+CATLABEL[p.cat]+'</span>'
+        +'<span class="w-badge"><span class="dot"></span>'+p.series+'</span>'
+        +'</div>'
+        +'<h3>'+p.t+'</h3>'
+        +'<p class="w-blurb">'+p.blurb+'</p>'
+        +'<div class="w-meta">'
+        +levelHTML(p.level)
+        +'<span class="w-stretch"></span>'
+        +(p.coming
+          ?'<span class="w-chip">Coming soon</span>'
+          :'<span>'+dateLabel(p)+'</span><span class="sep">·</span><span>'+p.read+'</span>')
+        +'</div>'
+        +'<div class="w-meta" style="border:0;padding-top:8px">'
+        +'<span class="w-readmore">'+(p.url?"Read article →":"In progress")+'</span>'
+        +'</div>'
+        +'</'+tag+'>';
+    }
+
+    function render(){
+      var list=POSTS.filter(function(p){ return state.filter==="all"||p.cat===state.filter; });
+      list.sort(sortFn());
+
+      var old=new Map();
+      Array.from(grid.children).forEach(function(el){ old.set(el.dataset.key,el.getBoundingClientRect()); });
+
+      grid.innerHTML=list.map(function(p){
+        return cardHTML(p).replace(/^<(a|div)/,'<$1 data-key="'+p.seq+'"');
+      }).join("");
+
+      var reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
+      if(!reduce){
+        Array.from(grid.children).forEach(function(el){
+          var prev=old.get(el.dataset.key);
+          if(!prev){ el.animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],{duration:260,easing:"cubic-bezier(.2,.7,.2,1)"}); return; }
+          var now=el.getBoundingClientRect();
+          var dx=prev.left-now.left,dy=prev.top-now.top;
+          if(dx||dy) el.animate([{transform:"translate("+dx+"px,"+dy+"px)"},{transform:"none"}],{duration:340,easing:"cubic-bezier(.2,.7,.2,1)"});
         });
-      });
+      }
+
+      var total=list.length;
+      var label={path:"beginner → advanced",pathDesc:"advanced → beginner",newest:"newest first",oldest:"oldest first"}[state.sort];
+      countEl.innerHTML="<b>"+total+"</b> "+(total===1?"article":"articles")+" · sorted "+label;
+    }
+
+    function setCounts(){
+      var c={all:POSTS.length,sciml:0,agentic:0,governance:0};
+      POSTS.forEach(function(p){ c[p.cat]++; });
+      document.querySelectorAll("[data-c]").forEach(function(el){ el.textContent=c[el.dataset.c]||""; });
+    }
+
+    document.getElementById("w-filters").addEventListener("click",function(e){
+      var b=e.target.closest("[data-filter]"); if(!b) return;
+      state.filter=b.dataset.filter;
+      document.querySelectorAll("#w-filters .w-seg").forEach(function(s){ s.setAttribute("aria-pressed",s===b?"true":"false"); });
+      render();
     });
+    document.getElementById("w-sorts").addEventListener("click",function(e){
+      var b=e.target.closest("[data-sort]"); if(!b) return;
+      state.sort=b.dataset.sort;
+      document.querySelectorAll("#w-sorts .w-seg").forEach(function(s){ s.setAttribute("aria-pressed",s===b?"true":"false"); });
+      render();
+    });
+
+    setCounts();
+    render();
   })();
 </script>
 </body>
