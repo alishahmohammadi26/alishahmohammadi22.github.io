@@ -1,9 +1,8 @@
-<!DOCTYPE html><html lang="en" data-theme="light"><head>
+<!DOCTYPE html><html lang="en"><head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bioprocess Viable Cell Density: Monod Kinetics with PINNs | IndPenSim Benchmark | Ali Shahmohammadi</title><meta name="description" content="Estimating mumax, Ks, Yxs from 20 offline CHO cell culture measurements using the warm-start PINN protocol. The IndPenSim benchmark, real results, and the PAT digital twin vision.">
-  <link rel="canonical" href="https://alishahmohammadi.com/blog/pinn-odes-bioprocess-cell-density.html">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root{--bg:#F8F6F2;--bg-alt:#F1EEE9;--ink:#111010;--ink-2:#4A4540;--ink-3:#8C857E;--navy:#1C3D6B;--navy-lt:#EBF0F7;--sienna:#B8845A;--sienna-lt:#FBF4EC;--purple:#5B4E8A;--purple-lt:#F2EEF9;--green:#2D7A4F;--green-lt:#EBF7F1;--green-bdr:#BEE5D3;--border:#DEDAD3;--dark:#111010;--accent:#2563EB;--accent-lt:#EFF6FF;--accent-mid:#BFDBFE;--red:#DC2626;--red-lt:#FEF2F2;--amber:#D97706;--amber-lt:#FFFBEB;--amber-bdr:#FDE68A;--teal:#0D9488;--teal-lt:#F0FDFA;--teal-bdr:#99F6E4}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -98,22 +97,9 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
-  <link rel="stylesheet" href="/assets/css/theme.css">
-  <script>(function(){var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';document.documentElement.dataset.theme=t;})()</script>
 </head><body>
-<header class="site-header" data-elevate="false">
-  <a class="brand" href="/">Ali Shahmohammadi <span class="brand-deg">Ph.D.</span></a>
-  <nav class="site-nav" aria-label="Primary">
-    <a href="/#writing">Writing</a>
-    <a href="/#career">Career</a>
-    <a href="/resume.html">Resume</a>
-    <a class="nav-ext" href="https://github.com/alishahmohammadi22" rel="me">GitHub</a>
-  </nav>
-  <button class="theme-toggle" type="button" aria-label="Toggle dark mode" data-theme-toggle>
-    <span class="theme-toggle-dot"></span>
-  </button>
-  <div class="read-progress" role="presentation"><span></span></div>
-</header>
+<nav><a href="../index.html" class="nav-logo">Ali Shahmohammadi <em>Ph.D.</em></a>
+<div class="nav-links"><a href="../index.html#career">Career</a><a href="../index.html#writing">Writing</a><a href="../index.html#contact">Contact</a><a href="../resume.html">Resume</a></div></nav>
 <div class="article-page"><div class="article-hero"><div class="article-hero-inner">
   <div class="hero-series">Physics AI · ODEs Series · Article 7 of 7</div><h1 class="article-title">Bioprocess Viable Cell Density<br><em>Monod Kinetics, IndPenSim Benchmark &amp; PAT Digital Twin</em></h1>
   <p class="article-sub">Estimating $\mu_{{max}}$, $K_s$, $Y_{{xs}}$ from 20 sparse offline bioreactor measurements using the warm-start PINN protocol. Yxs recovered to 0.4% error; the $K_s$ identifiability problem explained. Toward real-time kinetic estimation from PAT Raman data.</p><div class="article-meta"><span class="meta-pill  highlight">Scientific ML</span><span class="meta-pill  highlight">Bioprocess Engineering</span><span class="meta-pill">Feb 2026</span><span class="meta-pill">16 min read</span><span class="meta-pill">Advanced</span><span class="meta-pill">PyTorch</span></div>
@@ -225,29 +211,8 @@ opt2 = torch.optim.Adam(allp, lr=<span class="nm">2e-3</span>)
 </div></div>
 
 </div>
-<nav class="series-nav" aria-label="Series">
-  <a href="/blog/pinn-odes-stiff-enzyme-kinetics.html">
-    <div class="dir">← ODE Problems 06</div>
-    <div class="t">Stiff Enzyme Kinetics &amp; QSSA</div>
-  </a>
-  <span></span>
-</nav>
-<footer class="site-footer">
-  <div class="foot-lead">
-    <p class="foot-name">Ali Shahmohammadi, Ph.D.</p>
-    <p class="foot-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p>
-  </div>
-  <nav class="foot-nav" aria-label="Footer">
-    <a href="/#writing">Writing</a>
-    <a href="/#career">Career</a>
-    <a href="/resume.html">Resume</a>
-    <a href="https://github.com/alishahmohammadi22" rel="me">GitHub</a>
-    <a href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
-  </nav>
-  <div class="foot-base">
-    <span>© 2026 Ali Shahmohammadi, Ph.D.</span>
-    <a class="to-top" href="#top">Back to top ↑</a>
-  </div>
-</footer>
-<script src="/assets/js/site.js" defer></script>
+<footer><span class="footer-copy">&copy; 2026 Ali Shahmohammadi, Ph.D.</span>
+<div class="footer-links"><a href="../index.html">Portfolio</a><a href="../index.html#writing">Writing</a>
+<a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener">GitHub</a>
+<a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener">LinkedIn</a></div></footer>
 </body></html>
