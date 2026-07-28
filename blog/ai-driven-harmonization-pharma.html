@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,16 +8,17 @@
   <meta property="og:title" content="Bridging the Data Divide: AI-Driven Harmonization in Pharma" />
   <meta property="og:description" content="How AI-driven harmonization is transforming pharma R&D, from siloed data to a shared semantic layer. With a reproducible LOINC-mapping case study." />
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://alishahmohammadi22.github.io/blog/ai-driven-harmonization-pharma.html" />
-  <meta property="og:image" content="https://alishahmohammadi22.github.io/assets/images/og-preview.png" />
+  <meta property="og:url" content="https://alishahmohammadi.com/blog/ai-driven-harmonization-pharma.html" />
+  <meta property="og:image" content="https://alishahmohammadi.com/assets/images/og-preview.png" />
   <meta property="og:image:type" content="image/png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:image" content="https://alishahmohammadi22.github.io/assets/images/og-preview.png" />
+  <meta name="twitter:image" content="https://alishahmohammadi.com/assets/images/og-preview.png" />
+  <link rel="canonical" href="https://alishahmohammadi.com/blog/ai-driven-harmonization-pharma.html">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     :root{--bg:#fafaf7;--surface:#fff;--border:#e5e5e2;--muted:#6b6b68;--text:#1a1a1a;--accent:#2563eb;--accent-lt:#eff6ff;--accent-mid:#bfdbfe;--green:#16a34a;--green-bg:#f0fdf4;--green-bdr:#bbf7d0;--amber:#d97706;--amber-bg:#fffbeb;--amber-bdr:#fde68a;--purple:#7c3aed;--purple-lt:#f5f3ff;--purple-mid:#ddd6fe;--teal:#0d9488;--teal-bg:#f0fdfa;--teal-bdr:#99f6e4;--r:10px}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -152,22 +153,23 @@
     .footer-links{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:.9rem}
     .footer-links a{color:var(--muted)}
   </style>
+  <link rel="stylesheet" href="/assets/css/theme.css">
+  <script>(function(){var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';document.documentElement.dataset.theme=t;})()</script>
 </head>
 <body>
-<nav>
-  <div class="nav-inner">
-    <a href="https://alishahmohammadi22.github.io" class="nav-brand">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-      Ali Shahmohammadi
-    </a>
-    <ul class="nav-links">
-      <li><a href="https://alishahmohammadi22.github.io/#blog">Writing</a></li>
-      <li><a href="https://alishahmohammadi22.github.io/resume.html">Resume</a></li>
-      <li><a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener">GitHub</a></li>
-      <li><a href="https://alishahmohammadi22.github.io" class="nav-cta">Back to Portfolio</a></li>
-    </ul>
-  </div>
-</nav>
+<header class="site-header" data-elevate="false">
+  <a class="brand" href="/">Ali Shahmohammadi <span class="brand-deg">Ph.D.</span></a>
+  <nav class="site-nav" aria-label="Primary">
+    <a href="/#writing">Writing</a>
+    <a href="/#career">Career</a>
+    <a href="/resume.html">Resume</a>
+    <a class="nav-ext" href="https://github.com/alishahmohammadi22" rel="me">GitHub</a>
+  </nav>
+  <button class="theme-toggle" type="button" aria-label="Toggle dark mode" data-theme-toggle>
+    <span class="theme-toggle-dot"></span>
+  </button>
+  <div class="read-progress" role="presentation"><span></span></div>
+</header>
 
 <!-- ── Hero ── -->
 <section class="hero">
@@ -780,15 +782,23 @@ df[<span style="color:#16a34a">"needs_review"</span>] = df[<span style="color:#1
 </div><!-- /container -->
 
 <!-- ── Footer ── -->
-<footer>
-  <div>Ali Shahmohammadi, Ph.D. &mdash; Applied AI Engineer &middot; Agentic Systems &middot; Trustworthy Scientific Data</div>
-  <div class="footer-links">
-    <a href="https://alishahmohammadi22.github.io">Portfolio</a>
-    <a href="https://alishahmohammadi22.github.io/#blog">Writing</a>
-    <a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener">GitHub</a>
-    <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener">LinkedIn</a>
-    <a href="https://alishahmohammadi22.github.io/resume.html">Resume</a>
+<footer class="site-footer">
+  <div class="foot-lead">
+    <p class="foot-name">Ali Shahmohammadi, Ph.D.</p>
+    <p class="foot-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p>
+  </div>
+  <nav class="foot-nav" aria-label="Footer">
+    <a href="/#writing">Writing</a>
+    <a href="/#career">Career</a>
+    <a href="/resume.html">Resume</a>
+    <a href="https://github.com/alishahmohammadi22" rel="me">GitHub</a>
+    <a href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
+  </nav>
+  <div class="foot-base">
+    <span>© 2026 Ali Shahmohammadi, Ph.D.</span>
+    <a class="to-top" href="#top">Back to top ↑</a>
   </div>
 </footer>
+<script src="/assets/js/site.js" defer></script>
 </body>
 </html>
