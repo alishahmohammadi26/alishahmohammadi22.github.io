@@ -337,7 +337,7 @@ nav:not(.site-nav):not(.foot-nav){display:none}
   <!-- Hero -->
   <div class="article-hero">
     <div class="article-hero-inner">
-      <div class="hero-series">Physics AI &mdash; PINNs Series &nbsp;&middot;&nbsp; <em>Burgers &amp; Reaction PDEs</em> of 8</div>
+      <div class="hero-series">Physics AI &mdash; PINNs Series &nbsp;&middot;&nbsp; Article 4 of 8</div>
       <h1 class="article-title">Nonlinear PDEs with PINNs:<br><em>Burgers &amp; Reaction Kinetics</em></h1>
       <p class="article-sub">Shock formation, viscous regularization, and coupled ODE systems for A&rarr;B&rarr;C reactions &mdash; where physics-informed training earns its keep.</p>
       <div class="article-meta">
@@ -719,15 +719,15 @@ opt2.<span class="fn">step</span>(closure)
       <h2 class="section-h">Why PINNs Earn Their Keep for Kinetics</h2>
       <p class="body-text">For a single run with known $(k_1, k_2)$, a classical ODE solver (e.g., SciPy's <code>solve_ivp</code> with an adaptive Runge-Kutta method) solves the system faster and more accurately than a PINN. Classical solvers for smooth ODEs are mature, fast, and reliable. So why use a PINN here?</p>
 
-      <p class="body-text">The answer is not the forward problem &mdash; it is everything that comes after:</p>
+      <p class="body-text">The answer is not the forward problem, it is everything that comes after:</p>
 
       <p class="body-text"><strong>1. The inverse problem.</strong> If you have measured concentration profiles from inline spectroscopy (e.g., Raman or NIR), the PINN framework can treat $k_1$ and $k_2$ as learnable parameters and fit them to the data while simultaneously satisfying the ODE structure. A classical solver requires an outer optimisation loop (e.g., Bard 1974, nonlinear least squares) that calls the solver many times. The PINN computes everything in a single differentiable computational graph. <a href="pinn-inverse-problems.html"><em>Inverse Problems</em></a> covers this in detail.</p>
 
-      <p class="body-text"><strong>2. Data assimilation mid-trajectory.</strong> If process analytical technology (PAT) instruments provide inline concentration readings at multiple time points, these can be added directly as a data loss term $\mathcal{L}_\mathrm{data} = \sum_i (u(\hat{t}_i;\theta) - \hat{u}_i)^2$. The PINN then produces a solution that is simultaneously consistent with the ODE physics and with the measurements &mdash; a constrained regression that classical interpolation cannot perform.</p>
+      <p class="body-text"><strong>2. Data assimilation mid-trajectory.</strong> If process analytical technology (PAT) instruments provide inline concentration readings at multiple time points, these can be added directly as a data loss term $\mathcal{L}_\mathrm{data} = \sum_i (u(\hat{t}_i;\theta) - \hat{u}_i)^2$. The PINN then produces a solution that is simultaneously consistent with the ODE physics and with the measurements, a constrained regression that classical interpolation cannot perform.</p>
 
       <p class="body-text"><strong>3. Uncertainty and extrapolation.</strong> Neural network ensembles or Bayesian PINNs can propagate uncertainty from sparse observations through the physics constraints, yielding principled confidence intervals on quantities like time-to-peak for $C_B$ or yield of $C_C$. This is directly relevant to ICH Q10 Pharmaceutical Quality System requirements for process understanding and real-time release testing.</p>
 
-      <p class="body-text"><strong>4. Complex nonlinear kinetics.</strong> First-order kinetics is the simplest case. Michaelis-Menten enzyme kinetics, autocatalytic reactions, and multi-step mechanisms with reversibility and inhibition produce ODE systems where analytical solutions do not exist. The PINN residual is written in exactly the same way regardless of how complex the rate law is &mdash; you simply change the expression inside <code>residual()</code>.</p>
+      <p class="body-text"><strong>4. Complex nonlinear kinetics.</strong> First-order kinetics is the simplest case. Michaelis-Menten enzyme kinetics, autocatalytic reactions, and multi-step mechanisms with reversibility and inhibition produce ODE systems where analytical solutions do not exist. The PINN residual is written in exactly the same way regardless of how complex the rate law is, you simply change the expression inside <code>residual()</code>.</p>
     </div>
 
     <hr class="divider">
@@ -901,7 +901,7 @@ opt2.<span class="fn">step</span>(closure)
 
       <h3 class="sub-h">Results summary</h3>
       <p class="body-text">After 10,000 Adam epochs the KineticsPINN achieves relative $L_2$ error below $10^{-3}$ on all three species evaluated on 300 uniform time points in $[0,6]$. Mass conservation is satisfied to within $\pm 0.002$ across the entire time window without being explicitly enforced as a loss term. The intermediate $C_B$ peak location (time-to-maximum yield) is recovered to within 1% of the analytical value $t^* = 1.02$.</p>
-      <p class="body-text">Sensitivity to hyperparameters is greater than for the heat equation: reducing the IC weight below 5 typically leads to drift in the initial condition after $\sim$3,000 epochs, with the solution converging to a physically wrong trajectory that minimises the ODE residual but violates $C_A(0)=1$. This underscores a general principle &mdash; for initial value problems, the IC loss must be weighted strongly enough to serve as a reliable anchor, especially during the early training phase when the PDE residual gradient is large and can dominate.</p>
+      <p class="body-text">Sensitivity to hyperparameters is greater than for the heat equation: reducing the IC weight below 5 typically leads to drift in the initial condition after $\sim$3,000 epochs, with the solution converging to a physically wrong trajectory that minimises the ODE residual but violates $C_A(0)=1$. This underscores a general principle, for initial value problems, the IC loss must be weighted strongly enough to serve as a reliable anchor, especially during the early training phase when the PDE residual gradient is large and can dominate.</p>
     </div>
 
     <hr class="divider">
@@ -911,7 +911,7 @@ opt2.<span class="fn">step</span>(closure)
       <div class="section-label">09 &mdash; Looking Ahead</div>
       <h2 class="section-h">What These Problems Set Up</h2>
       <p class="body-text">The Burgers equation and the reaction kinetics system together establish the two most important extensions of the basic PINN framework: nonlinear PDE terms and multi-output ODE systems. But both problems were solved in the <em>forward</em> direction: given the physics and initial conditions, compute the solution.</p>
-      <p class="body-text"><a href="pinn-inverse-problems.html"><em>Inverse Problems</em></a> inverts this. We will take the same reaction kinetics network and remove $k_1$, $k_2$ from the code, instead treating them as learnable parameters in the model's parameter dictionary. When sparse noisy measurements of the concentration profiles are provided, the PINN will jointly optimise the network weights and the rate constants &mdash; doing physics-constrained parameter estimation in a single differentiable computation. This is the core capability that makes PINNs genuinely useful for real experimental data.</p>
+      <p class="body-text"><a href="pinn-inverse-problems.html"><em>Inverse Problems</em></a> inverts this. We will take the same reaction kinetics network and remove $k_1$, $k_2$ from the code, instead treating them as learnable parameters in the model's parameter dictionary. When sparse noisy measurements of the concentration profiles are provided, the PINN will jointly optimise the network weights and the rate constants, doing physics-constrained parameter estimation in a single differentiable computation. This is the core capability that makes PINNs genuinely useful for real experimental data.</p>
       <p class="body-text"><a href="pinn-adaptive-sampling.html"><em>Adaptive Sampling</em></a> returns to Burgers to address the adaptive sampling problem: how to automatically concentrate collocation points near the shock, and how to dynamically reweight the loss terms to counteract the spectral bias that prevents the network from resolving steep gradients.</p>
 
       <div class="callout insight">
@@ -920,7 +920,7 @@ opt2.<span class="fn">step</span>(closure)
         </div>
         <div class="callout-body">
           <strong>Conservative PINNs (cPINNs)</strong>
-          For problems with conservation laws &mdash; mass, momentum, energy &mdash; Jagtap et al. (2020) introduced conservative PINNs that decompose the domain into sub-domains and enforce flux continuity at interfaces via a Godunov-type flux condition. This is particularly important for the Burgers equation, where the weak solution across the shock satisfies the Rankine-Hugoniot jump condition rather than the strong-form PDE. cPINNs embed this conservation structure directly into the loss.
+          For problems with conservation laws, mass, momentum, energy, Jagtap et al. (2020) introduced conservative PINNs that decompose the domain into sub-domains and enforce flux continuity at interfaces via a Godunov-type flux condition. This is particularly important for the Burgers equation, where the weak solution across the shock satisfies the Rankine-Hugoniot jump condition rather than the strong-form PDE. cPINNs embed this conservation structure directly into the loss.
         </div>
       </div>
     </div>
@@ -941,6 +941,28 @@ opt2.<span class="fn">step</span>(closure)
       </div>
     </div>
 
+    <div style="margin-top:var(--sp-5);display:flex;gap:var(--sp-3);flex-wrap:wrap;align-items:center">
+      <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;flex-basis:100%">Notebook 1 — Burgers Equation</span>
+      <a href="https://github.com/alishahmohammadi22/physics-ai-pinns/blob/main/01_Intro_to_PINNs/notebooks/02_Intermediate/04_burgers_equation.ipynb" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;font:600 var(--text-sm)/1 var(--font-body);padding:10px 18px;border-radius:999px;background:var(--surface);border:1px solid var(--line-strong);color:var(--navy);text-decoration:none">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        View notebook on GitHub
+      </a>
+      <a href="https://colab.research.google.com/github/alishahmohammadi22/physics-ai-pinns/blob/main/01_Intro_to_PINNs/notebooks/02_Intermediate/04_burgers_equation.ipynb" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;font:600 var(--text-sm)/1 var(--font-body);padding:10px 18px;border-radius:999px;background:var(--accent);color:#fff;border:1px solid transparent;text-decoration:none">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z" fill="currentColor" stroke="none"/></svg>
+        Open in Colab
+      </a>
+    </div>
+    <div style="margin-top:var(--sp-5);display:flex;gap:var(--sp-3);flex-wrap:wrap;align-items:center">
+      <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;flex-basis:100%">Notebook 2 — Reaction Kinetics</span>
+      <a href="https://github.com/alishahmohammadi22/physics-ai-pinns/blob/main/01_Intro_to_PINNs/notebooks/02_Intermediate/05_reaction_kinetics.ipynb" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;font:600 var(--text-sm)/1 var(--font-body);padding:10px 18px;border-radius:999px;background:var(--surface);border:1px solid var(--line-strong);color:var(--navy);text-decoration:none">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        View notebook on GitHub
+      </a>
+      <a href="https://colab.research.google.com/github/alishahmohammadi22/physics-ai-pinns/blob/main/01_Intro_to_PINNs/notebooks/02_Intermediate/05_reaction_kinetics.ipynb" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;font:600 var(--text-sm)/1 var(--font-body);padding:10px 18px;border-radius:999px;background:var(--accent);color:#fff;border:1px solid transparent;text-decoration:none">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z" fill="currentColor" stroke="none"/></svg>
+        Open in Colab
+      </a>
+    </div>
     <hr class="divider">
 
     <!-- Bottom series nav -->
