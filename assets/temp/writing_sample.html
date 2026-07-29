@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Writing — sortable index (preview)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Tokens — identical to theme.css in the standardization spec
+   (grounded in the convergence-plot palette: navy/green + dark mode)
+   ============================================================ */
+:root{
+  --font-display:"STIX Two Text",Georgia,serif;
+  --font-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --text-xs:.78rem; --text-sm:.875rem; --text-base:1.0625rem; --text-lg:1.1875rem;
+  --text-xl:clamp(1.35rem,1.15rem + .9vw,1.6rem);
+  --text-2xl:clamp(1.7rem,1.3rem + 1.7vw,2.25rem);
+  --sp-1:.25rem;--sp-2:.5rem;--sp-3:.75rem;--sp-4:1rem;--sp-5:1.5rem;--sp-6:2rem;--sp-8:3rem;
+  --wrap:76rem; --r-sm:6px; --r:10px; --r-lg:16px;
+  --shadow-1:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.05);
+  --shadow-2:0 6px 22px rgba(16,24,40,.12);
+
+  --paper:#f8fafb; --surface:#fff; --surface-2:#eef2f4;
+  --line:#e2e7ea; --line-strong:#cfd6da;
+  --navy:#1c2c4c; --ink:#141821; --ink-2:#3f4753; --muted:#69727d;
+  --accent:#1f7a5c; --accent-2:#26986f; --accent-wash:#e6f3ed;
+  --danger:#b23a3a; --grid:#e7ecef;
+  --box-off:#d7dde1;
+}
+:root[data-theme="dark"]{
+  --paper:#0d1117; --surface:#141a22; --surface-2:#1b232d;
+  --line:#232c37; --line-strong:#313d4a;
+  --navy:#9db4de; --ink:#e6ebf0; --ink-2:#aeb8c4; --muted:#7c8794;
+  --accent:#3fb98d; --accent-2:#5fd0a6; --accent-wash:#0f2b22;
+  --danger:#e06a6a; --grid:#212a34; --box-off:#2c3742;
+  --shadow-2:0 8px 26px rgba(0,0,0,.45);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--font-body);font-size:var(--text-base);line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:var(--wrap);margin-inline:auto;padding:var(--sp-8) var(--sp-5) var(--sp-8)}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+
+/* Section head */
+.eyebrow{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--accent);margin:0 0 var(--sp-2)}
+h1.title{font-family:var(--font-display);font-weight:700;font-size:var(--text-2xl);
+  color:var(--navy);letter-spacing:-.02em;margin:0 0 var(--sp-3)}
+.lede{color:var(--ink-2);max-width:60ch;margin:0 0 var(--sp-6)}
+
+/* Controls bar */
+.controls{display:flex;flex-wrap:wrap;gap:var(--sp-5);align-items:flex-end;
+  justify-content:space-between;margin-bottom:var(--sp-5);
+  padding-bottom:var(--sp-5);border-bottom:1px solid var(--line)}
+.ctl-group{display:flex;flex-direction:column;gap:var(--sp-2)}
+.ctl-label{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted)}
+.segmented{display:inline-flex;flex-wrap:wrap;gap:4px;background:var(--surface-2);
+  padding:4px;border-radius:999px;border:1px solid var(--line)}
+.seg{appearance:none;border:0;background:transparent;cursor:pointer;
+  font:500 var(--text-sm)/1 var(--font-body);color:var(--ink-2);
+  padding:8px 14px;border-radius:999px;white-space:nowrap;transition:background .18s,color .18s}
+.seg:hover{color:var(--navy)}
+.seg[aria-pressed="true"]{background:var(--surface);color:var(--navy);box-shadow:var(--shadow-1)}
+.seg .n{font-family:var(--font-mono);font-size:.72rem;color:var(--muted);margin-left:6px}
+.seg[aria-pressed="true"] .n{color:var(--accent)}
+
+.count{font-size:var(--text-sm);color:var(--muted);align-self:center}
+.count b{color:var(--navy);font-weight:600}
+
+/* Grid + cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:var(--sp-5)}
+.card{position:relative;display:flex;flex-direction:column;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:var(--sp-5);transition:border-color .2s,box-shadow .2s,transform .2s}
+.card:hover{border-color:var(--accent);box-shadow:var(--shadow-2)}
+.card.coming{border-style:dashed}
+.card-top{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3);
+  margin-bottom:var(--sp-3)}
+.cat{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted)}
+.badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);
+  font-size:var(--text-xs);color:var(--accent);border:1px solid var(--line-strong);
+  border-radius:999px;padding:2px 9px;background:var(--surface)}
+.badge .dot{width:6px;height:6px;border-radius:999px;background:var(--accent)}
+.card h3{font-family:var(--font-display);font-size:var(--text-lg);line-height:1.25;
+  color:var(--navy);font-weight:600;margin:0 0 var(--sp-2)}
+.blurb{font-size:var(--text-sm);color:var(--ink-2);line-height:1.55;margin:0 0 var(--sp-4);flex:1}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-3);
+  font-size:var(--text-xs);color:var(--muted);
+  padding-top:var(--sp-3);border-top:1px solid var(--line)}
+.meta .sep{opacity:.5}
+/* Difficulty squares */
+.level{display:inline-flex;gap:3px;align-items:center}
+.level i{width:9px;height:9px;border-radius:2px;background:var(--box-off);display:block}
+.level i.on{background:var(--accent)}
+.level .lab{margin-left:6px;color:var(--ink-2);font-weight:500}
+.stretch{flex:1}
+.readmore{font-weight:600;color:var(--accent);font-size:var(--text-sm)}
+.card.coming .readmore{color:var(--muted)}
+.chip{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--danger);border:1px solid var(--danger);border-radius:999px;padding:2px 8px}
+
+/* Theme toggle (top-right of preview) */
+.toggle{position:fixed;top:16px;right:16px;z-index:5;width:36px;height:36px;border-radius:999px;
+  border:1px solid var(--line-strong);background:var(--surface);cursor:pointer;display:grid;place-items:center}
+.toggle b{width:15px;height:15px;border-radius:999px;background:var(--navy);box-shadow:inset -4px -4px 0 0 var(--surface)}
+:root[data-theme="dark"] .toggle b{box-shadow:none;background:var(--accent)}
+
+.note{margin-top:var(--sp-8);padding:var(--sp-4) var(--sp-5);background:var(--accent-wash);
+  border-left:3px solid var(--accent);border-radius:0 var(--r) var(--r) 0;font-size:var(--text-sm);color:var(--ink-2)}
+.note code{font-family:var(--font-mono);font-size:.85em;background:var(--surface);padding:.1em .35em;border-radius:4px;color:var(--navy)}
+
+@media (max-width:640px){
+  .controls{flex-direction:column;align-items:stretch}
+  .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<button class="toggle" id="themeBtn" aria-label="Toggle dark mode"><b></b></button>
+
+<div class="wrap" id="top">
+  <p class="eyebrow">Writing</p>
+  <h1 class="title">Articles &amp; Projects</h1>
+  <p class="lede">Applied AI engineering, agentic systems, trustworthy scientific
+    data, and physics-informed ML. Filter by topic, then sort for where you are —
+    a learning path from the basics, or the latest first.</p>
+
+  <div class="controls">
+    <div class="ctl-group">
+      <span class="ctl-label" id="filt-label">Topic</span>
+      <div class="segmented" role="group" aria-labelledby="filt-label" id="filters">
+        <button class="seg" data-filter="all" aria-pressed="true">All <span class="n" data-c="all"></span></button>
+        <button class="seg" data-filter="sciml" aria-pressed="false">Scientific ML <span class="n" data-c="sciml"></span></button>
+        <button class="seg" data-filter="agentic" aria-pressed="false">Agentic AI <span class="n" data-c="agentic"></span></button>
+        <button class="seg" data-filter="governance" aria-pressed="false">Data Governance &amp; FAIR <span class="n" data-c="governance"></span></button>
+      </div>
+    </div>
+
+    <div class="ctl-group">
+      <span class="ctl-label" id="sort-label">Sort</span>
+      <div class="segmented" role="group" aria-labelledby="sort-label" id="sorts">
+        <button class="seg" data-sort="path" aria-pressed="true">Beginner → Advanced</button>
+        <button class="seg" data-sort="pathDesc" aria-pressed="false">Advanced → Beginner</button>
+        <button class="seg" data-sort="newest" aria-pressed="false">Newest</button>
+        <button class="seg" data-sort="oldest" aria-pressed="false">Oldest</button>
+      </div>
+    </div>
+  </div>
+
+  <p class="count" id="count" aria-live="polite"></p>
+  <div class="grid" id="grid"></div>
+
+  <p class="note">
+    <b>Integration notes.</b> Difficulty levels are derived from the “Beginner” tags
+    and ▪ complexity squares already in your posts; adjust any in the <code>POSTS</code>
+    array. Dates are month-granular, so <code>Newest</code>/<code>Oldest</code> break
+    same-month ties by learning-path order — set real publish dates (<code>date:"2026-02-14"</code>)
+    for exact ordering. All links use the canonical <code>alishahmohammadi.com</code> domain.
+  </p>
+</div>
+
+<script>
+/* ============================================================
+   DATA — one object per post.
+   category: sciml | agentic | governance
+   level: 1 Beginner · 2 Intermediate · 3 Advanced · 4 Expert
+   seq:   global learning-path order (tiebreaker)
+   date:  "YYYY-MM"  (upcoming posts: null + coming:true)
+   ============================================================ */
+const B=(u)=>"https://alishahmohammadi.com/blog/"+u;
+const POSTS=[
+  // — PINN Foundations (learning path 1..8) —
+  {t:"Physics-Informed Neural Networks: Why Embedding Physical Laws Changes Everything",cat:"sciml",series:"Foundations 01",level:1,seq:1,date:"2025-09",read:"18 min",
+   blurb:"From the failure of pure data-driven ML in engineering to your first working PINN — a zero-labeled-data solver for a first-order ODE.",url:B("pinn-introduction.html")},
+  {t:"Second-Order ODEs with PINNs: The Damped Harmonic Oscillator",cat:"sciml",series:"Foundations 02",level:1,seq:2,date:"2025-10",read:"14 min",
+   blurb:"Nested automatic differentiation, two initial conditions, and the spectral-bias problem — with a hard-constraint ansatz solution.",url:B("pinn-odes-second-order.html")},
+  {t:"Solving the 1D Heat Equation with PINNs: Your First PDE",cat:"sciml",series:"Foundations 03",level:2,seq:3,date:"2025-11",read:"16 min",
+   blurb:"From a single variable to a 2D space-time domain — partial derivatives, boundary conditions, and full field reconstruction from sparse data.",url:B("pinn-heat-equation.html")},
+  {t:"Nonlinear PDEs with PINNs: Burgers Equation and Reaction Kinetics",cat:"sciml",series:"Foundations 04",level:2,seq:4,date:"2025-12",read:"20 min",
+   blurb:"Shock formation, viscous regularization, and coupled A→B→C systems — where physics-informed training earns its keep against FEM.",url:B("pinn-burgers-reaction-pdes.html")},
+  {t:"Inverse Problems with PINNs: Discovering Physical Parameters from Sparse, Noisy Data",cat:"sciml",series:"Foundations 05",level:3,seq:5,date:"2026-01",read:"22 min",
+   blurb:"Making unknown constants trainable variables — recovering diffusivity, reaction rates, and material properties from 40 noisy readings.",url:B("pinn-inverse-problems.html")},
+  {t:"Adaptive Sampling and Training Strategies for PINNs",cat:"sciml",series:"Foundations 06",level:4,seq:6,date:"2026-02",read:"18 min",
+   blurb:"Why uniform collocation fails for stiff problems, and how RAR, loss weighting, causal training, and Fourier features fix it.",url:B("pinn-adaptive-sampling.html")},
+  {t:"DeepONet: Learning Solution Operators Instead of Individual Solutions",cat:"sciml",series:"Foundations 07",level:3,seq:7,date:"2026-03",read:"26 min",
+   blurb:"From solving one PDE at a time to learning the map from any input function to its output — the branch/trunk architecture.",url:B("pinn-deeponet.html")},
+  {t:"Physics-Informed DeepONet: Operator Learning Without Solution Data",cat:"sciml",series:"Foundations 08",level:4,seq:8,date:"2026-04",read:"30 min",
+   blurb:"Universal operator approximation with physics-informed training — frozen operator nets for rapid inverse problems across parameter families.",url:B("pinn-physics-informed-deeponet.html")},
+
+  // — ODE Problem series (9..15) —
+  {t:"Logistic Population Growth with PINNs: S-Curve, Carrying Capacity, Inverse Estimation",cat:"sciml",series:"ODE Problems 01",level:1,seq:9,date:"2026-02",read:"12 min",
+   blurb:"Forward solve and joint estimation of r and K from 16 real U.S. census points (Pearl & Reed, 1920). The foundation pattern.",url:B("pinn-odes-logistic-growth.html")},
+  {t:"Consecutive Reaction Kinetics A→B→C with PINNs",cat:"sciml",series:"ODE Problems 02",level:2,seq:10,date:"2026-02",read:"14 min",
+   blurb:"k₁ and k₂ recovered from 14 noisy concentration measurements, including the intermediate peak. Physics loss enforces mass conservation.",url:B("pinn-odes-consecutive-reactions.html")},
+  {t:"Lotka–Volterra Predator–Prey with PINNs: Parameter Estimation from Real Hudson Bay Data",cat:"sciml",series:"ODE Problems 03",level:2,seq:11,date:"2026-02",read:"13 min",
+   blurb:"All four parameters recovered from 21 years of real lynx–hare pelt records via a two-phase warm-start protocol.",url:B("pinn-odes-lotka-volterra.html")},
+  {t:"SIR Epidemic Model with PINNs: Inferring Hidden States from Partial Observations",cat:"sciml",series:"ODE Problems 04",level:2,seq:12,date:"2026-02",read:"13 min",
+   blurb:"Recovering β and γ from the 1978 boarding-school flu outbreak with only infectious counts — physics reconstructs the hidden compartments.",url:B("pinn-odes-sir-epidemic.html")},
+  {t:"Van der Pol Oscillator with PINNs: Recovering Nonlinear Damping from Sparse Data",cat:"sciml",series:"ODE Problems 05",level:3,seq:13,date:"2026-02",read:"14 min",
+   blurb:"Nested autograd for ẍ, time-scaling to keep residuals O(1), and recovering μ from 45 noisy samples — plus the spectral-bias wall.",url:B("pinn-odes-van-der-pol.html")},
+  {t:"Stiff Enzyme Kinetics & QSSA: Why Plain PINNs Fail on Michaelis–Menten Systems",cat:"sciml",series:"ODE Problems 06",level:3,seq:14,date:"2026-02",read:"15 min",
+   blurb:"A stiffness ratio ≈ 10⁴ defeats uniform collocation. The quasi-steady-state assumption collapses it to one tractable non-stiff ODE.",url:B("pinn-odes-stiff-enzyme-kinetics.html")},
+  {t:"Bioprocess Viable Cell Density: Monod Kinetics & Luedeking–Piret with PINNs",cat:"sciml",series:"ODE Problems 07",level:3,seq:15,date:"2026-02",read:"15 min",
+   blurb:"Estimating six kinetic parameters from sparse offline CHO measurements — directly applicable to mAb and mRNA process characterisation.",url:B("pinn-odes-bioprocess-cell-density.html")},
+
+  // — Capstones (16..17) —
+  {t:"Unified PINN–ODE Benchmark: Capstone Across Seven Systems",cat:"sciml",series:"Capstone",level:3,seq:16,date:"2026-02",read:"20 min",
+   blurb:"One harness benchmarking every ODE problem in the series under matched settings — the reproducible capstone tying the applied track together.",url:B("unified-pinn-ode-benchmark.html")},
+  {t:"Why DeepONet Underperforms on ODE Inverse Problems: A Deep Diagnostic Study",cat:"sciml",series:"Capstone",level:4,seq:17,date:"2026-02",read:"12 min",
+   blurb:"SVD rank analysis, training-dynamics diagnosis, and a 5.7× architecture improvement — why Pure PINN beats DeepONet on 6 of 7 systems.",url:B("deeponet-vs-pinn-ode-analysis.html")},
+
+  // — Agentic AI (18..20) —
+  {t:"Building Agentic AI Systems for Ontology Curation in Drug R&D",cat:"agentic",series:"Agentic AI",level:2,seq:18,date:"2026-05",read:"14 min",
+   blurb:"A four-agent LangGraph pipeline automating term extraction, ontology mapping, conflict detection, and governance routing — with human oversight throughout.",url:B("agentic-ontology-curation.html")},
+  {t:"Agentic AI for Data Governance: A Production Pattern for First-Pass Curation",cat:"agentic",series:"Agentic AI",level:3,seq:19,date:"2026-05",read:"22 min",
+   blurb:"An audit-ready operating model where agents make bounded proposals, stewards adjudicate the risky residue, and PROV-O records every decision.",url:B("agentic-ai-data-governance-pharma.html")},
+  {t:"Making Messy Scientific Data Trustworthy for AI Agents",cat:"agentic",series:"Agentic AI",level:3,seq:20,date:null,coming:true,read:"in progress",
+   blurb:"Architecture, implementation, and eval results from an MCP server + agent + validation connector stack: design decisions, measured hallucination rate, and building AI that refuses rather than guesses.",url:null},
+
+  // — Data Governance & FAIR (21..27) —
+  {t:"FAIR Data Principles: A Practical Guide to Findable, Accessible, Interoperable, Reusable Data",cat:"governance",series:"FAIR",level:1,seq:21,date:"2026-05",read:"18 min",
+   blurb:"What the FAIR principles actually mean, why they matter more than ever in the age of AI, and a 5-step starter plan.",url:B("fair-data-principles.html")},
+  {t:"Bridging the Data Divide: AI-Driven Harmonization in Pharma",cat:"governance",series:"Harmonization",level:2,seq:22,date:"2026-01",read:"12 min",
+   blurb:"Why successful AI programs start with harmonized data, not models. Includes a case study: 44 raw lab terms → 8 LOINC concepts, 98% auto-mapping.",url:B("ai-driven-harmonization-pharma.html")},
+  {t:"A 90-Day Maturity Assessment for Pharmaceutical R&D Data Catalogs",cat:"governance",series:"Data Catalog",level:2,seq:23,date:"2026-05",read:"24 min",
+   blurb:"A practical playbook to baseline FAIR maturity, find one high-leverage quick win, and ship a defensible 12-month roadmap.",url:B("90-day-pharma-catalog-maturity.html")},
+  {t:"AI Governance Without the Theater: Operationalizing ISO/IEC 23894 in Pharma R&D",cat:"governance",series:"AI Governance",level:3,seq:24,date:"2026-05",read:"28 min",
+   blurb:"Connecting ISO/IEC 23894 to ICH Q9(R1), NIST AI RMF crosswalks, and FAIR controls — evidence-ready operations over governance theater.",url:B("iso-23894-pharma-rd.html")},
+  {t:"Product Mastering Across the R&D-to-Commercial Lifecycle: Why Knowledge Graphs Beat Traditional MDM",cat:"governance",series:"MDM",level:3,seq:25,date:"2026-05",read:"25 min",
+   blurb:"Why the row-and-column gold record breaks down for medicinal products — ISO IDMP, bitemporal graphs, agentic entity resolution.",url:B("product-mastering-knowledge-graphs-vs-mdm.html")},
+  {t:"From Ontology to MDM: How Semantic Layers Are Replacing Hub-and-Spoke Master Data in Pharma",cat:"governance",series:"Semantic Layers",level:3,seq:26,date:"2026-05",read:"30 min",
+   blurb:"Treating meaning as a first-class artifact: OWL, SHACL, SKOS, data-mesh federation, exemplars from Bayer COLID and Roche EDIS.",url:B("semantic-layer-replacing-mdm-pharma.html")},
+  {t:"What FAIR Data Actually Means for AI-Ready Pharmaceutical R&D (5-Part Series)",cat:"governance",series:"FAIR",level:2,seq:27,date:"2026-05",read:"~45 min",
+   blurb:"A deep-dive into FAIR maturity frameworks — RDA (41 indicators) and Pistoia — with a CAR-T viability walkthrough and a Python scorer.",url:"https://alishahmohammadi22.github.io/fair-data-toolkit"},
+];
+
+const LEVELS={1:"Beginner",2:"Intermediate",3:"Advanced",4:"Expert"};
+const CATLABEL={sciml:"Scientific ML",agentic:"Agentic AI",governance:"Data Governance & FAIR"};
+
+let state={filter:"all",sort:"path"};
+const grid=document.getElementById("grid");
+const countEl=document.getElementById("count");
+
+function dateVal(p){ if(p.coming) return 999999; if(!p.date) return 0;
+  const [y,m]=p.date.split("-").map(Number); return y*100+m; }
+function dateLabel(p){ if(p.coming) return "Coming soon";
+  const [y,m]=p.date.split("-").map(Number);
+  return ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][m-1]+" "+y; }
+
+function sortFns(){
+  return {
+    path:     (a,b)=> a.level-b.level || a.seq-b.seq,
+    pathDesc: (a,b)=> b.level-a.level || b.seq-a.seq,
+    newest:   (a,b)=> dateVal(b)-dateVal(a) || a.seq-b.seq,
+    oldest:   (a,b)=> (a.coming?1:0)-(b.coming?1:0) || dateVal(a)-dateVal(b) || a.seq-b.seq,
+  }[state.sort];
+}
+
+function levelHTML(lvl){
+  let boxes=""; for(let i=1;i<=4;i++) boxes+=`<i class="${i<=lvl?'on':''}"></i>`;
+  return `<span class="level" title="${LEVELS[lvl]}">${boxes}<span class="lab">${LEVELS[lvl]}</span></span>`;
+}
+
+function cardHTML(p){
+  const tag=p.url?"a":"div";
+  const href=p.url?`href="${p.url}"`:"";
+  return `<${tag} class="card${p.coming?' coming':''}" ${href} data-cat="${p.cat}">
+    <div class="card-top">
+      <span class="cat">${CATLABEL[p.cat]}</span>
+      <span class="badge"><span class="dot"></span>${p.series}</span>
+    </div>
+    <h3>${p.t}</h3>
+    <p class="blurb">${p.blurb}</p>
+    <div class="meta">
+      ${levelHTML(p.level)}
+      <span class="stretch"></span>
+      ${p.coming?'<span class="chip">Coming soon</span>':`<span>${dateLabel(p)}</span><span class="sep">·</span><span>${p.read}</span>`}
+    </div>
+    <div class="meta" style="border:0;padding-top:8px">
+      <span class="readmore">${p.url?'Read article →':'In progress'}</span>
+    </div>
+  </${tag}>`;
+}
+
+/* FLIP reorder animation */
+function render(){
+  const list=POSTS
+    .filter(p=> state.filter==="all"||p.cat===state.filter)
+    .sort(sortFns());
+
+  // record old positions
+  const old=new Map();
+  [...grid.children].forEach(el=> old.set(el.dataset.key, el.getBoundingClientRect()));
+
+  grid.innerHTML=list.map(p=>{
+    const html=cardHTML(p);
+    return html.replace(/^<(a|div)/,`<$1 data-key="${p.seq}"`);
+  }).join("");
+
+  const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
+  if(!reduce){
+    [...grid.children].forEach(el=>{
+      const prev=old.get(el.dataset.key); if(!prev) { el.animate(
+        [{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],
+        {duration:260,easing:"cubic-bezier(.2,.7,.2,1)"}); return; }
+      const now=el.getBoundingClientRect();
+      const dx=prev.left-now.left, dy=prev.top-now.top;
+      if(dx||dy) el.animate(
+        [{transform:`translate(${dx}px,${dy}px)`},{transform:"none"}],
+        {duration:340,easing:"cubic-bezier(.2,.7,.2,1)"});
+    });
+  }
+
+  const total=POSTS.filter(p=>state.filter==="all"||p.cat===state.filter).length;
+  const label={path:"beginner → advanced",pathDesc:"advanced → beginner",newest:"newest first",oldest:"oldest first"}[state.sort];
+  countEl.innerHTML=`<b>${total}</b> ${total===1?'article':'articles'} · sorted ${label}`;
+}
+
+/* Filter counts */
+function setCounts(){
+  const c={all:POSTS.length,sciml:0,agentic:0,governance:0};
+  POSTS.forEach(p=>c[p.cat]++);
+  document.querySelectorAll("[data-c]").forEach(el=> el.textContent=c[el.dataset.c]);
+}
+
+/* Wire controls */
+document.getElementById("filters").addEventListener("click",e=>{
+  const b=e.target.closest("[data-filter]"); if(!b) return;
+  state.filter=b.dataset.filter;
+  document.querySelectorAll("#filters .seg").forEach(s=>s.setAttribute("aria-pressed",s===b));
+  render();
+});
+document.getElementById("sorts").addEventListener("click",e=>{
+  const b=e.target.closest("[data-sort]"); if(!b) return;
+  state.sort=b.dataset.sort;
+  document.querySelectorAll("#sorts .seg").forEach(s=>s.setAttribute("aria-pressed",s===b));
+  render();
+});
+
+/* Theme toggle */
+const tbtn=document.getElementById("themeBtn");
+(function(){ const t=matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light";
+  document.documentElement.dataset.theme=t; })();
+tbtn.addEventListener("click",()=>{
+  document.documentElement.dataset.theme=document.documentElement.dataset.theme==="dark"?"light":"dark";
+});
+
+setCounts();
+render();
+</script>
+</body>
+</html>

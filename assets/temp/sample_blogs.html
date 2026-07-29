@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ===== PER-ARTICLE HEAD SLOTS ===== -->
+<title>Physics-Informed Neural Networks: Why Embedding Physical Laws Changes Everything | Ali Shahmohammadi</title>
+<meta name="description" content="From the failure of pure data-driven ML in engineering to your first working PINN — a zero-labeled-data solver for a first-order ODE.">
+<link rel="canonical" href="https://alishahmohammadi.com/blog/pinn-introduction.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Physics-Informed Neural Networks: Why Embedding Physical Laws Changes Everything">
+<meta property="og:description" content="From the failure of pure data-driven ML in engineering to your first working PINN.">
+<meta property="og:url" content="https://alishahmohammadi.com/blog/pinn-introduction.html">
+<meta property="og:image" content="https://alishahmohammadi.com/assets/images/og-preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<!-- ================================== -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- KaTeX for math -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+<script>
+  (function(){var t=localStorage.getItem('theme');
+   if(!t)t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
+   document.documentElement.dataset.theme=t;})();
+</script>
+
+<style>
+/* ============================================================
+   theme.css  —  tokens grounded in the convergence-plot palette
+   ============================================================ */
+:root{
+  --font-display:"STIX Two Text",Georgia,serif;
+  --font-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --text-xs:.78rem;--text-sm:.875rem;--text-base:1.0625rem;--text-lg:1.1875rem;
+  --text-xl:clamp(1.35rem,1.15rem + .9vw,1.6rem);
+  --text-2xl:clamp(1.7rem,1.3rem + 1.7vw,2.25rem);
+  --text-3xl:clamp(2.15rem,1.5rem + 2.9vw,3.3rem);
+  --lh-tight:1.14;--lh-snug:1.3;--lh-body:1.72;
+  --sp-1:.25rem;--sp-2:.5rem;--sp-3:.75rem;--sp-4:1rem;--sp-5:1.5rem;--sp-6:2rem;--sp-8:3rem;--sp-10:4.5rem;
+  --measure:70ch;--wrap:76rem;
+  --r-sm:6px;--r:10px;--r-lg:16px;
+  --shadow-1:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.05);
+  --shadow-2:0 6px 22px rgba(16,24,40,.12);
+
+  --paper:#f8fafb;--surface:#fff;--surface-2:#eef2f4;
+  --line:#e2e7ea;--line-strong:#cfd6da;
+  --navy:#1c2c4c;--ink:#141821;--ink-2:#3f4753;--muted:#69727d;
+  --accent:#1f7a5c;--accent-2:#26986f;--accent-wash:#e6f3ed;
+  --danger:#b23a3a;--danger-wash:#f7ecec;
+  --code-bg:#0f1620;--code-fg:#dbe4ee;--code-line:#1e2a38;--code-tag:#7fd6ae;
+  --grid:#e7ecef;--box-off:#d7dde1;
+
+  --plot-navy:#1c2c4c;--plot-green:#1f7a5c;--plot-red:#b23a3a;
+}
+:root[data-theme="dark"]{
+  --paper:#0d1117;--surface:#141a22;--surface-2:#1b232d;
+  --line:#232c37;--line-strong:#313d4a;
+  --navy:#9db4de;--ink:#e6ebf0;--ink-2:#aeb8c4;--muted:#7c8794;
+  --accent:#3fb98d;--accent-2:#5fd0a6;--accent-wash:#0f2b22;
+  --danger:#e06a6a;--danger-wash:#2a1616;
+  --code-bg:#0a0e14;--code-fg:#d5dee8;--code-line:#1b2733;--code-tag:#7fd6ae;
+  --grid:#212a34;--box-off:#2c3742;--shadow-2:0 8px 26px rgba(0,0,0,.5);
+  --plot-navy:#9db4de;--plot-green:#3fb98d;--plot-red:#e06a6a;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-body);
+  font-size:var(--text-base);line-height:var(--lh-body);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+img{max-width:100%;height:auto}
+
+/* ---------- Header ---------- */
+.site-header{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:var(--sp-5);
+  padding:var(--sp-3) var(--sp-5);background:color-mix(in srgb,var(--paper) 82%,transparent);
+  backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid transparent;
+  transition:border-color .25s,box-shadow .25s}
+.site-header[data-elevate="true"]{border-bottom-color:var(--line);box-shadow:var(--shadow-1)}
+.brand{font-family:var(--font-display);font-weight:600;color:var(--navy);font-size:var(--text-lg);letter-spacing:-.01em}
+.brand:hover{text-decoration:none}
+.brand .deg{font-style:italic;color:var(--accent);font-weight:500}
+.site-nav{display:flex;gap:var(--sp-5);margin-left:auto;align-items:center}
+.site-nav a{font-size:var(--text-sm);font-weight:500;color:var(--ink-2);padding-block:var(--sp-1);position:relative}
+.site-nav a:hover{color:var(--navy);text-decoration:none}
+.site-nav a[aria-current="page"]{color:var(--navy)}
+.site-nav a[aria-current="page"]::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:2px;background:var(--accent);border-radius:2px}
+.theme-toggle{width:34px;height:34px;border-radius:999px;cursor:pointer;border:1px solid var(--line-strong);
+  background:var(--surface);display:grid;place-items:center}
+.theme-toggle b{width:14px;height:14px;border-radius:999px;background:var(--navy);box-shadow:inset -4px -4px 0 0 var(--surface)}
+:root[data-theme="dark"] .theme-toggle b{box-shadow:none;background:var(--accent)}
+.read-progress{position:absolute;left:0;right:0;bottom:-1px;height:3px;overflow:hidden}
+.read-progress span{display:block;height:100%;transform:scaleX(0);transform-origin:left;
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:transform .08s linear}
+@media (max-width:560px){.site-nav{gap:var(--sp-4)}.brand .deg{display:none}}
+
+/* ---------- Article layout ---------- */
+.article-wrap{max-width:var(--wrap);margin-inline:auto;padding:var(--sp-8) var(--sp-5) var(--sp-10);
+  display:grid;grid-template-columns:minmax(0,1fr) 14rem;gap:var(--sp-8);align-items:start}
+.article-main{min-width:0;max-width:72ch}
+@media (max-width:960px){.article-wrap{grid-template-columns:1fr}.toc{display:none}}
+
+/* Article header */
+.a-eyebrow{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.13em;
+  text-transform:uppercase;color:var(--accent);margin:0 0 var(--sp-3)}
+.a-title{font-family:var(--font-display);font-weight:700;font-size:var(--text-3xl);line-height:var(--lh-tight);
+  color:var(--navy);letter-spacing:-.02em;margin:0 0 var(--sp-4)}
+.a-sub{font-size:var(--text-lg);color:var(--ink-2);line-height:1.5;margin:0 0 var(--sp-5)}
+.a-meta{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-4);font-size:var(--text-sm);color:var(--muted);
+  padding-bottom:var(--sp-5);border-bottom:1px solid var(--line);margin-bottom:var(--sp-6)}
+.a-meta .sep{opacity:.45}
+.level{display:inline-flex;gap:3px;align-items:center}
+.level i{width:9px;height:9px;border-radius:2px;background:var(--box-off);display:block}
+.level i.on{background:var(--accent)}
+.level .lab{margin-left:6px;color:var(--ink-2);font-weight:500}
+.badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:var(--text-xs);
+  color:var(--accent);border:1px solid var(--line-strong);border-radius:999px;padding:2px 9px;background:var(--surface)}
+.badge .dot{width:6px;height:6px;border-radius:999px;background:var(--accent)}
+
+/* Hero convergence plot (signature — "hero is a thesis") */
+.hero-fig{margin:0 0 var(--sp-8)}
+.hero-fig .frame{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:var(--sp-5) var(--sp-5) var(--sp-3);box-shadow:var(--shadow-1)}
+.hero-fig svg{width:100%;height:auto;display:block}
+.hero-fig figcaption{margin-top:var(--sp-3);font-size:var(--text-sm);color:var(--muted)}
+.legend{display:flex;gap:var(--sp-4);flex-wrap:wrap;font-family:var(--font-mono);font-size:var(--text-xs);margin-top:var(--sp-2)}
+.legend span{display:inline-flex;align-items:center;gap:6px;color:var(--ink-2)}
+.legend i{width:16px;height:0;border-top-width:2px;border-top-style:solid;display:inline-block}
+
+/* Prose */
+.prose h2{font-family:var(--font-display);font-weight:600;font-size:var(--text-2xl);line-height:var(--lh-snug);
+  color:var(--navy);margin:var(--sp-8) 0 var(--sp-4);scroll-margin-top:5rem}
+.prose h3{font-size:var(--text-xl);font-weight:600;color:var(--ink);margin:var(--sp-6) 0 var(--sp-3)}
+.prose p{margin:0 0 var(--sp-4)}
+.prose strong{color:var(--navy);font-weight:600}
+.prose ul,.prose ol{margin:0 0 var(--sp-4);padding-left:1.35em}
+.prose li{margin-bottom:var(--sp-2)}
+.section-eyebrow{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);display:flex;align-items:center;gap:var(--sp-2);margin-bottom:var(--sp-1)}
+.section-eyebrow .num{color:var(--accent);font-weight:600}
+.section-eyebrow .num::after{content:"";display:inline-block;width:18px;height:1px;background:var(--accent);
+  margin-left:var(--sp-2);vertical-align:middle}
+
+/* Collocation-dot divider (signature 2) */
+.rule-dots{border:0;height:6px;margin:var(--sp-8) 0;
+  background-image:radial-gradient(var(--grid) 1.6px,transparent 1.7px);background-size:14px 6px;background-position:center}
+
+/* Callouts */
+.callout{margin:var(--sp-5) 0;padding:var(--sp-4) var(--sp-5);background:var(--accent-wash);
+  border-left:3px solid var(--accent);border-radius:0 var(--r) var(--r) 0}
+.callout .label{font-family:var(--font-mono);font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.1em;
+  color:var(--accent);display:block;margin-bottom:var(--sp-1)}
+.callout p{margin:0}
+.callout.warn{background:var(--danger-wash);border-left-color:var(--danger)}
+.callout.warn .label{color:var(--danger)}
+
+/* Code */
+.code{margin:var(--sp-5) 0;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-1)}
+.code-head{display:flex;align-items:center;justify-content:space-between;font-family:var(--font-mono);
+  font-size:var(--text-xs);color:var(--code-tag);background:var(--code-line);padding:var(--sp-2) var(--sp-4);letter-spacing:.04em}
+.code pre{margin:0;padding:var(--sp-4) var(--sp-5);background:var(--code-bg);color:var(--code-fg);
+  font-family:var(--font-mono);font-size:.88rem;line-height:1.6;overflow-x:auto}
+.prose :not(pre)>code{font-family:var(--font-mono);font-size:.9em;background:var(--surface-2);color:var(--navy);padding:.1em .35em;border-radius:4px}
+
+/* Figure */
+.figure{margin:var(--sp-6) 0}
+.figure .frame{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:var(--sp-5)}
+.figure svg{width:100%;height:auto;display:block}
+.figure figcaption{margin-top:var(--sp-3);font-size:var(--text-sm);color:var(--muted);line-height:1.5}
+.figure figcaption b{color:var(--ink-2)}
+
+/* Table */
+.prose table{width:100%;border-collapse:collapse;margin:var(--sp-5) 0;font-size:var(--text-sm)}
+.prose th,.prose td{text-align:left;padding:var(--sp-3) var(--sp-4);border-bottom:1px solid var(--line);vertical-align:top}
+.prose thead th{font-family:var(--font-mono);font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.06em;
+  color:var(--muted);border-bottom:2px solid var(--line-strong)}
+.prose tbody tr:hover{background:var(--surface-2)}
+
+/* Math block spacing */
+.katex-display{margin:var(--sp-5) 0;overflow-x:auto;overflow-y:hidden;padding:var(--sp-2) 0}
+
+/* TOC */
+.toc{position:sticky;top:5rem}
+.toc .t{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:var(--sp-3)}
+.toc a{display:block;font-size:var(--text-sm);color:var(--ink-2);padding:var(--sp-1) 0 var(--sp-1) var(--sp-3);
+  border-left:2px solid var(--line);line-height:1.4}
+.toc a:hover{color:var(--navy);text-decoration:none;border-left-color:var(--line-strong)}
+.toc a.active{color:var(--accent);border-left-color:var(--accent);font-weight:600}
+
+/* Series prev/next */
+.series-nav{max-width:72ch;margin:var(--sp-10) 0 0;display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4)}
+.series-nav a{border:1px solid var(--line);border-radius:var(--r);padding:var(--sp-4);background:var(--surface);
+  color:var(--ink);display:block;transition:border-color .2s,box-shadow .2s}
+.series-nav a:hover{border-color:var(--accent);box-shadow:var(--shadow-1);text-decoration:none}
+.series-nav .dir{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--muted);
+  text-transform:uppercase;letter-spacing:.08em}
+.series-nav .tt{color:var(--navy);font-weight:600;margin-top:var(--sp-1);line-height:1.3}
+.series-nav .next{text-align:right}
+@media (max-width:600px){.series-nav{grid-template-columns:1fr}.series-nav .next{text-align:left}}
+
+/* Footer */
+.site-footer{margin-top:var(--sp-10);border-top:1px solid var(--line);background:var(--surface)}
+.site-footer>*{max-width:var(--wrap);margin-inline:auto;padding-inline:var(--sp-5)}
+.foot-lead{padding-top:var(--sp-8)}
+.foot-name{font-family:var(--font-display);font-size:var(--text-lg);color:var(--navy);font-weight:600;margin:0}
+.foot-role{color:var(--muted);font-size:var(--text-sm);margin:var(--sp-1) 0 0}
+.foot-nav{display:flex;flex-wrap:wrap;gap:var(--sp-5);padding-top:var(--sp-5)}
+.foot-nav a{font-size:var(--text-sm);color:var(--ink-2);font-weight:500}
+.foot-nav a:hover{color:var(--accent)}
+.foot-base{display:flex;justify-content:space-between;align-items:center;padding-block:var(--sp-5) var(--sp-8);
+  margin-top:var(--sp-5);border-top:1px solid var(--line);color:var(--muted);font-size:var(--text-sm)}
+.to-top{color:var(--muted)}.to-top:hover{color:var(--accent)}
+</style>
+</head>
+
+<body id="top">
+
+<!-- ========================= HEADER ========================= -->
+<header class="site-header" data-elevate="false">
+  <a class="brand" href="/">Ali Shahmohammadi <span class="deg">Ph.D.</span></a>
+  <nav class="site-nav" aria-label="Primary">
+    <a href="/#writing" aria-current="page">Writing</a>
+    <a href="/#career">Career</a>
+    <a href="/resume.html">Resume</a>
+    <a href="https://github.com/alishahmohammadi22" rel="me">GitHub</a>
+  </nav>
+  <button class="theme-toggle" id="themeBtn" type="button" aria-label="Toggle dark mode"><b></b></button>
+  <div class="read-progress" role="presentation"><span id="progress"></span></div>
+</header>
+
+<!-- ========================= ARTICLE ========================= -->
+<div class="article-wrap">
+  <main class="article-main prose">
+
+    <!-- ===== PER-ARTICLE HEADER ===== -->
+    <p class="a-eyebrow">Scientific ML · Foundations 01</p>
+    <h1 class="a-title">Physics-Informed Neural Networks: Why Embedding Physical Laws Changes Everything</h1>
+    <p class="a-sub">How adding a differential equation to the loss function lets a network
+      learn the right answer from almost no data — and where that trick stops working.</p>
+    <div class="a-meta">
+      <span class="badge"><span class="dot"></span>PINN Foundations</span>
+      <span class="level" title="Beginner"><i class="on"></i><i></i><i></i><i></i><span class="lab">Beginner</span></span>
+      <span class="sep">·</span><span>Sep 2025</span>
+      <span class="sep">·</span><span>18 min read</span>
+    </div>
+
+    <!-- Hero: convergence plot (signature element, drawn inline) -->
+    <figure class="hero-fig">
+      <div class="frame">
+        <svg viewBox="0 0 640 260" role="img" aria-label="Training loss converging on a log scale: total, physics, and boundary components all decreasing over epochs.">
+          <!-- gridlines -->
+          <g stroke="var(--grid)" stroke-width="1">
+            <line x1="56" y1="30" x2="620" y2="30"/><line x1="56" y1="80" x2="620" y2="80"/>
+            <line x1="56" y1="130" x2="620" y2="130"/><line x1="56" y1="180" x2="620" y2="180"/>
+            <line x1="56" y1="220" x2="620" y2="220"/>
+          </g>
+          <!-- axes -->
+          <line x1="56" y1="24" x2="56" y2="224" stroke="var(--line-strong)" stroke-width="1.5"/>
+          <line x1="56" y1="224" x2="620" y2="224" stroke="var(--line-strong)" stroke-width="1.5"/>
+          <!-- total loss (navy solid) -->
+          <path d="M60,40 C150,55 210,120 300,150 C400,182 500,205 616,214" fill="none"
+                stroke="var(--plot-navy)" stroke-width="2.4"/>
+          <!-- physics loss (green dashed) -->
+          <path d="M60,60 C150,80 220,140 320,168 C420,192 520,208 616,216" fill="none"
+                stroke="var(--plot-green)" stroke-width="2.2" stroke-dasharray="7 5"/>
+          <!-- boundary loss (red dotted) -->
+          <path d="M60,90 C140,120 230,165 330,186 C430,202 520,212 616,218" fill="none"
+                stroke="var(--plot-red)" stroke-width="2" stroke-dasharray="2 5" stroke-linecap="round"/>
+          <!-- labels -->
+          <text x="14" y="130" transform="rotate(-90 14 130)" font-family="var(--font-mono)" font-size="11" fill="var(--muted)">log loss</text>
+          <text x="330" y="248" text-anchor="middle" font-family="var(--font-mono)" font-size="11" fill="var(--muted)">training epochs →</text>
+        </svg>
+      </div>
+      <div class="legend" aria-hidden="true">
+        <span><i style="border-color:var(--plot-navy)"></i>total</span>
+        <span><i style="border-color:var(--plot-green);border-top-style:dashed"></i>physics residual</span>
+        <span><i style="border-color:var(--plot-red);border-top-style:dotted"></i>boundary</span>
+      </div>
+      <figcaption>The shape every post in this series ends on: three loss components
+        driven down together until the network satisfies both the data and the physics.</figcaption>
+    </figure>
+
+    <!-- ===== SECTION 01 ===== -->
+    <section>
+      <p class="section-eyebrow"><span class="num">01</span> The problem with data-hungry models</p>
+      <h2 id="problem">When there isn't enough data</h2>
+      <p>A standard neural network is an interpolator: give it thousands of labeled examples and
+        it will approximate the function that produced them. In engineering and the physical
+        sciences that assumption quietly fails. Experiments are expensive, sensors are sparse,
+        and the region you most want to predict is often the one you have no measurements for.
+        A purely data-driven model asked to extrapolate there will produce something smooth,
+        confident, and wrong.</p>
+      <p>But we usually know something the data doesn't contain directly: the <strong>governing
+        equation</strong>. Conservation of mass, a reaction rate law, a diffusion equation.
+        The central idea of a physics-informed neural network is to stop treating that equation
+        as background knowledge and start treating it as part of the loss.</p>
+    </section>
+
+    <hr class="rule-dots">
+
+    <!-- ===== SECTION 02 ===== -->
+    <section>
+      <p class="section-eyebrow"><span class="num">02</span> The core idea</p>
+      <h2 id="idea">Physics as a loss function</h2>
+      <p>We train the network to minimize two things at once: how far its predictions sit from
+        any data we do have, and how far its own derivatives sit from satisfying the differential
+        equation. The total objective is a weighted sum:</p>
+
+      <p>$$ \mathcal{L}(\theta) = \underbrace{\frac{1}{N_d}\sum_{i=1}^{N_d}\big(\hat{y}(x_i;\theta) - y_i\big)^2}_{\text{data}}
+         \;+\; \lambda\,\underbrace{\frac{1}{N_r}\sum_{j=1}^{N_r} r\big(x_j;\theta\big)^2}_{\text{physics residual}} $$</p>
+
+      <p>where the residual for a first-order ODE \( \frac{dy}{dx} = f(x,y) \) is simply
+        \( r(x;\theta) = \frac{d\hat{y}}{dx} - f(x,\hat{y}) \), and that derivative comes from
+        automatic differentiation of the network itself — not a finite-difference stencil.</p>
+
+      <div class="callout">
+        <span class="label">The core insight</span>
+        <p>The physics term is evaluated at <em>collocation points</em> where you have no label at
+          all. That's why a PINN can learn from little or no measured data: the equation supplies
+          the supervision everywhere the sensors don't.</p>
+      </div>
+    </section>
+
+    <hr class="rule-dots">
+
+    <!-- ===== SECTION 03 ===== -->
+    <section>
+      <p class="section-eyebrow"><span class="num">03</span> In code</p>
+      <h2 id="code">A first PINN, end to end</h2>
+      <p>Here is the residual and training step for a minimal PINN in PyTorch. Note that the
+        derivative is obtained with <code>torch.autograd.grad</code> — the same engine that
+        computes weight gradients also gives us <code>dy/dx</code>.</p>
+
+      <div class="code">
+        <div class="code-head"><span>train_pinn.py</span><span>Python · PyTorch</span></div>
+        <pre>def residual(model, x):
+    x.requires_grad_(True)
+    y = model(x)
+    dy_dx = torch.autograd.grad(y, x,
+        grad_outputs=torch.ones_like(y),
+        create_graph=True)[0]
+    # ODE: dy/dx = -k*y  ->  r = dy/dx + k*y
+    return dy_dx + K * y
+
+def loss_fn(model, x_data, y_data, x_colloc):
+    l_data = ((model(x_data) - y_data) ** 2).mean()
+    l_phys = (residual(model, x_colloc) ** 2).mean()
+    return l_data + LAMBDA * l_phys</pre>
+      </div>
+
+      <p>Training is the familiar Adam loop, and — as in every post in this series — we finish
+        with a short L-BFGS polish once the loss has flattened.</p>
+
+      <!-- Figure: solution vs analytic -->
+      <figure class="figure">
+        <div class="frame">
+          <svg viewBox="0 0 640 240" role="img" aria-label="PINN prediction overlaid on the analytic exponential-decay solution; the two curves coincide.">
+            <g stroke="var(--grid)" stroke-width="1">
+              <line x1="50" y1="30" x2="620" y2="30"/><line x1="50" y1="90" x2="620" y2="90"/>
+              <line x1="50" y1="150" x2="620" y2="150"/><line x1="50" y1="205" x2="620" y2="205"/>
+            </g>
+            <line x1="50" y1="24" x2="50" y2="206" stroke="var(--line-strong)" stroke-width="1.5"/>
+            <line x1="50" y1="206" x2="620" y2="206" stroke="var(--line-strong)" stroke-width="1.5"/>
+            <!-- analytic (navy) -->
+            <path d="M52,40 C160,120 260,170 620,200" fill="none" stroke="var(--plot-navy)" stroke-width="2.6"/>
+            <!-- pinn samples (green dots) -->
+            <g fill="var(--plot-green)">
+              <circle cx="90" cy="58" r="3.4"/><circle cx="150" cy="102" r="3.4"/><circle cx="230" cy="150" r="3.4"/>
+              <circle cx="330" cy="178" r="3.4"/><circle cx="450" cy="192" r="3.4"/><circle cx="580" cy="199" r="3.4"/>
+            </g>
+            <text x="300" y="230" text-anchor="middle" font-family="var(--font-mono)" font-size="11" fill="var(--muted)">x →</text>
+          </svg>
+        </div>
+        <figcaption><b>Result.</b> The PINN prediction (green) sits on top of the analytic
+          exponential decay (navy) after training on a single initial condition — zero interior
+          labels required.</figcaption>
+      </figure>
+    </section>
+
+    <hr class="rule-dots">
+
+    <!-- ===== SECTION 04 ===== -->
+    <section>
+      <p class="section-eyebrow"><span class="num">04</span> Trade-offs</p>
+      <h2 id="tradeoffs">Where PINNs win, and where they don't</h2>
+      <p>PINNs are not a replacement for a good mesh solver on a well-posed forward problem.
+        Their advantage shows up in three places: sparse or noisy data, inverse problems where
+        parameters are unknown, and smooth high-dimensional domains where meshing is painful.</p>
+
+      <table>
+        <thead><tr><th>Approach</th><th>Needs labeled data</th><th>Handles unknown parameters</th><th>Best for</th></tr></thead>
+        <tbody>
+          <tr><td>Pure neural net</td><td>A lot</td><td>No</td><td>Interpolation inside the data</td></tr>
+          <tr><td>FDM / FEM</td><td>None</td><td>Awkwardly</td><td>Well-posed forward problems</td></tr>
+          <tr><td><strong>PINN</strong></td><td>Little to none</td><td>Naturally</td><td>Inverse &amp; data-scarce problems</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout warn">
+        <span class="label">Honest limitations</span>
+        <p>Vanilla PINNs struggle with stiff systems, sharp fronts, and high-frequency solutions —
+          the spectral-bias wall. Later posts fix these with time-scaling, adaptive sampling, and
+          hard-constraint ansätze; this first one is deliberately the easy case.</p>
+      </div>
+    </section>
+
+    <hr class="rule-dots">
+
+    <!-- ===== SECTION 05: corrected roadmap (fixes the stale table) ===== -->
+    <section>
+      <p class="section-eyebrow"><span class="num">05</span> The series</p>
+      <h2 id="roadmap">PINN Foundations roadmap</h2>
+      <table>
+        <thead><tr><th>#</th><th>Article</th><th>Key concepts</th></tr></thead>
+        <tbody>
+          <tr><td>01</td><td>Introduction to PINNs</td><td>First-order ODE, autograd, collocation</td></tr>
+          <tr><td>02</td><td>Second-Order ODEs: Damped Oscillator</td><td>Nested autograd, hard constraints, spectral bias</td></tr>
+          <tr><td>03</td><td>1D Heat Equation</td><td>Parabolic PDE, space-time collocation</td></tr>
+          <tr><td>04</td><td>Burgers &amp; Reaction PDEs</td><td>Shocks, viscous regularization, coupled A→B→C</td></tr>
+          <tr><td>05</td><td>Inverse Problems</td><td>Unknown parameters as trainable variables</td></tr>
+          <tr><td>06</td><td>Adaptive Sampling &amp; Training</td><td>RAR, loss weighting, causal training, Fourier features</td></tr>
+          <tr><td>07</td><td>DeepONet</td><td>Branch/trunk operator learning</td></tr>
+          <tr><td>08</td><td>Physics-Informed DeepONet</td><td>Operator learning without solution data</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Series prev/next -->
+    <nav class="series-nav" aria-label="Series navigation">
+      <a href="/#writing">
+        <div class="dir">← Back</div>
+        <div class="tt">All writing</div>
+      </a>
+      <a class="next" href="/blog/pinn-odes-second-order.html">
+        <div class="dir">Next · Foundations 02 →</div>
+        <div class="tt">Second-Order ODEs: The Damped Harmonic Oscillator</div>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- ===== TOC (auto-highlights on scroll) ===== -->
+  <aside class="toc" aria-label="On this page">
+    <p class="t">On this page</p>
+    <nav id="tocNav">
+      <a href="#problem">The problem with data</a>
+      <a href="#idea">Physics as a loss</a>
+      <a href="#code">A first PINN, in code</a>
+      <a href="#tradeoffs">Where PINNs win</a>
+      <a href="#roadmap">Series roadmap</a>
+    </nav>
+  </aside>
+</div>
+
+<!-- ========================= FOOTER ========================= -->
+<footer class="site-footer">
+  <div class="foot-lead">
+    <p class="foot-name">Ali Shahmohammadi, Ph.D.</p>
+    <!-- {{ROLE_TITLE}} — set once, site-wide -->
+    <p class="foot-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p>
+  </div>
+  <nav class="foot-nav" aria-label="Footer">
+    <a href="/#writing">Writing</a>
+    <a href="/#career">Career</a>
+    <a href="/resume.html">Resume</a>
+    <a href="https://github.com/alishahmohammadi22" rel="me">GitHub</a>
+    <a href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
+  </nav>
+  <div class="foot-base">
+    <span>© 2026 Ali Shahmohammadi, Ph.D.</span>
+    <a class="to-top" href="#top">Back to top ↑</a>
+  </div>
+</footer>
+
+<script>
+/* Header elevate + reading progress */
+(function(){
+  var header=document.querySelector('.site-header');
+  var bar=document.getElementById('progress');
+  function onScroll(){
+    var y=window.scrollY||0;
+    header.dataset.elevate=y>8?'true':'false';
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.transform='scaleX('+(h>0?Math.min(y/h,1):0)+')';
+  }
+  addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+  /* Theme toggle */
+  document.getElementById('themeBtn').addEventListener('click',function(){
+    var n=document.documentElement.dataset.theme==='dark'?'light':'dark';
+    document.documentElement.dataset.theme=n;localStorage.setItem('theme',n);
+  });
+
+  /* TOC scrollspy */
+  var links=[...document.querySelectorAll('#tocNav a')];
+  var map={};links.forEach(function(a){map[a.getAttribute('href').slice(1)]=a;});
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){links.forEach(function(l){l.classList.remove('active');});
+        if(map[e.target.id])map[e.target.id].classList.add('active');}
+    });
+  },{rootMargin:'-20% 0px -70% 0px'});
+  document.querySelectorAll('.prose h2[id]').forEach(function(h){obs.observe(h);});
+})();
+
+/* KaTeX */
+document.addEventListener('DOMContentLoaded',function(){
+  if(window.renderMathInElement){
+    renderMathInElement(document.body,{
+      delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}]
+    });
+  }
+});
+</script>
+</body>
+</html>

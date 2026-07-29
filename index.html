@@ -1,840 +1,546 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ali Shahmohammadi, Ph.D. — Applied AI Engineer · Life Sciences</title>
-  <meta name="description" content="Applied AI engineer with a decade in pharmaceutical R&D. I build MCP servers, agentic pipelines, and evaluation harnesses that make scientific data trustworthy for AI.">
-  <meta property="og:title" content="Ali Shahmohammadi, Ph.D. — Applied AI Engineer">
-  <meta property="og:description" content="Applied AI engineer with a decade in pharmaceutical R&D — building production agentic systems in regulated life sciences.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://alishahmohammadi22.github.io">
-  <meta property="og:image" content="https://alishahmohammadi22.github.io/assets/images/og-preview.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Ali Shahmohammadi",
-    "honorificSuffix": "Ph.D.",
-    "jobTitle": "Applied AI Engineer · Agentic Systems · Trustworthy Scientific Data",
-    "url": "https://alishahmohammadi22.github.io",
-    "sameAs": ["https://linkedin.com/in/alishahmohammadi","https://github.com/alishahmohammadi22"],
-    "alumniOf": [{"@type":"CollegeOrUniversity","name":"Queen's University"},{"@type":"CollegeOrUniversity","name":"University of Texas at Austin"}]
-  }
-  </script>
-  <script defer data-domain="alishahmohammadi22.github.io" src="https://plausible.io/js/script.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    /* ── Tokens ── */
-    :root {
-      --bg:        #F8F6F2;
-      --bg-alt:    #F1EEE9;
-      --ink:       #111010;
-      --ink-2:     #4A4540;
-      --ink-3:     #8C857E;
-      --navy:      #1C3D6B;
-      --navy-lt:   #EBF0F7;
-      --sienna:    #B8845A;
-      --sienna-lt: #FBF4EC;
-      --purple:    #5B4E8A;
-      --purple-lt: #F2EEF9;
-      --green:     #2D7A4F;
-      --green-lt:  #EBF7F1;
-      --green-bdr: #BEE5D3;
-      --border:    #DEDAD3;
-      --dark:      #111010;
-    }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ali Shahmohammadi, Ph.D. — Applied AI Engineering &amp; Scientific Data</title>
+<meta name="description" content="I build MCP servers, agentic pipelines, and evaluation harnesses that make scientific data trustworthy for AI — with a decade in pharmaceutical R&D and physics-informed machine learning.">
+<link rel="canonical" href="https://alishahmohammadi.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ali Shahmohammadi, Ph.D. — Applied AI Engineering & Scientific Data">
+<meta property="og:description" content="MCP servers, agentic pipelines, and evaluation harnesses that make scientific data trustworthy for AI.">
+<meta property="og:url" content="https://alishahmohammadi.com/">
+<meta property="og:image" content="https://alishahmohammadi.com/assets/images/og-preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg); color: var(--ink);
-      font-size: 18px; line-height: 1.65;
-      -webkit-font-smoothing: antialiased;
-    }
-    a { color: inherit; text-decoration: none; }
-    img { display: block; max-width: 100%; }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-    /* ── Navigation ── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-      height: 60px; padding: 0 2.5rem;
-      display: flex; align-items: center; justify-content: space-between;
-      background: rgba(248,246,242,.94);
-      backdrop-filter: blur(20px) saturate(160%);
-      -webkit-backdrop-filter: blur(20px) saturate(160%);
-      border-bottom: 1px solid transparent;
-      transition: border-color .3s;
-    }
-    nav.scrolled { border-color: var(--border); }
-    .nav-logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.15rem; font-weight: 600; letter-spacing: .01em; color: var(--ink);
-    }
-    .nav-logo em { font-style: normal; color: var(--sienna); }
-    .nav-links { display: flex; align-items: center; gap: .2rem; }
-    .nav-links a {
-      font-size: .88rem; font-weight: 500; color: var(--ink-3);
-      padding: .42rem .8rem; border-radius: 4px; transition: color .15s, background .15s;
-    }
-    .nav-links a:hover { color: var(--ink); background: var(--bg-alt); }
-    .nav-resume {
-      background: var(--ink) !important; color: var(--bg) !important;
-      border-radius: 3px !important;
-    }
-    .nav-resume:hover { background: var(--navy) !important; color: #fff !important; }
-    .nav-menu { display: none; background: none; border: none; cursor: pointer; padding: .3rem; color: var(--ink); }
+<script>
+  (function(){var t=localStorage.getItem('theme');
+   if(!t)t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
+   document.documentElement.dataset.theme=t;})();
+</script>
 
-    @media (max-width: 700px) {
-      .nav-links {
-        display: none; flex-direction: column; align-items: flex-start;
-        position: absolute; top: 60px; left: 0; right: 0;
-        background: var(--bg); border-bottom: 1px solid var(--border);
-        padding: 1rem 2rem 1.5rem; gap: .2rem;
-      }
-      .nav-links.open { display: flex; }
-      .nav-menu { display: block; }
-    }
+<style>
+/* ===== theme.css tokens (shared with articles & index) ===== */
+:root{
+  --font-display:"STIX Two Text",Georgia,serif;
+  --font-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --text-xs:.78rem;--text-sm:.875rem;--text-base:1.0625rem;--text-lg:1.1875rem;
+  --text-xl:clamp(1.35rem,1.15rem + .9vw,1.6rem);
+  --text-2xl:clamp(1.7rem,1.3rem + 1.7vw,2.25rem);
+  --text-3xl:clamp(2.15rem,1.5rem + 2.9vw,3.3rem);
+  --text-hero:clamp(2.6rem,1.6rem + 4.4vw,4.6rem);
+  --lh-tight:1.1;--lh-snug:1.3;--lh-body:1.72;
+  --sp-1:.25rem;--sp-2:.5rem;--sp-3:.75rem;--sp-4:1rem;--sp-5:1.5rem;--sp-6:2rem;--sp-8:3rem;--sp-10:4.5rem;--sp-12:6.5rem;
+  --measure:70ch;--wrap:76rem;
+  --r-sm:6px;--r:10px;--r-lg:16px;--r-xl:22px;
+  --shadow-1:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.05);
+  --shadow-2:0 6px 22px rgba(16,24,40,.12);
+  --shadow-3:0 18px 48px rgba(16,24,40,.16);
 
-    /* ── Hero ── */
-    .hero {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 42%;
-      padding-top: 60px;
-    }
-    .hero-left {
-      display: flex; flex-direction: column; justify-content: center;
-      padding: 5rem 4rem 5rem 5rem;
-    }
-    .hero-eyebrow {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .68rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
-      color: var(--sienna); margin-bottom: 2rem;
-      display: flex; align-items: center; gap: .8rem;
-    }
-    .hero-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--sienna); flex-shrink: 0; }
-    .hero-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(3.8rem, 6.5vw, 6.8rem);
-      font-weight: 700; line-height: .93; letter-spacing: -.02em;
-      color: var(--ink); margin-bottom: 1.75rem;
-    }
-    .hero-name em { font-style: italic; font-weight: 400; color: var(--ink-3); }
-    .hero-bio {
-      font-size: 1rem; color: var(--ink-2); line-height: 1.75;
-      max-width: 440px; margin-bottom: 2.5rem; font-weight: 400;
-    }
-    .hero-bio strong { color: var(--ink); font-weight: 600; }
-    .hero-ctas { display: flex; gap: .75rem; flex-wrap: wrap; margin-bottom: 3rem; }
-    .btn {
-      display: inline-flex; align-items: center; gap: .45rem;
-      font-size: .85rem; font-weight: 600; padding: .7rem 1.4rem;
-      border-radius: 3px; transition: all .18s; cursor: pointer; border: none; white-space: nowrap;
-    }
-    .btn-dark { background: var(--ink); color: var(--bg); }
-    .btn-dark:hover { background: var(--navy); }
-    .btn-outline { background: transparent; color: var(--ink); border: 1px solid var(--border); }
-    .btn-outline:hover { border-color: var(--ink); background: var(--bg-alt); }
-    .hero-tags { display: flex; flex-wrap: wrap; gap: .4rem; }
-    .hero-tag {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .67rem; color: var(--ink-3);
-      border: 1px solid var(--border); padding: .24rem .6rem; border-radius: 2px;
-    }
-    .hero-photo {
-      position: relative; overflow: hidden; background: var(--bg-alt);
-    }
-    .hero-photo img {
-      width: 100%; height: 100%;
-      object-fit: cover; object-position: center top;
-    }
+  --paper:#f8fafb;--surface:#fff;--surface-2:#eef2f4;
+  --line:#e2e7ea;--line-strong:#cfd6da;
+  --navy:#1c2c4c;--ink:#141821;--ink-2:#3f4753;--muted:#69727d;
+  --accent:#1f7a5c;--accent-2:#26986f;--accent-wash:#e6f3ed;
+  --danger:#b23a3a;--danger-wash:#f7ecec;
+  --grid:#e7ecef;--box-off:#d7dde1;
+  --plot-navy:#1c2c4c;--plot-green:#1f7a5c;--plot-red:#b23a3a;
+  --on-accent:#ffffff;
+}
+:root[data-theme="dark"]{
+  --paper:#0d1117;--surface:#141a22;--surface-2:#1b232d;
+  --line:#232c37;--line-strong:#313d4a;
+  --navy:#9db4de;--ink:#e6ebf0;--ink-2:#aeb8c4;--muted:#7c8794;
+  --accent:#3fb98d;--accent-2:#5fd0a6;--accent-wash:#0f2b22;
+  --danger:#e06a6a;--danger-wash:#2a1616;
+  --grid:#212a34;--box-off:#2c3742;
+  --shadow-2:0 8px 26px rgba(0,0,0,.5);--shadow-3:0 20px 54px rgba(0,0,0,.6);
+  --plot-navy:#9db4de;--plot-green:#3fb98d;--plot-red:#e06a6a;
+  --on-accent:#08130f;
+}
 
-    @media (max-width: 860px) {
-      .hero { grid-template-columns: 1fr; min-height: auto; }
-      .hero-photo { height: 65vw; max-height: 520px; order: -1; }
-      .hero-left { padding: 3rem 2rem 3.5rem; }
-      .hero-name { font-size: clamp(3rem, 10vw, 5rem); }
-    }
-    @media (max-width: 480px) {
-      nav { padding: 0 1.5rem; }
-      .hero-left { padding: 2.5rem 1.5rem 3rem; }
-    }
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-body);
+  font-size:var(--text-base);line-height:var(--lh-body);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+img{max-width:100%;height:auto}
+.wrap{max-width:var(--wrap);margin-inline:auto;padding-inline:var(--sp-5)}
+.section{padding-block:var(--sp-12)}
+.section-head{margin-bottom:var(--sp-8)}
+.kicker{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 var(--sp-3)}
+.section-head h2{font-family:var(--font-display);font-weight:700;font-size:var(--text-2xl);color:var(--navy);letter-spacing:-.02em;margin:0}
+.section-head p{color:var(--ink-2);max-width:56ch;margin:var(--sp-3) 0 0}
 
-    /* ── Stats strip ── */
-    .stats-strip {
-      background: var(--dark); color: #fff;
-      display: grid; grid-template-columns: repeat(4, 1fr);
-    }
-    @media (max-width: 600px) { .stats-strip { grid-template-columns: 1fr 1fr; } }
-    .stat { padding: 2.5rem 2rem; border-right: 1px solid rgba(255,255,255,.07); }
-    .stat:last-child { border-right: none; }
-    .stat-num {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 3rem; font-weight: 700; line-height: 1; letter-spacing: -.02em;
-      color: #fff; margin-bottom: .3rem;
-    }
-    .stat-label {
-      font-size: .72rem; color: rgba(255,255,255,.38); font-weight: 400;
-      line-height: 1.5; text-transform: uppercase; letter-spacing: .06em;
-    }
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;font:600 var(--text-sm)/1 var(--font-body);
+  padding:12px 20px;border-radius:999px;cursor:pointer;border:1px solid transparent;transition:transform .15s,box-shadow .2s,background .2s,border-color .2s}
+.btn:hover{text-decoration:none;transform:translateY(-1px)}
+.btn-primary{background:var(--accent);color:var(--on-accent);box-shadow:var(--shadow-1)}
+.btn-primary:hover{background:var(--accent-2);box-shadow:var(--shadow-2)}
+.btn-ghost{background:transparent;color:var(--navy);border-color:var(--line-strong)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
 
-    /* ── Section shell ── */
-    .section { padding: 7rem 0; }
-    .section-alt { background: var(--bg-alt); }
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 3rem; }
-    @media (max-width: 600px) { .container { padding: 0 1.5rem; } .section { padding: 4.5rem 0; } }
+/* ===== Header ===== */
+.site-header{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:var(--sp-5);
+  padding:var(--sp-3) var(--sp-5);background:color-mix(in srgb,var(--paper) 82%,transparent);
+  backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid transparent;transition:border-color .25s,box-shadow .25s}
+.site-header[data-elevate="true"]{border-bottom-color:var(--line);box-shadow:var(--shadow-1)}
+.brand{font-family:var(--font-display);font-weight:600;color:var(--navy);font-size:var(--text-lg);letter-spacing:-.01em}
+.brand:hover{text-decoration:none}.brand .deg{font-style:italic;color:var(--accent);font-weight:500}
+.site-nav{display:flex;gap:var(--sp-5);margin-left:auto;align-items:center}
+.site-nav a{font-size:var(--text-sm);font-weight:500;color:var(--ink-2);position:relative;padding-block:var(--sp-1)}
+.site-nav a:hover{color:var(--navy);text-decoration:none}
+.theme-toggle{width:34px;height:34px;border-radius:999px;cursor:pointer;border:1px solid var(--line-strong);background:var(--surface);display:grid;place-items:center}
+.theme-toggle b{width:14px;height:14px;border-radius:999px;background:var(--navy);box-shadow:inset -4px -4px 0 0 var(--surface)}
+:root[data-theme="dark"] .theme-toggle b{box-shadow:none;background:var(--accent)}
+@media (max-width:640px){.site-nav a:not(.keep){display:none}.brand .deg{display:none}}
 
-    .section-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .67rem; letter-spacing: .15em; text-transform: uppercase;
-      color: var(--ink-3); margin-bottom: 1rem;
-    }
-    .section-h {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2.4rem, 4vw, 3.8rem); font-weight: 700;
-      letter-spacing: -.02em; line-height: 1.02; color: var(--ink); margin-bottom: 1rem;
-    }
-    .section-sub {
-      font-size: 1.05rem; color: var(--ink-2); line-height: 1.75;
-      max-width: 520px; margin-bottom: 3.5rem;
-    }
+/* ===== Hero ===== */
+.hero{position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;z-index:0;
+  background-image:radial-gradient(var(--grid) 1.4px,transparent 1.5px);background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(120% 90% at 70% 10%,#000 0,transparent 70%);
+  mask-image:radial-gradient(120% 90% at 70% 10%,#000 0,transparent 70%);opacity:.9}
+.hero-inner{position:relative;z-index:1;display:grid;grid-template-columns:1.15fr .85fr;gap:var(--sp-10);
+  align-items:center;padding-block:var(--sp-12)}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:var(--text-xs);
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);background:var(--surface);
+  border:1px solid var(--line);border-radius:999px;padding:6px 12px;margin:0 0 var(--sp-5)}
+.hero-eyebrow .pulse{width:7px;height:7px;border-radius:999px;background:var(--accent);box-shadow:0 0 0 0 var(--accent-2);animation:pulse 2.4s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 55%,transparent)}70%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.hero h1{font-family:var(--font-display);font-weight:700;font-size:var(--text-hero);line-height:var(--lh-tight);
+  letter-spacing:-.025em;color:var(--navy);margin:0 0 var(--sp-5)}
+.hero h1 .hl{color:var(--accent);font-style:italic}
+.hero-sub{font-size:var(--text-lg);color:var(--ink-2);max-width:52ch;margin:0 0 var(--sp-6)}
+.hero-cta{display:flex;flex-wrap:wrap;gap:var(--sp-3)}
 
-    /* ── Timeline ── */
-    .timeline { display: flex; flex-direction: column; }
-    .tl-item {
-      display: grid; grid-template-columns: 190px 1fr;
-      padding: 2.5rem 0; border-top: 1px solid var(--border);
-    }
-    .tl-item:last-child { border-bottom: 1px solid var(--border); }
-    @media (max-width: 680px) { .tl-item { grid-template-columns: 1fr; gap: .9rem; } }
-    .tl-meta { padding-right: 2rem; }
-    .tl-org {
-      font-weight: 700; font-size: .9rem; color: var(--navy);
-      text-transform: uppercase; letter-spacing: .07em; margin-bottom: .25rem;
-    }
-    .tl-period { font-family: 'JetBrains Mono', monospace; font-size: .7rem; color: var(--ink-3); }
-    .tl-title { font-size: 1.08rem; font-weight: 600; color: var(--ink); margin-bottom: .2rem; line-height: 1.35; }
-    .tl-loc { font-size: .88rem; color: var(--ink-3); margin-bottom: 1.1rem; }
-    .tl-bullets { list-style: none; display: flex; flex-direction: column; gap: .45rem; }
-    .tl-bullets li {
-      font-size: .95rem; color: var(--ink-2); line-height: 1.65;
-      padding-left: 1rem; position: relative;
-    }
-    .tl-bullets li::before { content: '–'; position: absolute; left: 0; color: var(--ink-3); }
+/* Hero visual — self-drawing convergence plot */
+.hero-visual{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);
+  box-shadow:var(--shadow-3);padding:var(--sp-5) var(--sp-5) var(--sp-4)}
+.hero-visual .cap{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--muted);
+  display:flex;justify-content:space-between;margin-bottom:var(--sp-3)}
+.hero-visual svg{width:100%;height:auto;display:block}
+.draw{stroke-dasharray:1400;stroke-dashoffset:1400;animation:draw 2.2s cubic-bezier(.5,.1,.2,1) forwards}
+.draw.d2{animation-delay:.35s}.draw.d3{animation-delay:.7s}
+@keyframes draw{to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){.draw{stroke-dashoffset:0;animation:none}}
+.hero-legend{display:flex;gap:var(--sp-4);flex-wrap:wrap;font-family:var(--font-mono);font-size:var(--text-xs);margin-top:var(--sp-3)}
+.hero-legend span{display:inline-flex;align-items:center;gap:6px;color:var(--ink-2)}
+.hero-legend i{width:16px;border-top-width:2px;border-top-style:solid;display:inline-block}
+@media (max-width:860px){.hero-inner{grid-template-columns:1fr;gap:var(--sp-8);padding-block:var(--sp-10)}}
 
-    /* ── Expertise grid ── */
-    .exp-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr);
-      gap: 1px; background: var(--border);
-      margin-top: 3.5rem;
-    }
-    @media (max-width: 640px) { .exp-grid { grid-template-columns: 1fr; } }
-    .exp-card { background: var(--bg); padding: 2rem; }
-    .section-alt .exp-card { background: var(--bg-alt); }
-    .exp-label {
-      font-size: .72rem; font-weight: 700; letter-spacing: .1em;
-      text-transform: uppercase; color: var(--navy); margin-bottom: 1rem;
-    }
-    .exp-tags { display: flex; flex-wrap: wrap; gap: .35rem; }
-    .exp-tag {
-      font-size: .85rem; color: var(--ink-2); border: 1px solid var(--border);
-      padding: .22rem .58rem; border-radius: 2px; transition: border-color .15s, color .15s;
-    }
-    .exp-tag:hover { border-color: var(--navy); color: var(--navy); }
+/* Stats band */
+.stats{display:flex;flex-wrap:wrap;gap:var(--sp-8);padding:var(--sp-6) 0;border-block:1px solid var(--line)}
+.stat .n{font-family:var(--font-display);font-weight:700;font-size:clamp(1.8rem,1.2rem+1.6vw,2.4rem);color:var(--navy);line-height:1}
+.stat .l{font-size:var(--text-sm);color:var(--muted);margin-top:6px}
 
-    /* ── Writing section tokens (from design spec) ── */
-    #writing {
-      --w-accent:      #1f7a5c;
-      --w-accent-2:    #26986f;
-      --w-accent-wash: #e6f3ed;
-      --w-navy:        #1c2c4c;
-      --w-ink:         #141821;
-      --w-ink-2:       #3f4753;
-      --w-muted:       #69727d;
-      --w-surface:     #ffffff;
-      --w-surface-2:   #eef2f4;
-      --w-line:        #e2e7ea;
-      --w-line-strong: #cfd6da;
-      --w-box-off:     #d7dde1;
-      --w-shadow-1:    0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.05);
-      --w-shadow-2:    0 6px 22px rgba(16,24,40,.12);
-      --w-r:           10px;
-      --w-r-lg:        16px;
-      --w-font-display:"STIX Two Text",Georgia,serif;
-      --w-font-mono:   "JetBrains Mono",ui-monospace,Menlo,monospace;
-    }
+/* Focus cards */
+.focus-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-5)}
+.focus-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:var(--sp-6);
+  transition:border-color .2s,box-shadow .2s,transform .2s;display:flex;flex-direction:column}
+.focus-card:hover{border-color:var(--accent);box-shadow:var(--shadow-2);transform:translateY(-2px);text-decoration:none}
+.focus-ico{width:46px;height:46px;border-radius:12px;background:var(--accent-wash);color:var(--accent);
+  display:grid;place-items:center;margin-bottom:var(--sp-4)}
+.focus-ico svg{width:24px;height:24px}
+.focus-card h3{font-family:var(--font-display);font-size:var(--text-lg);color:var(--navy);font-weight:600;margin:0 0 var(--sp-2)}
+.focus-card p{font-size:var(--text-sm);color:var(--ink-2);margin:0 0 var(--sp-4);flex:1}
+.focus-card .go{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.05em;color:var(--accent);font-weight:600}
+@media (max-width:860px){.focus-grid{grid-template-columns:1fr}}
 
-    /* ── Writing controls bar ── */
-    .w-controls {
-      display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: flex-end;
-      justify-content: space-between; margin-bottom: 1.5rem;
-      padding-bottom: 1.5rem; border-bottom: 1px solid var(--w-line);
-    }
-    .w-ctl-group { display: flex; flex-direction: column; gap: .5rem; }
-    .w-ctl-label {
-      font-family: var(--w-font-mono); font-size: .78rem; letter-spacing: .08em;
-      text-transform: uppercase; color: var(--w-muted);
-    }
-    .w-segmented {
-      display: inline-flex; flex-wrap: wrap; gap: 4px;
-      background: var(--w-surface-2); padding: 4px;
-      border-radius: 999px; border: 1px solid var(--w-line);
-    }
-    .w-seg {
-      appearance: none; border: 0; background: transparent; cursor: pointer;
-      font: 500 .875rem/1 'Inter',system-ui,sans-serif; color: var(--w-ink-2);
-      padding: 8px 14px; border-radius: 999px; white-space: nowrap;
-      transition: background .18s, color .18s;
-    }
-    .w-seg:hover { color: var(--w-navy); }
-    .w-seg[aria-pressed="true"] {
-      background: var(--w-surface); color: var(--w-navy);
-      box-shadow: var(--w-shadow-1);
-    }
-    .w-seg .n {
-      font-family: var(--w-font-mono); font-size: .72rem;
-      color: var(--w-muted); margin-left: 6px;
-    }
-    .w-seg[aria-pressed="true"] .n { color: var(--w-accent); }
-    .w-count { font-size: .875rem; color: var(--w-muted); align-self: center; }
-    .w-count b { color: var(--w-navy); font-weight: 600; }
+/* ===== Writing (sortable index) ===== */
+.controls{display:flex;flex-wrap:wrap;gap:var(--sp-5);align-items:flex-end;justify-content:space-between;margin-bottom:var(--sp-5)}
+.ctl-group{display:flex;flex-direction:column;gap:var(--sp-2)}
+.ctl-label{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.segmented{display:inline-flex;flex-wrap:wrap;gap:4px;background:var(--surface-2);padding:4px;border-radius:999px;border:1px solid var(--line)}
+.seg{appearance:none;border:0;background:transparent;cursor:pointer;font:500 var(--text-sm)/1 var(--font-body);
+  color:var(--ink-2);padding:8px 14px;border-radius:999px;white-space:nowrap;transition:background .18s,color .18s}
+.seg:hover{color:var(--navy)}
+.seg[aria-pressed="true"]{background:var(--surface);color:var(--navy);box-shadow:var(--shadow-1)}
+.seg .n{font-family:var(--font-mono);font-size:.72rem;color:var(--muted);margin-left:6px}
+.seg[aria-pressed="true"] .n{color:var(--accent)}
+.count{font-size:var(--text-sm);color:var(--muted);margin:0 0 var(--sp-5)}
+.count b{color:var(--navy);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:var(--sp-5)}
+.card{position:relative;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r-lg);padding:var(--sp-5);transition:border-color .2s,box-shadow .2s,transform .2s}
+.card:hover{border-color:var(--accent);box-shadow:var(--shadow-2)}
+.card.coming{border-style:dashed}
+.card-top{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3);margin-bottom:var(--sp-3)}
+.cat{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:var(--text-xs);color:var(--accent);
+  border:1px solid var(--line-strong);border-radius:999px;padding:2px 9px;background:var(--surface)}
+.badge .dot{width:6px;height:6px;border-radius:999px;background:var(--accent)}
+.card h3{font-family:var(--font-display);font-size:var(--text-lg);line-height:1.25;color:var(--navy);font-weight:600;margin:0 0 var(--sp-2)}
+.blurb{font-size:var(--text-sm);color:var(--ink-2);line-height:1.55;margin:0 0 var(--sp-4);flex:1}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-3);font-size:var(--text-xs);color:var(--muted);
+  padding-top:var(--sp-3);border-top:1px solid var(--line)}
+.meta .sep{opacity:.5}
+.level{display:inline-flex;gap:3px;align-items:center}
+.level i{width:9px;height:9px;border-radius:2px;background:var(--box-off);display:block}
+.level i.on{background:var(--accent)}
+.level .lab{margin-left:6px;color:var(--ink-2);font-weight:500}
+.stretch{flex:1}
+.readmore{font-weight:600;color:var(--accent);font-size:var(--text-sm)}
+.card.coming .readmore{color:var(--muted)}
+.chip{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--danger);
+  border:1px solid var(--danger);border-radius:999px;padding:2px 8px}
 
-    /* ── Writing card grid ── */
-    .w-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 1.5rem;
-    }
-    @media (max-width: 680px) { .w-grid { grid-template-columns: 1fr; } }
-    @media (max-width: 960px) {
-      .w-controls { flex-direction: column; align-items: stretch; }
-    }
+/* ===== Career timeline (dot nodes = collocation motif) ===== */
+.timeline{position:relative;margin-left:6px;padding-left:var(--sp-6);border-left:2px solid var(--line)}
+.tl-item{position:relative;padding-bottom:var(--sp-8)}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{content:"";position:absolute;left:calc(-1*var(--sp-6) - 7px);top:5px;width:12px;height:12px;
+  border-radius:999px;background:var(--surface);border:2px solid var(--accent)}
+.tl-item.now::before{background:var(--accent)}
+.tl-when{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.05em;color:var(--muted)}
+.tl-role{font-family:var(--font-display);font-size:var(--text-lg);color:var(--navy);font-weight:600;margin:4px 0 2px}
+.tl-org{font-size:var(--text-sm);color:var(--accent);font-weight:500;margin:0 0 var(--sp-2)}
+.tl-desc{font-size:var(--text-sm);color:var(--ink-2);margin:0;max-width:60ch}
+.about-grid{display:grid;grid-template-columns:220px 1fr;gap:var(--sp-8);align-items:start}
+.avatar{width:180px;height:180px;border-radius:var(--r-xl);object-fit:cover;border:1px solid var(--line);
+  background:var(--surface-2);box-shadow:var(--shadow-2)}
+.avatar-fallback{width:180px;height:180px;border-radius:var(--r-xl);display:grid;place-items:center;
+  font-family:var(--font-display);font-size:3rem;color:var(--accent);background:var(--accent-wash);border:1px solid var(--line)}
+.bio p{color:var(--ink-2);max-width:60ch}
+@media (max-width:760px){.about-grid{grid-template-columns:1fr}.avatar,.avatar-fallback{width:120px;height:120px}}
 
-    .w-card {
-      position: relative; display: flex; flex-direction: column;
-      background: var(--w-surface); border: 1px solid var(--w-line);
-      border-radius: var(--w-r-lg); padding: 1.5rem;
-      transition: border-color .2s, box-shadow .2s;
-      color: var(--w-ink); text-decoration: none;
-    }
-    .w-card:hover { border-color: var(--w-accent); box-shadow: var(--w-shadow-2); text-decoration: none; }
-    .w-card.coming { border-style: dashed; }
-    .w-card-top {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: .75rem; margin-bottom: .75rem;
-    }
-    .w-cat {
-      font-family: var(--w-font-mono); font-size: .78rem;
-      letter-spacing: .06em; text-transform: uppercase; color: var(--w-muted);
-    }
-    .w-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-family: var(--w-font-mono); font-size: .78rem;
-      color: var(--w-accent); border: 1px solid var(--w-line-strong);
-      border-radius: 999px; padding: 2px 9px; background: var(--w-surface);
-      white-space: nowrap;
-    }
-    .w-badge .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--w-accent); }
-    .w-card h3 {
-      font-family: var(--w-font-display); font-size: 1.1875rem; line-height: 1.25;
-      color: var(--w-navy); font-weight: 600; margin: 0 0 .5rem;
-    }
-    .w-blurb {
-      font-size: .875rem; color: var(--w-ink-2); line-height: 1.55;
-      margin: 0 0 1rem; flex: 1;
-    }
-    .w-meta {
-      display: flex; flex-wrap: wrap; align-items: center; gap: .75rem;
-      font-size: .78rem; color: var(--w-muted);
-      padding-top: .75rem; border-top: 1px solid var(--w-line);
-    }
-    .w-meta .sep { opacity: .5; }
-    .w-level { display: inline-flex; gap: 3px; align-items: center; }
-    .w-level i {
-      width: 9px; height: 9px; border-radius: 2px;
-      background: var(--w-box-off); display: block;
-    }
-    .w-level i.on { background: var(--w-accent); }
-    .w-level .lab { margin-left: 6px; color: var(--w-ink-2); font-weight: 500; }
-    .w-stretch { flex: 1; }
-    .w-readmore { font-weight: 600; color: var(--w-accent); font-size: .875rem; }
-    .w-card.coming .w-readmore { color: var(--w-muted); }
-    .w-chip {
-      font-family: var(--w-font-mono); font-size: .7rem; letter-spacing: .06em;
-      text-transform: uppercase; color: #b23a3a; border: 1px solid #b23a3a;
-      border-radius: 999px; padding: 2px 8px;
-    }
+/* ===== Contact ===== */
+.contact{text-align:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);
+  padding:var(--sp-10) var(--sp-6);box-shadow:var(--shadow-1)}
+.contact h2{font-family:var(--font-display);font-size:var(--text-2xl);color:var(--navy);margin:0 0 var(--sp-3)}
+.contact p{color:var(--ink-2);max-width:48ch;margin:0 auto var(--sp-6)}
+.contact-links{display:flex;flex-wrap:wrap;gap:var(--sp-3);justify-content:center}
 
-    /* ── Contact ── */
-    .contact-section { background: var(--dark); padding: 8rem 0; }
-    .contact-inner { max-width: 680px; margin: 0 auto; padding: 0 3rem; text-align: center; }
-    .contact-h {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(3.2rem, 7vw, 6rem); font-weight: 700; letter-spacing: -.02em;
-      line-height: .97; color: #fff; margin-bottom: 1.25rem;
-    }
-    .contact-h em { font-style: italic; font-weight: 400; color: rgba(255,255,255,.45); }
-    .contact-sub {
-      font-size: 1.05rem; color: rgba(255,255,255,.38); margin-bottom: 2.75rem; line-height: 1.75;
-    }
-    .contact-links { display: flex; justify-content: center; gap: .75rem; flex-wrap: wrap; }
-    .c-btn {
-      display: inline-flex; align-items: center; gap: .5rem;
-      font-size: .84rem; font-weight: 600;
-      padding: .7rem 1.4rem; border-radius: 3px; transition: all .18s;
-    }
-    .c-btn-white { background: #fff; color: var(--dark); }
-    .c-btn-white:hover { background: rgba(255,255,255,.88); }
-    .c-btn-ghost {
-      background: transparent; color: rgba(255,255,255,.58);
-      border: 1px solid rgba(255,255,255,.14);
-    }
-    .c-btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,.35); }
-
-    /* ── Footer ── */
-    footer {
-      background: #0C0C0C; border-top: 1px solid rgba(255,255,255,.05);
-      padding: 2rem 3rem;
-      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .75rem;
-    }
-    .footer-copy { font-size: .77rem; color: rgba(255,255,255,.22); }
-    .footer-links { display: flex; gap: 1.5rem; }
-    .footer-links a { font-size: .77rem; color: rgba(255,255,255,.27); transition: color .15s; }
-    .footer-links a:hover { color: rgba(255,255,255,.7); }
-
-    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
-  </style>
+/* ===== Footer ===== */
+.site-footer{margin-top:var(--sp-10);border-top:1px solid var(--line);background:var(--surface)}
+.site-footer>*{max-width:var(--wrap);margin-inline:auto;padding-inline:var(--sp-5)}
+.foot-lead{padding-top:var(--sp-8)}
+.foot-name{font-family:var(--font-display);font-size:var(--text-lg);color:var(--navy);font-weight:600;margin:0}
+.foot-role{color:var(--muted);font-size:var(--text-sm);margin:var(--sp-1) 0 0}
+.foot-nav{display:flex;flex-wrap:wrap;gap:var(--sp-5);padding-top:var(--sp-5)}
+.foot-nav a{font-size:var(--text-sm);color:var(--ink-2);font-weight:500}.foot-nav a:hover{color:var(--accent)}
+.foot-base{display:flex;justify-content:space-between;align-items:center;padding-block:var(--sp-5) var(--sp-8);
+  margin-top:var(--sp-5);border-top:1px solid var(--line);color:var(--muted);font-size:var(--text-sm)}
+.to-top{color:var(--muted)}.to-top:hover{color:var(--accent)}
+</style>
 </head>
-<body>
 
-<!-- ── Navigation ── -->
-<nav id="mainNav">
-  <a href="#home" class="nav-logo">Ali Shahmohammadi <em>Ph.D.</em></a>
-  <button class="nav-menu" id="navMenuBtn" aria-label="Open navigation">
-    <svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-      <line x1="0" y1="1" x2="18" y2="1"/><line x1="0" y1="7" x2="18" y2="7"/><line x1="0" y1="13" x2="18" y2="13"/>
-    </svg>
-  </button>
-  <div class="nav-links" id="navLinks">
+<body id="top">
+
+<!-- ===== HEADER ===== -->
+<header class="site-header" data-elevate="false">
+  <a class="brand" href="index.html">Ali Shahmohammadi <span class="deg">Ph.D.</span></a>
+  <nav class="site-nav" aria-label="Primary">
+    <a href="#focus">Focus</a>
+    <a href="#writing" class="keep">Writing</a>
     <a href="#career">Career</a>
-    <a href="#writing">Writing</a>
     <a href="#contact">Contact</a>
-    <a href="resume.html" class="nav-resume">Resume</a>
-  </div>
-</nav>
-
-<!-- ── Hero ── -->
-<section class="hero" id="home">
-  <div class="hero-left">
-    <div class="hero-eyebrow">Applied AI &nbsp;·&nbsp; Life Sciences &nbsp;·&nbsp; Ph.D.</div>
-    <h1 class="hero-name">
-      Ali<br>
-      Shahmo&shy;hammadi<br>
-      <em>Ph.D.</em>
-    </h1>
-    <p class="hero-bio">
-      I build <strong>MCP servers, agentic pipelines, and evaluation harnesses</strong> that make scientific data trustworthy for AI — a decade in pharmaceutical R&amp;D, shipping production systems in regulated environments.
-    </p>
-    <div class="hero-ctas">
-      <a href="#writing" class="btn btn-dark">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        Read Writing
-      </a>
-      <a href="resume.html" class="btn btn-outline">View Resume</a>
-    </div>
-    <div class="hero-tags">
-      <span class="hero-tag">Agentic AI</span>
-      <span class="hero-tag">MCP Servers</span>
-      <span class="hero-tag">LangGraph</span>
-      <span class="hero-tag">FAIR Data</span>
-      <span class="hero-tag">Pharma R&amp;D</span>
-      <span class="hero-tag">Knowledge Graphs</span>
-    </div>
-  </div>
-  <div class="hero-photo">
-    <img src="assets/images/ali.jpeg" alt="Ali Shahmohammadi, Ph.D." loading="eager">
-  </div>
-</section>
-
-<!-- ── Stats ── -->
-<div class="stats-strip">
-  <div class="stat">
-    <div class="stat-num">15+</div>
-    <div class="stat-label">Years bridging science &amp; AI</div>
-  </div>
-  <div class="stat">
-    <div class="stat-num">20+</div>
-    <div class="stat-label">Open-source projects</div>
-  </div>
-  <div class="stat">
-    <div class="stat-num">12+</div>
-    <div class="stat-label">Production agentic systems</div>
-  </div>
-  <div class="stat">
-    <div class="stat-num" style="font-size:1.65rem;letter-spacing:0;line-height:1.1;">FAIR<br>Studio</div>
-    <div class="stat-label">Pistoia Alliance product</div>
-  </div>
-</div>
-
-<!-- ── Career ── -->
-<section class="section" id="career">
-  <div class="container">
-    <div class="section-label">Career</div>
-    <h2 class="section-h">Experience &amp;<br>Expertise</h2>
-    <p class="section-sub">Three roles across pharma R&amp;D, biotech, and academic research — building production AI systems and the scientific foundations beneath them.</p>
-
-    <div class="timeline">
-
-      <div class="tl-item">
-        <div class="tl-meta">
-          <div class="tl-org">Takeda</div>
-          <div class="tl-period">Sep 2022 – Present</div>
-        </div>
-        <div>
-          <div class="tl-title">Associate Director, Applied AI Engineering &amp; Scientific Data</div>
-          <div class="tl-loc">Takeda Pharmaceutical Inc. · Greater Boston, MA</div>
-          <ul class="tl-bullets">
-            <li>Designed and deployed production agentic AI system for ontology curation — multi-agent LangGraph pipeline with human-in-the-loop governance, cutting curation cycle times significantly</li>
-            <li>Built MCP-style scientific data connectors integrating ELN, LIMS, and AWS into a validated, agent-ready data layer across R&amp;D domains</li>
-            <li>Architected next-gen R&amp;D data catalog with automated quality checks, lineage, and metadata management that gates data before it reaches AI pipelines</li>
-            <li>Led enterprise FAIR data strategy and delivered FAIR Studio (Pistoia Alliance) — industry-alliance product operationalizing FAIR assessment at scale</li>
-            <li>Built digital twin for continuous manufacturing of a small molecule API integrating unit-operation mechanistic models</li>
-            <li>Built strategic partnerships with MIT, BYU, Brown, and Purdue on PINNs and in-silico development</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-meta">
-          <div class="tl-org">Moderna</div>
-          <div class="tl-period">Aug 2021 – Sep 2022</div>
-        </div>
-        <div>
-          <div class="tl-title">Senior CMC Scientist</div>
-          <div class="tl-loc">Moderna Inc. · Greater Boston, MA</div>
-          <ul class="tl-bullets">
-            <li>Developed ML models for mRNA drug substance/product stability and shelf-life prediction (ICH-compliant)</li>
-            <li>Optimized IVT reaction for mRNA process characterization using ML + fundamental modeling</li>
-            <li>Led comparability and product specification projects through process scale-up phases</li>
-            <li>Contributed to IND and BLA submissions through statistical analysis and documentation</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-meta">
-          <div class="tl-org">UT Austin</div>
-          <div class="tl-period">Oct 2019 – Aug 2021</div>
-        </div>
-        <div>
-          <div class="tl-title">Post-Doctoral Research Fellow</div>
-          <div class="tl-loc">The University of Texas at Austin · Austin, TX</div>
-          <ul class="tl-bullets">
-            <li>Developed fundamental models for thin film gallium phosphate on silicon for plasma etch optimization</li>
-            <li>Built model-based DoE tools using R Shiny for plasma etch process optimization</li>
-            <li>Created first-principles model for viscoelastic properties of adhesive soft particles</li>
-            <li>Performed Molecular Dynamics Simulations with 100,000+ particles</li>
-          </ul>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Expertise -->
-    <div style="margin-top:4rem;">
-      <div class="section-label">Technical Expertise</div>
-      <div class="exp-grid">
-        <div class="exp-card">
-          <div class="exp-label">Agentic AI &amp; Machine Learning</div>
-          <div class="exp-tags">
-            <span class="exp-tag">Agentic AI</span><span class="exp-tag">AI Strategy</span>
-            <span class="exp-tag">LangGraph</span><span class="exp-tag">Multi-Agent Systems</span>
-            <span class="exp-tag">LLMs &amp; RAG</span><span class="exp-tag">Human-in-the-Loop</span>
-            <span class="exp-tag">AI Evaluation</span><span class="exp-tag">PINNs</span>
-            <span class="exp-tag">PyTorch</span><span class="exp-tag">JAX</span>
-            <span class="exp-tag">Graph Neural Networks</span><span class="exp-tag">Scikit-learn</span>
-          </div>
-        </div>
-        <div class="exp-card">
-          <div class="exp-label">Data Strategy &amp; Governance</div>
-          <div class="exp-tags">
-            <span class="exp-tag">Master Data Management</span><span class="exp-tag">Knowledge Graphs</span>
-            <span class="exp-tag">Ontology Engineering</span><span class="exp-tag">Data Catalogs</span>
-            <span class="exp-tag">Data Lineage</span><span class="exp-tag">FAIR Maturity Assessment</span>
-            <span class="exp-tag">AI Governance</span><span class="exp-tag">ISO/IEC 23894</span>
-            <span class="exp-tag">Semantic Interoperability</span><span class="exp-tag">SPARQL</span>
-          </div>
-        </div>
-        <div class="exp-card">
-          <div class="exp-label">Engineering &amp; Science</div>
-          <div class="exp-tags">
-            <span class="exp-tag">Digital CMC</span><span class="exp-tag">Process Modeling</span>
-            <span class="exp-tag">Mechanistic Models</span><span class="exp-tag">Design of Experiments</span>
-            <span class="exp-tag">Continuous Manufacturing</span><span class="exp-tag">Molecular Dynamics</span>
-            <span class="exp-tag">Cheminformatics</span><span class="exp-tag">Statistical Process Control</span>
-          </div>
-        </div>
-        <div class="exp-card">
-          <div class="exp-label">Infrastructure &amp; Cloud</div>
-          <div class="exp-tags">
-            <span class="exp-tag">Python</span><span class="exp-tag">R</span>
-            <span class="exp-tag">AWS (S3, EC2, Redshift, Neptune)</span>
-            <span class="exp-tag">Neo4j</span><span class="exp-tag">Apache Airflow</span>
-            <span class="exp-tag">dbt</span><span class="exp-tag">Terraform</span>
-            <span class="exp-tag">Docker</span><span class="exp-tag">GitHub Actions</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ── Writing ── -->
-<section class="section section-alt" id="writing">
-  <div class="container">
-    <div class="section-label">Writing</div>
-    <h2 class="section-h">Articles &amp; Projects</h2>
-    <p class="section-sub">Applied AI engineering, agentic systems, trustworthy scientific data, and physics-informed ML. Filter by topic, then sort for where you are — a learning path from the basics, or the latest first.</p>
-
-    <div class="w-controls">
-      <div class="w-ctl-group">
-        <span class="w-ctl-label" id="w-filt-label">Topic</span>
-        <div class="w-segmented" role="group" aria-labelledby="w-filt-label" id="w-filters">
-          <button class="w-seg" data-filter="all" aria-pressed="true">All <span class="n" data-c="all"></span></button>
-          <button class="w-seg" data-filter="sciml" aria-pressed="false">Scientific ML <span class="n" data-c="sciml"></span></button>
-          <button class="w-seg" data-filter="agentic" aria-pressed="false">Agentic AI <span class="n" data-c="agentic"></span></button>
-          <button class="w-seg" data-filter="governance" aria-pressed="false">Data Governance &amp; FAIR <span class="n" data-c="governance"></span></button>
-        </div>
-      </div>
-      <div class="w-ctl-group">
-        <span class="w-ctl-label" id="w-sort-label">Sort</span>
-        <div class="w-segmented" role="group" aria-labelledby="w-sort-label" id="w-sorts">
-          <button class="w-seg" data-sort="path" aria-pressed="true">Beginner → Advanced</button>
-          <button class="w-seg" data-sort="pathDesc" aria-pressed="false">Advanced → Beginner</button>
-          <button class="w-seg" data-sort="newest" aria-pressed="false">Newest</button>
-          <button class="w-seg" data-sort="oldest" aria-pressed="false">Oldest</button>
-        </div>
-      </div>
-    </div>
-
-    <p class="w-count" id="w-count" aria-live="polite"></p>
-    <div class="w-grid" id="w-grid"></div>
-  </div>
-</section>
-
-<!-- ── Contact ── -->
-<section class="contact-section" id="contact">
-  <div class="contact-inner">
-    <h2 class="contact-h">Let's build<br><em>something real.</em></h2>
-    <p class="contact-sub">Open to collaboration on applied AI engineering, agentic systems, and trustworthy data infrastructure for life sciences — and conversations about frontier AI for science.</p>
-    <div class="contact-links">
-      <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener" class="c-btn c-btn-white">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-        Connect on LinkedIn
-      </a>
-      <a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener" class="c-btn c-btn-ghost">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-        GitHub
-      </a>
-      <a href="resume.html" class="c-btn c-btn-ghost">Resume</a>
-    </div>
-  </div>
-</section>
-
-<!-- ── Footer ── -->
-<footer>
-  <span class="footer-copy">&copy; 2026 Ali Shahmohammadi, Ph.D. &mdash; Built with GitHub Pages</span>
-  <div class="footer-links">
     <a href="resume.html">Resume</a>
-    <a href="https://github.com/alishahmohammadi22" target="_blank" rel="noopener">GitHub</a>
-    <a href="https://linkedin.com/in/alishahmohammadi" target="_blank" rel="noopener">LinkedIn</a>
-    <a href="https://alishahmohammadi22.github.io/fair-data-toolkit" target="_blank" rel="noopener">FAIR Toolkit</a>
+  </nav>
+  <button class="theme-toggle" id="themeBtn" type="button" aria-label="Toggle dark mode"><b></b></button>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="wrap hero-inner">
+    <div class="hero-text">
+      <span class="hero-eyebrow"><span class="pulse"></span>Applied AI Engineering · Scientific Data</span>
+      <h1>I make scientific data <span class="hl">trustworthy</span> for AI.</h1>
+      <p class="hero-sub">MCP servers, agentic pipelines, and evaluation harnesses built on a
+        decade in pharmaceutical R&amp;D — plus a hands-on series on physics-informed machine learning.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#writing">Read the writing →</a>
+        <a class="btn btn-ghost" href="resume.html">View résumé</a>
+      </div>
+    </div>
+
+    <figure class="hero-visual" aria-label="A training-loss curve converging on a log scale.">
+      <div class="cap"><span>convergence.log</span><span>loss ↓</span></div>
+      <svg viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="var(--grid)" stroke-width="1">
+          <line x1="44" y1="26" x2="466" y2="26"/><line x1="44" y1="76" x2="466" y2="76"/>
+          <line x1="44" y1="126" x2="466" y2="126"/><line x1="44" y1="176" x2="466" y2="176"/>
+          <line x1="44" y1="222" x2="466" y2="222"/>
+        </g>
+        <line x1="44" y1="20" x2="44" y2="222" stroke="var(--line-strong)" stroke-width="1.5"/>
+        <line x1="44" y1="222" x2="466" y2="222" stroke="var(--line-strong)" stroke-width="1.5"/>
+        <path class="draw" d="M48,36 C140,52 200,120 280,150 C360,180 430,206 462,214"
+              fill="none" stroke="var(--plot-navy)" stroke-width="2.6"/>
+        <path class="draw d2" d="M48,58 C140,80 210,142 300,168 C380,190 440,208 462,216"
+              fill="none" stroke="var(--plot-green)" stroke-width="2.3" stroke-dasharray="7 5"/>
+        <path class="draw d3" d="M48,88 C130,120 220,166 320,186 C400,202 445,212 462,218"
+              fill="none" stroke="var(--plot-red)" stroke-width="2" stroke-dasharray="2 6" stroke-linecap="round"/>
+        <text x="14" y="128" transform="rotate(-90 14 128)" font-family="var(--font-mono)" font-size="10" fill="var(--muted)">log loss</text>
+        <text x="255" y="246" text-anchor="middle" font-family="var(--font-mono)" font-size="10" fill="var(--muted)">epochs →</text>
+      </svg>
+      <div class="hero-legend" aria-hidden="true">
+        <span><i style="border-color:var(--plot-navy)"></i>total</span>
+        <span><i style="border-color:var(--plot-green);border-top-style:dashed"></i>physics</span>
+        <span><i style="border-color:var(--plot-red);border-top-style:dotted"></i>boundary</span>
+      </div>
+    </figure>
+  </div>
+
+  <!-- Stats — understated band (edit numbers to match résumé; keep the year figure consistent with "a decade" above) -->
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat"><div class="n">10+</div><div class="l">years bridging science &amp; AI</div></div>
+      <div class="stat"><div class="n">20+</div><div class="l">open-source projects</div></div>
+      <div class="stat"><div class="n">12+</div><div class="l">production agentic systems</div></div>
+      <div class="stat"><div class="n">25+</div><div class="l">published articles</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOCUS ===== -->
+<section class="section" id="focus">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">What I work on</p>
+      <h2>Three threads, one goal: data AI can rely on</h2>
+      <p>The writing below is organized around these, so you can jump straight to the track you care about.</p>
+    </div>
+    <div class="focus-grid">
+      <a class="focus-card" href="#writing" data-jump="sciml">
+        <span class="focus-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M4 15c4 0 5-9 8-9s3 6 8 6"/></svg></span>
+        <h3>Physics-Informed ML</h3>
+        <p>Embedding differential equations in neural networks to learn from sparse, noisy data — a full beginner-to-advanced series on PINNs and neural operators.</p>
+        <span class="go">Scientific ML →</span>
+      </a>
+      <a class="focus-card" href="#writing" data-jump="agentic">
+        <span class="focus-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2.4"/><circle cx="5" cy="18" r="2.4"/><circle cx="19" cy="18" r="2.4"/><path d="M12 7.4v4M10.5 13l-4 3M13.5 13l4 3"/></svg></span>
+        <h3>Agentic AI Systems</h3>
+        <p>Multi-agent pipelines with human oversight — ontology curation, first-pass data governance, and audit-ready decision trails in regulated R&amp;D.</p>
+        <span class="go">Agentic AI →</span>
+      </a>
+      <a class="focus-card" href="#writing" data-jump="governance">
+        <span class="focus-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
+        <h3>Trustworthy Data &amp; FAIR</h3>
+        <p>Making R&amp;D data findable, interoperable, and AI-ready — FAIR maturity, semantic layers, master data, and AI governance you can actually operate.</p>
+        <span class="go">Data Governance &amp; FAIR →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WRITING (sortable) ===== -->
+<section class="section" id="writing" style="background:var(--surface-2)">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">Writing</p>
+      <h2>Articles &amp; projects</h2>
+      <p>Filter by topic, then sort for where you are — a learning path from the basics, or the latest first.</p>
+    </div>
+
+    <div class="controls">
+      <div class="ctl-group">
+        <span class="ctl-label" id="filt-label">Topic</span>
+        <div class="segmented" role="group" aria-labelledby="filt-label" id="filters">
+          <button class="seg" data-filter="all" aria-pressed="true">All <span class="n" data-c="all"></span></button>
+          <button class="seg" data-filter="sciml" aria-pressed="false">Scientific ML <span class="n" data-c="sciml"></span></button>
+          <button class="seg" data-filter="agentic" aria-pressed="false">Agentic AI <span class="n" data-c="agentic"></span></button>
+          <button class="seg" data-filter="governance" aria-pressed="false">Data Governance &amp; FAIR <span class="n" data-c="governance"></span></button>
+        </div>
+      </div>
+      <div class="ctl-group">
+        <span class="ctl-label" id="sort-label">Sort</span>
+        <div class="segmented" role="group" aria-labelledby="sort-label" id="sorts">
+          <button class="seg" data-sort="path" aria-pressed="true">Beginner → Advanced</button>
+          <button class="seg" data-sort="pathDesc" aria-pressed="false">Advanced → Beginner</button>
+          <button class="seg" data-sort="newest" aria-pressed="false">Newest</button>
+          <button class="seg" data-sort="oldest" aria-pressed="false">Oldest</button>
+        </div>
+      </div>
+    </div>
+
+    <p class="count" id="count" aria-live="polite"></p>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<!-- ===== CAREER / ABOUT ===== -->
+<section class="section" id="career">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">Career</p>
+      <h2>A decade turning science into systems</h2>
+    </div>
+
+    <div class="about-grid">
+      <div>
+        <!-- Real photo with graceful fallback -->
+        <img class="avatar" src="https://alishahmohammadi.com/assets/images/ali.jpeg" alt="Ali Shahmohammadi"
+             onerror="this.outerHTML='&lt;div class=\'avatar-fallback\'&gt;AS&lt;/div&gt;'">
+      </div>
+      <div class="bio">
+        <p>I work at the seam between rigorous science and shipped software: taking the messy,
+          sparse, hard-won data of pharmaceutical R&amp;D and building the pipelines, agents, and
+          evaluation harnesses that let AI use it without making things up. My background in
+          physics-informed modeling keeps me honest about what models can and can't know.</p>
+
+        <!-- ===== EDIT: replace with your résumé entries ===== -->
+        <div class="timeline" style="margin-top:var(--sp-6)">
+          <div class="tl-item now">
+            <div class="tl-when">Sep 2022 — Present</div>
+            <div class="tl-role">Associate Director, Applied AI Engineering &amp; Scientific Data</div>
+            <div class="tl-org">Takeda Pharmaceutical Inc.</div>
+            <p class="tl-desc">Agentic AI for ontology curation, MCP-based scientific data connectors, enterprise FAIR data strategy, and a digital twin for continuous API manufacturing. Research partnerships with MIT, BYU, Brown, and Purdue on PINNs.</p>
+          </div>
+          <div class="tl-item">
+            <div class="tl-when">Aug 2021 — Sep 2022</div>
+            <div class="tl-role">Senior CMC Scientist</div>
+            <div class="tl-org">Moderna Inc.</div>
+            <p class="tl-desc">ML models for mRNA drug-substance stability and shelf-life prediction; IVT reaction optimization combining ML and mechanistic modeling; contributed to IND and BLA submissions.</p>
+          </div>
+          <div class="tl-item">
+            <div class="tl-when">Oct 2019 — Aug 2021</div>
+            <div class="tl-role">Post-Doctoral Research Fellow</div>
+            <div class="tl-org">The University of Texas at Austin</div>
+            <p class="tl-desc">Fundamental models for thin-film etch optimization; model-based DoE tooling in R Shiny; first-principles viscoelastic modeling; molecular-dynamics simulations at 100k+ particle scale.</p>
+          </div>
+          <div class="tl-item">
+            <div class="tl-when">2019</div>
+            <div class="tl-role">Ph.D., Chemical Engineering</div>
+            <div class="tl-org">Queen's University · Kingston, ON, Canada</div>
+            <p class="tl-desc">Process systems engineering &amp; statistical design of experiments.</p>
+          </div>
+        </div>
+        <p style="margin-top:var(--sp-6)"><a class="btn btn-ghost" href="resume.html">Full résumé →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section class="section" id="contact">
+  <div class="wrap">
+    <div class="contact">
+      <p class="kicker" style="color:var(--accent)">Contact</p>
+      <h2>Let's talk about trustworthy AI for science</h2>
+      <p>Open to conversations on agentic systems, scientific data infrastructure, and physics-informed ML.</p>
+      <div class="contact-links">
+        <a class="btn btn-primary" href="mailto:hello@alishahmohammadi.com">Email me</a>
+        <a class="btn btn-ghost" href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
+        <a class="btn btn-ghost" href="https://github.com/alishahmohammadi22" rel="me">GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <div class="foot-lead">
+    <p class="foot-name">Ali Shahmohammadi, Ph.D.</p>
+    <p class="foot-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p>
+  </div>
+  <nav class="foot-nav" aria-label="Footer">
+    <a href="#writing">Writing</a><a href="#career">Career</a><a href="#contact">Contact</a>
+    <a href="resume.html">Resume</a>
+    <a href="https://github.com/alishahmohammadi22" rel="me">GitHub</a>
+    <a href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
+  </nav>
+  <div class="foot-base">
+    <span>© 2026 Ali Shahmohammadi, Ph.D.</span>
+    <a class="to-top" href="#top">Back to top ↑</a>
   </div>
 </footer>
 
 <script>
-  (function(){
-    var nav = document.getElementById('mainNav');
-    window.addEventListener('scroll', function(){ nav.classList.toggle('scrolled', window.scrollY > 20); }, {passive:true});
-  })();
+/* ---- Header elevate + theme ---- */
+(function(){
+  var header=document.querySelector('.site-header');
+  addEventListener('scroll',function(){header.dataset.elevate=(scrollY||0)>8?'true':'false';},{passive:true});
+  document.getElementById('themeBtn').addEventListener('click',function(){
+    var n=document.documentElement.dataset.theme==='dark'?'light':'dark';
+    document.documentElement.dataset.theme=n;localStorage.setItem('theme',n);
+  });
+})();
 
-  (function(){
-    var btn = document.getElementById('navMenuBtn');
-    var links = document.getElementById('navLinks');
-    btn.addEventListener('click', function(){ links.classList.toggle('open'); });
-    links.querySelectorAll('a').forEach(function(a){
-      a.addEventListener('click', function(){ links.classList.remove('open'); });
-    });
-  })();
-
-  /* ── Writing section: data-driven card grid ── */
-  (function(){
-    var B = function(u){ return "https://alishahmohammadi.com/blog/"+u; };
-    var POSTS = [
-      // PINN Foundations 01–08
-      {t:"Physics-Informed Neural Networks: Why Embedding Physical Laws Changes Everything",cat:"sciml",series:"Foundations 01",level:1,seq:1,date:"2025-09",read:"18 min",
-       blurb:"From the failure of pure data-driven ML in engineering to your first working PINN — a zero-labeled-data solver for a first-order ODE.",url:B("pinn-introduction.html")},
-      {t:"Second-Order ODEs with PINNs: The Damped Harmonic Oscillator",cat:"sciml",series:"Foundations 02",level:1,seq:2,date:"2025-10",read:"14 min",
-       blurb:"Nested automatic differentiation, two initial conditions, and the spectral-bias problem — with a hard-constraint ansatz solution.",url:B("pinn-odes-second-order.html")},
-      {t:"Solving the 1D Heat Equation with PINNs: Your First PDE",cat:"sciml",series:"Foundations 03",level:2,seq:3,date:"2025-11",read:"16 min",
-       blurb:"From a single variable to a 2D space-time domain — partial derivatives, boundary conditions, and full field reconstruction from sparse data.",url:B("pinn-heat-equation.html")},
-      {t:"Nonlinear PDEs with PINNs: Burgers Equation and Reaction Kinetics",cat:"sciml",series:"Foundations 04",level:2,seq:4,date:"2025-12",read:"20 min",
-       blurb:"Shock formation, viscous regularization, and coupled A→B→C systems — where physics-informed training earns its keep against FEM.",url:B("pinn-burgers-reaction-pdes.html")},
-      {t:"Inverse Problems with PINNs: Discovering Physical Parameters from Sparse, Noisy Data",cat:"sciml",series:"Foundations 05",level:3,seq:5,date:"2026-01",read:"22 min",
-       blurb:"Making unknown constants trainable variables — recovering diffusivity, reaction rates, and material properties from 40 noisy readings.",url:B("pinn-inverse-problems.html")},
-      {t:"Adaptive Sampling and Training Strategies for PINNs",cat:"sciml",series:"Foundations 06",level:4,seq:6,date:"2026-02",read:"18 min",
-       blurb:"Why uniform collocation fails for stiff problems, and how RAR, loss weighting, causal training, and Fourier features fix it.",url:B("pinn-adaptive-sampling.html")},
-      {t:"DeepONet: Learning Solution Operators Instead of Individual Solutions",cat:"sciml",series:"Foundations 07",level:3,seq:7,date:"2026-03",read:"26 min",
-       blurb:"From solving one PDE at a time to learning the map from any input function to its output — the branch/trunk architecture.",url:B("pinn-deeponet.html")},
-      {t:"Physics-Informed DeepONet: Operator Learning Without Solution Data",cat:"sciml",series:"Foundations 08",level:4,seq:8,date:"2026-04",read:"30 min",
-       blurb:"Universal operator approximation with physics-informed training — frozen operator nets for rapid inverse problems across parameter families.",url:B("pinn-physics-informed-deeponet.html")},
-      // ODE Problems 01–07
-      {t:"Logistic Population Growth with PINNs: S-Curve, Carrying Capacity, Inverse Estimation",cat:"sciml",series:"ODE Problems 01",level:1,seq:9,date:"2026-02",read:"12 min",
-       blurb:"Forward solve and joint estimation of r and K from 16 real U.S. census points (Pearl &amp; Reed, 1920). The foundation pattern.",url:B("pinn-odes-logistic-growth.html")},
-      {t:"Consecutive Reaction Kinetics A→B→C with PINNs",cat:"sciml",series:"ODE Problems 02",level:2,seq:10,date:"2026-02",read:"14 min",
-       blurb:"k₁ and k₂ recovered from 14 noisy concentration measurements, including the intermediate peak. Physics loss enforces mass conservation.",url:B("pinn-odes-consecutive-reactions.html")},
-      {t:"Lotka–Volterra Predator–Prey with PINNs: Parameter Estimation from Real Hudson Bay Data",cat:"sciml",series:"ODE Problems 03",level:2,seq:11,date:"2026-02",read:"13 min",
-       blurb:"All four parameters recovered from 21 years of real lynx–hare pelt records via a two-phase warm-start protocol.",url:B("pinn-odes-lotka-volterra.html")},
-      {t:"SIR Epidemic Model with PINNs: Inferring Hidden States from Partial Observations",cat:"sciml",series:"ODE Problems 04",level:2,seq:12,date:"2026-02",read:"13 min",
-       blurb:"Recovering β and γ from the 1978 boarding-school flu outbreak with only infectious counts — physics reconstructs the hidden compartments.",url:B("pinn-odes-sir-epidemic.html")},
-      {t:"Van der Pol Oscillator with PINNs: Recovering Nonlinear Damping from Sparse Data",cat:"sciml",series:"ODE Problems 05",level:3,seq:13,date:"2026-02",read:"14 min",
-       blurb:"Nested autograd for ẍ, time-scaling to keep residuals O(1), and recovering μ from 45 noisy samples — plus the spectral-bias wall.",url:B("pinn-odes-van-der-pol.html")},
-      {t:"Stiff Enzyme Kinetics &amp; QSSA: Why Plain PINNs Fail on Michaelis–Menten Systems",cat:"sciml",series:"ODE Problems 06",level:3,seq:14,date:"2026-02",read:"15 min",
-       blurb:"A stiffness ratio ≈ 10⁴ defeats uniform collocation. The quasi-steady-state assumption collapses it to one tractable non-stiff ODE.",url:B("pinn-odes-stiff-enzyme-kinetics.html")},
-      {t:"Bioprocess Viable Cell Density: Monod Kinetics &amp; Luedeking–Piret with PINNs",cat:"sciml",series:"ODE Problems 07",level:3,seq:15,date:"2026-02",read:"15 min",
-       blurb:"Estimating six kinetic parameters from sparse offline CHO measurements — directly applicable to mAb and mRNA process characterisation.",url:B("pinn-odes-bioprocess-cell-density.html")},
-      // Capstones
-      {t:"Unified PINN–ODE Benchmark: Capstone Across Seven Systems",cat:"sciml",series:"Capstone",level:3,seq:16,date:"2026-02",read:"20 min",
-       blurb:"One harness benchmarking every ODE problem in the series under matched settings — the reproducible capstone tying the applied track together.",url:B("unified-pinn-ode-benchmark.html")},
-      {t:"Why DeepONet Underperforms on ODE Inverse Problems: A Deep Diagnostic Study",cat:"sciml",series:"Capstone",level:4,seq:17,date:"2026-02",read:"12 min",
-       blurb:"SVD rank analysis, training-dynamics diagnosis, and a 5.7× architecture improvement — why Pure PINN beats DeepONet on 6 of 7 systems.",url:B("deeponet-vs-pinn-ode-analysis.html")},
-      // Agentic AI
-      {t:"Building Agentic AI Systems for Ontology Curation in Drug R&amp;D",cat:"agentic",series:"Agentic AI",level:2,seq:18,date:"2026-05",read:"14 min",
-       blurb:"A four-agent LangGraph pipeline automating term extraction, ontology mapping, conflict detection, and governance routing — with human oversight throughout.",url:B("agentic-ontology-curation.html")},
-      {t:"Agentic AI for Data Governance: A Production Pattern for First-Pass Curation",cat:"agentic",series:"Agentic AI",level:3,seq:19,date:"2026-05",read:"22 min",
-       blurb:"An audit-ready operating model where agents make bounded proposals, stewards adjudicate the risky residue, and PROV-O records every decision.",url:B("agentic-ai-data-governance-pharma.html")},
-      {t:"Making Messy Scientific Data Trustworthy for AI Agents",cat:"agentic",series:"Agentic AI",level:3,seq:20,date:null,coming:true,read:"in progress",
-       blurb:"Architecture, implementation, and eval results from an MCP server + agent + validation connector stack: design decisions, measured hallucination rate, and building AI that refuses rather than guesses.",url:null},
-      // Data Governance & FAIR
-      {t:"FAIR Data Principles: A Practical Guide to Findable, Accessible, Interoperable, Reusable Data",cat:"governance",series:"FAIR",level:1,seq:21,date:"2026-05",read:"18 min",
-       blurb:"What the FAIR principles actually mean, why they matter more than ever in the age of AI, and a 5-step starter plan.",url:B("fair-data-principles.html")},
-      {t:"Bridging the Data Divide: AI-Driven Harmonization in Pharma",cat:"governance",series:"Harmonization",level:2,seq:22,date:"2026-01",read:"12 min",
-       blurb:"Why successful AI programs start with harmonized data, not models. Includes a case study: 44 raw lab terms → 8 LOINC concepts, 98% auto-mapping.",url:B("ai-driven-harmonization-pharma.html")},
-      {t:"A 90-Day Maturity Assessment for Pharmaceutical R&amp;D Data Catalogs",cat:"governance",series:"Data Catalog",level:2,seq:23,date:"2026-05",read:"24 min",
-       blurb:"A practical playbook to baseline FAIR maturity, find one high-leverage quick win, and ship a defensible 12-month roadmap.",url:B("90-day-pharma-catalog-maturity.html")},
-      {t:"AI Governance Without the Theater: Operationalizing ISO/IEC 23894 in Pharma R&amp;D",cat:"governance",series:"AI Governance",level:3,seq:24,date:"2026-05",read:"28 min",
-       blurb:"Connecting ISO/IEC 23894 to ICH Q9(R1), NIST AI RMF crosswalks, and FAIR controls — evidence-ready operations over governance theater.",url:B("iso-23894-pharma-rd.html")},
-      {t:"Product Mastering Across the R&amp;D-to-Commercial Lifecycle: Why Knowledge Graphs Beat Traditional MDM",cat:"governance",series:"MDM",level:3,seq:25,date:"2026-05",read:"25 min",
-       blurb:"Why the row-and-column gold record breaks down for medicinal products — ISO IDMP, bitemporal graphs, agentic entity resolution.",url:B("product-mastering-knowledge-graphs-vs-mdm.html")},
-      {t:"From Ontology to MDM: How Semantic Layers Are Replacing Hub-and-Spoke Master Data in Pharma",cat:"governance",series:"Semantic Layers",level:3,seq:26,date:"2026-05",read:"30 min",
-       blurb:"Treating meaning as a first-class artifact: OWL, SHACL, SKOS, data-mesh federation, exemplars from Bayer COLID and Roche EDIS.",url:B("semantic-layer-replacing-mdm-pharma.html")},
-      {t:"What FAIR Data Actually Means for AI-Ready Pharmaceutical R&amp;D (5-Part Series)",cat:"governance",series:"FAIR",level:2,seq:27,date:"2026-05",read:"~45 min",
-       blurb:"A deep-dive into FAIR maturity frameworks — RDA (41 indicators) and Pistoia — with a CAR-T viability walkthrough and a Python scorer.",url:"https://alishahmohammadi22.github.io/fair-data-toolkit"},
-    ];
-
-    var LEVELS = {1:"Beginner",2:"Intermediate",3:"Advanced",4:"Expert"};
-    var CATLABEL = {sciml:"Scientific ML",agentic:"Agentic AI",governance:"Data Governance & FAIR"};
-    var state = {filter:"all",sort:"path"};
-    var grid = document.getElementById("w-grid");
-    var countEl = document.getElementById("w-count");
-
-    function dateVal(p){ if(p.coming) return 999999; if(!p.date) return 0;
-      var parts=p.date.split("-"); return +parts[0]*100+ +parts[1]; }
-    function dateLabel(p){ if(p.coming) return "Coming soon";
-      var parts=p.date.split("-"); var m=+parts[1]-1;
-      return ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][m]+" "+parts[0]; }
-
-    function sortFn(){
-      if(state.sort==="path")     return function(a,b){ return a.level-b.level||a.seq-b.seq; };
-      if(state.sort==="pathDesc") return function(a,b){ return b.level-a.level||b.seq-a.seq; };
-      if(state.sort==="newest")   return function(a,b){ return dateVal(b)-dateVal(a)||a.seq-b.seq; };
-      return function(a,b){ return (a.coming?1:0)-(b.coming?1:0)||dateVal(a)-dateVal(b)||a.seq-b.seq; };
-    }
-
-    function levelHTML(lvl){
-      var boxes=""; for(var i=1;i<=4;i++) boxes+='<i class="'+(i<=lvl?"on":"")+'"></i>';
-      return '<span class="w-level" title="'+LEVELS[lvl]+'">'+boxes+'<span class="lab">'+LEVELS[lvl]+'</span></span>';
-    }
-
-    function cardHTML(p){
-      var tag=p.url?"a":"div";
-      var href=p.url?' href="'+p.url+'"':"";
-      var ext=p.url&&p.url.indexOf("github.io")!==-1?' target="_blank" rel="noopener"':"";
-      return '<'+tag+' class="w-card'+(p.coming?" coming":"")+'"'+href+ext+' data-cat="'+p.cat+'">'
-        +'<div class="w-card-top">'
-        +'<span class="w-cat">'+CATLABEL[p.cat]+'</span>'
-        +'<span class="w-badge"><span class="dot"></span>'+p.series+'</span>'
-        +'</div>'
-        +'<h3>'+p.t+'</h3>'
-        +'<p class="w-blurb">'+p.blurb+'</p>'
-        +'<div class="w-meta">'
-        +levelHTML(p.level)
-        +'<span class="w-stretch"></span>'
-        +(p.coming
-          ?'<span class="w-chip">Coming soon</span>'
-          :'<span>'+dateLabel(p)+'</span><span class="sep">·</span><span>'+p.read+'</span>')
-        +'</div>'
-        +'<div class="w-meta" style="border:0;padding-top:8px">'
-        +'<span class="w-readmore">'+(p.url?"Read article →":"In progress")+'</span>'
-        +'</div>'
-        +'</'+tag+'>';
-    }
-
-    function render(){
-      var list=POSTS.filter(function(p){ return state.filter==="all"||p.cat===state.filter; });
-      list.sort(sortFn());
-
-      var old=new Map();
-      Array.from(grid.children).forEach(function(el){ old.set(el.dataset.key,el.getBoundingClientRect()); });
-
-      grid.innerHTML=list.map(function(p){
-        return cardHTML(p).replace(/^<(a|div)/,'<$1 data-key="'+p.seq+'"');
-      }).join("");
-
-      var reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
-      if(!reduce){
-        Array.from(grid.children).forEach(function(el){
-          var prev=old.get(el.dataset.key);
-          if(!prev){ el.animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],{duration:260,easing:"cubic-bezier(.2,.7,.2,1)"}); return; }
-          var now=el.getBoundingClientRect();
-          var dx=prev.left-now.left,dy=prev.top-now.top;
-          if(dx||dy) el.animate([{transform:"translate("+dx+"px,"+dy+"px)"},{transform:"none"}],{duration:340,easing:"cubic-bezier(.2,.7,.2,1)"});
-        });
-      }
-
-      var total=list.length;
-      var label={path:"beginner → advanced",pathDesc:"advanced → beginner",newest:"newest first",oldest:"oldest first"}[state.sort];
-      countEl.innerHTML="<b>"+total+"</b> "+(total===1?"article":"articles")+" · sorted "+label;
-    }
-
-    function setCounts(){
-      var c={all:POSTS.length,sciml:0,agentic:0,governance:0};
-      POSTS.forEach(function(p){ c[p.cat]++; });
-      document.querySelectorAll("[data-c]").forEach(function(el){ el.textContent=c[el.dataset.c]||""; });
-    }
-
-    document.getElementById("w-filters").addEventListener("click",function(e){
-      var b=e.target.closest("[data-filter]"); if(!b) return;
-      state.filter=b.dataset.filter;
-      document.querySelectorAll("#w-filters .w-seg").forEach(function(s){ s.setAttribute("aria-pressed",s===b?"true":"false"); });
-      render();
-    });
-    document.getElementById("w-sorts").addEventListener("click",function(e){
-      var b=e.target.closest("[data-sort]"); if(!b) return;
-      state.sort=b.dataset.sort;
-      document.querySelectorAll("#w-sorts .w-seg").forEach(function(s){ s.setAttribute("aria-pressed",s===b?"true":"false"); });
-      render();
-    });
-
-    setCounts();
-    render();
-  })();
+/* ---- Writing index data ---- */
+const B=(u)=>"blog/"+u;
+const POSTS=[
+ {t:"Physics-Informed Neural Networks: Why Embedding Physical Laws Changes Everything",cat:"sciml",series:"Foundations 01",level:1,seq:1,date:"2025-09",read:"18 min",blurb:"From the failure of pure data-driven ML in engineering to your first working PINN — a zero-labeled-data solver for a first-order ODE.",url:B("pinn-introduction.html")},
+ {t:"Second-Order ODEs with PINNs: The Damped Harmonic Oscillator",cat:"sciml",series:"Foundations 02",level:1,seq:2,date:"2025-10",read:"14 min",blurb:"Nested automatic differentiation, two initial conditions, and the spectral-bias problem — with a hard-constraint ansatz solution.",url:B("pinn-odes-second-order.html")},
+ {t:"Solving the 1D Heat Equation with PINNs: Your First PDE",cat:"sciml",series:"Foundations 03",level:2,seq:3,date:"2025-11",read:"16 min",blurb:"From a single variable to a 2D space-time domain — partial derivatives, boundary conditions, and full field reconstruction from sparse data.",url:B("pinn-heat-equation.html")},
+ {t:"Nonlinear PDEs with PINNs: Burgers Equation and Reaction Kinetics",cat:"sciml",series:"Foundations 04",level:2,seq:4,date:"2025-12",read:"20 min",blurb:"Shock formation, viscous regularization, and coupled A→B→C systems — where physics-informed training earns its keep against FEM.",url:B("pinn-burgers-reaction-pdes.html")},
+ {t:"Inverse Problems with PINNs: Discovering Physical Parameters from Sparse, Noisy Data",cat:"sciml",series:"Foundations 05",level:3,seq:5,date:"2026-01",read:"22 min",blurb:"Making unknown constants trainable variables — recovering diffusivity, reaction rates, and material properties from 40 noisy readings.",url:B("pinn-inverse-problems.html")},
+ {t:"Adaptive Sampling and Training Strategies for PINNs",cat:"sciml",series:"Foundations 06",level:4,seq:6,date:"2026-02",read:"18 min",blurb:"Why uniform collocation fails for stiff problems, and how RAR, loss weighting, causal training, and Fourier features fix it.",url:B("pinn-adaptive-sampling.html")},
+ {t:"DeepONet: Learning Solution Operators Instead of Individual Solutions",cat:"sciml",series:"Foundations 07",level:3,seq:7,date:"2026-03",read:"26 min",blurb:"From solving one PDE at a time to learning the map from any input function to its output — the branch/trunk architecture.",url:B("pinn-deeponet.html")},
+ {t:"Physics-Informed DeepONet: Operator Learning Without Solution Data",cat:"sciml",series:"Foundations 08",level:4,seq:8,date:"2026-04",read:"30 min",blurb:"Universal operator approximation with physics-informed training — frozen operator nets for rapid inverse problems across parameter families.",url:B("pinn-physics-informed-deeponet.html")},
+ {t:"Logistic Population Growth with PINNs: S-Curve, Carrying Capacity, Inverse Estimation",cat:"sciml",series:"ODE Problems 01",level:1,seq:9,date:"2026-02",read:"12 min",blurb:"Forward solve and joint estimation of r and K from 16 real U.S. census points (Pearl & Reed, 1920). The foundation pattern.",url:B("pinn-odes-logistic-growth.html")},
+ {t:"Consecutive Reaction Kinetics A→B→C with PINNs",cat:"sciml",series:"ODE Problems 02",level:2,seq:10,date:"2026-02",read:"14 min",blurb:"k₁ and k₂ recovered from 14 noisy concentration measurements, including the intermediate peak. Physics loss enforces mass conservation.",url:B("pinn-odes-consecutive-reactions.html")},
+ {t:"Lotka–Volterra Predator–Prey with PINNs: Parameter Estimation from Real Hudson Bay Data",cat:"sciml",series:"ODE Problems 03",level:2,seq:11,date:"2026-02",read:"13 min",blurb:"All four parameters recovered from 21 years of real lynx–hare pelt records via a two-phase warm-start protocol.",url:B("pinn-odes-lotka-volterra.html")},
+ {t:"SIR Epidemic Model with PINNs: Inferring Hidden States from Partial Observations",cat:"sciml",series:"ODE Problems 04",level:2,seq:12,date:"2026-02",read:"13 min",blurb:"Recovering β and γ from the 1978 boarding-school flu outbreak with only infectious counts — physics reconstructs the hidden compartments.",url:B("pinn-odes-sir-epidemic.html")},
+ {t:"Van der Pol Oscillator with PINNs: Recovering Nonlinear Damping from Sparse Data",cat:"sciml",series:"ODE Problems 05",level:3,seq:13,date:"2026-02",read:"14 min",blurb:"Nested autograd for ẍ, time-scaling to keep residuals O(1), and recovering μ from 45 noisy samples — plus the spectral-bias wall.",url:B("pinn-odes-van-der-pol.html")},
+ {t:"Stiff Enzyme Kinetics & QSSA: Why Plain PINNs Fail on Michaelis–Menten Systems",cat:"sciml",series:"ODE Problems 06",level:3,seq:14,date:"2026-02",read:"15 min",blurb:"A stiffness ratio ≈ 10⁴ defeats uniform collocation. The quasi-steady-state assumption collapses it to one tractable non-stiff ODE.",url:B("pinn-odes-stiff-enzyme-kinetics.html")},
+ {t:"Bioprocess Viable Cell Density: Monod Kinetics & Luedeking–Piret with PINNs",cat:"sciml",series:"ODE Problems 07",level:3,seq:15,date:"2026-02",read:"15 min",blurb:"Estimating six kinetic parameters from sparse offline CHO measurements — directly applicable to mAb and mRNA process characterisation.",url:B("pinn-odes-bioprocess-cell-density.html")},
+ {t:"Unified PINN–ODE Benchmark: Capstone Across Seven Systems",cat:"sciml",series:"Capstone",level:3,seq:16,date:"2026-02",read:"20 min",blurb:"One harness benchmarking every ODE problem in the series under matched settings — the reproducible capstone tying the applied track together.",url:B("unified-pinn-ode-benchmark.html")},
+ {t:"Why DeepONet Underperforms on ODE Inverse Problems: A Deep Diagnostic Study",cat:"sciml",series:"Capstone",level:4,seq:17,date:"2026-02",read:"12 min",blurb:"SVD rank analysis, training-dynamics diagnosis, and a 5.7× architecture improvement — why Pure PINN beats DeepONet on 6 of 7 systems.",url:B("deeponet-vs-pinn-ode-analysis.html")},
+ {t:"Building Agentic AI Systems for Ontology Curation in Drug R&D",cat:"agentic",series:"Agentic AI",level:2,seq:18,date:"2026-05",read:"14 min",blurb:"A four-agent LangGraph pipeline automating term extraction, ontology mapping, conflict detection, and governance routing — with human oversight throughout.",url:B("agentic-ontology-curation.html")},
+ {t:"Agentic AI for Data Governance: A Production Pattern for First-Pass Curation",cat:"agentic",series:"Agentic AI",level:3,seq:19,date:"2026-05",read:"22 min",blurb:"An audit-ready operating model where agents make bounded proposals, stewards adjudicate the risky residue, and PROV-O records every decision.",url:B("agentic-ai-data-governance-pharma.html")},
+ {t:"Making Messy Scientific Data Trustworthy for AI Agents",cat:"agentic",series:"Agentic AI",level:3,seq:20,date:null,coming:true,read:"in progress",blurb:"Architecture, implementation, and eval results from an MCP server + agent + validation connector stack: design decisions, measured hallucination rate, and building AI that refuses rather than guesses.",url:null},
+ {t:"FAIR Data Principles: A Practical Guide to Findable, Accessible, Interoperable, Reusable Data",cat:"governance",series:"FAIR",level:1,seq:21,date:"2026-05",read:"18 min",blurb:"What the FAIR principles actually mean, why they matter more than ever in the age of AI, and a 5-step starter plan.",url:B("fair-data-principles.html")},
+ {t:"Bridging the Data Divide: AI-Driven Harmonization in Pharma",cat:"governance",series:"Harmonization",level:2,seq:22,date:"2026-01",read:"12 min",blurb:"Why successful AI programs start with harmonized data, not models. Includes a case study: 44 raw lab terms → 8 LOINC concepts, 98% auto-mapping.",url:B("ai-driven-harmonization-pharma.html")},
+ {t:"A 90-Day Maturity Assessment for Pharmaceutical R&D Data Catalogs",cat:"governance",series:"Data Catalog",level:2,seq:23,date:"2026-05",read:"24 min",blurb:"A practical playbook to baseline FAIR maturity, find one high-leverage quick win, and ship a defensible 12-month roadmap.",url:B("90-day-pharma-catalog-maturity.html")},
+ {t:"AI Governance Without the Theater: Operationalizing ISO/IEC 23894 in Pharma R&D",cat:"governance",series:"AI Governance",level:3,seq:24,date:"2026-05",read:"28 min",blurb:"Connecting ISO/IEC 23894 to ICH Q9(R1), NIST AI RMF crosswalks, and FAIR controls — evidence-ready operations over governance theater.",url:B("iso-23894-pharma-rd.html")},
+ {t:"Product Mastering Across the R&D-to-Commercial Lifecycle: Why Knowledge Graphs Beat Traditional MDM",cat:"governance",series:"MDM",level:3,seq:25,date:"2026-05",read:"25 min",blurb:"Why the row-and-column gold record breaks down for medicinal products — ISO IDMP, bitemporal graphs, agentic entity resolution.",url:B("product-mastering-knowledge-graphs-vs-mdm.html")},
+ {t:"From Ontology to MDM: How Semantic Layers Are Replacing Hub-and-Spoke Master Data in Pharma",cat:"governance",series:"Semantic Layers",level:3,seq:26,date:"2026-05",read:"30 min",blurb:"Treating meaning as a first-class artifact: OWL, SHACL, SKOS, data-mesh federation, exemplars from Bayer COLID and Roche EDIS.",url:B("semantic-layer-replacing-mdm-pharma.html")},
+ {t:"What FAIR Data Actually Means for AI-Ready Pharmaceutical R&D (5-Part Series)",cat:"governance",series:"FAIR",level:2,seq:27,date:"2026-05",read:"~45 min",blurb:"A deep-dive into FAIR maturity frameworks — RDA (41 indicators) and Pistoia — with a CAR-T viability walkthrough and a Python scorer.",url:"https://alishahmohammadi22.github.io/fair-data-toolkit"},
+];
+const LEVELS={1:"Beginner",2:"Intermediate",3:"Advanced",4:"Expert"};
+const CATLABEL={sciml:"Scientific ML",agentic:"Agentic AI",governance:"Data Governance & FAIR"};
+let state={filter:"all",sort:"path"};
+const grid=document.getElementById("grid"),countEl=document.getElementById("count");
+const dateVal=p=>p.coming?999999:(p.date?(+p.date.split("-")[0]*100+ +p.date.split("-")[1]):0);
+function dateLabel(p){if(p.coming)return"Coming soon";const[y,m]=p.date.split("-").map(Number);
+  return["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][m-1]+" "+y;}
+function sortFns(){return{
+  path:(a,b)=>a.level-b.level||a.seq-b.seq,
+  pathDesc:(a,b)=>b.level-a.level||b.seq-a.seq,
+  newest:(a,b)=>dateVal(b)-dateVal(a)||a.seq-b.seq,
+  oldest:(a,b)=>(a.coming?1:0)-(b.coming?1:0)||dateVal(a)-dateVal(b)||a.seq-b.seq,
+}[state.sort];}
+function levelHTML(l){let s="";for(let i=1;i<=4;i++)s+=`<i class="${i<=l?'on':''}"></i>`;
+  return`<span class="level" title="${LEVELS[l]}">${s}<span class="lab">${LEVELS[l]}</span></span>`;}
+function cardHTML(p){const tag=p.url?"a":"div",href=p.url?`href="${p.url}"`:"";
+  return`<${tag} class="card${p.coming?' coming':''}" ${href} data-key="${p.seq}">
+   <div class="card-top"><span class="cat">${CATLABEL[p.cat]}</span><span class="badge"><span class="dot"></span>${p.series}</span></div>
+   <h3>${p.t}</h3><p class="blurb">${p.blurb}</p>
+   <div class="meta">${levelHTML(p.level)}<span class="stretch"></span>
+     ${p.coming?'<span class="chip">Coming soon</span>':`<span>${dateLabel(p)}</span><span class="sep">·</span><span>${p.read}</span>`}</div>
+   <div class="meta" style="border:0;padding-top:8px"><span class="readmore">${p.url?'Read article →':'In progress'}</span></div>
+  </${tag}>`;}
+function render(){
+  const list=POSTS.filter(p=>state.filter==="all"||p.cat===state.filter).sort(sortFns());
+  const old=new Map();[...grid.children].forEach(el=>old.set(el.dataset.key,el.getBoundingClientRect()));
+  grid.innerHTML=list.map(cardHTML).join("");
+  if(!matchMedia("(prefers-reduced-motion:reduce)").matches){
+    [...grid.children].forEach(el=>{const prev=old.get(el.dataset.key);
+      if(!prev){el.animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],{duration:260,easing:"cubic-bezier(.2,.7,.2,1)"});return;}
+      const now=el.getBoundingClientRect(),dx=prev.left-now.left,dy=prev.top-now.top;
+      if(dx||dy)el.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:"none"}],{duration:340,easing:"cubic-bezier(.2,.7,.2,1)"});});
+  }
+  const total=list.length,lab={path:"beginner → advanced",pathDesc:"advanced → beginner",newest:"newest first",oldest:"oldest first"}[state.sort];
+  countEl.innerHTML=`<b>${total}</b> ${total===1?'article':'articles'} · sorted ${lab}`;
+}
+(function(){const c={all:POSTS.length,sciml:0,agentic:0,governance:0};POSTS.forEach(p=>c[p.cat]++);
+  document.querySelectorAll("[data-c]").forEach(el=>el.textContent=c[el.dataset.c]);})();
+function setFilter(f){state.filter=f;document.querySelectorAll("#filters .seg").forEach(s=>s.setAttribute("aria-pressed",s.dataset.filter===f));render();}
+document.getElementById("filters").addEventListener("click",e=>{const b=e.target.closest("[data-filter]");if(b)setFilter(b.dataset.filter);});
+document.getElementById("sorts").addEventListener("click",e=>{const b=e.target.closest("[data-sort]");if(!b)return;
+  state.sort=b.dataset.sort;document.querySelectorAll("#sorts .seg").forEach(s=>s.setAttribute("aria-pressed",s===b));render();});
+/* Focus cards jump to a pre-filtered writing section */
+document.querySelectorAll("[data-jump]").forEach(a=>a.addEventListener("click",()=>setFilter(a.dataset.jump)));
+render();
 </script>
 </body>
 </html>
