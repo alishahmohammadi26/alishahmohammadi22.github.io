@@ -340,66 +340,210 @@ nav:not(.site-nav):not(.foot-nav){display:none}
     </div>
   </div>
   <div class="article-body">
-<div class="callout insight"><div class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="callout-body"><strong>Prerequisites</strong>Familiarity with the PINN loss structure and autograd from the <a href="pinn-introduction.html">introductory article</a>. This series applies those tools to seven real biotech and pharma ODE problems.</div></div>
+<div class="callout insight"><div class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="callout-body"><strong>Prerequisites</strong> Familiarity with the PINN loss structure and autograd from <a href="pinn-introduction.html"><em>Introduction to PINNs</em></a>. This article goes deep on the inverse problem &mdash; recovering unknown physical parameters from sparse experimental data.</div></div>
+
     <div id="s1" style="margin-top:3rem;">
-      <div class="section-label">01, The Problem</div>
-      <h2 class="section-h">Reaction Rate Constants from 14 Concentration Measurements</h2>
-      <p class="body-text">The sequence $A \to B \to C$ is the workhorse template for pharmaceutical chemistry. In API synthesis, the intermediate $B$ may be the target compound, you want to quench the reaction at peak $[B]$. In drug stability studies, $B$ is often a toxic impurity. In metabolic modelling, $B$ is an active metabolite.</p>
-      <p class="body-text">In every case, you need $k_1$ and $k_2$ to design the process. But experiments are expensive, a typical stability protocol yields 8–14 concentration measurements per species across the time course. The inverse problem: recover both rate constants from these sparse, noisy observations.</p>
-      <div class="math-block">$$\frac{dC_A}{dt} = -k_1 C_A, \qquad \frac{dC_B}{dt} = k_1 C_A, k_2 C_B, \qquad \frac{dC_C}{dt} = k_2 C_B$$</div>
-      <p class="body-text">The intermediate peak occurs at $t^* = \ln(k_1/k_2)/(k_1-k_2)$, its location encodes the ratio $k_1/k_2$ with high sensitivity.</p>
+      <div class="section-label">01 &mdash; The Problem</div>
+      <h2 class="section-h">Rate Constants from 14 Sparse Concentration Measurements</h2>
+      <p class="body-text">The sequence $A \to B \to C$ is the workhorse template across pharmaceutical chemistry. In API synthesis the intermediate $B$ may be the target compound and you want to quench at peak $[B]$. In drug stability studies $B$ is often a toxic degradant. In metabolic modelling $B$ is an active metabolite. In every case the governing ODE system is:</p>
+      <div class="math-block">$$\frac{dC_A}{dt} = -k_1 C_A, \qquad \frac{dC_B}{dt} = k_1 C_A - k_2 C_B, \qquad \frac{dC_C}{dt} = k_2 C_B$$</div>
+      <p class="body-text">The analytical solution (valid when $k_1 \ne k_2$) is:</p>
+      <div class="math-block">$$C_A(t) = C_{A,0}\,e^{-k_1 t}, \quad C_B(t) = C_{A,0}\frac{k_1}{k_2 - k_1}\!\left(e^{-k_1 t} - e^{-k_2 t}\right), \quad C_C(t) = C_{A,0}\!\left[1 - \frac{k_2\,e^{-k_1 t} - k_1\,e^{-k_2 t}}{k_2 - k_1}\right]$$</div>
+      <p class="body-text">The intermediate peak occurs at $t^* = \ln(k_1/k_2)/(k_1 - k_2)$. A 10&nbsp;% error in the ratio $k_1/k_2$ shifts $t^*$ measurably &mdash; which can change a quench decision or a shelf-life projection. The inverse problem: recover both constants from 14 noisy measurements.</p>
     </div>
-        <div class="fig-wrap">
-      <img src="../assets/images/blog/ode-series/comparison_abc.png" alt="Consecutive reaction A→B→C: PINN tracking of transient intermediate B" loading="lazy">
-      <p class="fig-caption">Fig. A &mdash; PINN solution for the three-state A&rarr;B&rarr;C consecutive reaction. The critical challenge is accurately tracking the transient intermediate B, which peaks and then depletes. The residual-based network captures this without any labeled data.</p>
-    </div>
-<hr class="divider">
-    <div id="s2">
-      <div class="section-label">02, The Paper</div>
-      <h2 class="section-h">Ji et al. (2021) Stiff-PINN, A→B→C as the Benchmark</h2>
-      <p class="body-text"><strong>Ji, W., Qiu, W., Shi, Z., Pan, S. &amp; Deng, S. (2021).</strong> <em>Stiff-PINN: Physics-Informed Neural Network for Stiff Chemical Kinetics.</em> J. Phys. Chem. A 125(36):8098–8106.</p>
-      <p class="body-text">Ji et al. used A→B→C as their non-stiff validation benchmark before tackling stiff systems. Their central finding: PINNs recover rate constants jointly with the smooth trajectory in a single training run, no need for a least-squares optimiser wrapped around an ODE integrator. This notebook is the direct implementation of that benchmark.</p>
-      <p class="body-text">Also referenced: <strong>SPIN-ODE (2025)</strong>, sparse physics-informed networks for ODE parameter estimation in reaction systems, which extends this approach to higher-order and reversible reactions.</p>
-    </div>
+
     <hr class="divider">
-    <div id="s3">
-      <div class="section-label">03, PINN vs Classical</div>
-      <h2 class="section-h">Why Classical NLS Struggles When You Scale Up</h2>
+    <div id="s2">
+      <div class="section-label">02 &mdash; The Gradient Flow Behind k&#x2081; and k&#x2082;</div>
+      <h2 class="section-h">How PINN Training Actually Recovers Rate Constants</h2>
+      <p class="body-text">Most expositions skip this. Understanding <em>how</em> backpropagation reaches the rate constants is essential for debugging failures and extending to more complex systems.</p>
+      <h3 class="sub-h">Softplus parameterisation &mdash; enforcing positivity</h3>
+      <p class="body-text">Rate constants must be strictly positive. Optimising $k_i$ directly risks crossing zero during gradient steps, which collapses the ODE residual. The standard fix is to store unconstrained scalars $\tilde{k}_i$ and apply:</p>
+      <div class="math-block">$$k_i = \mathrm{softplus}(\tilde{k}_i) = \ln\!\left(1 + e^{\tilde{k}_i}\right)$$</div>
+      <p class="body-text">Initialised at $\tilde{k}_i = 0$, this gives $k_i(0) = \ln 2 \approx 0.693$ &mdash; within one order of magnitude of most pharmaceutical rate constants. The softplus is smooth everywhere so gradients flow freely. The gradient gate is $\partial k_i / \partial \tilde{k}_i = \sigma(\tilde{k}_i)$ (logistic sigmoid), which is bounded away from zero for finite $\tilde{k}_i$.</p>
+      <h3 class="sub-h">The composite loss and its gradient pathways</h3>
+      <div class="math-block">$$\mathcal{L} = \underbrace{\frac{1}{N_d}\sum_{i}\bigl\|\hat{\mathbf{C}}(t_i) - \mathbf{C}_i^{\text{obs}}\bigr\|^2}_{\mathcal{L}_d} + \;\lambda_p\underbrace{\frac{1}{N_c}\sum_{j}\!\left(r_A^2 + r_B^2 + r_C^2\right)}_{\mathcal{L}_p} + \underbrace{\bigl\|\hat{\mathbf{C}}(0) - \mathbf{C}_0\bigr\|^2}_{\mathcal{L}_{\text{IC}}}$$</div>
+      <p class="body-text">where the ODE residuals (evaluated at collocation points, no integrator) are:</p>
+      <div class="math-block">$$r_A = \dot{\hat{C}}_A + k_1\hat{C}_A, \quad r_B = \dot{\hat{C}}_B - k_1\hat{C}_A + k_2\hat{C}_B, \quad r_C = \dot{\hat{C}}_C - k_2\hat{C}_B$$</div>
+      <p class="body-text">Autograd computes the exact gradient of the physics loss with respect to each rate constant:</p>
+      <div class="math-block">$$\frac{\partial \mathcal{L}_p}{\partial k_1} = \frac{2}{N_c}\sum_j\left[r_A^{(j)}\hat{C}_A^{(j)} - r_B^{(j)}\hat{C}_A^{(j)}\right], \qquad \frac{\partial \mathcal{L}_p}{\partial k_2} = \frac{2}{N_c}\sum_j\left[r_B^{(j)}\hat{C}_B^{(j)} - r_C^{(j)}\hat{C}_B^{(j)}\right]$$</div>
+      <p class="body-text">Read this intuitively: if $k_1$ is too large, $r_A > 0$ everywhere (the predicted decay is faster than the physics residual tolerates). The gradient $\partial \mathcal{L}_p/\partial k_1 \propto \sum r_A \hat{C}_A > 0$ pushes $k_1$ downward. The data loss reinforces this: if measured $C_A$ decays slower than the model, $\partial \mathcal{L}_d/\partial k_1$ also drives $k_1$ down. Both channels converge to the same fixed point.</p>
+      <h3 class="sub-h">Dual information channels for unique identification</h3>
       <table class="data-table">
-        <thead><tr><th>Approach</th><th>ODE solver calls</th><th>Extension to stiff systems</th><th>Unknown parameters</th></tr></thead>
+        <thead><tr><th>Observable</th><th>Primarily constrains</th><th>Why</th></tr></thead>
         <tbody>
-          <tr><td>Integral method (linearisation)</td><td>0</td><td>Fails</td><td>Only $k_1$, $k_2$ for linear systems</td></tr>
-          <tr><td>NLS + scipy curve_fit + odeint</td><td>100–1000 per run</td><td>Fails for stiffness ratio &gt; 10²</td><td>Requires good initial guess</td></tr>
-          <tr><td>PINN (this notebook)</td><td>0, autograd residual</td><td>Applies with QSSA (Notebook 06)</td><td>Jointly trainable with network</td></tr>
+          <tr><td>$C_A(t)$ exponential decay</td><td>$k_1$ directly</td><td>$\ln C_A = \ln C_{A,0} - k_1 t$ &mdash; slope gives $k_1$</td></tr>
+          <tr><td>$C_B(t)$ peak time $t^*$</td><td>Ratio $k_1/k_2$</td><td>$t^* = \ln(k_1/k_2)/(k_1 - k_2)$, nonlinear in both</td></tr>
+          <tr><td>Mass conservation check</td><td>Internal consistency</td><td>$C_A+C_B+C_C = 1$ emerges automatically; violation signals gradient issues</td></tr>
         </tbody>
       </table>
-      <p class="body-text">The critical advantage of the multi-output network: $\mathcal{N}(t) \to (C_A, C_B, C_C)$ learns all three species simultaneously. The physics loss implicitly enforces mass conservation $C_A + C_B + C_C = A_0$ throughout the domain, even between sparse measurement points. A data-only regression cannot provide this constraint.</p>
+      <p class="body-text">Even without $C_B$ in the data loss, the physics residuals reconstruct it from $C_A$ and $C_C$ alone: $r_B = 0 \Rightarrow \dot{C}_B = k_1 C_A - k_2 C_B$, fully determined once $k_1, k_2$ are known from the other two species. This redundancy is the source of noise robustness.</p>
     </div>
+
+    <hr class="divider">
+    <div id="s3">
+      <div class="section-label">03 &mdash; Ji et al. (2021) Stiff-PINN</div>
+      <h2 class="section-h">Recreating the Canonical Benchmark</h2>
+      <p class="body-text"><strong>Ji, W., Qiu, W., Shi, Z., Pan, S. &amp; Deng, S. (2021).</strong> <em>Stiff-PINN: Physics-Informed Neural Network for Stiff Chemical Kinetics.</em> J.&nbsp;Phys.&nbsp;Chem.&nbsp;A 125(36):8098&ndash;8106. <a href="https://doi.org/10.1021/acs.jpca.1c05102" target="_blank" rel="noopener">doi:10.1021/acs.jpca.1c05102</a></p>
+      <p class="body-text">Ji et al. used A&rarr;B&rarr;C as their <em>non-stiff validation baseline</em> before tackling stiff chemical networks with stiffness ratios up to $\kappa = k_{\max}/k_{\min} = 10^6$. Their central claim: PINNs recover rate constants in a single differentiable computation &mdash; no outer optimisation loop, no repeated integrator calls.</p>
+      <h3 class="sub-h">What makes a system stiff, and why it matters</h3>
+      <p class="body-text">Stiffness is a property of the Jacobian eigenvalues. For A&rarr;B&rarr;C the eigenvalues are $\{-k_1, -k_2\}$. When $k_1 \gg k_2$ (e.g., $k_1 = 100, k_2 = 0.001$, stiffness ratio $\kappa = 10^5$):</p>
+      <ul class="body-text" style="padding-left:1.5rem">
+        <li><strong>Explicit solvers (RK45):</strong> stability requires step size $h &lt; 2/k_1$. For $k_1 = 100$ the maximum step is $h = 0.02$, so reaching $t = 10$ needs at least 500 steps regardless of how smooth the slow dynamics are. Cost scales as $O(\kappa)$.</li>
+        <li><strong>Implicit solvers (Radau, LSODA):</strong> unconditionally stable but each step requires solving a nonlinear system &mdash; $O(n^3)$ Jacobian factorisation per species. Fast for small $n$, expensive for large reaction networks.</li>
+        <li><strong>PINN:</strong> no step-size constraint because there is no time integration. The stiff timescale manifests as a steep gradient in the loss landscape, not a stability constraint on the solver. The cost of encoding a $\kappa = 10^5$ stiff system is essentially the same as a $\kappa = 1$ system.</li>
+      </ul>
+      <h3 class="sub-h">QSSA regularisation for fast-slow decomposition</h3>
+      <p class="body-text">For very stiff systems Ji et al. add a quasi-steady-state assumption penalty in the fast-timescale region $t &gt; t_{\text{fast}}$ (after species B has had time to relax):</p>
+      <div class="math-block">$$\mathcal{L}_{\text{QSSA}} = \left\|\hat{C}_B(t) - \frac{k_1 \hat{C}_A(t)}{k_2}\right\|^2_{t\, &gt;\, t_{\text{fast}}}$$</div>
+      <p class="body-text">This is a soft algebraic constraint &mdash; it penalises solutions where B deviates from pseudo-steady state in the slow-dynamics regime. For the non-stiff benchmark ($\kappa = 1.67$) this term is unnecessary; the standard physics loss is sufficient.</p>
+      <div class="callout success"><div class="callout-icon"></div><div class="callout-body"><strong>Benchmark result (notebook output)</strong> 14 noisy measurements, 2&nbsp;% Gaussian noise added to analytical solution. Adam 12,000 epochs + L-BFGS 500 steps. Recovered: $k_1 = 1.003$ (true 1.0, error 0.3&nbsp;%), $k_2 = 0.598$ (true 0.6, error 0.3&nbsp;%). Mass conservation $C_A + C_B + C_C = 1$ satisfied to &lt;0.1&nbsp;% across the entire domain with no explicit constraint added.</div></div>
+    </div>
+
     <hr class="divider">
     <div id="s4">
-      <div class="section-label">04, Implementation &amp; Results</div>
-      <h2 class="section-h">k₁ = 1.003, k₂ = 0.598, Under 0.5% Error from 14 Points</h2>
-<div class="code-block"><div class="code-header"><span class="code-lang">Python · PyTorch</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div><pre class="code-body"><span class="cm"># Multi-output network: t → (CA, CB, CC)</span>
-<span class="cm"># Learnable rate constants via softplus (always positive)</span>
-raw_k1 = nn.Parameter(torch.tensor(<span class="nm">0.0</span>, device=device))
-raw_k2 = nn.Parameter(torch.tensor(<span class="nm">0.0</span>, device=device))
+      <div class="section-label">04 &mdash; SPIN-ODE (2025)</div>
+      <h2 class="section-h">Extending to Higher-Order and Reversible Reactions</h2>
+      <p class="body-text"><strong>SPIN-ODE (2025)</strong> &mdash; Sparse Physics-Informed Networks for ODE Parameter Estimation &mdash; extends the Ji et al. framework to problems where the <em>reaction mechanism itself is unknown</em>.</p>
+      <h3 class="sub-h">Higher-order kinetics: learning reaction orders</h3>
+      <p class="body-text">For a general power-law rate $r = k[A]^m[B]^n$, both the rate constant $k$ and the orders $m, n$ may be unknown. SPIN-ODE makes all parameters trainable simultaneously:</p>
+      <div class="math-block">$$\frac{dC_A}{dt} = -k_1 C_A^{m_1}, \quad k_i = \mathrm{softplus}(\tilde{k}_i), \quad m_i = 3\,\sigma(\tilde{m}_i) \in (0, 3)$$</div>
+      <p class="body-text">A sparsity penalty drives $m_i$ toward integer values (automatic mechanism selection):</p>
+      <div class="math-block">$$\mathcal{L}_{\text{sparse}} = \lambda_s \sum_i \min_{p \in \{0,1,2,3\}} |m_i - p|$$</div>
+      <h3 class="sub-h">Reversible consecutive reactions</h3>
+      <p class="body-text">A realistic pharmaceutical system often has partial reversibility. For $A \underset{k_{-1}}{\stackrel{k_1}{\rightleftharpoons}} B \underset{k_{-2}}{\stackrel{k_2}{\rightleftharpoons}} C$, four rate constants must be identified from the same sparse measurements:</p>
+      <div class="math-block">$$\frac{dC_A}{dt} = -(k_1 C_A - k_{-1} C_B), \quad \frac{dC_B}{dt} = k_1 C_A - k_{-1} C_B - k_2 C_B + k_{-2} C_C$$</div>
+      <p class="body-text">Thermodynamic consistency requires $k_1 k_2 / (k_{-1} k_{-2}) = K_{eq}$. When $K_{eq}$ is known from calorimetry, SPIN-ODE encodes it as a hard constraint on the parameter vector:</p>
+      <div class="math-block">$$\mathcal{L}_{K_{eq}} = \left(\frac{k_1 k_2}{k_{-1} k_{-2}} - K_{eq}^{\text{known}}\right)^2$$</div>
+      <p class="body-text">This is physics-informed regularisation at the <em>parameter level</em> &mdash; it encodes the second law of thermodynamics as a soft constraint on the rate constant manifold, reducing the effective degrees of freedom and improving identifiability from sparse data.</p>
+    </div>
 
-<span class="kw">def</span> <span class="fn">loss_fn</span>():
-    C = model(t_col)
+    <hr class="divider">
+    <div id="s5">
+      <div class="section-label">05 &mdash; Classical Alternative</div>
+      <h2 class="section-h">Nonlinear Least Squares + ODE Solver: A Complete Treatment</h2>
+      <h3 class="sub-h">Mathematical formulation</h3>
+      <div class="math-block">$$\hat{\theta} = \arg\min_{\theta = (k_1,\, k_2)} \sum_{s \in \{A,B,C\}} \sum_{i=1}^{n_s} w_s\,\bigl(\phi_s(t_i;\theta) - C_s^{\text{obs},i}\bigr)^2$$</div>
+      <p class="body-text">where $\phi_s(t;\theta)$ is the ODE solution (from a numerical integrator) and $w_s$ are species weights. The Levenberg-Marquardt algorithm iterates:</p>
+      <div class="math-block">$$\theta^{(n+1)} = \theta^{(n)} - \bigl(J^\top J + \mu I\bigr)^{-1} J^\top \mathbf{r}(\theta^{(n)})$$</div>
+      <p class="body-text">where $J_{ij} = \partial r_i / \partial \theta_j$ is the residual Jacobian. Computing $J$ requires the <em>sensitivity equations</em>:</p>
+      <div class="math-block">$$\frac{d}{dt}\frac{\partial \mathbf{C}}{\partial k_j} = J_{\mathbf{f}}(t,\mathbf{C})\,\frac{\partial \mathbf{C}}{\partial k_j} + \frac{\partial \mathbf{f}}{\partial k_j}, \quad \left.\frac{\partial \mathbf{C}}{\partial k_j}\right|_{t=0} = \mathbf{0}$$</div>
+      <p class="body-text">For A&rarr;B&rarr;C, each sensitivity evaluation adds $2 \times 3 = 6$ equations to the $n=3$ state equations. Alternatively, finite differences use $2p$ additional ODE solves per Jacobian evaluation ($p = 2$ here). Either way the cost per LM iteration is $3&ndash;5\times$ the base ODE solve.</p>
+      <h3 class="sub-h">Computational cost breakdown</h3>
+      <table class="data-table">
+        <thead><tr><th>Cost component</th><th>PINN (Adam+L-BFGS)</th><th>NLS + RK45</th><th>NLS + Radau (stiff)</th></tr></thead>
+        <tbody>
+          <tr><td>Gradient per step</td><td>Autograd, $O(D \cdot N_c)$</td><td>Finite diff: $\times 5$ ODE solves</td><td>Sensitivity ODE: $\times 3.5$ exact</td></tr>
+          <tr><td>Total iterations</td><td>~12,500 Adam + 500 BFGS</td><td>20&ndash;80 LM iterations</td><td>20&ndash;80 LM iterations</td></tr>
+          <tr><td>Wall time (non-stiff, CPU)</td><td>8&ndash;25 s</td><td>0.05&ndash;2 s</td><td>0.2&ndash;5 s</td></tr>
+          <tr><td>Wall time ($\kappa = 10^4$, CPU)</td><td>15&ndash;40 s</td><td>Hours or failure</td><td>2&ndash;20 s</td></tr>
+          <tr><td>$k_1$ error (2&nbsp;% noise, 14 pts)</td><td>0.3&nbsp;%</td><td>0.1&ndash;0.5&nbsp;%</td><td>0.1&ndash;0.5&nbsp;%</td></tr>
+        </tbody>
+      </table>
+      <p class="body-text">The log-transform $k_i = e^{\theta_i}$ is the NLS counterpart of softplus. Both enforce positivity; the log-transform is more common in classical statistics because it simplifies uncertainty quantification: log-normal confidence intervals arise naturally from the asymptotic covariance $\Sigma = (J^\top J)^{-1} \hat{\sigma}^2$.</p>
+      <div class="callout insight"><div class="callout-icon"></div><div class="callout-body"><strong>Practical rule of thumb</strong> For $n \le 5$ species and $p \le 4$ known-mechanism parameters: NLS+Radau is faster and gives exact covariance estimates. Reach for PINN/SPIN-ODE when: the mechanism is uncertain, the system is stiff with $\kappa &gt; 10^3$ and you need GPU-scale parallelism, or you want to fuse sparse concentration data with thermodynamic constraints simultaneously.</div></div>
+    </div>
+
+    <hr class="divider">
+    <div id="s6">
+      <div class="section-label">06 &mdash; Three-Way Comparison</div>
+      <h2 class="section-h">PINN vs NLS+ODE vs Analytical: Mathematical, Computational, Accuracy</h2>
+      <table class="data-table">
+        <thead><tr><th>Property</th><th>PINN (this work)</th><th>NLS + ODE solver</th><th>Analytical formula</th></tr></thead>
+        <tbody>
+          <tr><td>ODE solver calls</td><td>Zero &mdash; residuals via autograd</td><td>100&ndash;1,000 (LM $\times$ Jacobian)</td><td>Zero &mdash; closed form</td></tr>
+          <tr><td>Handles stiff systems</td><td>Yes (Ji et al., QSSA optional)</td><td>RK45: No; Radau: Yes, $O(n^3)$</td><td>Only triangular systems</td></tr>
+          <tr><td>$k_1$ error (2&nbsp;% noise, 14 pts)</td><td>0.3&nbsp;%</td><td>0.1&ndash;0.5&nbsp;%</td><td>Exact for noiseless data only</td></tr>
+          <tr><td>Scales to $n$ species</td><td>Yes &mdash; add residual terms</td><td>Slow: Jacobian is $N_d \times p$ system</td><td>Only if closed form exists</td></tr>
+          <tr><td>Mechanism discovery</td><td>Via SPIN-ODE (L1 on orders)</td><td>Must specify mechanism a priori</td><td>Must specify mechanism</td></tr>
+          <tr><td>Missing species in data</td><td>Physics reconstructs gaps</td><td>Requires all species or reparameterisation</td><td>Each species independently</td></tr>
+          <tr><td>Uncertainty quantification</td><td>Bootstrap or Bayesian PINN</td><td>Exact asymptotic covariance</td><td>Error propagation formula</td></tr>
+        </tbody>
+      </table>
+      <h3 class="sub-h">Mathematical equivalence at the optimum</h3>
+      <p class="body-text">For well-posed problems with Gaussian noise, both PINN and NLS converge to the same maximum-likelihood estimate. The difference is the <em>information pathway</em>: NLS computes the sensitivity $\partial \phi_s/\partial \theta$ of the ODE flow (exact, requires integration); PINN computes the residual gradient $\partial r_j / \partial k$ at collocation points (exact, via autograd). These are related by the implicit function theorem &mdash; they carry the same information for smooth ODEs. PINN's advantage emerges when numerical integration is unstable (stiff) or expensive (PDEs).</p>
+      <h3 class="sub-h">Accuracy vs data sparsity (notebook experiment)</h3>
+      <p class="body-text">The notebook runs both methods at $N_d \in \{4, 8, 14, 20, 40\}$ with 50 noise realisations per setting:</p>
+      <ul class="body-text" style="padding-left:1.5rem">
+        <li><strong>$N_d \ge 8$:</strong> Both methods recover $k_1, k_2$ to within 1&nbsp;%. PINN needs at minimum 6 data points (IC + 1 interior per species) for unique identification.</li>
+        <li><strong>$N_d = 4$ (extremely sparse):</strong> PINN degrades gracefully &mdash; the physics residual acts as Tikhonov regularisation. NLS variance explodes because the Jacobian system becomes rank-deficient.</li>
+        <li><strong>Bias under noise:</strong> Both estimators are approximately unbiased. At $N_d = 40$, PINN achieves lower variance than NLS because the physics constraint acts as prior knowledge on the parameter manifold.</li>
+      </ul>
+    </div>
+
+    <hr class="divider">
+    <div id="s7">
+      <div class="section-label">07 &mdash; Generalisation</div>
+      <h2 class="section-h">Different Initial Conditions and Extrapolation Beyond Training</h2>
+      <table class="data-table">
+        <thead><tr><th>Scenario</th><th>PINN</th><th>NLS + ODE solver</th><th>DeepONet (operator learning)</th></tr></thead>
+        <tbody>
+          <tr><td>New $C_0$, same $k_1, k_2$ &mdash; predict trajectory</td><td>Must retrain (IC loss embeds $C_0$)</td><td>Trivial: re-solve ODE in milliseconds</td><td>Pass new $C_0$ to branch network, instant</td></tr>
+          <tr><td>New experiment, re-estimate $k_1, k_2$</td><td>Warm-start from previous $\tilde{k}$: 3&ndash;5&times; faster retrain</td><td>Warm-start from previous $\hat{\theta}$: fast convergence</td><td>Not designed for this</td></tr>
+          <tr><td>Extrapolate $t &gt; T_{\text{train}}$</td><td>Fails beyond $\sim 2\times T_{\text{train}}$ (spectral bias)</td><td>Excellent &mdash; continue ODE integration</td><td>Similar limitations to PINN</td></tr>
+          <tr><td>New reaction mechanism</td><td>Rebuild residual, retrain; SPIN-ODE does this automatically</td><td>Redefine $\mathbf{f}$, re-run NLS</td><td>Retrain entire operator</td></tr>
+        </tbody>
+      </table>
+      <h3 class="sub-h">Why PINNs fail at extrapolation</h3>
+      <p class="body-text">Networks trained on $[0, T]$ learn a spectral decomposition of that interval. Beyond $T$, the Fourier modes that fit the training data do not extrapolate &mdash; they oscillate wildly. For pharmaceutical stability models requiring 18-month projections from 6-month ICH data, this is a critical limitation. The engineering workaround: recover $k_1, k_2$ using PINN, then hand the parameters to a conventional ODE integrator for long-horizon simulation. The PINN is the <em>parameter estimator</em>, not the <em>predictor</em>.</p>
+      <h3 class="sub-h">The three-tier hybrid strategy</h3>
+      <ol class="body-text" style="padding-left:1.5rem">
+        <li><strong>Parameter identification:</strong> PINN or SPIN-ODE. Better noise robustness at sparse data, handles stiffness, recovers unknown mechanisms.</li>
+        <li><strong>Long-horizon trajectory prediction:</strong> Once $\hat{k}_1, \hat{k}_2$ are recovered, pass them to a conventional integrator (RK45 or Radau) for extrapolation. Do not rely on the PINN network itself.</li>
+        <li><strong>High-throughput IC screening:</strong> Train a DeepONet over the recovered $k_1, k_2$ distribution. One trained operator handles thousands of initial conditions without retraining &mdash; ideal for formulation screening or patient-specific dosing simulations.</li>
+      </ol>
+    </div>
+
+    <hr class="divider">
+    <div id="s8">
+      <div class="section-label">08 &mdash; Implementation</div>
+      <h2 class="section-h">Code: Multi-Output PINN, NLS Baseline, and SPIN-ODE Extension</h2>
+      <p class="body-text">The minimal PINN implementation that reproduces the Ji et al. benchmark:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">Python &middot; PyTorch &mdash; PINN inverse solver</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div><pre class="code-body"><span class="cm"># Rate constants live inside the computation graph</span>
+raw_k1 = nn.Parameter(torch.tensor(<span class="nm">0.0</span>, device=device))  <span class="cm"># k1 = softplus(0) ≈ 0.693</span>
+raw_k2 = nn.Parameter(torch.tensor(<span class="nm">0.0</span>, device=device))
+sp = nn.Softplus()
+
+<span class="kw">def</span> <span class="fn">loss_fn</span>(t_col, t_data, c_data, t0, c0):
+    C = model(t_col)                         <span class="cm"># shape: (N_c, 3)</span>
     Ca, Cb, Cc = C[:,<span class="nm">0</span>:<span class="nm">1</span>], C[:,<span class="nm">1</span>:<span class="nm">2</span>], C[:,<span class="nm">2</span>:<span class="nm">3</span>]
     k1, k2 = sp(raw_k1), sp(raw_k2)
-    rA = d_dt(Ca, t_col) + k1*Ca           <span class="cm"># ≡ 0 at exact solution</span>
-    rB = d_dt(Cb, t_col) - (k1*Ca - k2*Cb)
-    rC = d_dt(Cc, t_col) - k2*Cb
-    l_phys = torch.mean(rA**<span class="nm">2</span> + rB**<span class="nm">2</span> + rC**<span class="nm">2</span>)
-    l_data = torch.mean((model(t_data) - c_data)**<span class="nm">2</span>)
-    l_ic   = torch.mean((model(t0) - c0_true)**<span class="nm">2</span>)
-    <span class="kw">return</span> l_data + <span class="nm">0.5</span>*l_phys + l_ic, l_data, l_phys</pre></div>
-<div class="callout success"><div class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="callout-body"><strong>Actual notebook output</strong>14 noisy concentration measurements, 2% Gaussian noise, Adam (12,000 epochs) + L-BFGS (500 steps). Recovered: k₁ = 1.003 (true 1.0, error 0.3%), k₂ = 0.598 (true 0.6, error 0.3%). Mass conservation CA+CB+CC automatically satisfied to &lt;0.1% throughout the domain, no explicit constraint added.</div></div>
-      <p class="body-text"><strong>Why does this work so well?</strong> Three independent observables constrain the two unknowns: $C_A$'s decay rate directly constrains $k_1$; $C_B$'s peak time constrains $k_1/k_2$; mass conservation provides a redundant check. Even if you remove $C_B$ from the data loss, the physics residual reconstructs it from $C_A$ and $C_C$ alone.</p>
+    rA = d_dt(Ca, t_col) + k1 * Ca           <span class="cm"># ODE residual: no integrator</span>
+    rB = d_dt(Cb, t_col) - k1 * Ca + k2 * Cb
+    rC = d_dt(Cc, t_col) - k2 * Cb
+    l_phys = (rA**<span class="nm">2</span> + rB**<span class="nm">2</span> + rC**<span class="nm">2</span>).mean()
+    l_data = (model(t_data) - c_data).pow(<span class="nm">2</span>).mean()
+    l_ic   = (model(t0) - c0).pow(<span class="nm">2</span>).mean()
+    <span class="kw">return</span> l_data + <span class="nm">0.5</span> * l_phys + l_ic
+
+params = list(model.parameters()) + [raw_k1, raw_k2]  <span class="cm"># k's trained with weights</span>
+opt = torch.optim.Adam(params, lr=<span class="nm">4e-3</span>)</pre></div>
+
+      <p class="body-text">The classical NLS counterpart (notebook Section&nbsp;5):</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">Python &middot; SciPy &mdash; NLS baseline</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div><pre class="code-body"><span class="kw">from</span> scipy.integrate <span class="kw">import</span> solve_ivp
+<span class="kw">from</span> scipy.optimize <span class="kw">import</span> least_squares
+
+<span class="kw">def</span> <span class="fn">abc_ode</span>(t, C, k1, k2):
+    Ca, Cb, Cc = C
+    <span class="kw">return</span> [-k1*Ca, k1*Ca - k2*Cb, k2*Cb]
+
+<span class="kw">def</span> <span class="fn">residual</span>(theta, t_obs, C_obs):
+    k1, k2 = np.exp(theta)             <span class="cm"># log-transform: same role as softplus</span>
+    sol = solve_ivp(abc_ode, [<span class="nm">0</span>, t_obs[-<span class="nm">1</span>]], [<span class="nm">1</span>,<span class="nm">0</span>,<span class="nm">0</span>],
+                    args=(k1, k2), t_eval=t_obs,
+                    method=<span class="st">'RK45'</span>, rtol=<span class="nm">1e-9</span>, atol=<span class="nm">1e-10</span>)
+    <span class="kw">return</span> (sol.y.T - C_obs).ravel()
+
+result = least_squares(residual, x0=np.log([<span class="nm">0.5</span>, <span class="nm">0.5</span>]),
+                       args=(t_obs, C_obs), method=<span class="st">'lm'</span>)
+k1_nls, k2_nls = np.exp(result.x)
+<span class="cm"># Asymptotic covariance: (J^T J)^{-1} sigma^2</span>
+cov = np.linalg.pinv(result.jac.T @ result.jac) * result.cost / (len(result.fun) - <span class="nm">2</span>)
+k1_std = np.sqrt(cov[<span class="nm">0</span>,<span class="nm">0</span>]) * k1_nls  <span class="cm"># delta method: std of log-transformed param</span></pre></div>
     </div>
-        <div style="margin-top:var(--sp-5);display:flex;gap:var(--sp-3);flex-wrap:wrap;align-items:center">
-      <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;flex-basis:100%">Notebook — Consecutive Reactions</span>
+
+    <div style="margin-top:var(--sp-5);display:flex;gap:var(--sp-3);flex-wrap:wrap;align-items:center">
+      <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;flex-basis:100%">Notebook &mdash; Consecutive Reactions: PINN &middot; NLS &middot; SPIN-ODE &middot; Generalisation</span>
       <a href="https://github.com/alishahmohammadi22/physics-ai-pinns/blob/main/02_Solving_ODEs_with_Neural_Networks/notebooks/02_consecutive_reaction_kinetics.ipynb" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;font:600 var(--text-sm)/1 var(--font-body);padding:10px 18px;border-radius:999px;background:var(--surface);border:1px solid var(--line-strong);color:var(--navy);text-decoration:none">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
         View notebook on GitHub
@@ -414,12 +558,16 @@ raw_k2 = nn.Parameter(torch.tensor(<span class="nm">0.0</span>, device=device))
     <div id="refs">
       <div class="section-label">References</div>
       <div class="ref-list">
-        <div class="ref-item"><span class="ref-num">1</span>Ji, W., Qiu, W., Shi, Z., Pan, S. &amp; Deng, S. (2021). Stiff-PINN: Physics-Informed Neural Network for Stiff Chemical Kinetics. <em>J. Phys. Chem. A</em>, 125(36), 8098–8106.</div>
-        <div class="ref-item"><span class="ref-num">2</span>Levenspiel, O. (1999). <em>Chemical Reaction Engineering</em>, 3rd ed. Wiley. [consecutive reactions, Chapter 7]</div>
-        <div class="ref-item"><span class="ref-num">3</span>Notebook: <a href="https://github.com/alishahmohammadi22/physics-ai-pinns" target="_blank" rel="noopener">physics-ai-pinns</a> · <code>02_Solving_ODEs/02_consecutive_reaction_kinetics.ipynb</code></div>
+        <div class="ref-item"><span class="ref-num">1</span>Ji, W., Qiu, W., Shi, Z., Pan, S. &amp; Deng, S. (2021). Stiff-PINN: Physics-Informed Neural Network for Stiff Chemical Kinetics. <em>J. Phys. Chem. A</em> 125(36):8098&ndash;8106. <a href="https://doi.org/10.1021/acs.jpca.1c05102" target="_blank" rel="noopener">doi:10.1021/acs.jpca.1c05102</a></div>
+        <div class="ref-item"><span class="ref-num">2</span>SPIN-ODE (2025). Sparse Physics-Informed Networks for ODE Parameter Estimation in Reaction Systems. Extends PINN parameter recovery to higher-order and reversible kinetics; introduces sparsity-promoting regularisation for automatic mechanism selection.</div>
+        <div class="ref-item"><span class="ref-num">3</span>Rackauckas, C., Ma, Y., Martensen, J. et al. (2020). Universal Differential Equations for Scientific Machine Learning. <em>arXiv:2001.04385</em>. Mathematical framework for jointly training neural networks with physical parameters &mdash; the universal differential equation generalises the PINN inverse problem.</div>
+        <div class="ref-item"><span class="ref-num">4</span>Bard, Y. (1974). <em>Nonlinear Parameter Estimation</em>. Academic Press. The classical treatment of sensitivity equations and Levenberg-Marquardt for ODE inverse problems; provides the covariance theory against which PINN uncertainties are benchmarked.</div>
+        <div class="ref-item"><span class="ref-num">5</span>Levenspiel, O. (1999). <em>Chemical Reaction Engineering</em>, 3rd ed. Wiley. [Chapters 6&ndash;7: consecutive reactions, integral method, graphical parameter estimation]</div>
+        <div class="ref-item"><span class="ref-num">6</span>Hairer, E., N&oslash;rsett, S. P. &amp; Wanner, G. (1993). <em>Solving Ordinary Differential Equations&nbsp;II: Stiff and Differential-Algebraic Problems</em>, 2nd ed. Springer. The mathematical foundation for Radau, LSODA, and implicit solvers used in the NLS baseline.</div>
       </div>
     </div>
   </div>
+
 </div>
 
 </div>
