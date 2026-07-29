@@ -339,7 +339,7 @@ nav:not(.site-nav):not(.foot-nav){display:none}
     <div class="article-hero-inner">
       <div class="hero-series">Physics AI &mdash; PINNs Series &nbsp;&middot;&nbsp; Article 4 of 8</div>
       <h1 class="article-title">Nonlinear PDEs with PINNs:<br><em>Burgers &amp; Reaction Kinetics</em></h1>
-      <p class="article-sub">Shock formation, viscous regularization, and coupled ODE systems for A&rarr;B&rarr;C reactions &mdash; where physics-informed training earns its keep.</p>
+      <p class="article-sub">Shock formation, viscous regularization, and coupled ODE systems for A&rarr;B&rarr;C reactions, where physics-informed training earns its keep.</p>
       <div class="article-meta">
         <span class="meta-pill highlight">Dec 2025</span>
         <span class="meta-pill">20 min read</span>
@@ -361,7 +361,7 @@ nav:not(.site-nav):not(.foot-nav){display:none}
       <div class="section-label">01 &mdash; The Nonlinearity Challenge</div>
       <h2 class="section-h">Why Nonlinear PDEs Are Qualitatively Harder</h2>
       <p class="body-text">The heat equation from <a href="pinn-heat-equation.html"><em>Heat Equation</em></a> is linear: if $u_1$ and $u_2$ are solutions, so is $\alpha u_1 + \beta u_2$. Linearity is what makes Fourier analysis work. You decompose the initial condition into eigenfunctions of the spatial operator, each mode evolves independently, and you superpose the results. The analytical machinery is beautiful and exact.</p>
-      <p class="body-text">Real engineering systems are relentlessly nonlinear. In fluid dynamics, fluid carries its own momentum &mdash; the velocity field advects itself, producing the nonlinear convective term $(\mathbf{u}\cdot\nabla)\mathbf{u}$ in the Navier-Stokes equations. In chemical kinetics, rate laws are products of concentrations: $r = k[A][B]$ for a bimolecular reaction, or the hyperbolic Michaelis-Menten form $r = V_\mathrm{max}[S]/(K_m + [S])$ for enzyme kinetics. In combustion, temperature-dependent Arrhenius rate constants introduce exponential nonlinearity.</p>
+      <p class="body-text">Real engineering systems are relentlessly nonlinear. In fluid dynamics, fluid carries its own momentum, the velocity field advects itself, producing the nonlinear convective term $(\mathbf{u}\cdot\nabla)\mathbf{u}$ in the Navier-Stokes equations. In chemical kinetics, rate laws are products of concentrations: $r = k[A][B]$ for a bimolecular reaction, or the hyperbolic Michaelis-Menten form $r = V_\mathrm{max}[S]/(K_m + [S])$ for enzyme kinetics. In combustion, temperature-dependent Arrhenius rate constants introduce exponential nonlinearity.</p>
       <p class="body-text">Classical numerical methods handle nonlinearity through linearisation (Newton iterations at each time step) or explicit time-stepping with severe stability constraints. Finite element methods can struggle with convection-dominated problems (the Péclet number problem) and require upwinding schemes or stabilisation terms. The PINN approach sidesteps mesh generation entirely and encodes the nonlinear residual directly, though it introduces its own set of challenges around spectral bias and loss landscape geometry that we examine in this article.</p>
 
       <div class="callout insight">
@@ -370,7 +370,7 @@ nav:not(.site-nav):not(.foot-nav){display:none}
         </div>
         <div class="callout-body">
           <strong>Spectral bias and sharp gradients</strong>
-          Neural networks trained with gradient descent preferentially learn low-frequency components of a target function before high-frequency ones &mdash; a phenomenon called spectral bias or frequency principle (Rahaman et al., 2019). For PDEs with sharp features like shocks, this bias means the network resists capturing the steep gradient, and training can stall in a shallow-gradient local minimum. Careful initialisation, adaptive sampling, and two-stage optimisation are the main remedies.
+          Neural networks trained with gradient descent preferentially learn low-frequency components of a target function before high-frequency ones, a phenomenon called spectral bias or frequency principle (Rahaman et al., 2019). For PDEs with sharp features like shocks, this bias means the network resists capturing the steep gradient, and training can stall in a shallow-gradient local minimum. Careful initialisation, adaptive sampling, and two-stage optimisation are the main remedies.
         </div>
       </div>
     </div>
@@ -387,7 +387,7 @@ nav:not(.site-nav):not(.foot-nav){display:none}
       <div class="math-block">
         $$\frac{\partial u}{\partial t} + u\,\frac{\partial u}{\partial x} = \nu\,\frac{\partial^2 u}{\partial x^2}$$
       </div>
-      <p class="body-text">This is the 1D Navier-Stokes momentum equation with the pressure gradient suppressed and the velocity field called $u$. The left side is the material derivative $Du/Dt = \partial u/\partial t + u\,\partial u/\partial x$ &mdash; the rate of change of velocity following a fluid parcel. The right side is viscous dissipation. When $\nu \to 0$ the equation becomes the inviscid Burgers equation, which develops a genuine discontinuity (shock) in finite time from smooth initial data.</p>
+      <p class="body-text">This is the 1D Navier-Stokes momentum equation with the pressure gradient suppressed and the velocity field called $u$. The left side is the material derivative $Du/Dt = \partial u/\partial t + u\,\partial u/\partial x$, the rate of change of velocity following a fluid parcel. The right side is viscous dissipation. When $\nu \to 0$ the equation becomes the inviscid Burgers equation, which develops a genuine discontinuity (shock) in finite time from smooth initial data.</p>
 
       <h3 class="sub-h">Standard test case (Raissi et al. 2019)</h3>
       <div class="math-block">
@@ -401,7 +401,7 @@ nav:not(.site-nav):not(.foot-nav){display:none}
       <div class="math-block">
         $$\mathcal{R}(x,t) = \underbrace{\frac{\partial u}{\partial t}}_{\text{autograd}} + \underbrace{u \cdot \frac{\partial u}{\partial x}}_{\text{nonlinear}} - \underbrace{\nu \cdot \frac{\partial^2 u}{\partial x^2}}_{\text{viscous}}$$
       </div>
-      <p class="body-text">The critical observation is that the nonlinear term $u\,\partial u/\partial x$ involves the product of the network output $u$ (from a forward pass) with the spatial gradient $\partial u/\partial x$ (from autograd). This product is automatically handled by PyTorch's autograd engine &mdash; no special treatment needed. The residual computation reads exactly like the mathematical formula:</p>
+      <p class="body-text">The critical observation is that the nonlinear term $u\,\partial u/\partial x$ involves the product of the network output $u$ (from a forward pass) with the spatial gradient $\partial u/\partial x$ (from autograd). This product is automatically handled by PyTorch's autograd engine, no special treatment needed. The residual computation reads exactly like the mathematical formula:</p>
 
       <div class="code-block">
         <div class="code-header">
@@ -497,11 +497,11 @@ nav:not(.site-nav):not(.foot-nav){display:none}
     <div>
       <div class="section-label">03 &mdash; Training Strategy</div>
       <h2 class="section-h">The Viscosity Challenge and Two-Stage Training</h2>
-      <p class="body-text">The small viscosity $\nu = 0.01/\pi$ is simultaneously the most physically interesting aspect of the problem and the most numerically challenging. It means the layer thickness at the shock is $O(\nu/|\nabla u|) \approx O(0.003)$, occupying a tiny fraction of the domain. Uniform random sampling of 10,000 collocation points across $[-1,1]\times[0,1]$ places on average only $\sim$30 points inside this thin layer &mdash; far too few to strongly constrain the residual where it matters most.</p>
-      <p class="body-text">The notebook addresses this with a deeper and wider network ([2, 40, 40, 40, 40, 40, 1] &mdash; five hidden layers of width 40) and critically, a two-stage optimisation strategy that has become the de facto standard in the PINN literature.</p>
+      <p class="body-text">The small viscosity $\nu = 0.01/\pi$ is simultaneously the most physically interesting aspect of the problem and the most numerically challenging. It means the layer thickness at the shock is $O(\nu/|\nabla u|) \approx O(0.003)$, occupying a tiny fraction of the domain. Uniform random sampling of 10,000 collocation points across $[-1,1]\times[0,1]$ places on average only $\sim$30 points inside this thin layer, far too few to strongly constrain the residual where it matters most.</p>
+      <p class="body-text">The notebook addresses this with a deeper and wider network ([2, 40, 40, 40, 40, 40, 1], five hidden layers of width 40) and critically, a two-stage optimisation strategy that has become the de facto standard in the PINN literature.</p>
 
       <h3 class="sub-h">Stage 1: Adam (robust, first-order)</h3>
-      <p class="body-text">Adam is run for 15,000 epochs at $10^{-3}$. Its adaptive learning rates per parameter make it robust to poorly conditioned loss landscapes and effective at escaping sharp valleys. However, Adam alone typically leaves the solution slightly diffuse around steep features &mdash; it converges to a good basin but cannot tightly minimise the residual there.</p>
+      <p class="body-text">Adam is run for 15,000 epochs at $10^{-3}$. Its adaptive learning rates per parameter make it robust to poorly conditioned loss landscapes and effective at escaping sharp valleys. However, Adam alone typically leaves the solution slightly diffuse around steep features, it converges to a good basin but cannot tightly minimise the residual there.</p>
 
       <h3 class="sub-h">Stage 2: L-BFGS (quasi-Newton, uses curvature)</h3>
       <p class="body-text">L-BFGS (Limited-memory Broyden-Fletcher-Goldfarb-Shanno) is a quasi-Newton method. It approximates the inverse Hessian from the history of gradient vectors, allowing much larger and better-directed steps than gradient descent. Starting from Adam's solution, L-BFGS can drive the loss down several additional orders of magnitude and sharpen the resolution of the steep layer.</p>
@@ -542,7 +542,7 @@ opt2.<span class="fn">step</span>(closure)
         </div>
         <div class="callout-body">
           <strong>L-BFGS cold-start failure</strong>
-          L-BFGS applied from random initialisation almost always diverges for PINNs. The loss landscape is non-convex and the initial gradient signal is dominated by noise. The Adam warm-start is not optional &mdash; it is what places the network in a basin where the Hessian approximation is meaningful and L-BFGS can take productive steps.
+          L-BFGS applied from random initialisation almost always diverges for PINNs. The loss landscape is non-convex and the initial gradient signal is dominated by noise. The Adam warm-start is not optional, it is what places the network in a basin where the Hessian approximation is meaningful and L-BFGS can take productive steps.
         </div>
       </div>
 
@@ -627,10 +627,10 @@ opt2.<span class="fn">step</span>(closure)
     <span class="kw">return</span> L_pde + <span class="nm">20.0</span> * L_ic</pre>
       </div>
 
-      <p class="body-text">Several design choices in this code are worth noting. First, <code>y[:, 0:1]</code> preserves the batch dimension (shape <code>(N,1)</code>), which is required for <code>autograd.grad</code> to compute per-sample gradients correctly &mdash; using <code>y[:, 0]</code> would produce shape <code>(N,)</code> and silently fail. Second, the three residuals are summed before taking the mean, which effectively weights each species equally. Third, the IC loss carries a weight of 20 &mdash; this is a form of manual loss weighting that ensures the initial condition is satisfied early in training, providing a reliable anchor for the time-integration structure of the ODE system.</p>
+      <p class="body-text">Several design choices in this code are worth noting. First, <code>y[:, 0:1]</code> preserves the batch dimension (shape <code>(N,1)</code>), which is required for <code>autograd.grad</code> to compute per-sample gradients correctly, using <code>y[:, 0]</code> would produce shape <code>(N,)</code> and silently fail. Second, the three residuals are summed before taking the mean, which effectively weights each species equally. Third, the IC loss carries a weight of 20, this is a form of manual loss weighting that ensures the initial condition is satisfied early in training, providing a reliable anchor for the time-integration structure of the ODE system.</p>
 
       <h3 class="sub-h">Mass conservation as a free diagnostic</h3>
-      <p class="body-text">Notice that mass conservation $C_A + C_B + C_C = 1$ is <em>not</em> imposed as a loss term in the notebook. After training, the constraint is evaluated as a diagnostic: if $C_A + C_B + C_C \approx 1$ everywhere, it confirms that the three ODE residuals are genuinely satisfied (since their sum implies the conservation law). This is a powerful cross-check &mdash; a network that satisfies mass conservation only because it was penalised to do so tells us less about ODE accuracy than one that satisfies it as an emergent consequence of correct residuals.</p>
+      <p class="body-text">Notice that mass conservation $C_A + C_B + C_C = 1$ is <em>not</em> imposed as a loss term in the notebook. After training, the constraint is evaluated as a diagnostic: if $C_A + C_B + C_C \approx 1$ everywhere, it confirms that the three ODE residuals are genuinely satisfied (since their sum implies the conservation law). This is a powerful cross-check, a network that satisfies mass conservation only because it was penalised to do so tells us less about ODE accuracy than one that satisfies it as an emergent consequence of correct residuals.</p>
 
       <div class="callout success">
         <div class="callout-icon">
@@ -638,7 +638,7 @@ opt2.<span class="fn">step</span>(closure)
         </div>
         <div class="callout-body">
           <strong>Typical results</strong>
-          The KineticsPINN achieves relative $L_2$ error below $10^{-3}$ across all three species after 10,000 Adam epochs, and mass conservation is satisfied to within $\pm0.002$ across the time window $[0,6]$ &mdash; without ever explicitly penalising the conservation law.
+          The KineticsPINN achieves relative $L_2$ error below $10^{-3}$ across all three species after 10,000 Adam epochs, and mass conservation is satisfied to within $\pm0.002$ across the time window $[0,6]$, without ever explicitly penalising the conservation law.
         </div>
       </div>
 
