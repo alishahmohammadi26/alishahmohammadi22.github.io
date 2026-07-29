@@ -335,7 +335,7 @@ nav:not(.site-nav):not(.foot-nav){display:none}
 <div class="article-page">
   <div class="article-hero">
     <div class="article-hero-inner">
-      <div class="hero-series">Physics AI · PINNs Series · Article 8 of 8 · Series Finale</div>
+      <div class="hero-series">Physics AI · PINNs Series · <em>Physics-Informed DeepONet</em> of 8 · Series Finale</div>
       <h1 class="article-title">Physics-Informed DeepONet: Operator Learning <em>Without Solution Data,</em> and Parameter Estimation at Scale</h1>
       <p class="article-sub">Combining the universal approximation theorem for operators with physics-informed training, and using DeepONet to solve inverse problems across entire parameter families simultaneously.</p>
       <div class="article-meta">
@@ -585,7 +585,7 @@ opt = torch.optim.Adam(model.parameters(), lr=<span class="nm">1e-3</span>)
     <div class="section-label">Section 05</div>
     <h2 class="section-h">Parameter Estimation with Operator Learning</h2>
 
-    <p class="body-text">The most consequential application of PI-DeepONet is not forward prediction, it is inverse parameter estimation. Article 5 in this series demonstrated how a PINN can recover unknown PDE parameters by including them as learnable variables in the physics loss. The cost: a separate PINN must be trained for each new measurement dataset, each requiring 30–120 seconds of gradient descent.</p>
+    <p class="body-text">The most consequential application of PI-DeepONet is not forward prediction, it is inverse parameter estimation. <a href="pinn-inverse-problems.html"><em>Inverse Problems</em></a> in this series demonstrated how a PINN can recover unknown PDE parameters by including them as learnable variables in the physics loss. The cost: a separate PINN must be trained for each new measurement dataset, each requiring 30–120 seconds of gradient descent.</p>
 
     <p class="body-text">Operator learning offers a fundamentally different paradigm. Instead of treating $D$ and $k$ as fixed physical constants, make them part of the branch input. The augmented branch encodes:</p>
 

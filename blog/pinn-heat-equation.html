@@ -337,7 +337,7 @@ nav:not(.site-nav):not(.foot-nav){display:none}
   <!-- Hero -->
   <div class="article-hero">
     <div class="article-hero-inner">
-      <div class="hero-series">Physics AI &mdash; PINNs Series &nbsp;&middot;&nbsp; Article 3 of 8</div>
+      <div class="hero-series">Physics AI &mdash; PINNs Series &nbsp;&middot;&nbsp; <em>Heat Equation</em> of 8</div>
       <h1 class="article-title">Solving the 1D Heat Equation<br><em>with PINNs</em></h1>
       <p class="article-sub">From a single independent variable to a two-dimensional space-time domain &mdash; how PINNs handle partial derivatives, boundary conditions, and the full field reconstruction problem.</p>
       <div class="article-meta">
@@ -364,7 +364,7 @@ nav:not(.site-nav):not(.foot-nav){display:none}
       <p class="body-text">The 1D heat (diffusion) equation is the canonical entry point:</p>
       <div class="math-block">$$\frac{\partial u}{\partial t} = \alpha\,\frac{\partial^2 u}{\partial x^2}$$</div>
       <p class="body-text">This single equation governs an enormous range of phenomena. In pharmaceutical manufacturing: drug diffusion through membrane barriers, heat generation and dissipation in lyophilization (freeze-drying), and tablet dissolution fronts all satisfy diffusion-type equations in some spatial dimension. In battery engineering, thermal runaway analysis requires solving the heat equation across cell layers with spatially varying conductivity. In chemical engineering, tubular reactor temperature profiles with axial diffusion reduce to the same form.</p>
-      <p class="body-text">The classical numerical approach is to discretise space with a finite-difference or finite-element grid and march forward in time. This works well for regular geometries and known boundary conditions. The PINN approach differs fundamentally: rather than discretising, the neural network <em>is</em> the solution, and training enforces the governing equation at scattered collocation points without any mesh. The payoff is flexibility in geometry and the ability to seamlessly blend sparse experimental data with physics &mdash; a capability we will exploit heavily starting in Article 5.</p>
+      <p class="body-text">The classical numerical approach is to discretise space with a finite-difference or finite-element grid and march forward in time. This works well for regular geometries and known boundary conditions. The PINN approach differs fundamentally: rather than discretising, the neural network <em>is</em> the solution, and training enforces the governing equation at scattered collocation points without any mesh. The payoff is flexibility in geometry and the ability to seamlessly blend sparse experimental data with physics &mdash; a capability we will exploit heavily starting in <a href="pinn-inverse-problems.html"><em>Inverse Problems</em></a>.</p>
 
       <div class="callout insight">
         <div class="callout-icon">
@@ -544,7 +544,7 @@ model = <span class="fn">PINN</span>([<span class="nm">2</span>, <span class="nm
     <span class="kw">return</span> total, (L_pde.<span class="fn">item</span>(), L_ic.<span class="fn">item</span>(), L_bc.<span class="fn">item</span>())</pre>
       </div>
 
-      <p class="body-text">Notice that all three terms have equal weight of 1.0 here. In practice, relative scaling matters: the IC loss starts large (the initial profile is $O(1)$) while the BC loss starts near zero if the network already predicts small values at the boundary. Unequal loss magnitudes during early training can cause gradient imbalance. For this clean problem the default equal weighting works well, but Article 6 on adaptive sampling covers sophisticated loss-weighting strategies for more difficult cases.</p>
+      <p class="body-text">Notice that all three terms have equal weight of 1.0 here. In practice, relative scaling matters: the IC loss starts large (the initial profile is $O(1)$) while the BC loss starts near zero if the network already predicts small values at the boundary. Unequal loss magnitudes during early training can cause gradient imbalance. For this clean problem the default equal weighting works well, but <a href="pinn-adaptive-sampling.html"><em>Adaptive Sampling</em></a> covers sophisticated loss-weighting strategies for more difficult cases.</p>
 
       <h3 class="sub-h">Sampling in 2D: the collocation domain</h3>
       <p class="body-text">The training domain is now a rectangle $[0,1] \times [0,T]$. Interior points for the PDE residual are sampled uniformly at random. This is the simplest valid strategy, but it distributes effort uniformly across regions that may have very different physics. The notebook uses:</p>
@@ -869,7 +869,7 @@ relL2 = np.linalg.<span class="fn">norm</span>(U - Ue) / np.linalg.<span class="
       <h2 class="section-h">Collocation Sampling in Two Dimensions</h2>
       <p class="body-text">Uniform random sampling across $[0,1]\times[0,T]$ is the simplest valid choice and works well for this problem because the solution is globally smooth. But consider what happens with a problem that develops sharp gradients in a localised region &mdash; for example, a material with a sharp thermal conductivity interface, or a reaction front that moves through the domain. Uniform sampling devotes most collocation points to regions where the solution is easy and the residual is already small, wasting computational budget.</p>
       <p class="body-text">Two principled alternatives have been developed in the literature. <strong>Residual-Based Adaptive Refinement (RAR)</strong>, introduced by Lu et al. (2021) in the DeepXDE library, evaluates the PDE residual magnitude on a candidate point cloud and preferentially adds new collocation points where the residual is large. This concentrates training effort at the hardest parts of the domain. <strong>Adaptive collocation with self-attention</strong> (explored in several 2022&ndash;2023 papers) learns a non-uniform sampling distribution end-to-end as part of the training procedure.</p>
-      <p class="body-text">For the heat equation with its smooth single-mode solution, uniform sampling is sufficient. Article 6 in this series covers adaptive strategies in detail, using the Burgers equation (which develops a genuine near-shock) as the motivating example.</p>
+      <p class="body-text">For the heat equation with its smooth single-mode solution, uniform sampling is sufficient. <a href="pinn-adaptive-sampling.html"><em>Adaptive Sampling</em></a> in this series covers adaptive strategies in detail, using the Burgers equation (which develops a genuine near-shock) as the motivating example.</p>
 
       <div class="callout insight">
         <div class="callout-icon">
@@ -890,7 +890,7 @@ relL2 = np.linalg.<span class="fn">norm</span>(U - Ue) / np.linalg.<span class="
       <h2 class="section-h">Beyond the 1D Heat Equation</h2>
       <p class="body-text">Mastering the 1D heat equation establishes the full PINN-for-PDEs vocabulary: multi-input networks, mixed partial derivatives, initial-plus-boundary constraint separation, and 2D collocation domains. The same framework scales to progressively harder problems by changing only the residual definition.</p>
 
-      <p class="body-text"><strong>Burgers' equation</strong> (Article 4) introduces a nonlinear convective term $u\,\partial u / \partial x$ that the PDE residual must encode. At low viscosity, the solution develops a steep internal layer &mdash; a near-shock &mdash; that stress-tests the spectral bias of deep networks and motivates the Adam $\to$ L-BFGS two-stage training recipe.</p>
+      <p class="body-text"><strong>Burgers' equation</strong> (<a href="pinn-burgers-reaction-pdes.html"><em>Burgers &amp; Reaction PDEs</em></a>) introduces a nonlinear convective term $u\,\partial u / \partial x$ that the PDE residual must encode. At low viscosity, the solution develops a steep internal layer &mdash; a near-shock &mdash; that stress-tests the spectral bias of deep networks and motivates the Adam $\to$ L-BFGS two-stage training recipe.</p>
 
       <p class="body-text"><strong>The wave equation</strong> $\partial^2 u/\partial t^2 = c^2 \partial^2 u/\partial x^2$ requires a second time derivative in the residual and a second initial condition (initial velocity field). It introduces hyperbolic PDE behavior: information propagates at finite speed, which creates challenges for the PINN if the network does not &ldquo;know&rdquo; about the wave speed structure from the collocation distribution.</p>
 

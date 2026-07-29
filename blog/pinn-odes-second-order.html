@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Second-Order ODEs with PINNs: The Damped Harmonic Oscillator | Ali Shahmohammadi</title>
-<meta name="description" content="Nested automatic differentiation, two initial conditions, and the spectral bias problem that makes oscillatory physics hard for neural networks. Article 2 of the Physics AI series.">
+<meta name="description" content="Nested automatic differentiation, two initial conditions, and the spectral bias problem that makes oscillatory physics hard for neural networks. <em>Second-Order ODEs</em> of the Physics AI series.">
 
 <meta property="og:type" content="article">
 
@@ -336,7 +336,7 @@ nav:not(.site-nav):not(.foot-nav){display:none}
 
   <div class="article-hero">
     <div class="article-hero-inner">
-      <div class="hero-series">Physics AI · PINNs Series · Article 2 of 8</div>
+      <div class="hero-series">Physics AI · PINNs Series · <em>Second-Order ODEs</em> of 8</div>
       <h1 class="article-title">Second-Order ODEs with PINNs<br><em>The Damped Harmonic Oscillator</em></h1>
       <p class="article-sub">Nested automatic differentiation, two initial conditions, the hard-constraint ansatz, and the spectral bias problem that makes oscillatory physics hard for neural networks.</p>
       <div class="article-meta">
@@ -370,7 +370,7 @@ nav:not(.site-nav):not(.foot-nav){display:none}
       <div class="section-label">01, Why Second-Order ODEs Matter</div>
       <h2 class="section-h">From Springs to RLC Circuits</h2>
 
-      <p class="body-text">In Article 1, we solved $dy/dx = -y$, a single scalar first-order ODE. Real engineering systems are rarely so simple. The vast majority of dynamic models in mechanical, electrical, chemical, and biomedical engineering are governed by <strong>second-order dynamics</strong>:</p>
+      <p class="body-text">In <a href="pinn-introduction.html"><em>Introduction to PINNs</em></a>, we solved $dy/dx = -y$, a single scalar first-order ODE. Real engineering systems are rarely so simple. The vast majority of dynamic models in mechanical, electrical, chemical, and biomedical engineering are governed by <strong>second-order dynamics</strong>:</p>
 
       <ul style="margin-bottom:1.25rem;padding-left:1.5rem;color:var(--ink-2);font-size:.975rem;line-height:1.8;">
         <li><strong>Mechanical:</strong> spring-mass-damper systems, structural vibration, seismic response</li>
@@ -502,7 +502,7 @@ nav:not(.site-nav):not(.foot-nav){display:none}
       <p class="body-text">The ODE residual for the damped oscillator requires the second time-derivative $\ddot{u}$:</p>
       <div class="math-block">$$\mathcal{R}(t) = \ddot{u} + 2\zeta\omega_0\dot{u} + \omega_0^2 u = 0$$</div>
 
-      <p class="body-text">In Article 1, we computed one derivative: $\frac{d\hat{y}}{dx}$. Here we need two: first $\dot{u} = \frac{du}{dt}$, then $\ddot{u} = \frac{d^2u}{dt^2}$. PyTorch handles this by calling <code>torch.autograd.grad</code> twice in sequence, but the first call <strong>must</strong> use <code>create_graph=True</code>.</p>
+      <p class="body-text">In <a href="pinn-introduction.html"><em>Introduction to PINNs</em></a>, we computed one derivative: $\frac{d\hat{y}}{dx}$. Here we need two: first $\dot{u} = \frac{du}{dt}$, then $\ddot{u} = \frac{d^2u}{dt^2}$. PyTorch handles this by calling <code>torch.autograd.grad</code> twice in sequence, but the first call <strong>must</strong> use <code>create_graph=True</code>.</p>
 
       <p class="body-text">Why? When <code>create_graph=True</code> is set, PyTorch does not free the intermediate computational graph after computing $\dot{u}$. This graph is then available for a second backward pass to compute $\ddot{u}$. Without it, the first differentiation discards the graph, and the second call raises a runtime error.</p>
 
@@ -785,7 +785,7 @@ nav:not(.site-nav):not(.foot-nav){display:none}
     <!-- Section 7: Results and Comparison -->
     <div id="section7">
       <div class="section-label">07, Results</div>
-      <h2 class="section-h">Accuracy and What Changed from Article 1</h2>
+      <h2 class="section-h">Accuracy and What Changed from <a href="pinn-introduction.html"><em>Introduction to PINNs</em></a></h2>
 
       <p class="body-text">Training the soft-constraint PINN for 8,000 epochs with Adam at $\eta = 2\times10^{-3}$, the model converges to a relative L2 error of approximately $5\times10^{-3}$ for $\omega_0 = 3.0$, $\zeta = 0.20$. The hard-constraint variant requires only 6,000 epochs to achieve a lower error of approximately $8\times10^{-4}$.</p>
 
@@ -797,7 +797,7 @@ nav:not(.site-nav):not(.foot-nav){display:none}
             <th>Aspect</th>
             <th>Article 1: First-Order ODE</th>
             <th>Article 2: Second-Order ODE</th>
-            <th>Article 3+: PDEs</th>
+            <th>PDEs (Heat Eq. onward)</th>
           </tr>
         </thead>
         <tbody>
@@ -874,7 +874,7 @@ nav:not(.site-nav):not(.foot-nav){display:none}
         </div>
         <div class="callout-body">
           <strong>Next in the series</strong>
-          Article 3 extends the framework to its first genuine PDE: the 1D heat equation $\partial T / \partial t = \alpha\, \partial^2 T / \partial x^2$. The input becomes two-dimensional $(x, t)$, collocation points become a 2D scatter over space-time, and boundary conditions appear at both spatial endpoints.
+          <a href="pinn-heat-equation.html"><em>Heat Equation</em></a> extends the framework to its first genuine PDE: the 1D heat equation $\partial T / \partial t = \alpha\, \partial^2 T / \partial x^2$. The input becomes two-dimensional $(x, t)$, collocation points become a 2D scatter over space-time, and boundary conditions appear at both spatial endpoints.
         </div>
       </div>
     </div>

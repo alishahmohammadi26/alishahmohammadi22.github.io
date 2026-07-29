@@ -337,7 +337,7 @@ nav:not(.site-nav):not(.foot-nav){display:none}
   <!-- Hero -->
   <div class="article-hero">
     <div class="article-hero-inner">
-      <div class="hero-series">Physics AI &mdash; PINNs Series &nbsp;&middot;&nbsp; Article 4 of 8</div>
+      <div class="hero-series">Physics AI &mdash; PINNs Series &nbsp;&middot;&nbsp; <em>Burgers &amp; Reaction PDEs</em> of 8</div>
       <h1 class="article-title">Nonlinear PDEs with PINNs:<br><em>Burgers &amp; Reaction Kinetics</em></h1>
       <p class="article-sub">Shock formation, viscous regularization, and coupled ODE systems for A&rarr;B&rarr;C reactions &mdash; where physics-informed training earns its keep.</p>
       <div class="article-meta">
@@ -360,7 +360,7 @@ nav:not(.site-nav):not(.foot-nav){display:none}
     <div style="margin-top:3rem">
       <div class="section-label">01 &mdash; The Nonlinearity Challenge</div>
       <h2 class="section-h">Why Nonlinear PDEs Are Qualitatively Harder</h2>
-      <p class="body-text">The heat equation from Article 3 is linear: if $u_1$ and $u_2$ are solutions, so is $\alpha u_1 + \beta u_2$. Linearity is what makes Fourier analysis work. You decompose the initial condition into eigenfunctions of the spatial operator, each mode evolves independently, and you superpose the results. The analytical machinery is beautiful and exact.</p>
+      <p class="body-text">The heat equation from <a href="pinn-heat-equation.html"><em>Heat Equation</em></a> is linear: if $u_1$ and $u_2$ are solutions, so is $\alpha u_1 + \beta u_2$. Linearity is what makes Fourier analysis work. You decompose the initial condition into eigenfunctions of the spatial operator, each mode evolves independently, and you superpose the results. The analytical machinery is beautiful and exact.</p>
       <p class="body-text">Real engineering systems are relentlessly nonlinear. In fluid dynamics, fluid carries its own momentum &mdash; the velocity field advects itself, producing the nonlinear convective term $(\mathbf{u}\cdot\nabla)\mathbf{u}$ in the Navier-Stokes equations. In chemical kinetics, rate laws are products of concentrations: $r = k[A][B]$ for a bimolecular reaction, or the hyperbolic Michaelis-Menten form $r = V_\mathrm{max}[S]/(K_m + [S])$ for enzyme kinetics. In combustion, temperature-dependent Arrhenius rate constants introduce exponential nonlinearity.</p>
       <p class="body-text">Classical numerical methods handle nonlinearity through linearisation (Newton iterations at each time step) or explicit time-stepping with severe stability constraints. Finite element methods can struggle with convection-dominated problems (the Péclet number problem) and require upwinding schemes or stabilisation terms. The PINN approach sidesteps mesh generation entirely and encodes the nonlinear residual directly, though it introduces its own set of challenges around spectral bias and loss landscape geometry that we examine in this article.</p>
 
@@ -415,7 +415,7 @@ nav:not(.site-nav):not(.foot-nav){display:none}
     u_t = torch.autograd.<span class="fn">grad</span>(u, t,  torch.<span class="fn">ones_like</span>(u), create_graph=<span class="kw">True</span>)[<span class="nm">0</span>]
     u_x = torch.autograd.<span class="fn">grad</span>(u, x,  torch.<span class="fn">ones_like</span>(u), create_graph=<span class="kw">True</span>)[<span class="nm">0</span>]
     u_xx= torch.autograd.<span class="fn">grad</span>(u_x, x, torch.<span class="fn">ones_like</span>(u_x), create_graph=<span class="kw">True</span>)[<span class="nm">0</span>]
-    <span class="cm"># The nonlinear term u*u_x is computed elementwise — autograd handles it</span>
+    <span class="cm"># The nonlinear term u*u_x is computed elementwise, autograd handles it</span>
     <span class="kw">return</span> u_t + u * u_x - nu * u_xx
 
 <span class="kw">def</span> <span class="fn">loss_fn</span>():
@@ -511,14 +511,14 @@ nav:not(.site-nav):not(.foot-nav){display:none}
           <div class="code-dots"><span class="code-dot dot-r"></span><span class="code-dot dot-y"></span><span class="code-dot dot-g"></span></div>
           <span class="code-lang">Python &mdash; two-stage Adam → L-BFGS training</span>
         </div>
-        <pre class="code-body"><span class="cm"># Stage 1: Adam — robust, handles the difficult early training</span>
+        <pre class="code-body"><span class="cm"># Stage 1: Adam robust, handles the difficult early training</span>
 opt = torch.optim.<span class="fn">Adam</span>(model.parameters(), lr=<span class="nm">1e-3</span>)
 <span class="kw">for</span> ep <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">15000</span>):
     opt.<span class="fn">zero_grad</span>(); loss = <span class="fn">loss_fn</span>(); loss.<span class="fn">backward</span>(); opt.<span class="fn">step</span>()
     <span class="kw">if</span> ep % <span class="nm">2500</span> == <span class="nm">0</span>:
         <span class="fn">print</span>(<span class="st">f"[adam] epoch {ep:5d} | loss {loss.item():.3e}"</span>)
 
-<span class="cm"># Stage 2: L-BFGS — quasi-Newton, drives loss to near-machine precision</span>
+<span class="cm"># Stage 2: L-BFGS quasi-Newton, drives loss to near-machine precision</span>
 opt2 = torch.optim.<span class="fn">LBFGS</span>(
     model.parameters(),
     max_iter=<span class="nm">3000</span>,
@@ -560,7 +560,7 @@ opt2.<span class="fn">step</span>(closure)
       <h3 class="sub-h">Governing equations</h3>
       <div class="math-block">
         $$\frac{dC_A}{dt} = -k_1 C_A$$
-        $$\frac{dC_B}{dt} = k_1 C_A, k_2 C_B$$
+        $$\frac{dC_B}{dt} = k_1 C_A - k_2 C_B$$
         $$\frac{dC_C}{dt} = k_2 C_B$$
       </div>
       <p class="body-text">With initial conditions $C_A(0) = 1$, $C_B(0) = C_C(0) = 0$ and rate constants $k_1 = 1.5$, $k_2 = 0.6$ from the notebook. Mass is conserved exactly: $C_A(t) + C_B(t) + C_C(t) = 1$ for all $t$.</p>
@@ -569,8 +569,8 @@ opt2.<span class="fn">step</span>(closure)
       <p class="body-text">For $k_1 \neq k_2$, the system admits a closed-form solution derived by successive integration of the first-order linear ODEs:</p>
       <div class="math-block">
         $$C_A(t) = e^{-k_1 t}$$
-        $$C_B(t) = \frac{k_1}{k_2, k_1}\left(e^{-k_1 t} - e^{-k_2 t}\right)$$
-        $$C_C(t) = 1, C_A(t), C_B(t)$$
+        $$C_B(t) = \frac{k_1}{k_2 - k_1}\left(e^{-k_1 t} - e^{-k_2 t}\right)$$
+        $$C_C(t) = 1 - C_A(t) - C_B(t)$$
       </div>
       <p class="body-text">With $k_1 = 1.5 > k_2 = 0.6$, species $B$ accumulates before $C_A$ is depleted because the formation rate ($k_1 C_A$) initially exceeds the consumption rate ($k_2 C_B$). The intermediate $C_B$ peaks at $t^* = \ln(k_1/k_2)/(k_1-k_2) \approx 1.02$ before decaying to zero as the reaction completes.</p>
     </div>
@@ -623,7 +623,7 @@ opt2.<span class="fn">step</span>(closure)
     L_pde = torch.<span class="fn">mean</span>(rA**<span class="nm">2</span> + rB**<span class="nm">2</span> + rC**<span class="nm">2</span>)
     L_ic  = torch.<span class="fn">mean</span>((<span class="fn">model</span>(t0) - y0)**<span class="nm">2</span>)
 
-    <span class="cm"># IC weighted ×20 — helps during early training</span>
+    <span class="cm"># IC weighted ×20, helps during early training</span>
     <span class="kw">return</span> L_pde + <span class="nm">20.0</span> * L_ic</pre>
       </div>
 
@@ -721,7 +721,7 @@ opt2.<span class="fn">step</span>(closure)
 
       <p class="body-text">The answer is not the forward problem &mdash; it is everything that comes after:</p>
 
-      <p class="body-text"><strong>1. The inverse problem.</strong> If you have measured concentration profiles from inline spectroscopy (e.g., Raman or NIR), the PINN framework can treat $k_1$ and $k_2$ as learnable parameters and fit them to the data while simultaneously satisfying the ODE structure. A classical solver requires an outer optimisation loop (e.g., Bard 1974, nonlinear least squares) that calls the solver many times. The PINN computes everything in a single differentiable computational graph. Article 5 in this series covers this in detail.</p>
+      <p class="body-text"><strong>1. The inverse problem.</strong> If you have measured concentration profiles from inline spectroscopy (e.g., Raman or NIR), the PINN framework can treat $k_1$ and $k_2$ as learnable parameters and fit them to the data while simultaneously satisfying the ODE structure. A classical solver requires an outer optimisation loop (e.g., Bard 1974, nonlinear least squares) that calls the solver many times. The PINN computes everything in a single differentiable computational graph. <a href="pinn-inverse-problems.html"><em>Inverse Problems</em></a> covers this in detail.</p>
 
       <p class="body-text"><strong>2. Data assimilation mid-trajectory.</strong> If process analytical technology (PAT) instruments provide inline concentration readings at multiple time points, these can be added directly as a data loss term $\mathcal{L}_\mathrm{data} = \sum_i (u(\hat{t}_i;\theta) - \hat{u}_i)^2$. The PINN then produces a solution that is simultaneously consistent with the ODE physics and with the measurements &mdash; a constrained regression that classical interpolation cannot perform.</p>
 
@@ -788,7 +788,7 @@ opt2.<span class="fn">step</span>(closure)
         </div>
         <div class="callout-body">
           <strong>Stiff kinetics warning</strong>
-          When $k_1 \gg k_2$ (or vice versa), the ODE system becomes stiff: there is a fast transient (rapid consumption of $A$) followed by slow dynamics (gradual accumulation of $C$). Classical explicit solvers require tiny time steps to remain stable during the fast phase. PINNs also struggle here: the spectral bias makes them prefer slow dynamics, and the IC residual spikes during the fast transient. Ji et al. (2021) introduced Stiff-PINN, which uses a quasi-steady-state assumption to handle the fast-slow decomposition. This is the regime where careful loss weighting (Article 6) is essential.
+          When $k_1 \gg k_2$ (or vice versa), the ODE system becomes stiff: there is a fast transient (rapid consumption of $A$) followed by slow dynamics (gradual accumulation of $C$). Classical explicit solvers require tiny time steps to remain stable during the fast phase. PINNs also struggle here: the spectral bias makes them prefer slow dynamics, and the IC residual spikes during the fast transient. Ji et al. (2021) introduced Stiff-PINN, which uses a quasi-steady-state assumption to handle the fast-slow decomposition. This is the regime where careful loss weighting (<a href="pinn-adaptive-sampling.html"><em>Adaptive Sampling</em></a>) is essential.
         </div>
       </div>
     </div>
@@ -911,8 +911,8 @@ opt2.<span class="fn">step</span>(closure)
       <div class="section-label">09 &mdash; Looking Ahead</div>
       <h2 class="section-h">What These Problems Set Up</h2>
       <p class="body-text">The Burgers equation and the reaction kinetics system together establish the two most important extensions of the basic PINN framework: nonlinear PDE terms and multi-output ODE systems. But both problems were solved in the <em>forward</em> direction: given the physics and initial conditions, compute the solution.</p>
-      <p class="body-text">Article 5 inverts this. We will take the same reaction kinetics network and remove $k_1$, $k_2$ from the code, instead treating them as learnable parameters in the model's parameter dictionary. When sparse noisy measurements of the concentration profiles are provided, the PINN will jointly optimise the network weights and the rate constants &mdash; doing physics-constrained parameter estimation in a single differentiable computation. This is the core capability that makes PINNs genuinely useful for real experimental data.</p>
-      <p class="body-text">Article 6 returns to Burgers to address the adaptive sampling problem: how to automatically concentrate collocation points near the shock, and how to dynamically reweight the loss terms to counteract the spectral bias that prevents the network from resolving steep gradients.</p>
+      <p class="body-text"><a href="pinn-inverse-problems.html"><em>Inverse Problems</em></a> inverts this. We will take the same reaction kinetics network and remove $k_1$, $k_2$ from the code, instead treating them as learnable parameters in the model's parameter dictionary. When sparse noisy measurements of the concentration profiles are provided, the PINN will jointly optimise the network weights and the rate constants &mdash; doing physics-constrained parameter estimation in a single differentiable computation. This is the core capability that makes PINNs genuinely useful for real experimental data.</p>
+      <p class="body-text"><a href="pinn-adaptive-sampling.html"><em>Adaptive Sampling</em></a> returns to Burgers to address the adaptive sampling problem: how to automatically concentrate collocation points near the shock, and how to dynamically reweight the loss terms to counteract the spectral bias that prevents the network from resolving steep gradients.</p>
 
       <div class="callout insight">
         <div class="callout-icon">
@@ -937,7 +937,7 @@ opt2.<span class="fn">step</span>(closure)
         <div class="ref-item"><span class="ref-num">[3]</span>Jagtap, A. D., Kharazmi, E., &amp; Karniadakis, G. E. (2020). Conservative physics-informed neural networks on discrete domains for conservation laws: Applications to forward and inverse problems. <em>Computer Methods in Applied Mechanics and Engineering</em>, 365, 113028. <a href="https://doi.org/10.1016/j.cma.2020.113028" target="_blank" rel="noopener">doi:10.1016/j.cma.2020.113028</a></div>
         <div class="ref-item"><span class="ref-num">[4]</span>Ji, W., Qiu, W., Shi, Z., Pan, S., &amp; Deng, S. (2021). Stiff-PINN: Physics-informed neural network for stiff chemical kinetics. <em>The Journal of Physical Chemistry A</em>, 125(36), 8098&ndash;8106. <a href="https://doi.org/10.1021/acs.jpca.1c05102" target="_blank" rel="noopener">doi:10.1021/acs.jpca.1c05102</a></div>
         <div class="ref-item"><span class="ref-num">[5]</span>ICH Q10: Pharmaceutical Quality System. International Conference on Harmonisation of Technical Requirements for Registration of Pharmaceuticals for Human Use, 2008. The regulatory framework emphasising science- and risk-based process understanding; provides the regulatory context for real-time kinetic monitoring applications.</div>
-        <div class="ref-item"><span class="ref-num">[6]</span>Bard, Y. (1974). <em>Nonlinear Parameter Estimation</em>. Academic Press. The classical treatment of parameter estimation for differential equation models; provides the statistical and computational foundations against which PINN-based inverse methods are compared in Article 5.</div>
+        <div class="ref-item"><span class="ref-num">[6]</span>Bard, Y. (1974). <em>Nonlinear Parameter Estimation</em>. Academic Press. The classical treatment of parameter estimation for differential equation models; provides the statistical and computational foundations against which PINN-based inverse methods are compared in <a href="pinn-inverse-problems.html"><em>Inverse Problems</em></a>.</div>
       </div>
     </div>
 
