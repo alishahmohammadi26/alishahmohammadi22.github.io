@@ -22,7 +22,7 @@
 </script>
 <style>
 /* ============================================================
-   Portfolio theme tokens — matches index.html exactly
+   Portfolio theme tokens, matches index.html exactly
    ============================================================ */
 :root{
   --font-display:"STIX Two Text",Georgia,serif;
@@ -135,7 +135,7 @@ img{max-width:100%;height:auto}
    No content HTML needs to change.
    ══════════════════════════════════════════════════════════════ */
 
-/* Old article page wrapper — just reset padding (nav is now sticky, not fixed) */
+/* Old article page wrapper, just reset padding (nav is now sticky, not fixed) */
 .article-page{max-width:var(--wrap);margin-inline:auto;padding-inline:var(--sp-5)}
 
 /* Old dark hero → light article header */
@@ -314,8 +314,41 @@ hr.divider{background:var(--line-strong)}
   letter-spacing:.1em;color:var(--accent);margin:0 0 var(--sp-2);
 }
 
-/* Old nav — hide fixed positioning; handled by new .site-header */
+/* Old nav, hide fixed positioning; handled by new .site-header */
 nav:not(.site-nav):not(.foot-nav){display:none}
+
+/* ─── Insight cards (forward / inverse / practitioner) ─────────── */
+.insights-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:var(--sp-4);margin:var(--sp-5) 0}
+.insight-card-b{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:var(--sp-4) var(--sp-5);transition:background .2s,box-shadow .2s}
+.insight-card-b:hover{background:var(--accent-wash);box-shadow:var(--shadow-2)}
+.insight-card-b h4{font-family:var(--font-display);font-size:var(--text-lg);color:var(--accent);margin:0 0 var(--sp-2);font-weight:600}
+.insight-card-b p{font-size:var(--text-sm);color:var(--ink-2);line-height:1.55;margin:0}
+
+/* ─── PINN timeline ─────────────────────────────────────────────── */
+.pinn-timeline{list-style:none;margin:var(--sp-5) 0;padding:0 0 0 2.4rem;position:relative}
+.pinn-timeline::before{content:"";position:absolute;top:0;bottom:0;left:7px;width:2px;background:linear-gradient(to bottom,transparent,var(--line-strong) 8%,var(--line-strong) 92%,transparent)}
+.pinn-timeline li{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:var(--sp-4) var(--sp-5);margin-bottom:var(--sp-4)}
+.pinn-timeline li:last-child{margin-bottom:0}
+.pinn-timeline li::before{content:"";position:absolute;top:17px;left:calc(-2.4rem + 0px);width:13px;height:13px;background:var(--accent);border:2px solid var(--paper);border-radius:50%;box-shadow:0 0 0 2px var(--line-strong)}
+.pinn-timeline li:hover{background:var(--accent-wash)}
+.pinn-timeline li h4{font-family:var(--font-mono);font-size:var(--text-sm);color:var(--accent);margin:0 0 var(--sp-2);font-weight:600;letter-spacing:.03em}
+.pinn-timeline li p{font-size:var(--text-sm);color:var(--ink-2);line-height:1.55;margin:0}
+
+/* ─── Review landscape heatmap ──────────────────────────────────── */
+.heatmap-wrap{overflow-x:auto;margin:var(--sp-5) 0;border-radius:var(--r);border:1px solid var(--line)}
+.heatmap-table{width:100%;border-collapse:collapse;font-size:var(--text-xs);min-width:640px}
+.heatmap-table th{font-family:var(--font-mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);padding:var(--sp-2) var(--sp-2);border-bottom:2px solid var(--line-strong);text-align:center;vertical-align:bottom;word-break:break-word;line-height:1.35;background:var(--surface-2)}
+.heatmap-table th:first-child{text-align:left;min-width:140px}
+.heatmap-table td{padding:var(--sp-2) var(--sp-2);border-bottom:1px solid var(--line);text-align:center;font-size:1rem;line-height:1;vertical-align:middle}
+.heatmap-table td:first-child{text-align:left;font-size:.73rem;color:var(--ink-2);padding-right:var(--sp-3)}
+.heatmap-table tr:hover td{background:var(--surface-2)}
+.heatmap-table .hm-this td{background:var(--accent-wash);border-top:2px solid var(--accent)}
+.heatmap-table .hm-this:hover td{background:var(--accent-wash)}
+.hm-full{color:var(--accent);font-size:1.1rem}
+.hm-half{color:var(--ink-2);font-size:1.05rem}
+.hm-none{color:var(--line-strong);font-size:1rem}
+.hm-legend{display:flex;gap:var(--sp-5);flex-wrap:wrap;margin-top:var(--sp-3);font-size:var(--text-xs);color:var(--muted)}
+.hm-legend span{display:flex;align-items:center;gap:var(--sp-2)}
 </style>
 </head>
 <body>
@@ -338,14 +371,15 @@ nav:not(.site-nav):not(.foot-nav){display:none}
     <div class="article-hero-inner">
       <div class="hero-series">Physics AI · PINNs Series · <em>Introduction to PINNs</em> of 8</div>
       <h1 class="article-title">Physics-Informed Neural Networks<br><em>Why Embedding Physical Laws into Machine Learning Changes Everything</em></h1>
-      <p class="article-sub">From the failure of pure data-driven ML in engineering to your first working PINN, a zero-labeled-data solver for a first-order ODE that trains entirely on the governing equation itself.</p>
+      <p class="article-sub">From the failure of pure data-driven ML in engineering to your first working PINN, and from the 2017 foundational papers through a decade of variants, failure modes, and research breakthroughs. A zero-labeled-data solver plus a research-review of where the field stands today.</p>
       <div class="article-meta">
         <span class="meta-pill highlight">Scientific ML</span>
         <span class="meta-pill highlight">Physics-Informed AI</span>
-        <span class="meta-pill">Sep 2025</span>
-        <span class="meta-pill">18 min read</span>
-        <span class="meta-pill">Beginner</span>
+        <span class="meta-pill">Aug 2026</span>
+        <span class="meta-pill">38 min read</span>
+        <span class="meta-pill">Beginner–Intermediate</span>
         <span class="meta-pill">PyTorch</span>
+        <span class="meta-pill highlight">Research Review</span>
       </div>
     </div>
   </div>
@@ -354,98 +388,127 @@ nav:not(.site-nav):not(.foot-nav){display:none}
 
     </div>
 
-    <!-- Section 1 -->
-    <div id="section1" style="margin-top:3rem;">
-      <div class="section-label">01, The Engineering Data Problem</div>
-      <h2 class="section-h">Why Traditional ML Struggles in Engineering</h2>
+<div id="section-evolution">
+      <div class="section-label">Field History, 2017–2026</div>
+      <h2 class="section-h">How We Got Here: A Decade of PINN Progress</h2>
 
-      <p class="body-text">Large language models are trained on hundreds of billions of tokens of human text. The internet is saturated with language data. The statistical patterns in language are redundant, overlapping, and forgiving, if the model misses a nuance, the surrounding context usually compensates.</p>
+      <p class="body-text">The 2019 <em>Journal of Computational Physics</em> paper, the peer-reviewed consolidation of the 2017 arXiv preprints, had accumulated <strong>28,581 citations</strong> on Google Scholar as of August 2026, making it one of the most cited papers in computational science this decade. The 2021 <em>Nature Reviews Physics</em> survey by Karniadakis et al. had reached 8,009 citations and 149,000 page accesses. These numbers are not given to impress; they are given to contextualize. A field that grows this fast also generates failure modes, corrections, and methodological revisions at the same rate.</p>
 
-      <p class="body-text">Now ask: how much labeled data does a pharmaceutical manufacturing process generate? A typical batch reactor might log temperature, pressure, and concentration at 10-second intervals. Run for a full year, that yields roughly 3 million data points, spread across dozens of operating variables, with process upsets, sensor drift, and changing feedstock composition corrupting a significant fraction of them. That is not internet-scale data. That is <em>sparse, expensive, physics-constrained</em> data.</p>
+      <p class="body-text">The most useful lens for reading this history is not chronological but causal: almost every major methodological advance was a direct response to a documented failure mode. The timeline below traces the <strong>failure → diagnosis → fix</strong> pattern that repeats across the decade.</p>
 
-      <h3 class="sub-h">The structural asymmetry between language and engineering data</h3>
+      <ul class="pinn-timeline">
+        <li>
+          <h4>Nov 2017, Foundational preprints</h4>
+          <p>Raissi–Perdikaris–Karniadakis submit Parts I and II to arXiv (arXiv:1711.10561; arXiv:1711.10566). Part I covers forward PDE problems using physics as the training signal. Part II covers data-driven discovery of governing equations. The residual-loss formulation is introduced in essentially its current form.</p>
+        </li>
+        <li>
+          <h4>2018–2019, Consolidation and peer review</h4>
+          <p>The <em>Journal of Computational Physics</em> article (DOI: 10.1016/j.jcp.2018.10.045) establishes the widely-cited peer-reviewed formulation for forward and inverse problems with nonlinear PDEs. Sirignano &amp; Spiliopoulos publish the Deep Galerkin Method (DGM) as a complementary mesh-free solver. The basic toolkit is in place.</p>
+        </li>
+        <li>
+          <h4>2019–2021, Reproducible software ecosystems</h4>
+          <p>Lu, Meng, Mao, and Karniadakis release DeepXDE (SIAM Review 2021), making production-quality PINN workflows accessible in a dozen lines of Python. NeuroDiffEq provides a PyTorch alternative. NVIDIA's Modulus (later PhysicsNeMo) scales the approach to industrial geometries and is subsequently open-sourced.</p>
+        </li>
+        <li>
+          <h4>2020–2021, First wave of variants, responding to scaling failures</h4>
+          <p>Domain decomposition variants emerge: conservative PINNs (cPINN), Extended PINNs (XPINN), and variational PINNs (VPINN / hp-VPINN). Bayesian PINNs (B-PINN) add uncertainty quantification. Self-adaptive loss weighting methods appear. Each variant targets a specific failure of vanilla PINNs on stiff or multi-domain problems.</p>
+        </li>
+        <li>
+          <h4>2021, Formal diagnosis of training failure</h4>
+          <p>Wang, Teng, and Perdikaris (SIAM J. Sci. Comput.) prove that gradient flow pathologies cause one loss term to dominate training, leaving the others ignored. Wang, Yu, and Perdikaris apply the Neural Tangent Kernel (NTK) to explain <em>when and why</em> PINNs fail to train. Krishnapriyan et al. (NeurIPS) demonstrate that vanilla PINNs can fail on simple convection and reaction problems due to ill-conditioned loss landscapes, a significant finding that temperes the field's early optimism.</p>
+        </li>
+        <li>
+          <h4>2022–2023, Adaptive sampling and causal training</h4>
+          <p>Residual-Based Adaptive Refinement (RAR) and comprehensive non-adaptive/adaptive sampling studies (Wu et al., CMAME 2023) address the collocation coverage problem. Causal training (Wang, Sankaran, Perdikaris) resolves the non-causal propagation issue in time-dependent PDEs, where the network learns later times before earlier ones are well-resolved. Wang et al. publish the "Expert's Guide to Training PINNs" (arXiv:2308.08468), consolidating practitioner knowledge.</p>
+        </li>
+        <li>
+          <h4>2023–2025, New architectures and theoretical maturity</h4>
+          <p>PirateNets (Wang et al., 2024) address training instability via adaptive residual connections. Physics-informed Kolmogorov–Arnold Networks (PIKANs, Liu et al. 2024/2025) explore alternative function approximators with interpretability advantages. De Ryck and Mishra publish a comprehensive numerical analysis of PINNs in <em>Acta Numerica 33</em> (2024). PINN–neural operator hybrids bridge single-instance solving and function-space learning.</p>
+        </li>
+        <li>
+          <h4>2024–2026, The operator learning convergence</h4>
+          <p>Physics-informed DeepONet and physics-informed Fourier Neural Operators merge the PINN residual constraint with operator-learning architectures that generalize across problem families rather than solving a single instance. The field splits productively: vanilla PINNs remain valuable for inverse problems and sparse-data fusion; operator methods dominate repeated-query forward problem settings.</p>
+        </li>
+      </ul>
+
+      <h3 class="sub-h">What PINNs can do that classical solvers cannot</h3>
 
       <table class="data-table">
         <thead>
           <tr>
-            <th>Property</th>
-            <th>Language Data</th>
-            <th>Engineering Data</th>
+            <th>Method</th>
+            <th>Requires Mesh?</th>
+            <th>Inverse Problems?</th>
+            <th>Sparse Data?</th>
+            <th>Continuous Solution?</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Volume</td>
-            <td>Hundreds of billions of tokens</td>
-            <td>Thousands to millions of measurements</td>
+            <td>Euler Method</td>
+            <td style="text-align:center;">Yes</td>
+            <td style="text-align:center;">No</td>
+            <td style="text-align:center;">No</td>
+            <td style="text-align:center;">No</td>
           </tr>
           <tr>
-            <td>Acquisition cost</td>
-            <td>Near-zero (scraped from web)</td>
-            <td>Expensive, sensors, experiments, simulations</td>
+            <td>Runge-Kutta 4</td>
+            <td style="text-align:center;">Yes</td>
+            <td style="text-align:center;">No</td>
+            <td style="text-align:center;">No</td>
+            <td style="text-align:center;">No</td>
           </tr>
           <tr>
-            <td>Redundancy</td>
-            <td>Extremely high; context heals errors</td>
-            <td>Low, each measurement is precious</td>
+            <td>Finite Element</td>
+            <td style="text-align:center;">Yes</td>
+            <td style="text-align:center;">Hard</td>
+            <td style="text-align:center;">No</td>
+            <td style="text-align:center;">No</td>
           </tr>
           <tr>
-            <td>Governing structure</td>
-            <td>Statistical co-occurrence patterns</td>
-            <td>Physical conservation laws, thermodynamics</td>
+            <td>Finite Difference</td>
+            <td style="text-align:center;">Yes</td>
+            <td style="text-align:center;">Hard</td>
+            <td style="text-align:center;">No</td>
+            <td style="text-align:center;">No</td>
           </tr>
-          <tr>
-            <td>Extrapolation failure</td>
-            <td>Risky but often recoverable</td>
-            <td>Catastrophic, negative concentrations, violated balances</td>
+          <tr style="background:var(--navy-lt);">
+            <td><strong>PINN</strong></td>
+            <td style="text-align:center;color:var(--green);"><strong>No</strong></td>
+            <td style="text-align:center;color:var(--green);"><strong>Yes</strong></td>
+            <td style="text-align:center;color:var(--green);"><strong>Yes</strong></td>
+            <td style="text-align:center;color:var(--green);"><strong>Yes</strong></td>
           </tr>
         </tbody>
       </table>
 
-      <h3 class="sub-h">Engineering systems are governed by differential equations</h3>
+      <h3 class="sub-h">Mesh-free computation</h3>
+      <p class="body-text">Creating a quality mesh for a complex 3D engineering geometry, a pharmaceutical tablet, a turbine blade, a reactor with internal baffles, can take days of preprocessing effort and requires specialized domain expertise. PINNs learn a continuous function over the domain without discretization, reducing geometry-to-simulation time dramatically.</p>
 
-      <p class="body-text">Almost every physical process in chemical, mechanical, or pharmaceutical engineering is described by an ODE or PDE. These equations encode centuries of accumulated physical understanding, not approximate statistical patterns, but precise mechanistic relationships.</p>
+      <h3 class="sub-h">Inverse problems without an outer optimization loop</h3>
+      <p class="body-text">In classical PDE solvers, estimating an unknown parameter (a reaction rate constant, a diffusion coefficient, a thermal conductivity) requires solving a forward problem thousands of times inside an outer optimization loop, computationally expensive and prone to getting stuck in local minima. In a PINN, the unknown parameter becomes an additional trainable variable in the same loss function and the same training loop. The forward solve and the parameter estimation happen simultaneously.</p>
 
-      <p class="body-text"><strong>Energy balance in a CSTR:</strong></p>
-      <div class="math-block">$$\rho C_p \frac{dT}{dt} = -\Delta H_r \cdot r(T, C) - \frac{UA}{V}(T, T_c)$$</div>
+      <h3 class="sub-h">Data assimilation from sparse measurements</h3>
+      <p class="body-text">Adding 10 noisy experimental observations to the loss function, as a data term alongside the physics term, allows the PINN to incorporate real measurements while the physics automatically regularizes the solution between measurement points. The result is a physically consistent reconstruction that a pure data-driven model could not achieve with only 10 points.</p>
 
-      <p class="body-text"><strong>Diffusion-reaction in a catalyst pellet:</strong></p>
-      <div class="math-block">$$D_e \nabla^2 C, r(C, T) = 0$$</div>
-
-      <p class="body-text"><strong>Navier-Stokes for incompressible flow:</strong></p>
-      <div class="math-block">$$\rho\left(\frac{\partial \mathbf{u}}{\partial t} + \mathbf{u} \cdot \nabla \mathbf{u}\right) = -\nabla p + \mu \nabla^2 \mathbf{u}$$</div>
-
-      <p class="body-text">A standard neural network trained only on data will violate these relationships. It will predict reactors with more energy out than in, fail completely outside the training range of temperatures and concentrations, and produce physically implausible results. This is not a theoretical concern, it has been observed repeatedly in industrial ML deployments.</p>
-
-      <div class="callout insight">
-        <div class="callout-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        </div>
-        <div class="callout-body">
-          <strong>The core insight</strong>
-          Traditional AI: Data → Loss → Model. Physics-Informed AI: Data + Physical Laws → Loss → Model. The physical law is not an afterthought, it is baked directly into the training objective.
-        </div>
-      </div>
+      <h3 class="sub-h">Continuous and differentiable everywhere</h3>
+      <p class="body-text">A classical finite difference solution is a lookup table, values at fixed grid points. A PINN is a differentiable function defined for any $x$ in the domain. It can be evaluated at arbitrary resolution without retraining. Derivatives, integrals, and sensitivity analyses over the domain are all available analytically from the network itself.</p>
     </div>
 
-        <div class="fig-wrap">
-      <img src="../assets/images/blog/pinn-intro/pinn_first_example.png" alt="First PINN result: neural network solution vs analytical for exponential decay" loading="lazy">
-      <p class="fig-caption">Fig. A &mdash; First working PINN: the network solution (red) vs. analytical reference (black) for the first-order ODE $y'=-y$. Trained with zero labeled data — only the residual loss and initial condition.</p>
-    </div>
-    <div class="fig-wrap">
-      <img src="../assets/images/blog/pinn-intro/pinn_collocation_comparison.png" alt="Collocation point comparison: effect of collocation density on PINN accuracy" loading="lazy">
-      <p class="fig-caption">Fig. B &mdash; Effect of collocation point density on solution accuracy. Too few points leave residual blind spots; too many adds unnecessary compute. The middle column shows the balanced regime used throughout the series.</p>
-    </div>
-    <div class="fig-wrap">
-      <img src="../assets/images/blog/pinn-intro/pinn_with_sparse_data.png" alt="PINN with sparse observations: combining physics residual and data loss" loading="lazy">
-      <p class="fig-caption">Fig. C &mdash; PINN with sparse data observations. Even with only 5 noisy measurement points (crosses), the physics residual constrains the trajectory to physically consistent behavior across the full domain.</p>
-    </div>
-<hr class="divider">
+    <hr class="divider">
 
-    <!-- Section 2 -->
-    <div id="section2">
-      <div class="section-label">02, What Is a PINN</div>
-      <h2 class="section-h">The Three-Term Loss Function</h2>
+    <!-- Section 1 -->
+    <div id="section1" style="margin-top:3rem;">
+      <div class="section-label">01, The Physics Gap</div>
+      <h2 class="section-h">Why Traditional ML Struggles in Engineering</h2>
+
+      <p class="body-text">Consider a pharmaceutical manufacturing reactor. Every critical variable, temperature, pH, dissolved oxygen, product concentration, is governed by conservation equations derived over a century of chemistry and engineering. Yet when you try to model it with a standard neural network, the model sees only patterns in numbers. It has no knowledge that energy must be conserved, that concentrations cannot go negative, or that the dynamics follow the Arrhenius equation. Train on one batch and it extrapolates to another with physically impossible predictions.</p>
+
+      <p class="body-text">This is not a data quality problem or a model capacity problem. It is a structural mismatch: purely data-driven models cannot extrapolate through the laws of physics they were never shown. Classical numerical solvers know the physics but require complete specification of boundary conditions, parameters, and geometry, and collapse when any of those are uncertain or unavailable. Physics-Informed Neural Networks were built to occupy the middle ground.</p>
+
+      <h3 class="sub-h">The solution: embed physics directly into the training objective</h3>
+
+      <p class="body-text">The fix is not more data. It is making the differential equation part of the model itself. A standard neural network minimises a single data-misfit loss. A Physics-Informed Neural Network (PINN) minimises three terms simultaneously:</p>
 
       <p class="body-text">A standard neural network learns a mapping $f_\theta: x \rightarrow y$ by minimizing the prediction error on labeled outputs:</p>
       <div class="math-block">$$\mathcal{L}_{data} = \frac{1}{N}\sum_{i=1}^{N} \left| \hat{y}_i, y_i \right|^2$$</div>
@@ -531,14 +594,8 @@ nav:not(.site-nav):not(.foot-nav){display:none}
         </svg>
         <div class="fig-caption">Figure 1. Traditional NN vs PINN architecture. The PINN adds an automatic differentiation path that feeds the network's own output derivatives back into the loss, enabling physics enforcement without labeled data.</div>
       </div>
-    </div>
 
-    <hr class="divider">
-
-    <!-- Section 3 -->
-    <div id="section3">
-      <div class="section-label">03, Automatic Differentiation</div>
-      <h2 class="section-h">Why Autograd Wins Over Finite Differences</h2>
+      <h3 class="sub-h">Why automatic differentiation makes this possible</h3>
 
       <p class="body-text">Enforcing $\frac{d\hat{y}}{dx} + \hat{y} = 0$ requires computing the derivative of the network's output with respect to its input. Three methods exist for this, with dramatically different tradeoffs:</p>
 
@@ -589,7 +646,7 @@ x = torch.tensor([<span class="nm">2.0</span>], requires_grad=<span class="kw">T
 
 f = x**<span class="nm">3</span> + <span class="nm">2</span>*x**<span class="nm">2</span> - <span class="nm">5</span>*x + <span class="nm">1</span>
 
-<span class="cm"># First derivative — create_graph=True keeps the graph alive for second pass</span>
+<span class="cm"># First derivative, create_graph=True keeps the graph alive for second pass</span>
 dfdx = torch.autograd.grad(f, x, create_graph=<span class="kw">True</span>)[<span class="nm">0</span>]
 
 <span class="cm"># Second derivative</span>
@@ -601,14 +658,6 @@ d2fdx2 = torch.autograd.grad(dfdx, x)[<span class="nm">0</span>]
       </div>
 
       <p class="body-text">When the simple polynomial above is replaced by the full neural network $f_\theta(x)$, autograd can still propagate the chain rule through all layers, activation functions, and weight matrices, automatically and exactly. This is the mathematical foundation that makes PINNs possible.</p>
-    </div>
-
-    <hr class="divider">
-
-    <!-- Section 4 -->
-    <div id="section4">
-      <div class="section-label">04, Building the PINN</div>
-      <h2 class="section-h">Architecture, Collocation, and Training</h2>
 
       <h3 class="sub-h">Network architecture</h3>
       <p class="body-text">For the first-order ODE problem, a compact architecture is sufficient: one input node (the scalar $x$), three hidden layers of 32 neurons each with Tanh activations, and a single output (the predicted $\hat{y}$). This yields 2,209 trainable parameters.</p>
@@ -799,88 +848,192 @@ Epoch  4500 | Total: 2.07e-06 | Physics: 2.07e-06 | BC: 5.55e-11
           After 5,000 epochs with no labeled data: max absolute error $\approx 2.1 \times 10^{-3}$, mean absolute error $\approx 6.8 \times 10^{-4}$ against the analytical solution $y(x) = e^{-x}$.
         </div>
       </div>
+    
+
+      <hr class="rule-dots">
+
+      <h3 class="sub-h">Practical examples: the equations PINNs are built to solve</h3>
+
+      <p class="body-text">Now that you have seen a PINN train from scratch, here are the governing equations it was designed to handle in practice. Each one is a case where the physics is trusted but something, a parameter, a boundary condition, a full state trajectory, is unknown and must be recovered from data.</p>
+
+      <p class="body-text"><strong>Energy balance in a CSTR:</strong></p>
+      <div class="math-block">$$\rho C_p \frac{dT}{dt} = -\Delta H_r \cdot r(T, C) - \frac{UA}{V}(T, T_c)$$</div>
+
+      <p class="body-text"><strong>Diffusion-reaction in a catalyst pellet:</strong></p>
+      <div class="math-block">$$D_e \nabla^2 C, r(C, T) = 0$$</div>
+
+      <p class="body-text"><strong>Navier-Stokes for incompressible flow:</strong></p>
+      <div class="math-block">$$\rho\left(\frac{\partial \mathbf{u}}{\partial t} + \mathbf{u} \cdot \nabla \mathbf{u}\right) = -\nabla p + \mu \nabla^2 \mathbf{u}$$</div>
+
+      <p class="body-text">In every case, a purely data-driven model trained on historical runs will violate these relationships the moment it extrapolates. A PINN enforces them explicitly, through residual terms in the training loss, so the predictions remain physically consistent even outside the training distribution.</p>
     </div>
 
     <hr class="divider">
 
-    <!-- Section 5 -->
-    <div id="section5">
-      <div class="section-label">05, Why This Is Revolutionary</div>
-      <h2 class="section-h">PINNs vs Classical Numerical Methods</h2>
+<div id="section-landscape">
+      <div class="section-label">Research Context, What Reviews Cover</div>
+      <h2 class="section-h">The Research Landscape: How Major Reviews Compare</h2>
 
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>Method</th>
-            <th>Requires Mesh?</th>
-            <th>Inverse Problems?</th>
-            <th>Sparse Data?</th>
-            <th>Continuous Solution?</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Euler Method</td>
-            <td style="text-align:center;">Yes</td>
-            <td style="text-align:center;">No</td>
-            <td style="text-align:center;">No</td>
-            <td style="text-align:center;">No</td>
-          </tr>
-          <tr>
-            <td>Runge-Kutta 4</td>
-            <td style="text-align:center;">Yes</td>
-            <td style="text-align:center;">No</td>
-            <td style="text-align:center;">No</td>
-            <td style="text-align:center;">No</td>
-          </tr>
-          <tr>
-            <td>Finite Element</td>
-            <td style="text-align:center;">Yes</td>
-            <td style="text-align:center;">Hard</td>
-            <td style="text-align:center;">No</td>
-            <td style="text-align:center;">No</td>
-          </tr>
-          <tr>
-            <td>Finite Difference</td>
-            <td style="text-align:center;">Yes</td>
-            <td style="text-align:center;">Hard</td>
-            <td style="text-align:center;">No</td>
-            <td style="text-align:center;">No</td>
-          </tr>
-          <tr style="background:var(--navy-lt);">
-            <td><strong>PINN</strong></td>
-            <td style="text-align:center;color:var(--green);"><strong>No</strong></td>
-            <td style="text-align:center;color:var(--green);"><strong>Yes</strong></td>
-            <td style="text-align:center;color:var(--green);"><strong>Yes</strong></td>
-            <td style="text-align:center;color:var(--green);"><strong>Yes</strong></td>
-          </tr>
-        </tbody>
-      </table>
+      <p class="body-text">If you want to go deeper into the literature, knowing which review covers what is essential. Eight major PINN/PIML reviews have shaped the field since 2021. The table below maps each against eight evaluation criteria, not to rank them, but to help you navigate to the right source for your question.</p>
 
-      <h3 class="sub-h">Mesh-free computation</h3>
-      <p class="body-text">Creating a quality mesh for a complex 3D engineering geometry, a pharmaceutical tablet, a turbine blade, a reactor with internal baffles, can take days of preprocessing effort and requires specialized domain expertise. PINNs learn a continuous function over the domain without discretization, reducing geometry-to-simulation time dramatically.</p>
+      <p class="body-text">The coverage audit was conducted by reading each paper's abstract, table of contents, section headings, and representative body text. Ratings: <strong>●</strong> deep (major organising component); <strong>◐</strong> partial (meaningful but not central); <strong>○</strong> absent or minimal.</p>
 
-      <h3 class="sub-h">Inverse problems without an outer optimization loop</h3>
-      <p class="body-text">In classical PDE solvers, estimating an unknown parameter (a reaction rate constant, a diffusion coefficient, a thermal conductivity) requires solving a forward problem thousands of times inside an outer optimization loop, computationally expensive and prone to getting stuck in local minima. In a PINN, the unknown parameter becomes an additional trainable variable in the same loss function and the same training loop. The forward solve and the parameter estimation happen simultaneously.</p>
+      <div class="heatmap-wrap">
+        <table class="heatmap-table" aria-label="PINN review coverage landscape">
+          <thead>
+            <tr>
+              <th>Review</th>
+              <th>Method taxonomy</th>
+              <th>Theory</th>
+              <th>Applications breadth</th>
+              <th>Paradigm comparison</th>
+              <th>Inverse-problem depth</th>
+              <th>Identifiability &amp; FIM</th>
+              <th>Code / resources</th>
+              <th>Industry-oriented</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Karniadakis et al. (2021) <em>Nature Rev. Phys.</em></td>
+              <td class="hm-full">●</td><td class="hm-half">◐</td><td class="hm-full">●</td>
+              <td class="hm-half">◐</td><td class="hm-half">◐</td><td class="hm-none">○</td>
+              <td class="hm-half">◐</td><td class="hm-half">◐</td>
+            </tr>
+            <tr>
+              <td>Cai et al. (2021/22) <em>Acta Mech. Sin.</em></td>
+              <td class="hm-half">◐</td><td class="hm-none">○</td><td class="hm-full">●</td>
+              <td class="hm-none">○</td><td class="hm-full">●</td><td class="hm-none">○</td>
+              <td class="hm-half">◐</td><td class="hm-half">◐</td>
+            </tr>
+            <tr>
+              <td>Cuomo et al. (2022) <em>J. Sci. Comput.</em></td>
+              <td class="hm-full">●</td><td class="hm-half">◐</td><td class="hm-full">●</td>
+              <td class="hm-half">◐</td><td class="hm-half">◐</td><td class="hm-none">○</td>
+              <td class="hm-half">◐</td><td class="hm-none">○</td>
+            </tr>
+            <tr>
+              <td>Faroughi et al. (2024) <em>J. Comput. Inf. Sci. Eng.</em></td>
+              <td class="hm-full">●</td><td class="hm-half">◐</td><td class="hm-full">●</td>
+              <td class="hm-half">◐</td><td class="hm-half">◐</td><td class="hm-none">○</td>
+              <td class="hm-half">◐</td><td class="hm-half">◐</td>
+            </tr>
+            <tr>
+              <td>Farea et al. (2024) <em>AI</em> (MDPI)</td>
+              <td class="hm-full">●</td><td class="hm-none">○</td><td class="hm-full">●</td>
+              <td class="hm-half">◐</td><td class="hm-half">◐</td><td class="hm-none">○</td>
+              <td class="hm-none">○</td><td class="hm-none">○</td>
+            </tr>
+            <tr>
+              <td>Toscano et al. (2024/25) <em>MLCS&amp;E</em></td>
+              <td class="hm-full">●</td><td class="hm-half">◐</td><td class="hm-full">●</td>
+              <td class="hm-none">○</td><td class="hm-half">◐</td><td class="hm-none">○</td>
+              <td class="hm-full">●</td><td class="hm-half">◐</td>
+            </tr>
+            <tr>
+              <td>Ren et al. (2025) <em>Appl. Sci.</em></td>
+              <td class="hm-full">●</td><td class="hm-half">◐</td><td class="hm-full">●</td>
+              <td class="hm-none">○</td><td class="hm-half">◐</td><td class="hm-none">○</td>
+              <td class="hm-none">○</td><td class="hm-half">◐</td>
+            </tr>
+            <tr class="hm-this">
+              <td><strong>This series</strong> (planned scope)</td>
+              <td class="hm-half">◐</td><td class="hm-half">◐</td><td class="hm-half">◐</td>
+              <td class="hm-full">●</td><td class="hm-full">●</td><td class="hm-full">●</td>
+              <td class="hm-full">●</td><td class="hm-full">●</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="hm-legend">
+        <span><strong class="hm-full">●</strong> Deep, major organising component</span>
+        <span><strong class="hm-half">◐</strong> Partial, meaningful but not central</span>
+        <span><strong class="hm-none">○</strong> Absent / minimal</span>
+      </div>
 
-      <h3 class="sub-h">Data assimilation from sparse measurements</h3>
-      <p class="body-text">Adding 10 noisy experimental observations to the loss function, as a data term alongside the physics term, allows the PINN to incorporate real measurements while the physics automatically regularizes the solution between measurement points. The result is a physically consistent reconstruction that a pure data-driven model could not achieve with only 10 points.</p>
 
-      <h3 class="sub-h">Continuous and differentiable everywhere</h3>
-      <p class="body-text">A classical finite difference solution is a lookup table, values at fixed grid points. A PINN is a differentiable function defined for any $x$ in the domain. It can be evaluated at arbitrary resolution without retraining. Derivatives, integrals, and sensitivity analyses over the domain are all available analytically from the network itself.</p>
     </div>
 
     <hr class="divider">
 
-    <!-- Section 6 -->
-    <div id="section6">
+<div id="section-origin">
+      <div class="section-label">Practitioner Frame</div>
+      <h2 class="section-h">The Two Problems PINNs Were Built to Solve</h2>
+
+      <p class="body-text">Raissi, Perdikaris, and Karniadakis did not set out to build a general-purpose AI framework. They submitted two companion papers on the same day in November 2017, targeting two specific failure modes in the existing toolkit. <em>Part I: Data-driven Solutions</em> and <em>Part II: Data-driven Discovery</em>, published together on arXiv, established a vocabulary that still organizes the field today.</p>
+
+      <p class="body-text">The core distinction is not about which equation you are solving. It is about what is <strong>known</strong> and what is <strong>unknown</strong> when you start. This changes everything downstream: the loss function structure, the validation strategy, the identifiability diagnostics you need, and the honest expectations you should set.</p>
+
+      <div class="insights-grid">
+        <div class="insight-card-b">
+          <h4>Forward problems</h4>
+          <p>Governing physics and all parameters are known. The <em>state</em>, temperature field, concentration profile, velocity, is what you seek. PINNs compete head-to-head with FEM, FVM, and spectral solvers on accuracy and cost. The physics residual is the training signal; labeled data are optional.</p>
+        </div>
+        <div class="insight-card-b">
+          <h4>Inverse problems</h4>
+          <p>Some combination of parameters, initial conditions, boundary conditions, or forcing terms must be <em>inferred</em> from indirect, sparse, noisy observations. Physics acts as a regularizer. Unknown parameters become additional trainable variables, no expensive outer optimization loop required. Identifiability must be checked.</p>
+        </div>
+        <div class="insight-card-b">
+          <h4>The practitioner's real question</h4>
+          <p>Which paradigm, mechanistic solver, data-driven model, or PINN, fits your data, your physics, your compute budget, and your required output quality? The answer is almost never "always PINNs." It depends on what you trust and what you don't. This framing organizes the rest of the article.</p>
+        </div>
+      </div>
+
+      <h3 class="sub-h">Beyond the two archetypes</h3>
+
+      <p class="body-text">Reviews and primary studies document PINNs applied to state reconstruction from sparse sensor data, surrogate modeling where training cost is amortized over many evaluations, partially-known physics where some equation terms are uncertain, and multi-fidelity learning from both high-cost simulations and cheap experimental data. The value proposition is genuinely different in each regime. The honest verdict, developed in the sections on field evolution and limitations below, is that PINNs can reduce data requirements and improve physical plausibility when the constraints are informative, correctly specified, and trainable. They do not automatically deliver robust identification or solver-grade reliability across every problem class.</p>
+
+      <div class="callout warning">
+        <div class="callout-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="callout-body">
+          <strong>Inverse-problem caution</strong>
+          A small physics residual does not guarantee that inferred parameters are unique, physically correct, or useful for a decision. Identifiability, whether the data actually constrain the parameters you care about, must be verified separately. "Loss ≈ 0" is not a stopping criterion for inverse problems. This point is covered in depth in the Limitations section.
+        </div>
+      </div>
+
+      <hr class="rule-dots">
+
+      <p class="body-text">The important idea is not that neural networks <em>replace</em> physics. The important idea is that physics becomes <em>part of</em> the neural network. For decades, engineers described systems through differential equations. For the last decade, AI described systems through data. PINNs represent the convergence of these two traditions.</p>
+      <p class="body-text">In this article, we built a network that solved $dy/dx = -y$ to better than $10^{-3}$ absolute error using zero labeled data, with a 2,209-parameter network, 5,000 training epochs, and the ODE itself as the sole training signal. The BC loss vanished to $10^{-11}$ while the physics loss drove systematic improvement across the entire domain.</p>
+
+      <div class="callout insight">
+        <div class="callout-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <div class="callout-body">
+          <strong>Next in the series</strong>
+          <a href="pinn-odes-second-order.html"><em>Second-Order ODEs</em></a> extends the framework to second-order ODEs, the damped harmonic oscillator, introducing nested automatic differentiation, two initial conditions, the hard-constraint ansatz, and the spectral bias problem that underlies most of the advanced techniques in this field.
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+<div id="section6">
       <div class="section-label">06, Honest Limitations</div>
       <h2 class="section-h">Where PINNs Currently Struggle</h2>
 
       <p class="body-text">Most introductory articles stop after the success stories. That would be a disservice to anyone planning to deploy PINNs in production. Here are the well-documented failure modes, with concrete mitigations where they exist.</p>
 
-      <h3 class="sub-h">Training instability</h3>
-      <p class="body-text">The PINN loss landscape is non-convex and poorly conditioned. Gradients from the physics loss and the boundary condition loss can point in conflicting directions, causing oscillations or premature plateauing. This is particularly severe when the physics loss and BC loss have different natural scales, one term dominates and the other is effectively ignored. Mitigation: adaptive loss weighting, learning rate scheduling, residual-based adaptive refinement (RAR) [Lu et al., 2021].</p>
+      <p class="body-text">The decade of research reviewed above has converged on a clear picture: PINNs are not general-purpose solvers. They are a specialized tool that excels in specific regimes and fails predictably in others. The following are not edge cases, they are the typical failure modes documented in peer-reviewed studies across multiple research groups.</p>
+
+      <div class="callout warning">
+        <div class="callout-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="callout-body">
+          <strong>Central principle for inverse problems</strong>
+          A small physics residual does not, by itself, guarantee that inferred state or parameters are uniquely identifiable, physically correct, or useful for a decision. This was established rigorously in the identifiability literature (Raue et al. 2009; Villaverde et al. 2016) and applies directly to PINN-based parameter estimation. Always pair residual diagnostics with independent validation data, sensitivity analysis, and identifiability checks.
+        </div>
+      </div>
+
+      <h3 class="sub-h">Training instability and gradient pathologies</h3>
+      <p class="body-text">The PINN loss landscape is non-convex and poorly conditioned. Gradients from the physics loss and the boundary condition loss can point in conflicting directions, causing oscillations or premature plateauing. Wang, Teng, and Perdikaris (2021) proved this formally: when PDE-residual and boundary/data losses are naïvely combined, one term dominates the gradient flow and the other is effectively ignored during training. The follow-up NTK analysis (Wang, Yu, Perdikaris 2022) explains <em>when and why</em> PINNs fail using the eigenspectrum of the neural tangent kernel, and motivates the adaptive weighting methods that are now standard. Mitigation: adaptive loss weighting (self-adaptive PINNs, NTK-informed weighting), learning rate scheduling, L-BFGS warm-up after Adam pre-training.</p>
+
+      <h3 class="sub-h">Spectral bias</h3>
+      <p class="body-text">Standard multi-layer perceptrons preferentially learn low-frequency components of the target function. This creates systematic blind spots for solutions with sharp gradients, boundary layers, or oscillatory dynamics, exactly the features that make PDE solutions interesting and that classical methods handle with mesh refinement. Mitigation: Fourier feature embeddings that lift inputs into a high-frequency feature space before the network layers; or architectural choices such as PirateNets that use adaptive residual connections to escape the low-frequency attractor.</p>
 
       <h3 class="sub-h">Stiff equations</h3>
       <p class="body-text">A stiff ODE has solution components that evolve on vastly different timescales. For example, $\frac{dC}{dt} = -10^6 C$ decays to near-zero within microseconds. Standard PINN training with uniform collocation points entirely misses the fast dynamics, and the physics loss at late times provides negligible gradient information about the early transient. Mitigation: adaptive collocation density, curriculum training (gradually expanding the time horizon), domain decomposition.</p>
@@ -924,8 +1077,7 @@ Epoch  4500 | Total: 2.07e-06 | Physics: 2.07e-06 | BC: 5.55e-11
 
     <hr class="divider">
 
-    <!-- Section 7: Series Roadmap -->
-    <div id="section7">
+<div id="section7">
       <div class="section-label">07, Series Roadmap</div>
       <h2 class="section-h">Eight Articles on PINNs</h2>
 
@@ -993,32 +1145,8 @@ Epoch  4500 | Total: 2.07e-06 | Physics: 2.07e-06 | BC: 5.55e-11
       <p class="body-text">The Jupyter notebooks for this series are available on GitHub: <a href="https://github.com/alishahmohammadi22/physics-ai-pinns" target="_blank" rel="noopener">github.com/alishahmohammadi22/physics-ai-pinns</a>. The notebook for this article is <code>01_Beginner/01_intro_to_pinn.ipynb</code>.</p>
     </div>
 
-    <hr class="divider">
-
-    <!-- Section 8: Conclusion -->
-    <div id="section8">
-      <div class="section-label">08, Conclusion</div>
-      <h2 class="section-h">Physics Becomes Part of the Network</h2>
-
-      <p class="body-text">The important idea is not that neural networks <em>replace</em> physics. The important idea is that physics becomes <em>part of</em> the neural network. For decades, engineers described systems through differential equations. For the last decade, AI described systems through data. PINNs represent the convergence of these two traditions.</p>
-
-      <p class="body-text">In this article, we built a network that solved $dy/dx = -y$ to better than $10^{-3}$ absolute error using zero labeled data, with a 2,209-parameter network, 5,000 training epochs, and the ODE itself as the sole training signal. The BC loss vanished to $10^{-11}$ while the physics loss drove systematic improvement across the entire domain.</p>
-
-      <p class="body-text">This convergence is already transforming pharmaceutical manufacturing (real-time parameter estimation from PAT data), computational fluid dynamics (mesh-free solvers for complex geometries), reaction engineering (simultaneous kinetics and transport identification from sparse pilot data), and scientific discovery (identifying governing equations from experimental observations). The tools are open-source, documented, and runnable on a standard laptop.</p>
-
-      <div class="callout insight">
-        <div class="callout-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        </div>
-        <div class="callout-body">
-          <strong>Next in the series</strong>
-          <a href="pinn-odes-second-order.html"><em>Second-Order ODEs</em></a> extends the framework to second-order ODEs, the damped harmonic oscillator, introducing nested automatic differentiation, two initial conditions, the hard-constraint ansatz, and the spectral bias problem that underlies most of the advanced techniques in this field.
-        </div>
-      </div>
-    </div>
-
-        <div style="margin-top:var(--sp-5);display:flex;gap:var(--sp-3);flex-wrap:wrap;align-items:center">
-      <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;flex-basis:100%">Notebook — Introduction to PINNs</span>
+    <div style="margin-top:var(--sp-5);display:flex;gap:var(--sp-3);flex-wrap:wrap;align-items:center">
+      <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;flex-basis:100%">Notebook, Introduction to PINNs</span>
       <a href="https://github.com/alishahmohammadi22/physics-ai-pinns/blob/main/01_Intro_to_PINNs/notebooks/01_Beginner/01_intro_to_pinn.ipynb" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;font:600 var(--text-sm)/1 var(--font-body);padding:10px 18px;border-radius:999px;background:var(--surface);border:1px solid var(--line-strong);color:var(--navy);text-decoration:none">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
         View notebook on GitHub
@@ -1029,53 +1157,250 @@ Epoch  4500 | Total: 2.07e-06 | Physics: 2.07e-06 | BC: 5.55e-11
       </a>
     </div>
 
+
     <hr class="divider">
 
-    <!-- References -->
-    <div id="references">
+<div id="references">
       <div class="section-label">References</div>
       <h2 class="section-h">Further Reading</h2>
 
       <div class="ref-list">
         <div class="ref-item">
           <span class="ref-num">[1]</span>
-          <strong>Raissi, M., Perdikaris, P., &amp; Karniadakis, G. E.</strong> (2019). Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. <em>Journal of Computational Physics</em>, 378, 686–707. <a href="https://doi.org/10.1016/j.jcp.2018.10.045" target="_blank" rel="noopener">DOI: 10.1016/j.jcp.2018.10.045</a>
+          <strong>Raissi, M., Perdikaris, P., &amp; Karniadakis, G. E.</strong> (2017). Physics Informed Deep Learning (Part I): Data-driven Solutions of Nonlinear Partial Differential Equations. <em>arXiv:1711.10561</em>.
         </div>
         <div class="ref-item">
           <span class="ref-num">[2]</span>
-          <strong>Karniadakis, G. E., Kevrekidis, I. G., Lu, L., Perdikaris, P., Wang, S., &amp; Yang, L.</strong> (2021). Physics-informed machine learning. <em>Nature Reviews Physics</em>, 3, 422–440. <a href="https://doi.org/10.1038/s42254-021-00314-5" target="_blank" rel="noopener">DOI: 10.1038/s42254-021-00314-5</a>
+          <strong>Raissi, M., Perdikaris, P., &amp; Karniadakis, G. E.</strong> (2017). Physics Informed Deep Learning (Part II): Data-driven Discovery of Nonlinear Partial Differential Equations. <em>arXiv:1711.10566</em>.
         </div>
         <div class="ref-item">
           <span class="ref-num">[3]</span>
-          <strong>Lu, L., Meng, X., Mao, Z., &amp; Karniadakis, G. E.</strong> (2021). DeepXDE: A deep learning library for solving differential equations. <em>SIAM Review</em>, 63(1), 208–228. <a href="https://doi.org/10.1137/19M1274067" target="_blank" rel="noopener">DOI: 10.1137/19M1274067</a>
+          <strong>Raissi, M., Perdikaris, P., &amp; Karniadakis, G. E.</strong> (2019). Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. <em>Journal of Computational Physics</em>, 378, 686–707. <a href="https://doi.org/10.1016/j.jcp.2018.10.045" target="_blank" rel="noopener">DOI: 10.1016/j.jcp.2018.10.045</a>
         </div>
         <div class="ref-item">
           <span class="ref-num">[4]</span>
-          <strong>Cuomo, S., di Cola, V. S., Giampaolo, F., Rozza, G., Raissi, M., &amp; Piccialli, F.</strong> (2022). Scientific machine learning through physics-informed neural networks: Where we are and what's next. <em>Journal of Scientific Computing</em>, 92(88). <a href="https://doi.org/10.1007/s10915-022-01939-z" target="_blank" rel="noopener">DOI: 10.1007/s10915-022-01939-z</a>
+          <strong>Karniadakis, G. E., Kevrekidis, I. G., Lu, L., Perdikaris, P., Wang, S., &amp; Yang, L.</strong> (2021). Physics-informed machine learning. <em>Nature Reviews Physics</em>, 3, 422–440. <a href="https://doi.org/10.1038/s42254-021-00314-5" target="_blank" rel="noopener">DOI: 10.1038/s42254-021-00314-5</a>
         </div>
         <div class="ref-item">
           <span class="ref-num">[5]</span>
-          <strong>Cai, S., Mao, Z., Wang, Z., Yin, M., &amp; Karniadakis, G. E.</strong> (2021). Physics-informed neural networks (PINNs) for fluid mechanics: A review. <em>Acta Mechanica Sinica</em>, 37, 1727–1738. <a href="https://arxiv.org/abs/2105.09506" target="_blank" rel="noopener">arXiv: 2105.09506</a>
+          <strong>Lu, L., Meng, X., Mao, Z., &amp; Karniadakis, G. E.</strong> (2021). DeepXDE: A deep learning library for solving differential equations. <em>SIAM Review</em>, 63(1), 208–228. <a href="https://doi.org/10.1137/19M1274067" target="_blank" rel="noopener">DOI: 10.1137/19M1274067</a>
         </div>
         <div class="ref-item">
           <span class="ref-num">[6]</span>
-          <strong>Wang, S., Li, B., Chen, Y., &amp; Perdikaris, P.</strong> (2024). PirateNets: Physics-informed deep learning with residual adaptive networks. <a href="https://arxiv.org/abs/2402.00326" target="_blank" rel="noopener">arXiv: 2402.00326</a>
+          <strong>Cai, S., Mao, Z., Wang, Z., Yin, M., &amp; Karniadakis, G. E.</strong> (2021). Physics-informed neural networks (PINNs) for fluid mechanics: A review. <em>Acta Mechanica Sinica</em>, 37, 1727–1738. <a href="https://arxiv.org/abs/2105.09506" target="_blank" rel="noopener">arXiv: 2105.09506</a>
         </div>
         <div class="ref-item">
           <span class="ref-num">[7]</span>
-          <strong>Hu, Z., Jagtap, A. D., Karniadakis, G. E., &amp; Kawaguchi, K.</strong> (2023). Augmented physics-informed neural networks (APINNs): A gating network-based soft domain decomposition methodology. <em>Engineering Applications of Artificial Intelligence</em>, 126, 107183. <a href="https://doi.org/10.1016/j.engappai.2023.107183" target="_blank" rel="noopener">DOI: 10.1016/j.engappai.2023.107183</a>
+          <strong>Cuomo, S., di Cola, V. S., Giampaolo, F., Rozza, G., Raissi, M., &amp; Piccialli, F.</strong> (2022). Scientific machine learning through physics-informed neural networks: Where we are and what's next. <em>Journal of Scientific Computing</em>, 92(88). <a href="https://doi.org/10.1007/s10915-022-01939-z" target="_blank" rel="noopener">DOI: 10.1007/s10915-022-01939-z</a>
         </div>
         <div class="ref-item">
           <span class="ref-num">[8]</span>
-          <strong>PyTorch autograd documentation.</strong> <a href="https://pytorch.org/docs/stable/autograd.html" target="_blank" rel="noopener">pytorch.org/docs/stable/autograd.html</a>
+          <strong>Wang, S., Teng, Y., &amp; Perdikaris, P.</strong> (2021). Understanding and mitigating gradient flow pathologies in physics-informed neural networks. <em>SIAM Journal on Scientific Computing</em>, 43(5), A3055–A3081. <a href="https://doi.org/10.1137/20M1318043" target="_blank" rel="noopener">DOI: 10.1137/20M1318043</a>
         </div>
         <div class="ref-item">
           <span class="ref-num">[9]</span>
-          <strong>DeepXDE documentation and examples.</strong> <a href="https://deepxde.readthedocs.io" target="_blank" rel="noopener">deepxde.readthedocs.io</a>
+          <strong>Wang, S., Yu, X., &amp; Perdikaris, P.</strong> (2022). When and why PINNs fail to train: A neural tangent kernel perspective. <em>Journal of Computational Physics</em>, 449, 110768. <a href="https://doi.org/10.1016/j.jcp.2021.110768" target="_blank" rel="noopener">DOI: 10.1016/j.jcp.2021.110768</a>
         </div>
         <div class="ref-item">
           <span class="ref-num">[10]</span>
-          <strong>NVIDIA Modulus documentation.</strong> <a href="https://docs.nvidia.com/modulus" target="_blank" rel="noopener">docs.nvidia.com/modulus</a>
+          <strong>Krishnapriyan, A. S., Gholami, A., Zhe, S., Kirby, R. M., &amp; Mahoney, M. W.</strong> (2021). Characterizing possible failure modes in physics-informed neural networks. <em>Advances in Neural Information Processing Systems 34</em> (NeurIPS 2021). <a href="https://arxiv.org/abs/2109.01050" target="_blank" rel="noopener">arXiv: 2109.01050</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[11]</span>
+          <strong>Grossmann, T. G., Komorowska, U. J., Latz, J., &amp; Schönlieb, C.-B.</strong> (2024). Can physics-informed neural networks beat the finite element method? <em>IMA Journal of Applied Mathematics</em>, 89(1), 143–174. <a href="https://doi.org/10.1093/imamat/hxae011" target="_blank" rel="noopener">DOI: 10.1093/imamat/hxae011</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[12]</span>
+          <strong>Farea, A., Yli-Harja, O., &amp; Emmert-Streib, F.</strong> (2024). Understanding physics-informed neural networks: Techniques, applications, trends, and challenges. <em>AI</em> (MDPI), 5(3), 1534–1557. <a href="https://doi.org/10.3390/ai5030074" target="_blank" rel="noopener">DOI: 10.3390/ai5030074</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[13]</span>
+          <strong>Toscano, J. D., Oommen, V., Varghese, A. J., et al.</strong> (2024/2025). From PINNs to PIKANs: Recent advances in physics-informed machine learning. <em>Machine Learning for Computational Science and Engineering</em>, 1:15. <a href="https://doi.org/10.1007/s44379-025-00015-1" target="_blank" rel="noopener">DOI: 10.1007/s44379-025-00015-1</a>; <a href="https://arxiv.org/abs/2410.13228" target="_blank" rel="noopener">arXiv: 2410.13228</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[14]</span>
+          <strong>Ren, Z., Zhou, S., Liu, D., &amp; Liu, Q.</strong> (2025). Physics-informed neural networks: A review of methodological evolution, theoretical foundations, and interdisciplinary frontiers. <em>Applied Sciences</em>, 15(14), 8092. <a href="https://doi.org/10.3390/app15148092" target="_blank" rel="noopener">DOI: 10.3390/app15148092</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[15]</span>
+          <strong>Faroughi, S. A., Pawar, N. M., Fernandes, C., Raissi, M., et al.</strong> (2024). Physics-Guided, Physics-Informed, and Physics-Encoded Neural Networks in Scientific Computing. <em>Journal of Computing and Information Science in Engineering</em>, 24(4), 040802. <a href="https://doi.org/10.1115/1.4064449" target="_blank" rel="noopener">DOI: 10.1115/1.4064449</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[16]</span>
+          <strong>Wu, C., Zhu, M., Tan, Q., Kartha, Y., &amp; Lu, L.</strong> (2023). A comprehensive study of non-adaptive and residual-based adaptive sampling for physics-informed neural networks. <em>Computer Methods in Applied Mechanics and Engineering</em>, 403, 115671. <a href="https://doi.org/10.1016/j.cma.2022.115671" target="_blank" rel="noopener">DOI: 10.1016/j.cma.2022.115671</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[17]</span>
+          <strong>Wang, S., Sankaran, S., Wang, H., &amp; Perdikaris, P.</strong> (2023). An Expert's Guide to Training Physics-Informed Neural Networks. <a href="https://arxiv.org/abs/2308.08468" target="_blank" rel="noopener">arXiv: 2308.08468</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[18]</span>
+          <strong>Wang, S., Li, B., Chen, Y., &amp; Perdikaris, P.</strong> (2024). PirateNets: Physics-informed deep learning with residual adaptive networks. <a href="https://arxiv.org/abs/2402.00326" target="_blank" rel="noopener">arXiv: 2402.00326</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[19]</span>
+          <strong>Hu, Z., Jagtap, A. D., Karniadakis, G. E., &amp; Kawaguchi, K.</strong> (2023). Augmented physics-informed neural networks (APINNs). <em>Engineering Applications of Artificial Intelligence</em>, 126, 107183. <a href="https://doi.org/10.1016/j.engappai.2023.107183" target="_blank" rel="noopener">DOI: 10.1016/j.engappai.2023.107183</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[20]</span>
+          <strong>Raue, A., Kreutz, C., Maiwald, T., et al.</strong> (2009). Structural and practical identifiability analysis of partially observed dynamical models. <em>Bioinformatics</em>, 25(15), 1923–1929. <a href="https://doi.org/10.1093/bioinformatics/btp358" target="_blank" rel="noopener">DOI: 10.1093/bioinformatics/btp358</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[21]</span>
+          <strong>PyTorch autograd documentation.</strong> <a href="https://pytorch.org/docs/stable/autograd.html" target="_blank" rel="noopener">pytorch.org/docs/stable/autograd.html</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[22]</span>
+          <strong>DeepXDE documentation and examples.</strong> <a href="https://deepxde.readthedocs.io" target="_blank" rel="noopener">deepxde.readthedocs.io</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[23]</span>
+          <strong>NVIDIA Modulus / PhysicsNeMo documentation.</strong> <a href="https://docs.nvidia.com/modulus" target="_blank" rel="noopener">docs.nvidia.com/modulus</a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /.article-body -->
+</div><!-- /.article-page -->
+
+<footer class="site-footer">
+  <div class="foot-lead">
+    <p class="foot-name">Ali Shahmohammadi, Ph.D.</p>
+    <p class="foot-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p>
+  </div>
+  <nav class="foot-nav" aria-label="Footer">
+    <a href="../index.html#writing">Writing</a>
+    <a href="../index.html#career">Career</a>
+    <a href="../resume.html">Resume</a>
+    <a href="https://github.com/alishahmohammadi22" rel="me">GitHub</a>
+    <a href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
+  </nav>
+  <div class="foot-base">
+    <span>&copy; 2026 Ali Shahmohammadi, Ph.D.</span>
+    <a class="to-top" href="#top">Back to top &uarr;</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var header = document.querySelector('.site-header');
+  var bar    = document.getElementById('progress');
+  function onScroll(){
+    var y = window.scrollY || 0;
+    header.dataset.elevate = y > 8 ? 'true' : 'false';
+    var h = document.documentElement.scrollHeight - innerHeight;
+    if(bar) bar.style.transform = 'scaleX(' + (h > 0 ? Math.min(y/h, 1) : 0) + ')';
+  }
+  addEventListener('scroll', onScroll, {passive: true});
+  onScroll();
+  document.getElementById('themeBtn').addEventListener('click', function(){
+    var n = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = n;
+    localStorage.setItem('theme', n);
+  });
+})();
+</script>
+</body>
+</html>
+
+    <hr class="divider">
+
+<div id="references">
+      <div class="section-label">References</div>
+      <h2 class="section-h">Further Reading</h2>
+
+      <div class="ref-list">
+        <div class="ref-item">
+          <span class="ref-num">[1]</span>
+          <strong>Raissi, M., Perdikaris, P., &amp; Karniadakis, G. E.</strong> (2017). Physics Informed Deep Learning (Part I): Data-driven Solutions of Nonlinear Partial Differential Equations. <em>arXiv:1711.10561</em>.
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[2]</span>
+          <strong>Raissi, M., Perdikaris, P., &amp; Karniadakis, G. E.</strong> (2017). Physics Informed Deep Learning (Part II): Data-driven Discovery of Nonlinear Partial Differential Equations. <em>arXiv:1711.10566</em>.
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[3]</span>
+          <strong>Raissi, M., Perdikaris, P., &amp; Karniadakis, G. E.</strong> (2019). Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. <em>Journal of Computational Physics</em>, 378, 686–707. <a href="https://doi.org/10.1016/j.jcp.2018.10.045" target="_blank" rel="noopener">DOI: 10.1016/j.jcp.2018.10.045</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[4]</span>
+          <strong>Karniadakis, G. E., Kevrekidis, I. G., Lu, L., Perdikaris, P., Wang, S., &amp; Yang, L.</strong> (2021). Physics-informed machine learning. <em>Nature Reviews Physics</em>, 3, 422–440. <a href="https://doi.org/10.1038/s42254-021-00314-5" target="_blank" rel="noopener">DOI: 10.1038/s42254-021-00314-5</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[5]</span>
+          <strong>Lu, L., Meng, X., Mao, Z., &amp; Karniadakis, G. E.</strong> (2021). DeepXDE: A deep learning library for solving differential equations. <em>SIAM Review</em>, 63(1), 208–228. <a href="https://doi.org/10.1137/19M1274067" target="_blank" rel="noopener">DOI: 10.1137/19M1274067</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[6]</span>
+          <strong>Cai, S., Mao, Z., Wang, Z., Yin, M., &amp; Karniadakis, G. E.</strong> (2021). Physics-informed neural networks (PINNs) for fluid mechanics: A review. <em>Acta Mechanica Sinica</em>, 37, 1727–1738. <a href="https://arxiv.org/abs/2105.09506" target="_blank" rel="noopener">arXiv: 2105.09506</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[7]</span>
+          <strong>Cuomo, S., di Cola, V. S., Giampaolo, F., Rozza, G., Raissi, M., &amp; Piccialli, F.</strong> (2022). Scientific machine learning through physics-informed neural networks: Where we are and what's next. <em>Journal of Scientific Computing</em>, 92(88). <a href="https://doi.org/10.1007/s10915-022-01939-z" target="_blank" rel="noopener">DOI: 10.1007/s10915-022-01939-z</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[8]</span>
+          <strong>Wang, S., Teng, Y., &amp; Perdikaris, P.</strong> (2021). Understanding and mitigating gradient flow pathologies in physics-informed neural networks. <em>SIAM Journal on Scientific Computing</em>, 43(5), A3055–A3081. <a href="https://doi.org/10.1137/20M1318043" target="_blank" rel="noopener">DOI: 10.1137/20M1318043</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[9]</span>
+          <strong>Wang, S., Yu, X., &amp; Perdikaris, P.</strong> (2022). When and why PINNs fail to train: A neural tangent kernel perspective. <em>Journal of Computational Physics</em>, 449, 110768. <a href="https://doi.org/10.1016/j.jcp.2021.110768" target="_blank" rel="noopener">DOI: 10.1016/j.jcp.2021.110768</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[10]</span>
+          <strong>Krishnapriyan, A. S., Gholami, A., Zhe, S., Kirby, R. M., &amp; Mahoney, M. W.</strong> (2021). Characterizing possible failure modes in physics-informed neural networks. <em>Advances in Neural Information Processing Systems 34</em> (NeurIPS 2021). <a href="https://arxiv.org/abs/2109.01050" target="_blank" rel="noopener">arXiv: 2109.01050</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[11]</span>
+          <strong>Grossmann, T. G., Komorowska, U. J., Latz, J., &amp; Schönlieb, C.-B.</strong> (2024). Can physics-informed neural networks beat the finite element method? <em>IMA Journal of Applied Mathematics</em>, 89(1), 143–174. <a href="https://doi.org/10.1093/imamat/hxae011" target="_blank" rel="noopener">DOI: 10.1093/imamat/hxae011</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[12]</span>
+          <strong>Farea, A., Yli-Harja, O., &amp; Emmert-Streib, F.</strong> (2024). Understanding physics-informed neural networks: Techniques, applications, trends, and challenges. <em>AI</em> (MDPI), 5(3), 1534–1557. <a href="https://doi.org/10.3390/ai5030074" target="_blank" rel="noopener">DOI: 10.3390/ai5030074</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[13]</span>
+          <strong>Toscano, J. D., Oommen, V., Varghese, A. J., et al.</strong> (2024/2025). From PINNs to PIKANs: Recent advances in physics-informed machine learning. <em>Machine Learning for Computational Science and Engineering</em>, 1:15. <a href="https://doi.org/10.1007/s44379-025-00015-1" target="_blank" rel="noopener">DOI: 10.1007/s44379-025-00015-1</a>; <a href="https://arxiv.org/abs/2410.13228" target="_blank" rel="noopener">arXiv: 2410.13228</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[14]</span>
+          <strong>Ren, Z., Zhou, S., Liu, D., &amp; Liu, Q.</strong> (2025). Physics-informed neural networks: A review of methodological evolution, theoretical foundations, and interdisciplinary frontiers. <em>Applied Sciences</em>, 15(14), 8092. <a href="https://doi.org/10.3390/app15148092" target="_blank" rel="noopener">DOI: 10.3390/app15148092</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[15]</span>
+          <strong>Faroughi, S. A., Pawar, N. M., Fernandes, C., Raissi, M., et al.</strong> (2024). Physics-Guided, Physics-Informed, and Physics-Encoded Neural Networks in Scientific Computing. <em>Journal of Computing and Information Science in Engineering</em>, 24(4), 040802. <a href="https://doi.org/10.1115/1.4064449" target="_blank" rel="noopener">DOI: 10.1115/1.4064449</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[16]</span>
+          <strong>Wu, C., Zhu, M., Tan, Q., Kartha, Y., &amp; Lu, L.</strong> (2023). A comprehensive study of non-adaptive and residual-based adaptive sampling for physics-informed neural networks. <em>Computer Methods in Applied Mechanics and Engineering</em>, 403, 115671. <a href="https://doi.org/10.1016/j.cma.2022.115671" target="_blank" rel="noopener">DOI: 10.1016/j.cma.2022.115671</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[17]</span>
+          <strong>Wang, S., Sankaran, S., Wang, H., &amp; Perdikaris, P.</strong> (2023). An Expert's Guide to Training Physics-Informed Neural Networks. <a href="https://arxiv.org/abs/2308.08468" target="_blank" rel="noopener">arXiv: 2308.08468</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[18]</span>
+          <strong>Wang, S., Li, B., Chen, Y., &amp; Perdikaris, P.</strong> (2024). PirateNets: Physics-informed deep learning with residual adaptive networks. <a href="https://arxiv.org/abs/2402.00326" target="_blank" rel="noopener">arXiv: 2402.00326</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[19]</span>
+          <strong>Hu, Z., Jagtap, A. D., Karniadakis, G. E., &amp; Kawaguchi, K.</strong> (2023). Augmented physics-informed neural networks (APINNs). <em>Engineering Applications of Artificial Intelligence</em>, 126, 107183. <a href="https://doi.org/10.1016/j.engappai.2023.107183" target="_blank" rel="noopener">DOI: 10.1016/j.engappai.2023.107183</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[20]</span>
+          <strong>Raue, A., Kreutz, C., Maiwald, T., et al.</strong> (2009). Structural and practical identifiability analysis of partially observed dynamical models. <em>Bioinformatics</em>, 25(15), 1923–1929. <a href="https://doi.org/10.1093/bioinformatics/btp358" target="_blank" rel="noopener">DOI: 10.1093/bioinformatics/btp358</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[21]</span>
+          <strong>PyTorch autograd documentation.</strong> <a href="https://pytorch.org/docs/stable/autograd.html" target="_blank" rel="noopener">pytorch.org/docs/stable/autograd.html</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[22]</span>
+          <strong>DeepXDE documentation and examples.</strong> <a href="https://deepxde.readthedocs.io" target="_blank" rel="noopener">deepxde.readthedocs.io</a>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">[23]</span>
+          <strong>NVIDIA Modulus / PhysicsNeMo documentation.</strong> <a href="https://docs.nvidia.com/modulus" target="_blank" rel="noopener">docs.nvidia.com/modulus</a>
         </div>
       </div>
     </div>
