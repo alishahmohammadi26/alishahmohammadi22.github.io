@@ -22,3 +22,5 @@ assets/
 ## Live Site
 
 → [alishahmohammadi22.github.io](https://alishahmohammadi22.github.io)
+
+<!-- maintained-note: keep this repo tidy -->
