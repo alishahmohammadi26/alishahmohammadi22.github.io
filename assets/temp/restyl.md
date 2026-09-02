@@ -16,9 +16,9 @@ homepage.
 2. **Apply sections in order:** §1 (domain) → §2 (content fixes) → §3–§5
    (templates) → §6 (styles) → §7 (per-file checklist).
 3. **Never touch these strings** (they are correct as-is and would break if changed):
-   - `github.com/alishahmohammadi22` and any `github.com/alishahmohammadi22/<repo>` URL — these are code repos, not the site host.
-   - `https://alishahmohammadi22.github.io/onto-curator-agent` — separate GitHub Pages *project* site.
-   - `https://alishahmohammadi22.github.io/fair-data-toolkit` — separate GitHub Pages *project* site.
+   - `github.com/alishahmohammadi26` and any `github.com/alishahmohammadi26/<repo>` URL — these are code repos, not the site host.
+   - `https://alishahmohammadi26.github.io/onto-curator-agent` — separate GitHub Pages *project* site.
+   - `https://alishahmohammadi26.github.io/fair-data-toolkit` — separate GitHub Pages *project* site.
 4. **String-level replacements in §1 are byte-exact.** Structural replacements in
    §3–§6 are described by intent + anchors, because class names in the live HTML
    are not known here; map them to the existing markup, or replace the chrome
@@ -32,7 +32,7 @@ homepage.
 
 **Problem:** the PINN posts link internally to `alishahmohammadi.com`; the
 agentic-AI, data-governance, and FAIR posts link to the old
-`alishahmohammadi22.github.io` (nav, bylines, related links, `og:url`, `og:image`,
+`alishahmohammadi26.github.io` (nav, bylines, related links, `og:url`, `og:image`,
 and an "All Articles" link). This splits SEO signal, breaks social-share previews,
 and bounces readers off-domain.
 
@@ -40,24 +40,24 @@ Apply these rules **in this order**. Rule A must run before Rule E.
 
 | # | Find (exact) | Replace with | Notes |
 |---|---|---|---|
-| A | `https://alishahmohammadi22.github.io/#blog` | `https://alishahmohammadi.com/#writing` | Fixes domain **and** wrong anchor (`#blog` → `#writing`). |
+| A | `https://alishahmohammadi26.github.io/#blog` | `https://alishahmohammadi.com/#writing` | Fixes domain **and** wrong anchor (`#blog` → `#writing`). |
 | B | `alishahmohammadi.com/#blog` | `alishahmohammadi.com/#writing` | Safety net for any residual wrong anchors already on `.com`. |
-| C | `https://alishahmohammadi22.github.io/blog/` | `https://alishahmohammadi.com/blog/` | All post links + each page's own `og:url`. |
-| D | `https://alishahmohammadi22.github.io/assets/` | `https://alishahmohammadi.com/assets/` | `og:image` and any image src. |
-| E | `https://alishahmohammadi22.github.io/resume.html` | `https://alishahmohammadi.com/resume.html` | Resume link. |
-| F | `https://alishahmohammadi22.github.io"` | `https://alishahmohammadi.com/"` | Bare root link used as brand/home href (note trailing quote — match the attribute boundary so `/onto-curator-agent` etc. are **not** hit). |
-| G | `https://alishahmohammadi22.github.io )` and `https://alishahmohammadi22.github.io.` etc. | `https://alishahmohammadi.com` | Any remaining bare-root occurrences **not** followed by `/onto-curator-agent` or `/fair-data-toolkit`. Review each match. |
+| C | `https://alishahmohammadi26.github.io/blog/` | `https://alishahmohammadi.com/blog/` | All post links + each page's own `og:url`. |
+| D | `https://alishahmohammadi26.github.io/assets/` | `https://alishahmohammadi.com/assets/` | `og:image` and any image src. |
+| E | `https://alishahmohammadi26.github.io/resume.html` | `https://alishahmohammadi.com/resume.html` | Resume link. |
+| F | `https://alishahmohammadi26.github.io"` | `https://alishahmohammadi.com/"` | Bare root link used as brand/home href (note trailing quote — match the attribute boundary so `/onto-curator-agent` etc. are **not** hit). |
+| G | `https://alishahmohammadi26.github.io )` and `https://alishahmohammadi26.github.io.` etc. | `https://alishahmohammadi.com` | Any remaining bare-root occurrences **not** followed by `/onto-curator-agent` or `/fair-data-toolkit`. Review each match. |
 
 **Protected — skip (do not replace):**
 ```
-https://alishahmohammadi22.github.io/onto-curator-agent
-https://alishahmohammadi22.github.io/fair-data-toolkit
-github.com/alishahmohammadi22
+https://alishahmohammadi26.github.io/onto-curator-agent
+https://alishahmohammadi26.github.io/fair-data-toolkit
+github.com/alishahmohammadi26
 ```
 
 **After running A–G, grep to confirm only protected hosts remain:**
 ```
-grep -rn "alishahmohammadi22.github.io" .
+grep -rn "alishahmohammadi26.github.io" .
 # every remaining hit MUST be /onto-curator-agent or /fair-data-toolkit
 ```
 
@@ -225,7 +225,7 @@ homepage they can be relative.
     <a href="/#writing">Writing</a>
     <a href="/#career">Career</a>
     <a href="/resume.html">Resume</a>
-    <a class="nav-ext" href="https://github.com/alishahmohammadi22" rel="me">GitHub</a>
+    <a class="nav-ext" href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
   </nav>
 
   <button class="theme-toggle" type="button" aria-label="Toggle dark mode"
@@ -284,7 +284,7 @@ to `github.com` (correct) — never `github.io`.
     <a href="/#writing">Writing</a>
     <a href="/#career">Career</a>
     <a href="/resume.html">Resume</a>
-    <a href="https://github.com/alishahmohammadi22" rel="me">GitHub</a>
+    <a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
     <a href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
   </nav>
 

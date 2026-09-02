@@ -1,6 +1,6 @@
 # Ali Shahmohammadi — Portfolio & Blog
 
-Personal portfolio and blog hosted on GitHub Pages at [alishahmohammadi22.github.io](https://alishahmohammadi22.github.io).
+Personal portfolio and blog hosted on GitHub Pages at [alishahmohammadi26.github.io](https://alishahmohammadi26.github.io).
 
 ## About
 
@@ -21,4 +21,6 @@ assets/
 
 ## Live Site
 
-→ [alishahmohammadi22.github.io](https://alishahmohammadi22.github.io)
+→ [alishahmohammadi26.github.io](https://alishahmohammadi26.github.io)
+
+<!-- maintained-note: keep this repo tidy -->
