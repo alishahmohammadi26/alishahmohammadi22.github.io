@@ -1,18 +1,16 @@
-<!DOCTYPE html><html lang="en" data-theme="light"><head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html>
+<html data-theme="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Bioprocess Viable Cell Density: Monod Kinetics with PINNs | IndPenSim Benchmark | Ali Shahmohammadi</title>
-<meta name="description" content="Estimating mumax, Ks, Yxs from 20 offline CHO cell culture measurements using the warm-start PINN protocol. The IndPenSim benchmark, real results, and the PAT digital twin vision.">
-
-<meta property="og:type" content="article">
-
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<meta content="Estimating mumax, Ks, Yxs from 20 offline CHO cell culture measurements using the warm-start PINN protocol. The IndPenSim benchmark, real results, and the PAT digital twin vision." name="description"/>
+<meta content="article" property="og:type"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" rel="stylesheet"/>
+<script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})" src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <script>
   (function(){var t=localStorage.getItem('theme');
    if(!t)t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
@@ -314,47 +312,64 @@ hr.divider{background:var(--line-strong)}
 
 /* Old nav — hide fixed positioning; handled by new .site-header */
 nav:not(.site-nav):not(.foot-nav){display:none}
+
+/* ===== Related reading ===== */
+.related-reading{margin:var(--sp-10) 0 var(--sp-8);padding-top:var(--sp-8);border-top:1px solid var(--line)}
+.related-reading .rr-label{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 var(--sp-4)}
+.related-reading .rr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--sp-4)}
+.related-reading .rr-card{display:block;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:var(--sp-4) var(--sp-5);text-decoration:none;transition:border-color .2s,box-shadow .2s,transform .2s}
+.related-reading .rr-card:hover{border-color:var(--accent);box-shadow:var(--shadow-2);transform:translateY(-2px);text-decoration:none}
+.related-reading .rr-card .rr-title{display:block;font-family:var(--font-display);font-weight:600;color:var(--navy);
+  font-size:var(--text-base);line-height:var(--lh-snug);margin-bottom:6px}
+.related-reading .rr-card .rr-go{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--accent);letter-spacing:.05em}
+
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
 </style>
 </head><body>
 <header class="site-header" data-elevate="false">
-  <a class="brand" href="../index.html">Ali Shahmohammadi <span class="deg">Ph.D.</span></a>
-  <nav class="site-nav" aria-label="Primary">
-    <a href="../index.html#writing">Writing</a>
-    <a href="../index.html#career">Career</a>
-    <a href="../resume.html">Resume</a>
-    <a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
-  </nav>
-  <button class="theme-toggle" id="themeBtn" type="button" aria-label="Toggle dark mode"><b></b></button>
-  <div class="read-progress" role="presentation"><span id="progress"></span></div>
+<a class="brand" href="../index.html">Ali Shahmohammadi <span class="deg">Ph.D.</span></a>
+<nav aria-label="Primary" class="site-nav">
+<a href="../index.html#writing">Writing</a>
+<a href="../index.html#career">Career</a>
+<a href="../resume.html">Resume</a>
+<a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
+</nav>
+<button aria-label="Toggle dark mode" class="theme-toggle" id="themeBtn" type="button"><b></b></button>
+<div class="read-progress" role="presentation"><span id="progress"></span></div>
 </header>
 <div class="article-page"><div class="article-hero"><div class="article-hero-inner">
-  <div class="hero-series">Physics AI · ODEs Series · <a href="pinn-deeponet.html"><em>DeepONet</em></a> of 7</div><h1 class="article-title">Bioprocess Viable Cell Density<br><em>Monod Kinetics, IndPenSim Benchmark &amp; PAT Digital Twin</em></h1>
-  <p class="article-sub">Estimating $\mu_{{max}}$, $K_s$, $Y_{{xs}}$ from 20 sparse offline bioreactor measurements using the warm-start PINN protocol. Yxs recovered to 0.4% error; the $K_s$ identifiability problem explained. Toward real-time kinetic estimation from PAT Raman data.</p><div class="article-meta"><span class="meta-pill  highlight">Scientific ML</span><span class="meta-pill  highlight">Bioprocess Engineering</span><span class="meta-pill">Feb 2026</span><span class="meta-pill">16 min read</span><span class="meta-pill">Advanced</span><span class="meta-pill">PyTorch</span></div>
+<div class="hero-series">Physics AI · ODEs Series · <a href="pinn-deeponet.html"><em>DeepONet</em></a> of 7</div><h1 class="article-title">Bioprocess Viable Cell Density<br/><em>Monod Kinetics, IndPenSim Benchmark &amp; PAT Digital Twin</em></h1>
+<p class="article-sub">Estimating $\mu_{{max}}$, $K_s$, $Y_{{xs}}$ from 20 sparse offline bioreactor measurements using the warm-start PINN protocol. Yxs recovered to 0.4% error; the $K_s$ identifiability problem explained. Toward real-time kinetic estimation from PAT Raman data.</p><div class="article-meta"><span class="meta-pill highlight">Scientific ML</span><span class="meta-pill highlight">Bioprocess Engineering</span><span class="meta-pill">Feb 2026</span><span class="meta-pill">16 min read</span><span class="meta-pill">Advanced</span><span class="meta-pill">PyTorch</span></div>
 </div></div>
 <div class="article-body">
-<div class="callout insight"><div class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="callout-body"><strong>Prerequisites</strong>Familiarity with the PINN loss structure from <a href="pinn-introduction.html"><em>Introduction to PINNs</em></a>. Multi-output networks are introduced in <a href="pinn-odes-consecutive-reactions.html"><a href="pinn-odes-second-order.html"><em>Second-Order ODEs</em></a></a>.</div></div>    <div id="s1" style="margin-top:3rem;">
-      <div class="section-label">01, The Problem</div>
-      <h2 class="section-h">Three Growth Kinetics Parameters from 20 Offline Measurements</h2>
-      <p class="body-text">Every fed-batch bioreactor run for mAb, mRNA vaccine, or recombinant protein production requires kinetic characterisation: maximum specific growth rate $\mu_{max}$, half-saturation substrate concentration $K_s$, and biomass yield $Y_{xs}$. These three parameters govern productivity, scale-up, and process robustness.</p>
-      <p class="body-text">In a standard 14-day CHO run, you collect 8–12 offline viable cell density measurements (ViCell, NovaBright) and 8–12 substrate measurements (Nova BioProfile). That's roughly <strong>20 data points to estimate 3 parameters from a coupled nonlinear ODE system</strong>, sparse, expensive, and the only data you have before filing a regulatory submission.</p>
-      <div class="math-block">$$\frac{dX}{dt} = \mu(S)X, \qquad \frac{dS}{dt} = -\frac{1}{Y_{xs}}\mu(S)X, \qquad \mu(S) = \frac{\mu_{max} S}{K_s + S}$$</div>
-    </div>
-        <div class="fig-wrap">
-      <img src="../assets/images/blog/ode-series/comparison_bioprocess.png" alt="Monod bioprocess PINN: viable cell density X and substrate S coupled dynamics" loading="lazy">
-      <p class="fig-caption">Fig. A &mdash; Monod bioprocess model: viable cell density $X(t)$ (growth) and substrate $S(t)$ (depletion) coupled through the Monod growth term $\mu_{\text{max}} S/(K_s + S)$. The ten-fold scale difference between $X$ and $S$ requires careful state normalization.</p>
-    </div>
-<hr class="divider">
-    <div id="s2">
-      <div class="section-label">02, The Benchmark: IndPenSim (Goldrick et al. 2015, 2019)</div>
-      <h2 class="section-h">The Only Open Industrial-Scale Biopharmaceutical Fermentation Dataset</h2>
-      <p class="body-text"><strong>Goldrick, S. et al. (2015, 2019).</strong> <em>The development of an industrial-scale fed-batch fermentation simulation.</em> <strong>IndPenSim</strong>: an open, published, 100,000 L <em>Penicillium chrysogenum</em> fermentation simulation generating 100 synthetic batches. Available at industrialpenicillinsimulation.com.</p>
-      <p class="body-text"><strong>PINN applications:</strong> Adebar et al. (2025) <em>Biotechnol. Bioeng.</em> and Alam et al. (2025) <em>Can. J. Chem. Eng.</em> applied PINNs to bioreactor kinetic parameter estimation using the Monod framework, demonstrating that the warm-start protocol enables reliable parameter recovery from the same sparse offline data structure as this notebook.</p>
-    </div>
-    <hr class="divider">
-    <div id="s3">
-      <div class="section-label">03, The Warm-Start Protocol for Coupled Bioprocess Kinetics</div>
-      <h2 class="section-h">Phase 1: Data Only → Phase 2: Data + Physics + Parameters</h2>
-      <p class="body-text">The same two-phase warm-start from Notebook 03 (Lotka-Volterra) is essential here. Coupled Monod kinetics, where $\mu(S)$ appears nonlinearly in both equations, creates the same cold-start failure mode: conflicting gradients before the network has a plausible trajectory.</p>
+<div class="callout insight"><div class="callout-icon"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></div><div class="callout-body"><strong>Prerequisites</strong>Familiarity with the PINN loss structure from <a href="pinn-introduction.html"><em>Introduction to PINNs</em></a>. Multi-output networks are introduced in <a href="pinn-odes-consecutive-reactions.html"></a><a href="pinn-odes-second-order.html"><em>Second-Order ODEs</em></a>.</div></div> <div id="s1" style="margin-top:3rem;">
+<div class="section-label">01, The Problem</div>
+<h2 class="section-h">Three Growth Kinetics Parameters from 20 Offline Measurements</h2>
+<p class="body-text">Every fed-batch bioreactor run for mAb, mRNA vaccine, or recombinant protein production requires kinetic characterisation: maximum specific growth rate $\mu_{max}$, half-saturation substrate concentration $K_s$, and biomass yield $Y_{xs}$. These three parameters govern productivity, scale-up, and process robustness.</p>
+<p class="body-text">In a standard 14-day CHO run, you collect 8–12 offline viable cell density measurements (ViCell, NovaBright) and 8–12 substrate measurements (Nova BioProfile). That's roughly <strong>20 data points to estimate 3 parameters from a coupled nonlinear ODE system</strong>, sparse, expensive, and the only data you have before filing a regulatory submission.</p>
+<div class="math-block">$$\frac{dX}{dt} = \mu(S)X, \qquad \frac{dS}{dt} = -\frac{1}{Y_{xs}}\mu(S)X, \qquad \mu(S) = \frac{\mu_{max} S}{K_s + S}$$</div>
+</div>
+<div class="fig-wrap">
+<img alt="Monod bioprocess PINN: viable cell density X and substrate S coupled dynamics" loading="lazy" src="../assets/images/blog/ode-series/comparison_bioprocess.png"/>
+<p class="fig-caption">Fig. A: Monod bioprocess model: viable cell density $X(t)$ (growth) and substrate $S(t)$ (depletion) coupled through the Monod growth term $\mu_{\text{max}} S/(K_s + S)$. The ten-fold scale difference between $X$ and $S$ requires careful state normalization.</p>
+</div>
+<hr class="divider"/>
+<div id="s2">
+<div class="section-label">02, The Benchmark: IndPenSim (Goldrick et al. 2015, 2019)</div>
+<h2 class="section-h">The Only Open Industrial-Scale Biopharmaceutical Fermentation Dataset</h2>
+<p class="body-text"><strong>Goldrick, S. et al. (2015, 2019).</strong> <em>The development of an industrial-scale fed-batch fermentation simulation.</em> <strong>IndPenSim</strong>: an open, published, 100,000 L <em>Penicillium chrysogenum</em> fermentation simulation generating 100 synthetic batches. Available at industrialpenicillinsimulation.com.</p>
+<p class="body-text"><strong>PINN applications:</strong> Adebar et al. (2025) <em>Biotechnol. Bioeng.</em> and Alam et al. (2025) <em>Can. J. Chem. Eng.</em> applied PINNs to bioreactor kinetic parameter estimation using the Monod framework, demonstrating that the warm-start protocol enables reliable parameter recovery from the same sparse offline data structure as this notebook.</p>
+</div>
+<hr class="divider"/>
+<div id="s3">
+<div class="section-label">03, The Warm-Start Protocol for Coupled Bioprocess Kinetics</div>
+<h2 class="section-h">Phase 1: Data Only → Phase 2: Data + Physics + Parameters</h2>
+<p class="body-text">The same two-phase warm-start from Notebook 03 (Lotka-Volterra) is essential here. Coupled Monod kinetics, where $\mu(S)$ appears nonlinearly in both equations, creates the same cold-start failure mode: conflicting gradients before the network has a plausible trajectory.</p>
 <div class="code-block"><div class="code-header"><span class="code-lang">Python · PyTorch</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div><pre class="code-body"><span class="cm"># Phase 1 (6000 epochs): fit biomass and substrate data only</span>
 opt1 = torch.optim.Adam(model.parameters(), lr=<span class="nm">3e-3</span>)
 <span class="kw">for</span> ep <span class="kw">in</span> range(<span class="nm">6000</span>):
@@ -370,71 +385,75 @@ opt2 = torch.optim.Adam(allp, lr=<span class="nm">2e-3</span>)
     (data_loss() + <span class="nm">1.0</span>*phys_loss() + <span class="nm">5.0</span>*ic_loss()).backward()
     opt2.step()
 <span class="cm"># L-BFGS refinement (800 steps) for final convergence</span></pre></div>
-    </div>
-    <hr class="divider">
-    <div id="s4">
-      <div class="section-label">04, Results &amp; Identifiability</div>
-      <h2 class="section-h">Yxs Perfectly Recovered; Ks Poorly Identified, Why</h2>
-      <table class="data-table">
-        <thead><tr><th>Parameter</th><th>PINN recovered</th><th>True value</th><th>Error</th><th>Why</th></tr></thead>
-        <tbody>
-          <tr><td>$\mu_{max}$ [h⁻¹]</td><td>0.244</td><td>0.300</td><td>19%</td><td>Correlated with $K_s$; constrained by early growth phase shape</td></tr>
-          <tr><td>$K_s$ [g/L]</td><td>7.37</td><td>5.0</td><td>47%</td><td>Only informative when $S \sim K_s$, a brief window late in the batch</td></tr>
-          <tr><td>$Y_{xs}$ [g/g]</td><td>0.498</td><td>0.500</td><td>0.4%</td><td>Tightly constrained by total biomass/substrate mass balance</td></tr>
-        </tbody>
-      </table>
-<div class="callout warning"><div class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="callout-body"><strong>The Ks identifiability problem</strong>$K_s$ requires observations where $S \sim K_s$ (here: 5 g/L substrate in a 40 g/L initial batch). Only the last few measurements are in this sensitive zone. This is a fundamental limitation, not a PINN limitation, the same problem affects classical NLS + odeint. Fix: multiple batches at different initial substrate concentrations, or PAT tools for continuous substrate monitoring.</div></div>
-      <p class="body-text">The notebook uses a simulated IndPenSim-scale batch by default. To use real IndPenSim data: set <code>INDPENSIM_CSV</code> to a downloaded batch file and map time, biomass, and substrate column names. The PINN code is unchanged.</p>
-    </div>
-    <hr class="divider">
-    <div id="s5">
-      <div class="section-label">05, The PAT Digital Twin Vision</div>
-      <h2 class="section-h">From 20 Offline Points to Real-Time Kinetic Monitoring</h2>
-      <p class="body-text">With Raman spectroscopy as a PAT tool, glucose can be monitored every 5 minutes instead of twice daily, transforming 20 offline points into &gt;2,000 real-time observations. A PINN trained on live Raman data could estimate $\mu_{max}$, $K_s$, and $Y_{xs}$ within the first 48–72 hours, feed updated parameters to a model-predictive controller for feed rate optimisation, and predict final titer at day 14 from day 3 data.</p>
-      <p class="body-text">This is the biopharmaceutical PINN digital twin, ICH Q8/Q11 process understanding operationalised in real-time.</p>
-    </div>
-        <div style="margin-top:var(--sp-5);display:flex;gap:var(--sp-3);flex-wrap:wrap;align-items:center">
-      <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;flex-basis:100%">Notebook — Monod Bioprocess</span>
-      <a href="https://github.com/alishahmohammadi26/physics-ai-pinns/blob/main/02_Solving_ODEs_with_Neural_Networks/notebooks/07_bioprocess_viable_cell_density.ipynb" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;font:600 var(--text-sm)/1 var(--font-body);padding:10px 18px;border-radius:999px;background:var(--surface);border:1px solid var(--line-strong);color:var(--navy);text-decoration:none">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+</div>
+<hr class="divider"/>
+<div id="s4">
+<div class="section-label">04, Results &amp; Identifiability</div>
+<h2 class="section-h">Yxs Perfectly Recovered; Ks Poorly Identified, Why</h2>
+<table class="data-table">
+<thead><tr><th>Parameter</th><th>PINN recovered</th><th>True value</th><th>Error</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td>$\mu_{max}$ [h⁻¹]</td><td>0.244</td><td>0.300</td><td>19%</td><td>Correlated with $K_s$; constrained by early growth phase shape</td></tr>
+<tr><td>$K_s$ [g/L]</td><td>7.37</td><td>5.0</td><td>47%</td><td>Only informative when $S \sim K_s$, a brief window late in the batch</td></tr>
+<tr><td>$Y_{xs}$ [g/g]</td><td>0.498</td><td>0.500</td><td>0.4%</td><td>Tightly constrained by total biomass/substrate mass balance</td></tr>
+</tbody>
+</table>
+<div class="callout warning"><div class="callout-icon"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" x2="12" y1="9" y2="13"></line><line x1="12" x2="12.01" y1="17" y2="17"></line></svg></div><div class="callout-body"><strong>The Ks identifiability problem</strong>$K_s$ requires observations where $S \sim K_s$ (here: 5 g/L substrate in a 40 g/L initial batch). Only the last few measurements are in this sensitive zone. This is a fundamental limitation, not a PINN limitation, the same problem affects classical NLS + odeint. Fix: multiple batches at different initial substrate concentrations, or PAT tools for continuous substrate monitoring.</div></div>
+<p class="body-text">The notebook uses a simulated IndPenSim-scale batch by default. To use real IndPenSim data: set <code>INDPENSIM_CSV</code> to a downloaded batch file and map time, biomass, and substrate column names. The PINN code is unchanged.</p>
+</div>
+<hr class="divider"/>
+<div id="s5">
+<div class="section-label">05, The PAT Digital Twin Vision</div>
+<h2 class="section-h">From 20 Offline Points to Real-Time Kinetic Monitoring</h2>
+<p class="body-text">With Raman spectroscopy as a PAT tool, glucose can be monitored every 5 minutes instead of twice daily, transforming 20 offline points into &gt;2,000 real-time observations. A PINN trained on live Raman data could estimate $\mu_{max}$, $K_s$, and $Y_{xs}$ within the first 48–72 hours, feed updated parameters to a model-predictive controller for feed rate optimisation, and predict final titer at day 14 from day 3 data.</p>
+<p class="body-text">This is the biopharmaceutical PINN digital twin, ICH Q8/Q11 process understanding operationalised in real-time.</p>
+</div>
+<div style="margin-top:var(--sp-5);display:flex;gap:var(--sp-3);flex-wrap:wrap;align-items:center">
+<span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;flex-basis:100%">Notebook: Monod Bioprocess</span>
+<a href="https://github.com/alishahmohammadi26/physics-ai-pinns/blob/main/02_Solving_ODEs_with_Neural_Networks/notebooks/07_bioprocess_viable_cell_density.ipynb" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;font:600 var(--text-sm)/1 var(--font-body);padding:10px 18px;border-radius:999px;background:var(--surface);border:1px solid var(--line-strong);color:var(--navy);text-decoration:none" target="_blank">
+<svg fill="currentColor" height="15" viewbox="0 0 24 24" width="15"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg>
         View notebook on GitHub
       </a>
-      <a href="https://colab.research.google.com/github/alishahmohammadi26/physics-ai-pinns/blob/main/02_Solving_ODEs_with_Neural_Networks/notebooks/07_bioprocess_viable_cell_density.ipynb" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;font:600 var(--text-sm)/1 var(--font-body);padding:10px 18px;border-radius:999px;background:var(--accent);color:#fff;border:1px solid transparent;text-decoration:none">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z" fill="currentColor" stroke="none"/></svg>
+<a href="https://colab.research.google.com/github/alishahmohammadi26/physics-ai-pinns/blob/main/02_Solving_ODEs_with_Neural_Networks/notebooks/07_bioprocess_viable_cell_density.ipynb" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;font:600 var(--text-sm)/1 var(--font-body);padding:10px 18px;border-radius:999px;background:var(--accent);color:#fff;border:1px solid transparent;text-decoration:none" target="_blank">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><circle cx="12" cy="12" r="10"></circle><path d="M10 8l6 4-6 4V8z" fill="currentColor" stroke="none"></path></svg>
         Open in Colab
       </a>
-    </div>
-
-    <hr class="divider">
-    <div id="refs">
-      <div class="section-label">References</div>
-      <div class="ref-list">
-        <div class="ref-item"><span class="ref-num">1</span>Goldrick, S., et al. (2015). The development of an industrial-scale fed-batch fermentation simulation. <em>J. Biotechnol.</em>, 193, 70–82.</div>
-        <div class="ref-item"><span class="ref-num">2</span>Adebar, M., et al. (2025). Physics-informed neural networks for bioreactor kinetics. <em>Biotechnol. Bioeng.</em></div>
-        <div class="ref-item"><span class="ref-num">3</span>Alam, M., et al. (2025). PINN-based viable cell density prediction. <em>Can. J. Chem. Eng.</em></div>
-        <div class="ref-item"><span class="ref-num">4</span>Monod, J. (1949). The growth of bacterial cultures. <em>Annual Review of Microbiology</em>, 3, 371–394.</div>
-        <div class="ref-item"><span class="ref-num">5</span>Notebook: <a href="https://github.com/alishahmohammadi26/physics-ai-pinns" target="_blank" rel="noopener">physics-ai-pinns</a> · <code>02_Solving_ODEs/07_bioprocess_viable_cell_density.ipynb</code></div>
-      </div>
-    </div>
+</div>
+<hr class="divider"/>
+<div id="refs">
+<div class="section-label">References</div>
+<div class="ref-list">
+<div class="ref-item"><span class="ref-num">1</span>Goldrick, S., et al. (2015). The development of an industrial-scale fed-batch fermentation simulation. <em>J. Biotechnol.</em>, 193, 70–82.</div>
+<div class="ref-item"><span class="ref-num">2</span>Adebar, M., et al. (2025). Physics-informed neural networks for bioreactor kinetics. <em>Biotechnol. Bioeng.</em></div>
+<div class="ref-item"><span class="ref-num">3</span>Alam, M., et al. (2025). PINN-based viable cell density prediction. <em>Can. J. Chem. Eng.</em></div>
+<div class="ref-item"><span class="ref-num">4</span>Monod, J. (1949). The growth of bacterial cultures. <em>Annual Review of Microbiology</em>, 3, 371–394.</div>
+<div class="ref-item"><span class="ref-num">5</span>Notebook: <a href="https://github.com/alishahmohammadi26/physics-ai-pinns" rel="noopener" target="_blank">physics-ai-pinns</a> · <code>02_Solving_ODEs/07_bioprocess_viable_cell_density.ipynb</code></div>
+</div>
+</div>
 </div></div>
-
+<div class="related-reading reveal">
+<p class="rr-label">Related reading</p>
+<div class="rr-grid">
+<a class="rr-card" href="pinn-odes-stiff-enzyme-kinetics.html"><span class="rr-title">Stiff Enzyme Kinetics &amp; QSSA: Michaelis-Menten Progress Curve with PINNs</span><span class="rr-go">Read article &#8594;</span></a>
+<a class="rr-card" href="unified-pinn-ode-benchmark.html"><span class="rr-title">Unified Benchmark: PINNs, Adaptive Sampling &amp; DeepONet Across Nine ODE Systems</span><span class="rr-go">Read article &#8594;</span></a>
+</div>
 </div>
 <footer class="site-footer">
-  <div class="foot-lead">
-    <p class="foot-name">Ali Shahmohammadi, Ph.D.</p>
-    <p class="foot-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p>
-  </div>
-  <nav class="foot-nav" aria-label="Footer">
-    <a href="../index.html#writing">Writing</a>
-    <a href="../index.html#career">Career</a>
-    <a href="../resume.html">Resume</a>
-    <a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
-    <a href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
-  </nav>
-  <div class="foot-base">
-    <span>&copy; 2026 Ali Shahmohammadi, Ph.D.</span>
-    <a class="to-top" href="#top">Back to top &uarr;</a>
-  </div>
+<div class="foot-lead">
+<p class="foot-name">Ali Shahmohammadi, Ph.D.</p>
+<p class="foot-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p>
+</div>
+<nav aria-label="Footer" class="foot-nav">
+<a href="../index.html#writing">Writing</a>
+<a href="../index.html#career">Career</a>
+<a href="../resume.html">Resume</a>
+<a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
+<a href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
+</nav>
+<div class="foot-base">
+<span>© 2026 Ali Shahmohammadi, Ph.D.</span>
+<a class="to-top" href="#top">Back to top ↑</a>
+</div>
 </footer>
 <script>
 (function(){
@@ -453,6 +472,14 @@ opt2 = torch.optim.Adam(allp, lr=<span class="nm">2e-3</span>)
     document.documentElement.dataset.theme = n;
     localStorage.setItem('theme', n);
   });
+})();
+</script>
+<script>
+(function(){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}
+  });},{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
 })();
 </script>
 </body></html>

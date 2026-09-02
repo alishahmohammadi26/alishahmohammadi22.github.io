@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Résumé — Ali Shahmohammadi, Ph.D.</title>
-<meta name="description" content="Résumé of Ali Shahmohammadi, Ph.D. — Associate Director, Applied AI Engineering & Scientific Data. Agentic AI, MCP data infrastructure, and FAIR data strategy in pharmaceutical R&D.">
+<title>Résumé, Ali Shahmohammadi, Ph.D.</title>
+<meta name="description" content="Résumé of Ali Shahmohammadi, Ph.D., Associate Director, Digital: Workflow Automation & Applied AI. Enterprise data governance, FAIR data strategy, and agentic AI in regulated pharmaceutical R&D.">
 <link rel="canonical" href="https://alishahmohammadi.com/resume.html">
 <meta property="og:type" content="profile">
-<meta property="og:title" content="Résumé — Ali Shahmohammadi, Ph.D.">
-<meta property="og:description" content="Associate Director, Applied AI Engineering & Scientific Data.">
+<meta property="og:title" content="Résumé, Ali Shahmohammadi, Ph.D.">
+<meta property="og:description" content="Associate Director, Digital: Workflow Automation & Applied AI.">
 <meta property="og:url" content="https://alishahmohammadi.com/resume.html">
 <meta property="og:image" content="https://alishahmohammadi.com/assets/images/og-preview.png">
 
@@ -138,6 +138,11 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;tex
   display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:var(--text-sm)}
 .site-footer a{color:var(--ink-2)}
 
+/* ===== Scroll-reveal (matches index.html & articles) ===== */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
 /* ===== Print / PDF ===== */
 @media print{
   :root{--paper:#fff;--surface:#fff;--surface-2:#f2f2f2;--line:#d0d0d0;--line-strong:#999;
@@ -148,6 +153,7 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;tex
   .r-grid{grid-template-columns:14rem 1fr;gap:1.4rem}
   a{color:#111}
   .xp,.edu-item,.pub,.block{break-inside:avoid}
+  .reveal{opacity:1!important;transform:none!important;transition:none!important}
   @page{margin:14mm}
 }
 </style>
@@ -169,13 +175,11 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;tex
 <main class="resume">
 
   <!-- ===== HEAD ===== -->
-  <div class="r-head">
+  <div class="r-head reveal">
     <h1 class="r-name">Ali Shahmohammadi<span class="deg">Ph.D.</span></h1>
-    <p class="r-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p>
+    <p class="r-role">Associate Director, Digital · Workflow Automation &amp; Applied AI</p>
     <div class="r-contact">
-      <span>Greater Boston, MA</span><span class="sep">·</span>
-      <!-- EDIT: real email -->
-      <a href="mailto:hello@alishahmohammadi.com">hello@alishahmohammadi.com</a><span class="sep">·</span>
+      <span>Cambridge, MA</span><span class="sep">·</span>
       <a href="https://alishahmohammadi.com">alishahmohammadi.com</a><span class="sep">·</span>
       <a href="https://linkedin.com/in/alishahmohammadi" rel="me">linkedin.com/in/alishahmohammadi</a><span class="sep">·</span>
       <a href="https://github.com/alishahmohammadi26" rel="me">github.com/alishahmohammadi26</a>
@@ -189,12 +193,11 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;tex
   <div class="r-grid">
 
     <!-- ===== SIDEBAR ===== -->
-    <aside class="side">
+    <aside class="side reveal">
       <div class="block">
         <h3 class="r-h2">Contact</h3>
         <ul class="contact-list">
-          <li><span class="k">Location</span><span>Greater Boston, MA</span></li>
-          <li><span class="k">Email</span><a href="mailto:hello@alishahmohammadi.com">hello@alishahmohammadi.com</a></li>
+          <li><span class="k">Location</span><span>Cambridge, MA</span></li>
           <li><span class="k">Web</span><a href="https://alishahmohammadi.com">alishahmohammadi.com</a></li>
           <li><span class="k">LinkedIn</span><a href="https://linkedin.com/in/alishahmohammadi" rel="me">/in/alishahmohammadi</a></li>
           <li><span class="k">GitHub</span><a href="https://github.com/alishahmohammadi26" rel="me">@alishahmohammadi26</a></li>
@@ -204,36 +207,49 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;tex
       <div class="block">
         <h3 class="r-h2">Technical Expertise</h3>
         <div class="skillgroup">
-          <h4>Agentic AI &amp; Machine Learning</h4>
+          <h4>Data Governance &amp; Trust</h4>
           <div class="tags">
-            <span class="tag">Agentic AI</span><span class="tag">AI Strategy</span><span class="tag">LangGraph</span>
-            <span class="tag">Multi-Agent Systems</span><span class="tag">LLMs &amp; RAG</span><span class="tag">Human-in-the-Loop</span>
-            <span class="tag">AI Evaluation</span><span class="tag">PINNs</span><span class="tag">PyTorch</span>
-            <span class="tag">JAX</span><span class="tag">Graph Neural Nets</span><span class="tag">scikit-learn</span>
+            <span class="tag">Governance Strategy</span><span class="tag">Operating Models</span><span class="tag">Data Ownership</span>
+            <span class="tag">Data Contracts</span><span class="tag">Stewardship Councils</span><span class="tag">Policy Enforcement</span>
+            <span class="tag">Data Quality</span><span class="tag">Adoption &amp; Compliance Metrics</span>
           </div>
         </div>
         <div class="skillgroup">
-          <h4>Data Strategy &amp; Governance</h4>
+          <h4>Metadata, Catalog &amp; Lineage</h4>
           <div class="tags">
-            <span class="tag">Master Data Mgmt</span><span class="tag">Knowledge Graphs</span><span class="tag">Ontology Engineering</span>
-            <span class="tag">Data Catalogs</span><span class="tag">Data Lineage</span><span class="tag">FAIR Maturity</span>
-            <span class="tag">AI Governance</span><span class="tag">ISO/IEC 23894</span><span class="tag">Semantic Interop.</span><span class="tag">SPARQL</span>
+            <span class="tag">Data Catalogs</span><span class="tag">Metadata Mgmt</span><span class="tag">Lineage</span>
+            <span class="tag">Controlled Vocabularies</span><span class="tag">Ontology Engineering</span><span class="tag">Knowledge Graphs</span>
+            <span class="tag">Master Data Mgmt</span><span class="tag">FAIR Maturity</span>
           </div>
         </div>
         <div class="skillgroup">
-          <h4>Engineering &amp; Science</h4>
+          <h4>AI Governance &amp; Automation</h4>
           <div class="tags">
-            <span class="tag">Digital CMC</span><span class="tag">Process Modeling</span><span class="tag">Mechanistic Models</span>
-            <span class="tag">Design of Experiments</span><span class="tag">Continuous Mfg</span><span class="tag">Molecular Dynamics</span>
-            <span class="tag">Cheminformatics</span><span class="tag">SPC</span>
+            <span class="tag">Agentic AI</span><span class="tag">LangGraph</span><span class="tag">LangChain</span>
+            <span class="tag">AWS Bedrock</span><span class="tag">Human-in-the-Loop</span><span class="tag">AI Use-Case Prioritization</span>
           </div>
         </div>
         <div class="skillgroup">
-          <h4>Infrastructure &amp; Cloud</h4>
+          <h4>Regulated Environments</h4>
           <div class="tags">
-            <span class="tag">Python</span><span class="tag">R</span><span class="tag">AWS (S3/EC2/Redshift/Neptune)</span>
-            <span class="tag">Neo4j</span><span class="tag">Airflow</span><span class="tag">dbt</span>
-            <span class="tag">Terraform</span><span class="tag">Docker</span><span class="tag">GitHub Actions</span>
+            <span class="tag">GxP</span><span class="tag">HIPAA-Aligned Handling</span><span class="tag">ICH Guidance</span>
+            <span class="tag">IND / BLA Support</span><span class="tag">Audit Readiness</span><span class="tag">Validation Evidence</span>
+          </div>
+        </div>
+        <div class="skillgroup">
+          <h4>Platforms &amp; Engineering</h4>
+          <div class="tags">
+            <span class="tag">AWS (S3/EC2/Redshift/EMR/Neptune)</span><span class="tag">TetraScience</span><span class="tag">LabKey</span>
+            <span class="tag">JMP</span><span class="tag">Neo4j</span><span class="tag">Airflow</span><span class="tag">dbt</span>
+            <span class="tag">Terraform</span><span class="tag">GitHub Actions</span><span class="tag">Power BI</span>
+            <span class="tag">Tableau</span><span class="tag">Python</span><span class="tag">R</span><span class="tag">PyTorch</span>
+          </div>
+        </div>
+        <div class="skillgroup">
+          <h4>Leadership</h4>
+          <div class="tags">
+            <span class="tag">Team Building</span><span class="tag">Roadmap &amp; Portfolio</span><span class="tag">Matrixed-Org Influence</span>
+            <span class="tag">Executive Communication</span><span class="tag">Partnership Mgmt</span>
           </div>
         </div>
       </div>
@@ -247,16 +263,30 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;tex
         <div class="proj"><span style="font-weight:600;color:var(--navy);font-size:var(--text-sm)">FAIR Studio</span>
           <p>Pistoia Alliance product operationalizing FAIR assessment at scale.</p></div>
       </div>
+
+      <div class="block">
+        <h3 class="r-h2">Certifications</h3>
+        <ul class="contact-list" style="margin-bottom:0">
+          <li><span>AWS Solutions Architect</span></li>
+          <li><span>Six Sigma Black Belt</span></li>
+        </ul>
+      </div>
     </aside>
 
     <!-- ===== MAIN ===== -->
-    <div class="main">
+    <div class="main reveal">
       <div class="block summary">
         <h3 class="r-h2">Summary</h3>
-        <p>Applied AI engineer with a decade in pharmaceutical R&amp;D, building the MCP servers,
-          agentic pipelines, and evaluation harnesses that make scientific data trustworthy for
-          AI. Ships production systems in regulated life-sciences environments, grounded in a
-          background in physics-informed and mechanistic modeling.</p>
+        <p style="max-width:68ch">Data and AI leader with more than ten years in regulated life-sciences R&amp;D,
+          including four-plus years at Takeda building enterprise data governance, FAIR data, and AI-enablement
+          capabilities across research domains. Treats data trust as an operating system rather than a manual
+          review cycle: governance policy expressed as automated controls embedded in platforms, ownership and
+          stewardship models that hold across technical and business domains, and agentic AI that performs
+          first-pass curation, quality checking, and lineage capture with human approval retained where
+          accountability requires it. Leads multidisciplinary teams of engineers, data scientists, and process
+          specialists, partners across Product, Engineering, Architecture, QA, Security, and Research in a large
+          matrixed organization, and translates GxP and regulatory requirements into scalable standards and
+          trusted data products.</p>
       </div>
 
       <div class="block">
@@ -264,69 +294,71 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;tex
 
         <div class="xp">
           <div class="xp-top">
-            <p class="xp-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p>
-            <span class="xp-when">Sep 2022 – Present</span>
+            <p class="xp-role">Associate Director, Digital · Workflow Automation &amp; Applied AI</p>
+            <span class="xp-when">Jul 2024 – Present</span>
+          </div>
+          <p class="xp-org">Takeda Pharmaceutical Inc. · Cambridge, MA</p>
+          <ul>
+            <li>Lead Takeda's R&amp;D FAIR data strategy and enterprise data governance roadmap, defining the policies, capabilities, operating model, and stewardship structure that make research data findable, accessible, interoperable, and reusable across regulated R&amp;D domains.</li>
+            <li>Drive enterprise deployment of FAIR Studio, operationalizing FAIR assessment at scale and embedding governance directly into digital products, AI pipelines, and prioritized AI use cases.</li>
+            <li>Architect the next-generation R&amp;D data catalog: automated agentic AI quality checks, lineage, metadata management, and classification that gate data before it reaches analytics and machine learning.</li>
+            <li>Designed and deployed a production agentic AI system for ontology curation and integration: a multi-agent pipeline covering entity registration, term mapping, and stewardship workflow with human-in-the-loop approval, compressing curation cycle times while preserving governance accountability.</li>
+            <li>Established enterprise standards for data ownership, master data definitions, controlled vocabularies, metadata, and quality rules, defining the accountability model that assigns named owners and stewards across technical and business domains.</li>
+            <li>Lead a multidisciplinary team of engineers, data scientists, and process specialists: setting the roadmap, mentoring contributors, and holding a portfolio of initiatives to ROI-validated outcomes in data quality, operational efficiency, and risk reduction.</li>
+            <li>Partner with QA, IT, Security, and scientific stakeholders to align data practices with GxP expectations and downstream AI use, sustaining audit readiness and end-to-end traceability from instrument to insight.</li>
+            <li>Built the cell therapy digital data backbone: a governed end-to-end flow connecting laboratory instruments, AWS data services, LabKey, and JMP, with near-real-time observability and quality checkpoints from bench to analytics.</li>
+          </ul>
+        </div>
+
+        <div class="xp">
+          <div class="xp-top">
+            <p class="xp-role">Senior Scientist, Digital CMC</p>
+            <span class="xp-when">Sep 2022 – Jul 2024</span>
           </div>
           <p class="xp-org">Takeda Pharmaceutical Inc. · Greater Boston, MA</p>
           <ul>
-            <li>Designed and deployed a production agentic AI system for ontology curation — a multi-agent LangGraph pipeline with human-in-the-loop governance — cutting curation cycle times significantly.</li>
-            <li>Built MCP-style scientific data connectors integrating ELN, LIMS, and AWS into a validated, agent-ready data layer across R&amp;D domains.</li>
-            <li>Architected a next-generation R&amp;D data catalog with automated quality checks, lineage, and metadata management that gates data before it reaches AI pipelines.</li>
-            <li>Led enterprise FAIR data strategy and delivered FAIR Studio (Pistoia Alliance), an industry-alliance product operationalizing FAIR assessment at scale.</li>
-            <li>Built a digital twin for continuous manufacturing of a small-molecule API, integrating unit-operation mechanistic models.</li>
-            <li>Established strategic research partnerships with MIT, BYU, Brown, and Purdue on PINNs and in-silico development.</li>
+            <li>Delivered flow cytometry automation with TetraScience, moving instrument data automatically from assay execution to LabKey through AI-enabled autogating and FlowJo and back on scientist confirmation, eliminating manual handoffs.</li>
+            <li>Operationalized self-service reporting through governed dashboards and standardized reporting layers, reducing reliance on ad-hoc data pulls and giving decision-makers trusted, near-real-time information.</li>
+            <li>Designed the assay submission and automation intake process, defining service-level expectations, metadata requirements, and governance gates that measurably improved data quality, traceability, and audit readiness.</li>
+            <li>Delivered mechanistic process models and a digital twin for a continuous manufacturing process, plus physics-informed models for a continuous hydrogenation process, and built research partnerships with MIT, BYU, Brown, and Purdue advancing physics-informed neural networks and in-silico-first development.</li>
           </ul>
         </div>
 
         <div class="xp">
           <div class="xp-top">
-            <p class="xp-role">Senior CMC Scientist</p>
-            <span class="xp-when">Aug 2021 – Sep 2022</span>
+            <p class="xp-role">Senior Statistician, CMC</p>
+            <span class="xp-when">Jul 2021 – Sep 2022</span>
           </div>
           <p class="xp-org">Moderna Inc. · Greater Boston, MA</p>
           <ul>
-            <li>Developed ML models for mRNA drug-substance and drug-product stability and shelf-life prediction (ICH-compliant).</li>
-            <li>Optimized the IVT reaction for mRNA process characterization using combined ML and fundamental modeling.</li>
-            <li>Led comparability and product-specification projects through process scale-up phases.</li>
-            <li>Contributed to IND and BLA submissions through statistical analysis and documentation.</li>
-          </ul>
-        </div>
-
-        <div class="xp">
-          <div class="xp-top">
-            <p class="xp-role">Post-Doctoral Research Fellow</p>
-            <span class="xp-when">Oct 2019 – Aug 2021</span>
-          </div>
-          <p class="xp-org">The University of Texas at Austin · Austin, TX</p>
-          <ul>
-            <li>Developed fundamental models for thin-film gallium phosphate on silicon for plasma-etch optimization.</li>
-            <li>Built model-based DoE tools in R Shiny for plasma-etch process optimization.</li>
-            <li>Created a first-principles model for the viscoelastic properties of adhesive soft particles.</li>
-            <li>Performed molecular-dynamics simulations with 100,000+ particles.</li>
+            <li>Combined machine learning with first-principles modeling to optimize the IVT reaction for mRNA process characterization, accelerating process understanding.</li>
+            <li>Built ML and fundamental stability models (ICH) predicting shelf-life of mRNA drug substances and products, informing risk-based release strategies.</li>
+            <li>Implemented SPC and anomaly-detection systems for mRNA DS/DP manufacturing, enabling earlier drift detection and faster root-cause investigation.</li>
+            <li>Designed DoE, hypothesis testing, and factor-screening for mRNA/LNP process development; contributed statistical analysis to IND and BLA submissions.</li>
           </ul>
         </div>
       </div>
 
       <div class="block">
         <h3 class="r-h2">Education</h3>
-        <!-- Well-sourced; verify graduation year -->
         <div class="edu-item">
-          <p class="edu-deg">Ph.D., Chemical Engineering</p>
+          <p class="edu-deg">Ph.D., Chemical Process Engineering</p>
           <p class="edu-org">Queen's University · Kingston, ON, Canada</p>
-          <p class="edu-note">Process systems engineering &amp; statistical design of experiments — developed a
-            new design-of-experiments algorithm for building mathematical models via a process-automation system.</p>
-          <p class="edu-when">2019 &nbsp;<span style="opacity:.6">(verify year)</span></p>
+          <p class="edu-note">Doctoral research conducted as an Eli Lilly-sponsored industrial collaboration; developed a
+            Bayesian model-based DoE methodology that reduced experiments required for kinetic-model development and
+            validation of complex chemical systems.</p>
+          <p class="edu-when">2019</p>
         </div>
-        <!-- EDIT: add prior degrees (BSc / MSc) from your CV -->
         <div class="edu-item">
-          <p class="edu-deg">M.Sc., Chemical Engineering</p>
+          <p class="edu-deg">M.Sc., Chemical Process Engineering</p>
           <p class="edu-org">Tarbiat Modares University · Tehran, Iran</p>
           <p class="edu-when">2013</p>
         </div>
         <div class="edu-item">
           <p class="edu-deg">B.Sc., Chemical Engineering</p>
-          <p class="edu-org">Tehran University · Tehran, Iran</p>
+          <p class="edu-org">University of Tehran · Tehran, Iran</p>
           <p class="edu-when">2011</p>
+        </div>
       </div>
 
       <div class="block">
@@ -339,7 +371,7 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;tex
           <div class="m">2026 · ICH Q9(R1), NIST AI RMF crosswalks</div></div>
         <div class="pub"><a href="https://alishahmohammadi.com/blog/pinn-introduction.html">Physics-Informed Neural Networks: Why Embedding Physical Laws Changes Everything</a>
           <div class="m">2025 · foundational article, 17-part PINN series</div></div>
-        <p style="margin-top:var(--sp-3)"><a class="more-link" href="https://alishahmohammadi.com/#writing">Full index — 25+ articles →</a></p>
+        <p style="margin-top:var(--sp-3)"><a class="more-link" href="https://alishahmohammadi.com/#writing">Full index: 25+ articles →</a></p>
       </div>
     </div>
   </div>
@@ -365,6 +397,14 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;tex
     document.documentElement.dataset.theme=n;localStorage.setItem('theme',n);
   });
   document.getElementById('printBtn').addEventListener('click',function(){window.print();});
+})();
+</script>
+<script>
+(function(){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}
+  });},{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
 })();
 </script>
 </body>

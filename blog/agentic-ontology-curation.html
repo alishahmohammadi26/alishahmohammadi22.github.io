@@ -1,20 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html data-theme="light" lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Building Agentic AI Systems for Ontology Curation in Drug R&D | Ali Shahmohammadi</title>
-<meta name="description" content="How a four-agent LangGraph pipeline automates biomedical ontology curation, extracting entities, mapping to BioPortal/OLS, detecting conflicts, and routing governance decisions, while keeping humans in the loop." />
-
-<meta property="og:type" content="article">
-
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Building Agentic AI Systems for Ontology Curation in Drug R&amp;D | Ali Shahmohammadi</title>
+<meta content="How a four-agent LangGraph pipeline automates biomedical ontology curation, extracting entities, mapping to BioPortal/OLS, detecting conflicts, and routing governance decisions, while keeping humans in the loop." name="description"/>
+<meta content="article" property="og:type"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" rel="stylesheet"/>
+<script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})" src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <script>
   (function(){var t=localStorage.getItem('theme');
    if(!t)t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
@@ -316,8 +313,24 @@ hr.divider{background:var(--line-strong)}
 
 /* Old nav — hide fixed positioning; handled by new .site-header */
 nav:not(.site-nav):not(.foot-nav){display:none}
-</style>
 
+/* ===== Related reading ===== */
+.related-reading{margin:var(--sp-10) 0 var(--sp-8);padding-top:var(--sp-8);border-top:1px solid var(--line)}
+.related-reading .rr-label{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 var(--sp-4)}
+.related-reading .rr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--sp-4)}
+.related-reading .rr-card{display:block;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:var(--sp-4) var(--sp-5);text-decoration:none;transition:border-color .2s,box-shadow .2s,transform .2s}
+.related-reading .rr-card:hover{border-color:var(--accent);box-shadow:var(--shadow-2);transform:translateY(-2px);text-decoration:none}
+.related-reading .rr-card .rr-title{display:block;font-family:var(--font-display);font-weight:600;color:var(--navy);
+  font-size:var(--text-base);line-height:var(--lh-snug);margin-bottom:6px}
+.related-reading .rr-card .rr-go{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--accent);letter-spacing:.05em}
+
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+</style>
 <style>
 /* ═══════════════════════════════════════════════════════════════════════
    NON-PINN ARTICLE COMPATIBILITY CSS
@@ -626,258 +639,250 @@ code:not(pre code){font-family:var(--font-mono);font-size:.9em;background:var(--
 </style>
 </head>
 <body>
-
 <!-- Nav -->
 <header class="site-header" data-elevate="false">
-  <a class="brand" href="../index.html">Ali Shahmohammadi <span class="deg">Ph.D.</span></a>
-  <nav class="site-nav" aria-label="Primary">
-    <a href="../index.html#writing">Writing</a>
-    <a href="../index.html#career">Career</a>
-    <a href="../resume.html">Resume</a>
-    <a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
-  </nav>
-  <button class="theme-toggle" id="themeBtn" type="button" aria-label="Toggle dark mode"><b></b></button>
-  <div class="read-progress" role="presentation"><span id="progress"></span></div>
+<a class="brand" href="../index.html">Ali Shahmohammadi <span class="deg">Ph.D.</span></a>
+<nav aria-label="Primary" class="site-nav">
+<a href="../index.html#writing">Writing</a>
+<a href="../index.html#career">Career</a>
+<a href="../resume.html">Resume</a>
+<a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
+</nav>
+<button aria-label="Toggle dark mode" class="theme-toggle" id="themeBtn" type="button"><b></b></button>
+<div class="read-progress" role="presentation"><span id="progress"></span></div>
 </header>
-
 <!-- Hero -->
 <section class="hero">
-  <div class="hero-pill">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-    Agentic AI &nbsp;&middot;&nbsp; Ontology Curation &nbsp;&middot;&nbsp; Drug R&amp;D
+<div class="hero-pill">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+    Agentic AI  ·  Ontology Curation  ·  Drug R&amp;D
   </div>
-  <h1>Building <span class="accent">Agentic AI</span> Systems<br>for Ontology Curation</h1>
-  <p class="hero-sub">How a four-agent LangGraph pipeline automates biomedical term extraction, ontology mapping, conflict detection, and governance routing &mdash; while preserving human oversight at every critical decision point.</p>
-  <div class="hero-meta">
-    <span class="meta-tag">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+<h1>Building <span class="accent">Agentic AI</span> Systems<br/>for Ontology Curation</h1>
+<p class="hero-sub">How a four-agent LangGraph pipeline automates biomedical term extraction, ontology mapping, conflict detection, and governance routing, while preserving human oversight at every critical decision point.</p>
+<div class="hero-meta">
+<span class="meta-tag">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
       May 19, 2026
     </span>
-    <span class="meta-dot"></span>
-    <span class="meta-tag">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+<span class="meta-dot"></span>
+<span class="meta-tag">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
       14 min read
     </span>
-    <span class="meta-dot"></span>
-    <span class="meta-tag">Ali Shahmohammadi, Ph.D.</span>
-  </div>
-  <div class="hero-cta">
-    <a href="#problem" class="btn btn-primary">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+<span class="meta-dot"></span>
+<span class="meta-tag">Ali Shahmohammadi, Ph.D.</span>
+</div>
+<div class="hero-cta">
+<a class="btn btn-primary" href="#problem">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="15"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
       Read Article
     </a>
-    <a href="https://github.com/alishahmohammadi26/onto-curator-agent" target="_blank" rel="noopener" class="btn btn-outline">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+<a class="btn btn-outline" href="https://github.com/alishahmohammadi26/onto-curator-agent" rel="noopener" target="_blank">
+<svg fill="currentColor" height="15" viewbox="0 0 24 24" width="15"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg>
       View on GitHub
     </a>
-    <a href="https://alishahmohammadi26.github.io/onto-curator-agent" target="_blank" rel="noopener" class="btn btn-outline">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+<a class="btn btn-outline" href="https://alishahmohammadi26.github.io/onto-curator-agent" rel="noopener" target="_blank">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" x2="21" y1="14" y2="3"></line></svg>
       Project Page
     </a>
-  </div>
+</div>
 </section>
-
 <!-- Stats -->
 <div class="container" style="margin:3rem auto;">
-  <div class="stats-row">
-    <div class="stat"><div class="stat-num">4</div><div class="stat-label">Specialized Agents</div></div>
-    <div class="stat"><div class="stat-num">83%</div><div class="stat-label">Auto-Approval Rate</div></div>
-    <div class="stat"><div class="stat-num">4 hr</div><div class="stat-label">Mean Resolution Time</div></div>
-    <div class="stat"><div class="stat-num">96%</div><div class="stat-label">Steward Agreement</div></div>
-  </div>
+<div class="stats-row">
+<div class="stat"><div class="stat-num">4</div><div class="stat-label">Specialized Agents</div></div>
+<div class="stat"><div class="stat-num">83%</div><div class="stat-label">Auto-Approval Rate</div></div>
+<div class="stat"><div class="stat-num">4 hr</div><div class="stat-label">Mean Resolution Time</div></div>
+<div class="stat"><div class="stat-num">96%</div><div class="stat-label">Steward Agreement</div></div>
 </div>
-
+</div>
 <!-- TOC -->
 <section class="section-alt" style="padding:3rem 0;">
-  <div class="container">
-    <div class="toc">
-      <div class="toc-head">Contents</div>
-      <ol>
-        <li><span class="toc-n">01</span><a href="#problem">The Ontology Problem in Drug R&amp;D</a></li>
-        <li><span class="toc-n">02</span><a href="#why-agentic">Why an Agentic Architecture?</a></li>
-        <li><span class="toc-n">03</span><a href="#architecture">Four-Agent System Architecture</a></li>
-        <li><span class="toc-n">04</span><a href="#extractor">Agent 1 &mdash; EntityExtractorAgent</a></li>
-        <li><span class="toc-n">05</span><a href="#mapper">Agent 2 &mdash; OntologyMapperAgent</a></li>
-        <li><span class="toc-n">06</span><a href="#conflict">Agent 3 &mdash; ConflictDetectorAgent</a></li>
-        <li><span class="toc-n">07</span><a href="#governance-router">Agent 4 &mdash; GovernanceRouterAgent</a></li>
-        <li><span class="toc-n">08</span><a href="#pipeline">The LangGraph State Machine</a></li>
-        <li><span class="toc-n">09</span><a href="#hitl">Human-in-the-Loop Governance</a></li>
-        <li><span class="toc-n">10</span><a href="#results">Results &amp; Impact</a></li>
-        <li><span class="toc-n">11</span><a href="#lessons">Lessons Learned</a></li>
-      </ol>
-    </div>
-  </div>
+<div class="container">
+<div class="toc">
+<div class="toc-head">Contents</div>
+<ol>
+<li><span class="toc-n">01</span><a href="#problem">The Ontology Problem in Drug R&amp;D</a></li>
+<li><span class="toc-n">02</span><a href="#why-agentic">Why an Agentic Architecture?</a></li>
+<li><span class="toc-n">03</span><a href="#architecture">Four-Agent System Architecture</a></li>
+<li><span class="toc-n">04</span><a href="#extractor">Agent 1: EntityExtractorAgent</a></li>
+<li><span class="toc-n">05</span><a href="#mapper">Agent 2: OntologyMapperAgent</a></li>
+<li><span class="toc-n">06</span><a href="#conflict">Agent 3: ConflictDetectorAgent</a></li>
+<li><span class="toc-n">07</span><a href="#governance-router">Agent 4: GovernanceRouterAgent</a></li>
+<li><span class="toc-n">08</span><a href="#pipeline">The LangGraph State Machine</a></li>
+<li><span class="toc-n">09</span><a href="#hitl">Human-in-the-Loop Governance</a></li>
+<li><span class="toc-n">10</span><a href="#results">Results &amp; Impact</a></li>
+<li><span class="toc-n">11</span><a href="#lessons">Lessons Learned</a></li>
+</ol>
+</div>
+</div>
 </section>
-
 <!-- 1. The Problem -->
 <section class="section" id="problem">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>01 &mdash; The Problem</div>
-      <div class="section-title">The Ontology Problem in Drug R&amp;D</div>
-      <p class="section-sub">Biomedical terminology is fragmented across systems. AI/ML models can't be trained on inconsistently labelled data.</p>
-    </div>
-    <div class="prose" style="margin-bottom:2.5rem;">
-      <p>Walk through any pharmaceutical research organisation and you'll find the same problem everywhere. A process development scientist in San Diego writes "cell viability" in her ELN. Her counterpart in Osaka records the same measurement as "VIAB %". The LIMS in the Swiss manufacturing facility stores it as "Viability_Score_Trypan". The regulatory submission uses the official term <span class="ic">OBI:0001985</span> &mdash; but only because a data steward looked it up six weeks before the BLA deadline.</p>
-      <p>These four strings represent the same scientific concept. No machine knows that. No AI/ML model trained across these four systems will generalise correctly. The downstream cost blocks exactly the kind of cross-dataset meta-analysis and federated AI that could accelerate drug development by years.</p>
-    </div>
-    <div class="ps-grid">
-      <div class="ps-card problem">
-        <div class="ps-head">
-          <svg class="li-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-          <h3>Without Ontology Curation</h3>
-        </div>
-        <ul>
-          <li><svg class="li-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>60&ndash;70% of R&amp;D data carries unmapped or inconsistently mapped terms</li>
-          <li><svg class="li-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Manual review backlogs of 2&ndash;6 weeks per dataset ingestion</li>
-          <li><svg class="li-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Hallucinated or non-existent CURIEs propagate silently into the knowledge graph</li>
-          <li><svg class="li-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Cross-study analytics corrupted by synonym / homonym conflicts</li>
-          <li><svg class="li-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>No documented audit trail for terminology governance decisions</li>
-          <li><svg class="li-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>2&ndash;4 FTE domain stewards per therapeutic area cannot scale to 5M+ data points/year</li>
-        </ul>
-      </div>
-      <div class="ps-card solution">
-        <div class="ps-head">
-          <svg class="li-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          <h3>With OntoCurator Agent</h3>
-        </div>
-        <ul>
-          <li><svg class="li-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>83% of mappings auto-approved with &ge;0.92 confidence threshold</li>
-          <li><svg class="li-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Mean resolution time cut from 18 days to 4 hours</li>
-          <li><svg class="li-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Live BioPortal + OLS4 verification eliminates hallucinated CURIEs</li>
-          <li><svg class="li-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Cross-dataset conflict detection surfaces inconsistencies automatically</li>
-          <li><svg class="li-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Full audit trail &mdash; every decision logged to the PostgreSQL checkpointer</li>
-          <li><svg class="li-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Stewards review pre-analysed cards, not raw proposals</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow"><svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>01. The Problem</div>
+<div class="section-title">The Ontology Problem in Drug R&amp;D</div>
+<p class="section-sub">Biomedical terminology is fragmented across systems. AI/ML models can't be trained on inconsistently labelled data.</p>
+</div>
+<div class="prose" style="margin-bottom:2.5rem;">
+<p>Walk through any pharmaceutical research organisation and you'll find the same problem everywhere. A process development scientist in San Diego writes "cell viability" in her ELN. Her counterpart in Osaka records the same measurement as "VIAB %". The LIMS in the Swiss manufacturing facility stores it as "Viability_Score_Trypan". The regulatory submission uses the official term <span class="ic">OBI:0001985</span>, but only because a data steward looked it up six weeks before the BLA deadline.</p>
+<p>These four strings represent the same scientific concept. No machine knows that. No AI/ML model trained across these four systems will generalise correctly. The downstream cost blocks exactly the kind of cross-dataset meta-analysis and federated AI that could accelerate drug development by years.</p>
+</div>
+<div class="ps-grid">
+<div class="ps-card problem">
+<div class="ps-head">
+<svg class="li-icon" fill="none" height="16" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"></circle><line x1="15" x2="9" y1="9" y2="15"></line><line x1="9" x2="15" y1="9" y2="15"></line></svg>
+<h3>Without Ontology Curation</h3>
+</div>
+<ul>
+<li><svg class="li-icon" fill="none" height="14" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="14"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>60–70% of R&amp;D data carries unmapped or inconsistently mapped terms</li>
+<li><svg class="li-icon" fill="none" height="14" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="14"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>Manual review backlogs of 2–6 weeks per dataset ingestion</li>
+<li><svg class="li-icon" fill="none" height="14" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="14"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>Hallucinated or non-existent CURIEs propagate silently into the knowledge graph</li>
+<li><svg class="li-icon" fill="none" height="14" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="14"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>Cross-study analytics corrupted by synonym / homonym conflicts</li>
+<li><svg class="li-icon" fill="none" height="14" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="14"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>No documented audit trail for terminology governance decisions</li>
+<li><svg class="li-icon" fill="none" height="14" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="14"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>2–4 FTE domain stewards per therapeutic area cannot scale to 5M+ data points/year</li>
+</ul>
+</div>
+<div class="ps-card solution">
+<div class="ps-head">
+<svg class="li-icon" fill="none" height="16" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="16"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+<h3>With OntoCurator Agent</h3>
+</div>
+<ul>
+<li><svg class="li-icon" fill="none" height="14" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="14"><polyline points="20 6 9 17 4 12"></polyline></svg>83% of mappings auto-approved with ≥0.92 confidence threshold</li>
+<li><svg class="li-icon" fill="none" height="14" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="14"><polyline points="20 6 9 17 4 12"></polyline></svg>Mean resolution time cut from 18 days to 4 hours</li>
+<li><svg class="li-icon" fill="none" height="14" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="14"><polyline points="20 6 9 17 4 12"></polyline></svg>Live BioPortal + OLS4 verification eliminates hallucinated CURIEs</li>
+<li><svg class="li-icon" fill="none" height="14" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="14"><polyline points="20 6 9 17 4 12"></polyline></svg>Cross-dataset conflict detection surfaces inconsistencies automatically</li>
+<li><svg class="li-icon" fill="none" height="14" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="14"><polyline points="20 6 9 17 4 12"></polyline></svg>Full audit trail: every decision logged to the PostgreSQL checkpointer</li>
+<li><svg class="li-icon" fill="none" height="14" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="14"><polyline points="20 6 9 17 4 12"></polyline></svg>Stewards review pre-analysed cards, not raw proposals</li>
+</ul>
+</div>
+</div>
+</div>
 </section>
-
 <!-- 2. Why Agentic? -->
 <section class="section section-alt" id="why-agentic">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>02 &mdash; Design</div>
-      <div class="section-title">Why an Agentic Architecture?</div>
-      <p class="section-sub">A single LLM call works for simple cases. It fails predictably at the edges that matter most in regulated environments.</p>
-    </div>
-    <div class="prose" style="margin-bottom:2.5rem;">
-      <p>The naive approach is one prompt: "Here is a data field label &mdash; which ontology term does it map to?" This works for straightforward cases. The failure modes are instructive for why that isn't enough.</p>
-    </div>
-    <div class="feat-grid">
-      <div class="feat-card">
-        <div class="feat-icon amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
-        <div class="feat-title">Hallucinated Identifiers</div>
-        <div class="feat-desc">LLMs confidently generate plausible-looking but non-existent CURIEs. Without live API verification, these propagate silently into the knowledge graph.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
-        <div class="feat-title">Ambiguous Mappings</div>
-        <div class="feat-desc">A single call cannot surface that "cell viability" maps plausibly to both <span class="ic">OBI:0001985</span> and <span class="ic">BAO:0002166</span> with different semantic precedence depending on assay context.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-        <div class="feat-title">No Conflict Detection</div>
-        <div class="feat-desc">If dataset A maps "VIAB" to one term and dataset B maps "Cell Viability" to a different term, a single-call architecture has no mechanism to detect or escalate the inconsistency.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-        <div class="feat-title">No Governance Trail</div>
-        <div class="feat-desc">Pharmaceutical terminology decisions require documented human approval. A single call produces an answer but no audit trail, no routing, and no approval workflow.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon purple"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-        <div class="feat-title">Agentic Solution</div>
-        <div class="feat-desc">Each agent has a narrow, well-defined responsibility. LangGraph manages state transitions, conditional routing, and human-in-the-loop interrupts. The result is auditable, reversible, and trustworthy.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
-        <div class="feat-title">Design Principle</div>
-        <div class="feat-desc">The goal is not to replace domain stewards. It's to eliminate the 80% of curation work that is mechanical &mdash; term lookup, synonym matching, duplicate detection &mdash; so stewards focus on the 20% that requires scientific judgment.</div>
-      </div>
-    </div>
-  </div>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow"><svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>02. Design</div>
+<div class="section-title">Why an Agentic Architecture?</div>
+<p class="section-sub">A single LLM call works for simple cases. It fails predictably at the edges that matter most in regulated environments.</p>
+</div>
+<div class="prose" style="margin-bottom:2.5rem;">
+<p>The naive approach is one prompt: "Here is a data field label, which ontology term does it map to?" This works for straightforward cases. The failure modes are instructive for why that isn't enough.</p>
+</div>
+<div class="feat-grid">
+<div class="feat-card">
+<div class="feat-icon amber"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" x2="12" y1="9" y2="13"></line><line x1="12" x2="12.01" y1="17" y2="17"></line></svg></div>
+<div class="feat-title">Hallucinated Identifiers</div>
+<div class="feat-desc">LLMs confidently generate plausible-looking but non-existent CURIEs. Without live API verification, these propagate silently into the knowledge graph.</div>
+</div>
+<div class="feat-card">
+<div class="feat-icon amber"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y1="21" y2="16.65"></line></svg></div>
+<div class="feat-title">Ambiguous Mappings</div>
+<div class="feat-desc">A single call cannot surface that "cell viability" maps plausibly to both <span class="ic">OBI:0001985</span> and <span class="ic">BAO:0002166</span> with different semantic precedence depending on assay context.</div>
+</div>
+<div class="feat-card">
+<div class="feat-icon amber"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div>
+<div class="feat-title">No Conflict Detection</div>
+<div class="feat-desc">If dataset A maps "VIAB" to one term and dataset B maps "Cell Viability" to a different term, a single-call architecture has no mechanism to detect or escalate the inconsistency.</div>
+</div>
+<div class="feat-card">
+<div class="feat-icon"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><rect height="11" rx="2" ry="2" width="18" x="3" y="11"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
+<div class="feat-title">No Governance Trail</div>
+<div class="feat-desc">Pharmaceutical terminology decisions require documented human approval. A single call produces an answer but no audit trail, no routing, and no approval workflow.</div>
+</div>
+<div class="feat-card">
+<div class="feat-icon purple"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+<div class="feat-title">Agentic Solution</div>
+<div class="feat-desc">Each agent has a narrow, well-defined responsibility. LangGraph manages state transitions, conditional routing, and human-in-the-loop interrupts. The result is auditable, reversible, and trustworthy.</div>
+</div>
+<div class="feat-card">
+<div class="feat-icon green"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
+<div class="feat-title">Design Principle</div>
+<div class="feat-desc">The goal is not to replace domain stewards. It's to eliminate the 80% of curation work that is mechanical (term lookup, synonym matching, duplicate detection) so stewards focus on the 20% that requires scientific judgment.</div>
+</div>
+</div>
+</div>
 </section>
-
 <!-- 3. Architecture -->
 <section class="section" id="architecture">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>03 &mdash; System Design</div>
-      <div class="section-title">Four Agents, One Pipeline</div>
-      <p class="section-sub">Each agent is a self-contained LangChain Runnable with its own prompt template, tool bindings, output schema, and error handling.</p>
-    </div>
-    <div class="fw-grid">
-      <div class="fw-card">
-        <div class="fw-icon-row">
-          <div class="fw-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
-          <div><h3>EntityExtractorAgent</h3><div class="fw-sub">Agent 01 &nbsp;&middot;&nbsp; GPT-powered NER</div></div>
-        </div>
-        <p>Parses experimental protocols, assay definitions, and ELN entries using GPT to extract candidate scientific entities &mdash; measurements, biological entities, reagents, and process parameters &mdash; as typed spans with source provenance.</p>
-        <div class="tag-row">
-          <span class="tag blue">In: raw document text</span>
-          <span class="tag green">Out: List[EntitySpan]</span>
-          <span class="tag">Structured output</span><span class="tag">5 entity types</span>
-        </div>
-      </div>
-      <div class="fw-card">
-        <div class="fw-icon-row">
-          <div class="fw-icon green"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
-          <div><h3>OntologyMapperAgent</h3><div class="fw-sub">Agent 02 &nbsp;&middot;&nbsp; BioPortal + OLS4</div></div>
-        </div>
-        <p>Queries BioPortal and EBI OLS4 concurrently across 12 priority ontologies. Ranks candidates by Information Content and semantic similarity. Returns top-3 candidates with confidence scores.</p>
-        <div class="tag-row">
-          <span class="tag blue">In: List[EntitySpan]</span>
-          <span class="tag green">Out: List[MappingCandidate]</span>
-          <span class="tag">12 ontologies</span><span class="tag">IC + semantic ranking</span>
-        </div>
-      </div>
-      <div class="fw-card">
-        <div class="fw-icon-row">
-          <div class="fw-icon amber"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-          <div><h3>ConflictDetectorAgent</h3><div class="fw-sub">Agent 03 &nbsp;&middot;&nbsp; Registry comparison</div></div>
-        </div>
-        <p>Compares each new mapping proposal against the organisation's existing ontology registry. Detects synonym conflicts (same concept, different CURIEs) and homonym conflicts (same string, different concepts).</p>
-        <div class="tag-row">
-          <span class="tag blue">In: Candidates + Registry</span>
-          <span class="tag green">Out: List[ConflictReport]</span>
-          <span class="tag amber">Synonym</span><span class="tag amber">Homonym</span>
-        </div>
-      </div>
-      <div class="fw-card">
-        <div class="fw-icon-row">
-          <div class="fw-icon purple"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-          <div><h3>GovernanceRouterAgent</h3><div class="fw-sub">Agent 04 &nbsp;&middot;&nbsp; Tiered disposition</div></div>
-        </div>
-        <p>Applies configurable routing rules: auto-approve high-confidence unambiguous mappings, route conflicts to named domain stewards, escalate novel entity types to the ontology governance board.</p>
-        <div class="tag-row">
-          <span class="tag blue">In: List[ConflictReport]</span>
-          <span class="tag green">Out: GovernanceDecision</span>
-          <span class="tag purple">Auto / Steward / Board</span>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow"><svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><rect height="14" rx="2" width="20" x="2" y="3"></rect><line x1="8" x2="16" y1="21" y2="21"></line><line x1="12" x2="12" y1="17" y2="21"></line></svg>03. System Design</div>
+<div class="section-title">Four Agents, One Pipeline</div>
+<p class="section-sub">Each agent is a self-contained LangChain Runnable with its own prompt template, tool bindings, output schema, and error handling.</p>
+</div>
+<div class="fw-grid">
+<div class="fw-card">
+<div class="fw-icon-row">
+<div class="fw-icon"><svg fill="none" height="20" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="20"><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y1="21" y2="16.65"></line></svg></div>
+<div><h3>EntityExtractorAgent</h3><div class="fw-sub">Agent 01  ·  GPT-powered NER</div></div>
+</div>
+<p>Parses experimental protocols, assay definitions, and ELN entries using GPT to extract candidate scientific entities (measurements, biological entities, reagents, and process parameters) as typed spans with source provenance.</p>
+<div class="tag-row">
+<span class="tag blue">In: raw document text</span>
+<span class="tag green">Out: List[EntitySpan]</span>
+<span class="tag">Structured output</span><span class="tag">5 entity types</span>
+</div>
+</div>
+<div class="fw-card">
+<div class="fw-icon-row">
+<div class="fw-icon green"><svg fill="none" height="20" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="20"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></div>
+<div><h3>OntologyMapperAgent</h3><div class="fw-sub">Agent 02  ·  BioPortal + OLS4</div></div>
+</div>
+<p>Queries BioPortal and EBI OLS4 concurrently across 12 priority ontologies. Ranks candidates by Information Content and semantic similarity. Returns top-3 candidates with confidence scores.</p>
+<div class="tag-row">
+<span class="tag blue">In: List[EntitySpan]</span>
+<span class="tag green">Out: List[MappingCandidate]</span>
+<span class="tag">12 ontologies</span><span class="tag">IC + semantic ranking</span>
+</div>
+</div>
+<div class="fw-card">
+<div class="fw-icon-row">
+<div class="fw-icon amber"><svg fill="none" height="20" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="20"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div>
+<div><h3>ConflictDetectorAgent</h3><div class="fw-sub">Agent 03  ·  Registry comparison</div></div>
+</div>
+<p>Compares each new mapping proposal against the organisation's existing ontology registry. Detects synonym conflicts (same concept, different CURIEs) and homonym conflicts (same string, different concepts).</p>
+<div class="tag-row">
+<span class="tag blue">In: Candidates + Registry</span>
+<span class="tag green">Out: List[ConflictReport]</span>
+<span class="tag amber">Synonym</span><span class="tag amber">Homonym</span>
+</div>
+</div>
+<div class="fw-card">
+<div class="fw-icon-row">
+<div class="fw-icon purple"><svg fill="none" height="20" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="20"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+<div><h3>GovernanceRouterAgent</h3><div class="fw-sub">Agent 04  ·  Tiered disposition</div></div>
+</div>
+<p>Applies configurable routing rules: auto-approve high-confidence unambiguous mappings, route conflicts to named domain stewards, escalate novel entity types to the ontology governance board.</p>
+<div class="tag-row">
+<span class="tag blue">In: List[ConflictReport]</span>
+<span class="tag green">Out: GovernanceDecision</span>
+<span class="tag purple">Auto / Steward / Board</span>
+</div>
+</div>
+</div>
+</div>
 </section>
-
 <!-- 4. Extractor -->
 <section class="section section-alt" id="extractor">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>04 &mdash; Agent 1</div>
-      <div class="section-title">EntityExtractorAgent</div>
-      <p class="section-sub">GPT-powered named entity recognition specialised for pharmaceutical R&D documents, enforcing Pydantic schema at the LLM output boundary.</p>
-    </div>
-    <div class="prose" style="margin-bottom:0;">
-      <p>Unlike general biomedical NER models, this agent handles the messy, contextual language found in internal ELN entries, process descriptions, and analytical method summaries. The <span class="ic">source_offset</span> field preserves provenance so every mapping decision traces back to the exact position in the source document. Using <span class="ic">with_structured_output()</span> enforces Pydantic schema compliance and eliminates an entire class of parsing bugs.</p>
-    </div>
-    <div class="code-block">
-      <div class="code-header">
-        <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
-        <span class="code-title">entity_extractor.py</span>
-      </div>
-      <pre><code><span class="kw">from</span> pydantic <span class="kw">import</span> BaseModel, Field
+<div class="container">
+<div class="section-header">
+<div class="eyebrow"><svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y1="21" y2="16.65"></line></svg>04. Agent 1</div>
+<div class="section-title">EntityExtractorAgent</div>
+<p class="section-sub">GPT-powered named entity recognition specialised for pharmaceutical R&amp;D documents, enforcing Pydantic schema at the LLM output boundary.</p>
+</div>
+<div class="prose" style="margin-bottom:0;">
+<p>Unlike general biomedical NER models, this agent handles the messy, contextual language found in internal ELN entries, process descriptions, and analytical method summaries. The <span class="ic">source_offset</span> field preserves provenance so every mapping decision traces back to the exact position in the source document. Using <span class="ic">with_structured_output()</span> enforces Pydantic schema compliance and eliminates an entire class of parsing bugs.</p>
+</div>
+<div class="code-block">
+<div class="code-header">
+<div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
+<span class="code-title">entity_extractor.py</span>
+</div>
+<pre><code><span class="kw">from</span> pydantic <span class="kw">import</span> BaseModel, Field
 <span class="kw">from</span> typing <span class="kw">import</span> List, Literal
 <span class="kw">from</span> langchain_core.prompts <span class="kw">import</span> ChatPromptTemplate
 <span class="kw">from</span> langchain_openai <span class="kw">import</span> ChatOpenAI
@@ -888,7 +893,7 @@ code:not(pre code){font-family:var(--font-mono);font-size:.9em;background:var(--
     entity_type:     <span class="tp">Literal</span>[<span class="st">"Measurement"</span>, <span class="st">"BiologicalEntity"</span>, <span class="st">"ChemicalEntity"</span>,
                                     <span class="st">"ProcessParameter"</span>, <span class="st">"Assay"</span>]
     confidence:      <span class="tp">float</span> = Field(ge=<span class="nm">0.0</span>, le=<span class="nm">1.0</span>)
-    context_snippet: <span class="tp">str</span>   <span class="cm"># 30-word window &mdash; used by OntologyMapperAgent</span>
+    context_snippet: <span class="tp">str</span>   <span class="cm"># 30-word window — used by OntologyMapperAgent</span>
     source_offset:   <span class="tp">tuple</span>[<span class="tp">int</span>, <span class="tp">int</span>]
 
 <span class="kw">class</span> <span class="tp">EntityExtractorAgent</span>:
@@ -901,33 +906,32 @@ code:not(pre code){font-family:var(--font-mono);font-size:.9em;background:var(--
         <span class="cm"># with_structured_output() enforces Pydantic schema at the LLM boundary</span>
         self.chain = prompt | llm.with_structured_output(ExtractionResult)
 
-    <span class="kw">def</span> <span class="fn">extract</span>(self, text: <span class="tp">str</span>, doc_id: <span class="tp">str</span>) -> ExtractionResult:
+    <span class="kw">def</span> <span class="fn">extract</span>(self, text: <span class="tp">str</span>, doc_id: <span class="tp">str</span>) -&gt; ExtractionResult:
         <span class="kw">return</span> self.chain.invoke({<span class="st">"text"</span>: text, <span class="st">"doc_id"</span>: doc_id})</code></pre>
-    </div>
-    <div class="tag-row" style="margin-top:1.25rem;">
-      <span class="tag blue">with_structured_output()</span><span class="tag blue">Pydantic v2</span>
-      <span class="tag">Source provenance</span><span class="tag">Context snippet</span><span class="tag">5 entity types</span>
-    </div>
-  </div>
+</div>
+<div class="tag-row" style="margin-top:1.25rem;">
+<span class="tag blue">with_structured_output()</span><span class="tag blue">Pydantic v2</span>
+<span class="tag">Source provenance</span><span class="tag">Context snippet</span><span class="tag">5 entity types</span>
+</div>
+</div>
 </section>
-
 <!-- 5. Mapper -->
 <section class="section" id="mapper">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>05 &mdash; Agent 2</div>
-      <div class="section-title">OntologyMapperAgent</div>
-      <p class="section-sub">Concurrent BioPortal and OLS4 queries across 12 priority ontologies, ranked by Information Content and semantic similarity.</p>
-    </div>
-    <div class="prose" style="margin-bottom:0;">
-      <p>Information Content (IC) measures specificity &mdash; a high-IC term is a precise leaf-node concept. For curation we want the most specific correct term, so IC is the primary ranking signal. Semantic similarity against the entity's context snippet handles cases where IC alone would surface the technically-correct-but-contextually-wrong term. The agent fires BioPortal and OLS4 searches concurrently with <span class="ic">asyncio.gather</span>, deduplicates by CURIE, and re-ranks the merged set. The domain-fine-tuned <span class="ic">S-PubMedBert-MS-MARCO</span> model shows 18% higher precision@1 vs generic sentence transformers on the CRAFT corpus benchmark.</p>
-    </div>
-    <div class="code-block">
-      <div class="code-header">
-        <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
-        <span class="code-title">ontology_mapper.py</span>
-      </div>
-      <pre><code><span class="kw">import</span> asyncio
+<div class="container">
+<div class="section-header">
+<div class="eyebrow"><svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>05. Agent 2</div>
+<div class="section-title">OntologyMapperAgent</div>
+<p class="section-sub">Concurrent BioPortal and OLS4 queries across 12 priority ontologies, ranked by Information Content and semantic similarity.</p>
+</div>
+<div class="prose" style="margin-bottom:0;">
+<p>Information Content (IC) measures specificity: a high-IC term is a precise leaf-node concept. For curation we want the most specific correct term, so IC is the primary ranking signal. Semantic similarity against the entity's context snippet handles cases where IC alone would surface the technically-correct-but-contextually-wrong term. The agent fires BioPortal and OLS4 searches concurrently with <span class="ic">asyncio.gather</span>, deduplicates by CURIE, and re-ranks the merged set. The domain-fine-tuned <span class="ic">S-PubMedBert-MS-MARCO</span> model shows 18% higher precision@1 vs generic sentence transformers on the CRAFT corpus benchmark.</p>
+</div>
+<div class="code-block">
+<div class="code-header">
+<div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
+<span class="code-title">ontology_mapper.py</span>
+</div>
+<pre><code><span class="kw">import</span> asyncio
 <span class="kw">from</span> dataclasses <span class="kw">import</span> dataclass
 <span class="kw">from</span> sentence_transformers <span class="kw">import</span> SentenceTransformer
 
@@ -936,7 +940,7 @@ code:not(pre code){font-family:var(--font-mono);font-size:.9em;background:var(--
     curie:          <span class="tp">str</span>    <span class="cm"># e.g. "OBI:0001985"</span>
     label:          <span class="tp">str</span>    <span class="cm"># e.g. "cell viability assay"</span>
     ontology:       <span class="tp">str</span>
-    ic_score:       <span class="tp">float</span>  <span class="cm"># information content (0&ndash;1)</span>
+    ic_score:       <span class="tp">float</span>  <span class="cm"># information content (0–1)</span>
     semantic_sim:   <span class="tp">float</span>  <span class="cm"># cosine similarity to entity context snippet</span>
     combined_score: <span class="tp">float</span>  <span class="cm"># 0.6 * ic + 0.4 * semantic_sim</span>
     definition:     <span class="tp">str</span>
@@ -949,7 +953,7 @@ code:not(pre code){font-family:var(--font-mono);font-size:.9em;background:var(--
     <span class="kw">def</span> <span class="fn">__init__</span>(self):
         self.embedder = SentenceTransformer(<span class="st">"pritamdeka/S-PubMedBert-MS-MARCO"</span>)
 
-    <span class="kw">async def</span> <span class="fn">map_entity</span>(self, entity: EntitySpan) -> List[MappingCandidate]:
+    <span class="kw">async def</span> <span class="fn">map_entity</span>(self, entity: EntitySpan) -&gt; List[MappingCandidate]:
         bp_results, ols_results = <span class="kw">await</span> asyncio.gather(
             self._search_bioportal(entity.normalized, entity.entity_type),
             self._search_ols4(entity.normalized, entity.entity_type),
@@ -957,32 +961,31 @@ code:not(pre code){font-family:var(--font-mono);font-size:.9em;background:var(--
         candidates = self._deduplicate_by_curie(bp_results + ols_results)
         candidates = self._rank_by_semantic_similarity(candidates, entity.context_snippet)
         <span class="kw">return</span> sorted(candidates, key=<span class="kw">lambda</span> c: c.combined_score, reverse=<span class="tp">True</span>)[:<span class="nm">3</span>]</code></pre>
-    </div>
-    <div class="tag-row" style="margin-top:1.25rem;">
-      <span class="tag blue">asyncio.gather</span><span class="tag blue">S-PubMedBert-MS-MARCO</span>
-      <span class="tag green">BioPortal API</span><span class="tag green">EBI OLS4</span>
-      <span class="tag">IC ranking</span><span class="tag">Top-3 candidates</span>
-    </div>
-  </div>
+</div>
+<div class="tag-row" style="margin-top:1.25rem;">
+<span class="tag blue">asyncio.gather</span><span class="tag blue">S-PubMedBert-MS-MARCO</span>
+<span class="tag green">BioPortal API</span><span class="tag green">EBI OLS4</span>
+<span class="tag">IC ranking</span><span class="tag">Top-3 candidates</span>
+</div>
+</div>
 </section>
-
 <!-- 6. Conflict Detector -->
 <section class="section section-alt" id="conflict">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>06 &mdash; Agent 3</div>
-      <div class="section-title">ConflictDetectorAgent</div>
-      <p class="section-sub">The component that single-call architectures entirely miss &mdash; cross-dataset inconsistency detection using the live registry and OWL reasoning.</p>
-    </div>
-    <div class="prose" style="margin-bottom:0;">
-      <p>A <strong>synonym conflict</strong> occurs when two different source strings are proposed as mapping to two different CURIEs &mdash; one must be wrong, or a synonym relationship must be explicitly registered. A <strong>homonym conflict</strong> occurs when the same source string is used in different systems but refers to semantically distinct concepts. The <span class="ic">_same_concept()</span> method uses OWL reasoning via a locally cached ontology graph (<span class="ic">owlready2</span>) to distinguish these two cases by checking equivalent-class and subclass-of relationships.</p>
-    </div>
-    <div class="code-block">
-      <div class="code-header">
-        <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
-        <span class="code-title">conflict_detector.py</span>
-      </div>
-      <pre><code><span class="kw">from</span> enum <span class="kw">import</span> Enum
+<div class="container">
+<div class="section-header">
+<div class="eyebrow"><svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>06. Agent 3</div>
+<div class="section-title">ConflictDetectorAgent</div>
+<p class="section-sub">The component that single-call architectures entirely miss: cross-dataset inconsistency detection using the live registry and OWL reasoning.</p>
+</div>
+<div class="prose" style="margin-bottom:0;">
+<p>A <strong>synonym conflict</strong> occurs when two different source strings are proposed as mapping to two different CURIEs. One must be wrong, or a synonym relationship must be explicitly registered. A <strong>homonym conflict</strong> occurs when the same source string is used in different systems but refers to semantically distinct concepts. The <span class="ic">_same_concept()</span> method uses OWL reasoning via a locally cached ontology graph (<span class="ic">owlready2</span>) to distinguish these two cases by checking equivalent-class and subclass-of relationships.</p>
+</div>
+<div class="code-block">
+<div class="code-header">
+<div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
+<span class="code-title">conflict_detector.py</span>
+</div>
+<pre><code><span class="kw">from</span> enum <span class="kw">import</span> Enum
 <span class="kw">from</span> dataclasses <span class="kw">import</span> dataclass
 
 <span class="kw">class</span> <span class="tp">ConflictType</span>(Enum):
@@ -1000,7 +1003,7 @@ code:not(pre code){font-family:var(--font-mono);font-size:.9em;background:var(--
     requires_human_review: <span class="tp">bool</span>      = <span class="tp">False</span>
 
 <span class="kw">class</span> <span class="tp">ConflictDetectorAgent</span>:
-    <span class="kw">def</span> <span class="fn">analyze</span>(self, candidates, entity) -> ConflictReport:
+    <span class="kw">def</span> <span class="fn">analyze</span>(self, candidates, entity) -&gt; ConflictReport:
         existing = self.registry.lookup(entity.normalized, entity.entity_type)
         best = candidates[<span class="nm">0</span>]
         <span class="kw">if not</span> existing:
@@ -1012,46 +1015,45 @@ code:not(pre code){font-family:var(--font-mono);font-size:.9em;background:var(--
             self._same_concept(existing.curie, best.curie) <span class="kw">else</span> ConflictType.HOMONYM
         <span class="kw">return</span> ConflictReport(entity, best, conflict,
             existing_curie=existing.curie, requires_human_review=<span class="tp">True</span>)</code></pre>
-    </div>
-    <div class="tag-row" style="margin-top:1.25rem;">
-      <span class="tag amber">Synonym conflicts</span><span class="tag amber">Homonym conflicts</span>
-      <span class="tag blue">OWL reasoning</span><span class="tag blue">owlready2</span><span class="tag">Registry lookup</span>
-    </div>
-  </div>
+</div>
+<div class="tag-row" style="margin-top:1.25rem;">
+<span class="tag amber">Synonym conflicts</span><span class="tag amber">Homonym conflicts</span>
+<span class="tag blue">OWL reasoning</span><span class="tag blue">owlready2</span><span class="tag">Registry lookup</span>
+</div>
+</div>
 </section>
-
 <!-- 7. Governance Router -->
 <section class="section" id="governance-router">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>07 &mdash; Agent 4</div>
-      <div class="section-title">GovernanceRouterAgent</div>
-      <p class="section-sub">Three-tier routing: auto-approve, steward review, or board escalation &mdash; based on confidence score, conflict type, and ontology priority.</p>
-    </div>
-    <div class="levels-grid" style="margin-top:0;margin-bottom:2.5rem;">
-      <div class="level-card">
-        <div class="level-badge green">Tier 1 &mdash; Auto-Approve</div>
-        <div class="level-name">High-confidence, unambiguous</div>
-        <div class="level-desc"><span class="ic">APPROVED</span> exact matches, or <span class="ic">ORPHAN</span> with combined score &ge;0.92 and Priority 1 ontology. Written directly to registry with <span class="ic">source=AUTO_APPROVED</span>.</div>
-      </div>
-      <div class="level-card">
-        <div class="level-badge amber">Tier 2 &mdash; Steward Review</div>
-        <div class="level-name">Conflicts and low-confidence orphans</div>
-        <div class="level-desc">All conflicts and orphans with 0.75 &le; score &lt; 0.92. Routed to the named domain steward with a pre-analysed decision card. 72-hour SLA.</div>
-      </div>
-      <div class="level-card">
-        <div class="level-badge red">Tier 3 &mdash; Board Escalation</div>
-        <div class="level-name">Novel types and homonym conflicts</div>
-        <div class="level-desc">Entity types not covered by existing ontologies, or homonym conflicts in core platform terminologies. Formal governance board vote required.</div>
-      </div>
-    </div>
-    <div class="code-block" style="margin-top:0;">
-      <div class="code-header">
-        <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
-        <span class="code-title">governance_router.py</span>
-      </div>
-      <pre><code><span class="kw">class</span> <span class="tp">GovernanceRouterAgent</span>:
-    <span class="kw">def</span> <span class="fn">route</span>(self, report: ConflictReport) -> GovernanceDecision:
+<div class="container">
+<div class="section-header">
+<div class="eyebrow"><svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>07. Agent 4</div>
+<div class="section-title">GovernanceRouterAgent</div>
+<p class="section-sub">Three-tier routing: auto-approve, steward review, or board escalation: based on confidence score, conflict type, and ontology priority.</p>
+</div>
+<div class="levels-grid" style="margin-top:0;margin-bottom:2.5rem;">
+<div class="level-card">
+<div class="level-badge green">Tier 1: Auto-Approve</div>
+<div class="level-name">High-confidence, unambiguous</div>
+<div class="level-desc"><span class="ic">APPROVED</span> exact matches, or <span class="ic">ORPHAN</span> with combined score ≥0.92 and Priority 1 ontology. Written directly to registry with <span class="ic">source=AUTO_APPROVED</span>.</div>
+</div>
+<div class="level-card">
+<div class="level-badge amber">Tier 2: Steward Review</div>
+<div class="level-name">Conflicts and low-confidence orphans</div>
+<div class="level-desc">All conflicts and orphans with 0.75 ≤ score &lt; 0.92. Routed to the named domain steward with a pre-analysed decision card. 72-hour SLA.</div>
+</div>
+<div class="level-card">
+<div class="level-badge red">Tier 3: Board Escalation</div>
+<div class="level-name">Novel types and homonym conflicts</div>
+<div class="level-desc">Entity types not covered by existing ontologies, or homonym conflicts in core platform terminologies. Formal governance board vote required.</div>
+</div>
+</div>
+<div class="code-block" style="margin-top:0;">
+<div class="code-header">
+<div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
+<span class="code-title">governance_router.py</span>
+</div>
+<pre><code><span class="kw">class</span> <span class="tp">GovernanceRouterAgent</span>:
+    <span class="kw">def</span> <span class="fn">route</span>(self, report: ConflictReport) -&gt; GovernanceDecision:
         <span class="cm"># Tier 1: auto-approve</span>
         <span class="kw">if</span> report.conflict_type == ConflictType.APPROVED:
             <span class="kw">return</span> GovernanceDecision(Disposition.AUTO_APPROVED, report)
@@ -1067,41 +1069,40 @@ code:not(pre code){font-family:var(--font-mono);font-size:.9em;background:var(--
                 assigned_to=steward.email, due_date=self._sla_date(hours=<span class="nm">72</span>))
         <span class="cm"># Tier 3: board escalation</span>
         <span class="kw">return</span> GovernanceDecision(Disposition.BOARD_ESCALATED, report)</code></pre>
-    </div>
-  </div>
+</div>
+</div>
 </section>
-
 <!-- 8. LangGraph Pipeline -->
 <section class="section section-alt" id="pipeline">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>08 &mdash; Orchestration</div>
-      <div class="section-title">The LangGraph State Machine</div>
-      <p class="section-sub">A typed <span class="ic">CurationState</span> flows through the graph, accumulating results at each node. Conditional edges implement routing. PostgreSQL checkpointing enables forensic debugging and HITL interrupts.</p>
-    </div>
-    <div class="arch-wrap" style="margin-top:0;">
-      <div class="arch-stack">
-        <div class="arch-qs-lbl">Pipeline Nodes</div>
-        <div class="arch-layer a1"><span class="arch-dot"></span><span class="arch-lbl">Extract</span><span class="arch-detail">EntityExtractorAgent &mdash; raw text &rarr; List[EntitySpan]</span></div>
-        <div class="arch-conn"><div class="arch-conn-line"></div><span class="arch-conn-lbl">state.entities</span><div class="arch-conn-line"></div></div>
-        <div class="arch-layer a2"><span class="arch-dot"></span><span class="arch-lbl">Map</span><span class="arch-detail">OntologyMapperAgent &mdash; spans &rarr; List[MappingCandidate]</span></div>
-        <div class="arch-conn"><div class="arch-conn-line"></div><span class="arch-conn-lbl">state.candidates</span><div class="arch-conn-line"></div></div>
-        <div class="arch-layer a3"><span class="arch-dot"></span><span class="arch-lbl">Detect</span><span class="arch-detail">ConflictDetectorAgent &mdash; candidates &rarr; List[ConflictReport]</span></div>
-        <div class="arch-conn"><div class="arch-conn-line"></div><span class="arch-conn-lbl">state.conflicts</span><div class="arch-conn-line"></div></div>
-        <div class="arch-layer a4"><span class="arch-dot"></span><span class="arch-lbl">Govern</span><span class="arch-detail">GovernanceRouterAgent &mdash; conflicts &rarr; List[GovernanceDecision]</span></div>
-        <div class="arch-conn"><div class="arch-conn-line"></div><span class="arch-conn-lbl">conditional edge</span><div class="arch-conn-line"></div></div>
-        <div class="arch-layer" style="background:var(--amber-bg);border-color:var(--amber-bdr);"><span class="arch-dot" style="background:var(--amber)"></span><span class="arch-lbl" style="color:var(--amber)">Interrupt</span><span class="arch-detail">Human review gate &mdash; graph suspends, state persisted to DB</span></div>
-        <div class="arch-conn"><div class="arch-conn-line"></div><span class="arch-conn-lbl">steward feedback</span><div class="arch-conn-line"></div></div>
-        <div class="arch-layer" style="background:var(--green-bg);border-color:var(--green-bdr);"><span class="arch-dot" style="background:var(--green)"></span><span class="arch-lbl" style="color:var(--green)">Commit</span><span class="arch-detail">Registry write &mdash; approved mappings persisted with full lineage</span></div>
-      </div>
-      <div class="arch-qs">
-        <div class="arch-qs-lbl">State Machine Code</div>
-        <div class="code-block" style="margin-top:0;">
-          <div class="code-header">
-            <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
-            <span class="code-title">pipeline.py</span>
-          </div>
-          <pre><code><span class="kw">from</span> langgraph.graph <span class="kw">import</span> StateGraph, END
+<div class="container">
+<div class="section-header">
+<div class="eyebrow"><svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>08. Orchestration</div>
+<div class="section-title">The LangGraph State Machine</div>
+<p class="section-sub">A typed <span class="ic">CurationState</span> flows through the graph, accumulating results at each node. Conditional edges implement routing. PostgreSQL checkpointing enables forensic debugging and HITL interrupts.</p>
+</div>
+<div class="arch-wrap" style="margin-top:0;">
+<div class="arch-stack">
+<div class="arch-qs-lbl">Pipeline Nodes</div>
+<div class="arch-layer a1"><span class="arch-dot"></span><span class="arch-lbl">Extract</span><span class="arch-detail">EntityExtractorAgent: raw text → List[EntitySpan]</span></div>
+<div class="arch-conn"><div class="arch-conn-line"></div><span class="arch-conn-lbl">state.entities</span><div class="arch-conn-line"></div></div>
+<div class="arch-layer a2"><span class="arch-dot"></span><span class="arch-lbl">Map</span><span class="arch-detail">OntologyMapperAgent: spans → List[MappingCandidate]</span></div>
+<div class="arch-conn"><div class="arch-conn-line"></div><span class="arch-conn-lbl">state.candidates</span><div class="arch-conn-line"></div></div>
+<div class="arch-layer a3"><span class="arch-dot"></span><span class="arch-lbl">Detect</span><span class="arch-detail">ConflictDetectorAgent: candidates → List[ConflictReport]</span></div>
+<div class="arch-conn"><div class="arch-conn-line"></div><span class="arch-conn-lbl">state.conflicts</span><div class="arch-conn-line"></div></div>
+<div class="arch-layer a4"><span class="arch-dot"></span><span class="arch-lbl">Govern</span><span class="arch-detail">GovernanceRouterAgent: conflicts → List[GovernanceDecision]</span></div>
+<div class="arch-conn"><div class="arch-conn-line"></div><span class="arch-conn-lbl">conditional edge</span><div class="arch-conn-line"></div></div>
+<div class="arch-layer" style="background:var(--amber-bg);border-color:var(--amber-bdr);"><span class="arch-dot" style="background:var(--amber)"></span><span class="arch-lbl" style="color:var(--amber)">Interrupt</span><span class="arch-detail">Human review gate: graph suspends, state persisted to DB</span></div>
+<div class="arch-conn"><div class="arch-conn-line"></div><span class="arch-conn-lbl">steward feedback</span><div class="arch-conn-line"></div></div>
+<div class="arch-layer" style="background:var(--green-bg);border-color:var(--green-bdr);"><span class="arch-dot" style="background:var(--green)"></span><span class="arch-lbl" style="color:var(--green)">Commit</span><span class="arch-detail">Registry write: approved mappings persisted with full lineage</span></div>
+</div>
+<div class="arch-qs">
+<div class="arch-qs-lbl">State Machine Code</div>
+<div class="code-block" style="margin-top:0;">
+<div class="code-header">
+<div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
+<span class="code-title">pipeline.py</span>
+</div>
+<pre><code><span class="kw">from</span> langgraph.graph <span class="kw">import</span> StateGraph, END
 <span class="kw">from</span> langgraph.checkpoint.postgres <span class="kw">import</span> PostgresSaver
 
 <span class="kw">class</span> <span class="tp">CurationState</span>(TypedDict):
@@ -1114,7 +1115,7 @@ code:not(pre code){font-family:var(--font-mono);font-size:.9em;background:var(--
     requires_interrupt: <span class="tp">bool</span>
     steward_feedback:   str | <span class="tp">None</span>
 
-<span class="kw">def</span> <span class="fn">build_graph</span>(checkpointer) -> StateGraph:
+<span class="kw">def</span> <span class="fn">build_graph</span>(checkpointer) -&gt; StateGraph:
     graph = StateGraph(CurationState)
     graph.add_node(<span class="st">"extract"</span>,   extractor_node)
     graph.add_node(<span class="st">"map"</span>,       mapper_node)
@@ -1135,132 +1136,134 @@ code:not(pre code){font-family:var(--font-mono);font-size:.9em;background:var(--
         checkpointer=checkpointer,
         interrupt_before=[<span class="st">"interrupt"</span>]
     )</code></pre>
-        </div>
-        <div class="tag-row" style="margin-top:1rem;">
-          <span class="tag blue">LangGraph</span><span class="tag blue">interrupt_before</span>
-          <span class="tag green">PostgresSaver</span><span class="tag">Typed state</span><span class="tag">Conditional edges</span>
-        </div>
-      </div>
-    </div>
-  </div>
+</div>
+<div class="tag-row" style="margin-top:1rem;">
+<span class="tag blue">LangGraph</span><span class="tag blue">interrupt_before</span>
+<span class="tag green">PostgresSaver</span><span class="tag">Typed state</span><span class="tag">Conditional edges</span>
+</div>
+</div>
+</div>
+</div>
 </section>
-
 <!-- 9. HITL -->
 <section class="section" id="hitl">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>09 &mdash; Governance</div>
-      <div class="section-title">Human-in-the-Loop Governance</div>
-      <p class="section-sub">Governance is a first-class product feature, not an afterthought. Every steward decision is explicit, time-stamped, and tied to a named individual.</p>
-    </div>
-    <div class="prose" style="margin-bottom:2.5rem;">
-      <p>The <span class="ic">interrupt_before=["interrupt"]</span> parameter suspends graph execution at the human review node, persisting the full state to the PostgreSQL checkpointer. The steward receives a notification and reviews a structured decision card. After the decision, the graph resumes from the checkpoint and completes the commit step. User research revealed that stewards wanted visibility into <em>all</em> automated decisions, not just uncertain ones &mdash; the production system now sends a weekly digest of auto-approved mappings with a 7-day exception window.</p>
-    </div>
-    <div class="articles-list">
-      <div class="article-card">
-        <div class="article-num">01</div>
-        <div><div class="article-title">Source context</div><div class="article-desc">The 30-word snippet from the source document with the entity highlighted &mdash; so the steward understands how the term was actually used.</div></div>
-        <svg class="article-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </div>
-      <div class="article-card">
-        <div class="article-num">02</div>
-        <div><div class="article-title">Proposed mapping + confidence breakdown</div><div class="article-desc">The top-1 candidate CURIE with IC score, semantic similarity, combined score, and the ontology definition &mdash; not just the identifier.</div></div>
-        <svg class="article-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </div>
-      <div class="article-card">
-        <div class="article-num">03</div>
-        <div><div class="article-title">Top-3 ranked alternatives</div><div class="article-desc">The next two candidates ranked by combined score &mdash; so the steward can one-click select an alternative without doing their own search.</div></div>
-        <svg class="article-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </div>
-      <div class="article-card">
-        <div class="article-num">04</div>
-        <div><div class="article-title">Conflict description + existing mapping</div><div class="article-desc">For conflict cases, the card shows the conflicting existing mapping, which dataset it came from, and when it was approved.</div></div>
-        <svg class="article-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </div>
-      <div class="article-card">
-        <div class="article-num">05</div>
-        <div><div class="article-title">Action buttons with rationale field</div><div class="article-desc">Approve / Reject / Request-Synonym / Escalate. A free-text rationale field is required for board-escalated items and stored in the audit log.</div></div>
-        <svg class="article-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </div>
-    </div>
-  </div>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow"><svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>09. Governance</div>
+<div class="section-title">Human-in-the-Loop Governance</div>
+<p class="section-sub">Governance is a first-class product feature, not an afterthought. Every steward decision is explicit, time-stamped, and tied to a named individual.</p>
+</div>
+<div class="prose" style="margin-bottom:2.5rem;">
+<p>The <span class="ic">interrupt_before=["interrupt"]</span> parameter suspends graph execution at the human review node, persisting the full state to the PostgreSQL checkpointer. The steward receives a notification and reviews a structured decision card. After the decision, the graph resumes from the checkpoint and completes the commit step. User research revealed that stewards wanted visibility into <em>all</em> automated decisions, not just uncertain ones: the production system now sends a weekly digest of auto-approved mappings with a 7-day exception window.</p>
+</div>
+<div class="articles-list">
+<div class="article-card">
+<div class="article-num">01</div>
+<div><div class="article-title">Source context</div><div class="article-desc">The 30-word snippet from the source document with the entity highlighted, so the steward understands how the term was actually used.</div></div>
+<svg class="article-arrow" fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+</div>
+<div class="article-card">
+<div class="article-num">02</div>
+<div><div class="article-title">Proposed mapping + confidence breakdown</div><div class="article-desc">The top-1 candidate CURIE with IC score, semantic similarity, combined score, and the ontology definition: not just the identifier.</div></div>
+<svg class="article-arrow" fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+</div>
+<div class="article-card">
+<div class="article-num">03</div>
+<div><div class="article-title">Top-3 ranked alternatives</div><div class="article-desc">The next two candidates ranked by combined score, so the steward can one-click select an alternative without doing their own search.</div></div>
+<svg class="article-arrow" fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+</div>
+<div class="article-card">
+<div class="article-num">04</div>
+<div><div class="article-title">Conflict description + existing mapping</div><div class="article-desc">For conflict cases, the card shows the conflicting existing mapping, which dataset it came from, and when it was approved.</div></div>
+<svg class="article-arrow" fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+</div>
+<div class="article-card">
+<div class="article-num">05</div>
+<div><div class="article-title">Action buttons with rationale field</div><div class="article-desc">Approve / Reject / Request-Synonym / Escalate. A free-text rationale field is required for board-escalated items and stored in the audit log.</div></div>
+<svg class="article-arrow" fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><line x1="5" x2="19" y1="12" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+</div>
+</div>
+</div>
 </section>
-
 <!-- 10. Results -->
 <section class="section section-alt" id="results">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>10 &mdash; Impact</div>
-      <div class="section-title">Results &amp; Impact</div>
-      <p class="section-sub">Piloted on three years of historical assay data across two therapeutic areas. Baseline: Jira-based manual curation with 18-day mean resolution time.</p>
-    </div>
-    <div class="stats-row" style="margin-bottom:3rem;">
-      <div class="stat"><div class="stat-num">83%</div><div class="stat-label">Auto-approval rate on production data</div></div>
-      <div class="stat"><div class="stat-num">4 hr</div><div class="stat-label">Mean resolution time vs 18-day baseline</div></div>
-      <div class="stat"><div class="stat-num">96%</div><div class="stat-label">Steward agreement with top-1 proposal</div></div>
-      <div class="stat"><div class="stat-num">14</div><div class="stat-label">Silent conflicts surfaced in historical data</div></div>
-    </div>
-    <div class="prose">
-      <p>The 83% auto-approval rate means domain stewards now actively review only one in six incoming proposals. Of the reviewed cases, 96% result in the steward selecting the agent's top-ranked candidate &mdash; confirming that the mapping quality is high enough to warrant the confidence threshold.</p>
-      <p>The most significant impact is the elimination of the backlog effect. Under the manual workflow, curation bottlenecks caused dataset ingestions to be delayed by 2&ndash;6 weeks. The agentic pipeline removes this constraint entirely for the auto-approved 83%.</p>
-      <p>The conflict detector surfaced 14 terminology inconsistencies in the historical data that had existed for 2&ndash;3 years without being detected &mdash; inconsistencies that were silently corrupting cross-study analytics.</p>
-    </div>
-  </div>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow"><svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><line x1="18" x2="18" y1="20" y2="10"></line><line x1="12" x2="12" y1="20" y2="4"></line><line x1="6" x2="6" y1="20" y2="14"></line></svg>10. Impact</div>
+<div class="section-title">Results &amp; Impact</div>
+<p class="section-sub">Piloted on three years of historical assay data across two therapeutic areas. Baseline: Jira-based manual curation with 18-day mean resolution time.</p>
+</div>
+<div class="stats-row" style="margin-bottom:3rem;">
+<div class="stat"><div class="stat-num">83%</div><div class="stat-label">Auto-approval rate on production data</div></div>
+<div class="stat"><div class="stat-num">4 hr</div><div class="stat-label">Mean resolution time vs 18-day baseline</div></div>
+<div class="stat"><div class="stat-num">96%</div><div class="stat-label">Steward agreement with top-1 proposal</div></div>
+<div class="stat"><div class="stat-num">14</div><div class="stat-label">Silent conflicts surfaced in historical data</div></div>
+</div>
+<div class="prose">
+<p>The 83% auto-approval rate means domain stewards now actively review only one in six incoming proposals. Of the reviewed cases, 96% result in the steward selecting the agent's top-ranked candidate: confirming that the mapping quality is high enough to warrant the confidence threshold.</p>
+<p>The most significant impact is the elimination of the backlog effect. Under the manual workflow, curation bottlenecks caused dataset ingestions to be delayed by 2–6 weeks. The agentic pipeline removes this constraint entirely for the auto-approved 83%.</p>
+<p>The conflict detector surfaced 14 terminology inconsistencies in the historical data that had existed for 2–3 years without being detected. Inconsistencies that were silently corrupting cross-study analytics.</p>
+</div>
+</div>
 </section>
-
 <!-- 11. Lessons -->
 <section class="section" id="lessons">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>11 &mdash; Lessons</div>
-      <div class="section-title">Lessons Learned</div>
-      <p class="section-sub">Six things we would do the same again &mdash; and one trap we walked into.</p>
-    </div>
-    <div class="roadmap-grid">
-      <div class="phase-card phase-done">
-        <div class="phase-lbl"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>What worked well</div>
-        <h3>Build the governance workflow first</h3>
-        <ul>
-          <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Designing the steward review UI before writing AI code shaped every data structure &mdash; the context snippet, confidence breakdown, and conflict report format all emerged from user research</li>
-          <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><code class="ic">with_structured_output()</code> throughout the pipeline eliminated an entire class of integration bugs &mdash; type-safe state is non-negotiable</li>
-          <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>LangGraph checkpointing enables full forensic debugging &mdash; every state transition is stored, every steward disagreement is explainable</li>
-          <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Domain-fine-tuned embeddings (S-PubMedBert) give 18% higher precision@1 over generic sentence transformers &mdash; domain vocabulary matters</li>
-          <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Conflict detection is the genuine novel contribution &mdash; extraction and mapping are well-served by existing tools; cross-dataset detection is the hard part</li>
-        </ul>
-      </div>
-      <div class="phase-card phase-next">
-        <div class="phase-lbl"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>The trap &amp; what's next</div>
-        <h3>BioPortal rate limits are your bottleneck</h3>
-        <ul>
-          <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>BioPortal free tier: 15 req/s. For bulk historical curation this is the dominant constraint &mdash; add a Redis cache layer (TTL 30 days) before the API call, not after</li>
-          <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>The weekly digest of auto-approved mappings with a 7-day exception window &mdash; stewards discovered they wanted visibility into automated decisions, not just uncertain ones</li>
-          <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>Next: <strong>ProvenanceTraceAgent</strong> &mdash; generates PROV-O compatible lineage graphs for each mapping decision, enabling automated scoring of RDA indicator <span class="ic">RDA-I3-01M</span></li>
-          <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>Next: Integration with <a href="https://alishahmohammadi26.github.io/fair-data-toolkit">FAIR Data Toolkit</a> Phase 2 &mdash; auto-scoring ontology interoperability indicators from the curation registry</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow"><svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>11. Lessons</div>
+<div class="section-title">Lessons Learned</div>
+<p class="section-sub">Six things we would do the same again, and one trap we walked into.</p>
+</div>
+<div class="roadmap-grid">
+<div class="phase-card phase-done">
+<div class="phase-lbl"><svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><polyline points="20 6 9 17 4 12"></polyline></svg>What worked well</div>
+<h3>Build the governance workflow first</h3>
+<ul>
+<li><svg fill="none" height="13" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="13"><polyline points="20 6 9 17 4 12"></polyline></svg>Designing the steward review UI before writing AI code shaped every data structure. The context snippet, confidence breakdown, and conflict report format all emerged from user research</li>
+<li><svg fill="none" height="13" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="13"><polyline points="20 6 9 17 4 12"></polyline></svg><code class="ic">with_structured_output()</code> throughout the pipeline eliminated an entire class of integration bugs. Type-safe state is non-negotiable</li>
+<li><svg fill="none" height="13" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="13"><polyline points="20 6 9 17 4 12"></polyline></svg>LangGraph checkpointing enables full forensic debugging: every state transition is stored, every steward disagreement is explainable</li>
+<li><svg fill="none" height="13" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="13"><polyline points="20 6 9 17 4 12"></polyline></svg>Domain-fine-tuned embeddings (S-PubMedBert) give 18% higher precision@1 over generic sentence transformers: domain vocabulary matters</li>
+<li><svg fill="none" height="13" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="13"><polyline points="20 6 9 17 4 12"></polyline></svg>Conflict detection is the genuine novel contribution: extraction and mapping are well-served by existing tools; cross-dataset detection is the hard part</li>
+</ul>
+</div>
+<div class="phase-card phase-next">
+<div class="phase-lbl"><svg fill="none" height="12" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="12"><circle cx="12" cy="12" r="10"></circle></svg>The trap &amp; what's next</div>
+<h3>BioPortal rate limits are your bottleneck</h3>
+<ul>
+<li><svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><circle cx="12" cy="12" r="10"></circle></svg>BioPortal free tier: 15 req/s. For bulk historical curation this is the dominant constraint: add a Redis cache layer (TTL 30 days) before the API call, not after</li>
+<li><svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><circle cx="12" cy="12" r="10"></circle></svg>The weekly digest of auto-approved mappings with a 7-day exception window. Stewards discovered they wanted visibility into automated decisions, not just uncertain ones</li>
+<li><svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><circle cx="12" cy="12" r="10"></circle></svg>Next: <strong>ProvenanceTraceAgent</strong>. Generates PROV-O compatible lineage graphs for each mapping decision, enabling automated scoring of RDA indicator <span class="ic">RDA-I3-01M</span></li>
+<li><svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><circle cx="12" cy="12" r="10"></circle></svg>Next: Integration with <a href="https://alishahmohammadi26.github.io/fair-data-toolkit">FAIR Data Toolkit</a> Phase 2: auto-scoring ontology interoperability indicators from the curation registry</li>
+</ul>
+</div>
+</div>
+</div>
 </section>
-
 <!-- Footer -->
+<div class="related-reading reveal">
+<p class="rr-label">Related reading</p>
+<div class="rr-grid">
+<a class="rr-card" href="agentic-ai-data-governance-pharma.html"><span class="rr-title">Agentic AI for Data Governance: A Production Pattern for First-Pass Curation</span><span class="rr-go">Read article &#8594;</span></a>
+<a class="rr-card" href="iso-23894-pharma-rd.html"><span class="rr-title">AI Governance Without the Theater: Operationalizing ISO/IEC 23894</span><span class="rr-go">Read article &#8594;</span></a>
+</div>
+</div>
 <footer class="site-footer">
-  <div class="foot-lead">
-    <p class="foot-name">Ali Shahmohammadi, Ph.D.</p>
-    <p class="foot-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p>
-  </div>
-  <nav class="foot-nav" aria-label="Footer">
-    <a href="../index.html#writing">Writing</a>
-    <a href="../index.html#career">Career</a>
-    <a href="../resume.html">Resume</a>
-    <a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
-    <a href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
-  </nav>
-  <div class="foot-base">
-    <span>&copy; 2026 Ali Shahmohammadi, Ph.D.</span>
-    <a class="to-top" href="#top">Back to top &uarr;</a>
-  </div>
+<div class="foot-lead">
+<p class="foot-name">Ali Shahmohammadi, Ph.D.</p>
+<p class="foot-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p>
+</div>
+<nav aria-label="Footer" class="foot-nav">
+<a href="../index.html#writing">Writing</a>
+<a href="../index.html#career">Career</a>
+<a href="../resume.html">Resume</a>
+<a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
+<a href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
+</nav>
+<div class="foot-base">
+<span>© 2026 Ali Shahmohammadi, Ph.D.</span>
+<a class="to-top" href="#top">Back to top ↑</a>
+</div>
 </footer>
-
 <script>
 (function(){
   var header = document.querySelector('.site-header');
@@ -1281,4 +1284,12 @@ code:not(pre code){font-family:var(--font-mono);font-size:.9em;background:var(--
 })();
 </script>
 </body>
+<script>
+(function(){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}
+  });},{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
 </html>

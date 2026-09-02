@@ -1,27 +1,26 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html data-theme="light" lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>FAIR Data Principles: A Practical Guide | Ali Shahmohammadi</title>
-<meta name="description" content="A decade after their publication, the FAIR principles have quietly become the backbone of modern data strategy. Here's what they actually mean, why they matter more than ever in the age of AI, and how to put them to work." />
-
-<meta property="og:title" content="FAIR Data Principles: A Practical Guide" />
-<meta property="og:description" content="What FAIR data actually means, why it matters more than ever in the age of AI, and how to put it to work in regulated R&amp;D environments." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://alishahmohammadi26.github.io/blog/fair-data-principles.html" />
-<meta property="og:image" content="https://alishahmohammadi26.github.io/assets/images/og-preview.png" />
-<meta property="og:image:type" content="image/png" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://alishahmohammadi26.github.io/assets/images/og-preview.png" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<meta content="A decade after their publication, the FAIR principles have quietly become the backbone of modern data strategy. Here's what they actually mean, why they matter more than ever in the age of AI, and how to put them to work." name="description"/>
+<meta content="FAIR Data Principles: A Practical Guide" property="og:title"/>
+<meta content="What FAIR data actually means, why it matters more than ever in the age of AI, and how to put it to work in regulated R&amp;D environments." property="og:description"/>
+<meta content="article" property="og:type"/>
+<meta content="https://alishahmohammadi26.github.io/blog/fair-data-principles.html" property="og:url"/>
+<meta content="https://alishahmohammadi26.github.io/assets/images/og-preview.png" property="og:image"/>
+<meta content="image/png" property="og:image:type"/>
+<meta content="1200" property="og:image:width"/>
+<meta content="630" property="og:image:height"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="https://alishahmohammadi26.github.io/assets/images/og-preview.png" name="twitter:image"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" rel="stylesheet"/>
+<script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})" src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <script>
   (function(){var t=localStorage.getItem('theme');
    if(!t)t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
@@ -323,8 +322,24 @@ hr.divider{background:var(--line-strong)}
 
 /* Old nav — hide fixed positioning; handled by new .site-header */
 nav:not(.site-nav):not(.foot-nav){display:none}
-</style>
 
+/* ===== Related reading ===== */
+.related-reading{margin:var(--sp-10) 0 var(--sp-8);padding-top:var(--sp-8);border-top:1px solid var(--line)}
+.related-reading .rr-label{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 var(--sp-4)}
+.related-reading .rr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--sp-4)}
+.related-reading .rr-card{display:block;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:var(--sp-4) var(--sp-5);text-decoration:none;transition:border-color .2s,box-shadow .2s,transform .2s}
+.related-reading .rr-card:hover{border-color:var(--accent);box-shadow:var(--shadow-2);transform:translateY(-2px);text-decoration:none}
+.related-reading .rr-card .rr-title{display:block;font-family:var(--font-display);font-weight:600;color:var(--navy);
+  font-size:var(--text-base);line-height:var(--lh-snug);margin-bottom:6px}
+.related-reading .rr-card .rr-go{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--accent);letter-spacing:.05em}
+
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+</style>
 <style>
 /* ═══════════════════════════════════════════════════════════════════════
    NON-PINN ARTICLE COMPATIBILITY CSS
@@ -633,670 +648,657 @@ code:not(pre code){font-family:var(--font-mono);font-size:.9em;background:var(--
 </style>
 </head>
 <body>
-
 <!-- Nav -->
 <header class="site-header" data-elevate="false">
-  <a class="brand" href="../index.html">Ali Shahmohammadi <span class="deg">Ph.D.</span></a>
-  <nav class="site-nav" aria-label="Primary">
-    <a href="../index.html#writing">Writing</a>
-    <a href="../index.html#career">Career</a>
-    <a href="../resume.html">Resume</a>
-    <a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
-  </nav>
-  <button class="theme-toggle" id="themeBtn" type="button" aria-label="Toggle dark mode"><b></b></button>
-  <div class="read-progress" role="presentation"><span id="progress"></span></div>
+<a class="brand" href="../index.html">Ali Shahmohammadi <span class="deg">Ph.D.</span></a>
+<nav aria-label="Primary" class="site-nav">
+<a href="../index.html#writing">Writing</a>
+<a href="../index.html#career">Career</a>
+<a href="../resume.html">Resume</a>
+<a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
+</nav>
+<button aria-label="Toggle dark mode" class="theme-toggle" id="themeBtn" type="button"><b></b></button>
+<div class="read-progress" role="presentation"><span id="progress"></span></div>
 </header>
-
 <!-- Hero -->
 <section class="hero">
-  <div class="hero-pill">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-    FAIR Data &nbsp;&middot;&nbsp; Data Governance &nbsp;&middot;&nbsp; Scientific Data Management
+<div class="hero-pill">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+    FAIR Data  ·  Data Governance  ·  Scientific Data Management
   </div>
-  <h1>FAIR Data Principles:<br><span class="accent">A Practical Guide</span></h1>
-  <p class="hero-sub">A decade after their publication, the FAIR principles have quietly become the backbone of modern data strategy&mdash;well beyond the research labs where they were born. Here&rsquo;s what they actually mean, why they matter more than ever in the age of AI, and how to put them to work.</p>
-  <div class="hero-meta">
-    <span class="meta-tag">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+<h1>FAIR Data Principles:<br/><span class="accent">A Practical Guide</span></h1>
+<p class="hero-sub">A decade after their publication, the FAIR principles have quietly become the backbone of modern data strategy. Well beyond the research labs where they were born. Here’s what they actually mean, why they matter more than ever in the age of AI, and how to put them to work.</p>
+<div class="hero-meta">
+<span class="meta-tag">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
       May 20, 2026
     </span>
-    <span class="meta-dot"></span>
-    <span class="meta-tag">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+<span class="meta-dot"></span>
+<span class="meta-tag">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
       18 min read
     </span>
-    <span class="meta-dot"></span>
-    <span class="meta-tag">Ali Shahmohammadi, Ph.D.</span>
-  </div>
-  <div class="hero-cta">
-    <a href="#cost-of-lost-data" class="btn btn-primary">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+<span class="meta-dot"></span>
+<span class="meta-tag">Ali Shahmohammadi, Ph.D.</span>
+</div>
+<div class="hero-cta">
+<a class="btn btn-primary" href="#cost-of-lost-data">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="15"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
       Read Article
     </a>
-    <a href="https://alishahmohammadi26.github.io/fair-data-toolkit" target="_blank" rel="noopener" class="btn btn-outline">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+<a class="btn btn-outline" href="https://alishahmohammadi26.github.io/fair-data-toolkit" rel="noopener" target="_blank">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" x2="21" y1="14" y2="3"></line></svg>
       FAIR Data Toolkit
     </a>
-  </div>
+</div>
 </section>
-
 <!-- Key stats -->
 <div class="container" style="margin:3rem auto;">
-  <div class="stats-row">
-    <div class="stat"><div class="stat-num">12K+</div><div class="stat-label">Citations since 2016</div></div>
-    <div class="stat"><div class="stat-num">&euro;10.2B</div><div class="stat-label">Annual cost of non-FAIR data in Europe</div></div>
-    <div class="stat"><div class="stat-num">17%</div><div class="stat-label">Drop in data availability per year after publication</div></div>
-    <div class="stat"><div class="stat-num">4</div><div class="stat-label">Principles &mdash; 15 sub-criteria</div></div>
-  </div>
+<div class="stats-row">
+<div class="stat"><div class="stat-num">12K+</div><div class="stat-label">Citations since 2016</div></div>
+<div class="stat"><div class="stat-num">€10.2B</div><div class="stat-label">Annual cost of non-FAIR data in Europe</div></div>
+<div class="stat"><div class="stat-num">17%</div><div class="stat-label">Drop in data availability per year after publication</div></div>
+<div class="stat"><div class="stat-num">4</div><div class="stat-label">Principles: 15 sub-criteria</div></div>
 </div>
-
+</div>
 <!-- TOC -->
 <section class="section-alt" style="padding:3rem 0;">
-  <div class="container">
-    <div class="toc">
-      <div class="toc-head">Contents</div>
-      <ol>
-        <li><span class="toc-n">01</span><a href="#cost-of-lost-data">The Cost of &ldquo;Lost&rdquo; Data</a></li>
-        <li><span class="toc-n">02</span><a href="#what-fair-is">What FAIR Is (and Isn&rsquo;t)</a></li>
-        <li><span class="toc-n">03</span><a href="#four-principles">The Four Principles, Unpacked</a></li>
-        <li><span class="toc-n">04</span><a href="#why-now">Why FAIR Matters Now</a></li>
-        <li><span class="toc-n">05</span><a href="#domains">FAIR Across Domains</a></li>
-        <li><span class="toc-n">06</span><a href="#implement">How to Implement FAIR</a></li>
-        <li><span class="toc-n">07</span><a href="#tools">Tools &amp; Resources</a></li>
-        <li><span class="toc-n">08</span><a href="#caveats">Challenges &amp; Critiques</a></li>
-        <li><span class="toc-n">09</span><a href="#future">Where This Is Heading</a></li>
-        <li><span class="toc-n">10</span><a href="#starter-plan">5-Step Starter Plan</a></li>
-        <li><span class="toc-n">11</span><a href="#references">References</a></li>
-      </ol>
-    </div>
-  </div>
+<div class="container">
+<div class="toc">
+<div class="toc-head">Contents</div>
+<ol>
+<li><span class="toc-n">01</span><a href="#cost-of-lost-data">The Cost of “Lost” Data</a></li>
+<li><span class="toc-n">02</span><a href="#what-fair-is">What FAIR Is (and Isn’t)</a></li>
+<li><span class="toc-n">03</span><a href="#four-principles">The Four Principles, Unpacked</a></li>
+<li><span class="toc-n">04</span><a href="#why-now">Why FAIR Matters Now</a></li>
+<li><span class="toc-n">05</span><a href="#domains">FAIR Across Domains</a></li>
+<li><span class="toc-n">06</span><a href="#implement">How to Implement FAIR</a></li>
+<li><span class="toc-n">07</span><a href="#tools">Tools &amp; Resources</a></li>
+<li><span class="toc-n">08</span><a href="#caveats">Challenges &amp; Critiques</a></li>
+<li><span class="toc-n">09</span><a href="#future">Where This Is Heading</a></li>
+<li><span class="toc-n">10</span><a href="#starter-plan">5-Step Starter Plan</a></li>
+<li><span class="toc-n">11</span><a href="#references">References</a></li>
+</ol>
+</div>
+</div>
 </section>
-
 <!-- 1. Cost of lost data -->
 <section class="section" id="cost-of-lost-data">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>01 &mdash; Background</div>
-      <div class="section-title">The Cost of &ldquo;Lost&rdquo; Data</div>
-      <p class="section-sub">Data worth millions vanishes not because of deliberate deletion, but because of benign neglect&mdash;PDFs, dead servers, and impenetrable prose.</p>
-    </div>
-    <div class="prose">
-      <p>In 2014, a group of researchers tried to reanalyze published cancer biology studies. They couldn&rsquo;t. Not because the science was wrong, but because the underlying data had effectively vanished&mdash;locked in PDF supplements, stored in defunct lab servers, described in prose so vague that no machine (and few humans) could make sense of it.</p>
-      <p>This wasn&rsquo;t an isolated story. It was the norm. A 2014 study found that the odds of an original dataset being available dropped by <strong>17% per year</strong> after publication.<sup><a href="#ref-1">[1]</a></sup> Data that took millions of dollars and years of work to produce was simply disappearing.</p>
-      <p>That frustration was the spark behind a short paper published in <em>Scientific Data</em> in March 2016&mdash;a paper that has since been cited more than 12,000 times and reshaped how governments, funders, and increasingly industries think about data. It introduced the <strong>FAIR Guiding Principles for scientific data management and stewardship</strong>.<sup><a href="#ref-2">[2]</a></sup></p>
-      <p>Nearly a decade on, FAIR has spread far beyond its life-sciences origins. It now underpins European data strategy, NIH funding policy, pharmaceutical R&amp;D consortia, Earth-observation programs, and the data foundations of modern AI systems. Whether you&rsquo;re a data engineer, a research scientist, a product manager, or a policy lead, FAIR is probably going to show up in your work.</p>
-    </div>
-  </div>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow"><svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>01. Background</div>
+<div class="section-title">The Cost of “Lost” Data</div>
+<p class="section-sub">Data worth millions vanishes not because of deliberate deletion, but because of benign neglect: PDFs, dead servers, and impenetrable prose.</p>
+</div>
+<div class="prose">
+<p>In 2014, a group of researchers tried to reanalyze published cancer biology studies. They couldn’t. Not because the science was wrong, but because the underlying data had effectively vanished: locked in PDF supplements, stored in defunct lab servers, described in prose so vague that no machine (and few humans) could make sense of it.</p>
+<p>This wasn’t an isolated story. It was the norm. A 2014 study found that the odds of an original dataset being available dropped by <strong>17% per year</strong> after publication.<sup><a href="#ref-1">[1]</a></sup> Data that took millions of dollars and years of work to produce was simply disappearing.</p>
+<p>That frustration was the spark behind a short paper published in <em>Scientific Data</em> in March 2016, a paper that has since been cited more than 12,000 times and reshaped how governments, funders, and increasingly industries think about data. It introduced the <strong>FAIR Guiding Principles for scientific data management and stewardship</strong>.<sup><a href="#ref-2">[2]</a></sup></p>
+<p>Nearly a decade on, FAIR has spread far beyond its life-sciences origins. It now underpins European data strategy, NIH funding policy, pharmaceutical R&amp;D consortia, Earth-observation programs, and the data foundations of modern AI systems. Whether you’re a data engineer, a research scientist, a product manager, or a policy lead, FAIR is probably going to show up in your work.</p>
+</div>
+</div>
 </section>
-
 <!-- 2. What FAIR is -->
 <section class="section section-alt" id="what-fair-is">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>02 &mdash; Definition</div>
-      <div class="section-title">What FAIR Is (and What It Isn&rsquo;t)</div>
-      <p class="section-sub">The acronym is straightforward. The nuance that makes it powerful is often missed.</p>
-    </div>
-    <div class="prose" style="margin-bottom:2.5rem;">
-      <p>FAIR stands for <strong>Findable, Accessible, Interoperable, and Reusable</strong>. The principles were developed through a community effort coordinated by FORCE11 and the Dutch Tech Centre for Life Sciences, building on workshops dating back to 2014.<sup><a href="#ref-3">[3]</a></sup></p>
-      <p>The key insight that distinguishes FAIR from earlier data-sharing frameworks is its emphasis on <em>machine-actionability</em>. In the authors&rsquo; words, the principles &ldquo;put specific emphasis on enhancing the ability of machines to automatically find and use the data, in addition to supporting its reuse by individuals.&rdquo;<sup><a href="#ref-2">[2]</a></sup> This is the part people miss, and it&rsquo;s the part that makes FAIR powerful in 2026.</p>
-    </div>
-    <div class="feat-grid">
-      <div class="feat-card">
-        <div class="feat-icon amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
-        <div class="feat-title">Not &ldquo;Open&rdquo;</div>
-        <div class="feat-desc">A common misconception. Data can be fully FAIR and still be access-restricted&mdash;as it must be for patient records, defense data, or proprietary R&amp;D. What FAIR requires is that the <em>conditions of access</em> are clear and that metadata remains discoverable.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
-        <div class="feat-title">Not a Standard or Technology</div>
-        <div class="feat-desc">FAIR is a set of principles. Multiple technical stacks can deliver FAIR data. The principles are intentionally technology-agnostic to remain applicable across all disciplines and evolving infrastructures.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
-        <div class="feat-title">Not Binary</div>
-        <div class="feat-desc">Datasets sit on a spectrum of &ldquo;FAIRness,&rdquo; and there are formal maturity models for assessing where yours falls.<sup><a href="#ref-4">[4]</a></sup> Expecting perfection is the enemy of progress.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
-        <div class="feat-title">Not a Governance Replacement</div>
-        <div class="feat-desc">FAIR complements governance frameworks but doesn&rsquo;t, on its own, address ethics, equity, or consent. The CARE Principles for Indigenous Data Governance are the key complementary framework.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
-        <div class="feat-title">Machine-Actionability First</div>
-        <div class="feat-desc">FAIR is not primarily about helping humans share data&mdash;it&rsquo;s about enabling machines to discover, integrate, and process data autonomously. This distinction is critical for AI/ML pipelines and automated data workflows.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
-        <div class="feat-title">A Spectrum, Not a Checklist</div>
-        <div class="feat-desc">Meaningful progress happens incrementally. Tools like F-UJI and the RDA FAIR Maturity Model provide scored assessments so you can measure improvement over time, not just claim compliance.</div>
-      </div>
-    </div>
-  </div>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow"><svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>02. Definition</div>
+<div class="section-title">What FAIR Is (and What It Isn’t)</div>
+<p class="section-sub">The acronym is straightforward. The nuance that makes it powerful is often missed.</p>
+</div>
+<div class="prose" style="margin-bottom:2.5rem;">
+<p>FAIR stands for <strong>Findable, Accessible, Interoperable, and Reusable</strong>. The principles were developed through a community effort coordinated by FORCE11 and the Dutch Tech Centre for Life Sciences, building on workshops dating back to 2014.<sup><a href="#ref-3">[3]</a></sup></p>
+<p>The key insight that distinguishes FAIR from earlier data-sharing frameworks is its emphasis on <em>machine-actionability</em>. In the authors’ words, the principles “put specific emphasis on enhancing the ability of machines to automatically find and use the data, in addition to supporting its reuse by individuals.”<sup><a href="#ref-2">[2]</a></sup> This is the part people miss, and it’s the part that makes FAIR powerful in 2026.</p>
+</div>
+<div class="feat-grid">
+<div class="feat-card">
+<div class="feat-icon amber"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><circle cx="12" cy="12" r="10"></circle><line x1="15" x2="9" y1="9" y2="15"></line><line x1="9" x2="15" y1="9" y2="15"></line></svg></div>
+<div class="feat-title">Not “Open”</div>
+<div class="feat-desc">A common misconception. Data can be fully FAIR and still be access-restricted: as it must be for patient records, defense data, or proprietary R&amp;D. What FAIR requires is that the <em>conditions of access</em> are clear and that metadata remains discoverable.</div>
+</div>
+<div class="feat-card">
+<div class="feat-icon amber"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><circle cx="12" cy="12" r="10"></circle><line x1="15" x2="9" y1="9" y2="15"></line><line x1="9" x2="15" y1="9" y2="15"></line></svg></div>
+<div class="feat-title">Not a Standard or Technology</div>
+<div class="feat-desc">FAIR is a set of principles. Multiple technical stacks can deliver FAIR data. The principles are intentionally technology-agnostic to remain applicable across all disciplines and evolving infrastructures.</div>
+</div>
+<div class="feat-card">
+<div class="feat-icon amber"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><circle cx="12" cy="12" r="10"></circle><line x1="15" x2="9" y1="9" y2="15"></line><line x1="9" x2="15" y1="9" y2="15"></line></svg></div>
+<div class="feat-title">Not Binary</div>
+<div class="feat-desc">Datasets sit on a spectrum of “FAIRness,” and there are formal maturity models for assessing where yours falls.<sup><a href="#ref-4">[4]</a></sup> Expecting perfection is the enemy of progress.</div>
+</div>
+<div class="feat-card">
+<div class="feat-icon amber"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><circle cx="12" cy="12" r="10"></circle><line x1="15" x2="9" y1="9" y2="15"></line><line x1="9" x2="15" y1="9" y2="15"></line></svg></div>
+<div class="feat-title">Not a Governance Replacement</div>
+<div class="feat-desc">FAIR complements governance frameworks but doesn’t, on its own, address ethics, equity, or consent. The CARE Principles for Indigenous Data Governance are the key complementary framework.</div>
+</div>
+<div class="feat-card">
+<div class="feat-icon"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></div>
+<div class="feat-title">Machine-Actionability First</div>
+<div class="feat-desc">FAIR is not primarily about helping humans share data: it’s about enabling machines to discover, integrate, and process data autonomously. This distinction is critical for AI/ML pipelines and automated data workflows.</div>
+</div>
+<div class="feat-card">
+<div class="feat-icon green"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
+<div class="feat-title">A Spectrum, Not a Checklist</div>
+<div class="feat-desc">Meaningful progress happens incrementally. Tools like F-UJI and the RDA FAIR Maturity Model provide scored assessments so you can measure improvement over time, not just claim compliance.</div>
+</div>
+</div>
+</div>
 </section>
-
 <!-- 3. Four principles -->
 <section class="section" id="four-principles">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>03 &mdash; Core Framework</div>
-      <div class="section-title">The Four Principles, Unpacked</div>
-      <p class="section-sub">The original paper breaks each letter into sub-principles. Here&rsquo;s what each actually requires&mdash;and what it means in practice.</p>
-    </div>
-
-    <!-- Findable -->
-    <div class="principle-block">
-      <div class="principle-header">
-        <div class="principle-letter pl-f">F</div>
-        <div class="principle-header-text">
-          <h3>Findable</h3>
-          <p>Data and metadata must be discoverable&mdash;by humans and, critically, by software agents.</p>
-        </div>
-      </div>
-      <ul class="sub-principles">
-        <li><span class="sub-num">F1</span>(Meta)data are assigned a globally unique and persistent identifier.</li>
-        <li><span class="sub-num">F2</span>Data are described with rich metadata.</li>
-        <li><span class="sub-num">F3</span>Metadata clearly and explicitly include the identifier of the data they describe.</li>
-        <li><span class="sub-num">F4</span>(Meta)data are registered or indexed in a searchable resource.</li>
-      </ul>
-      <div class="callout"><p><strong>In practice:</strong> Use persistent identifiers like DOIs (via DataCite or Crossref), ORCIDs for people, and register datasets in catalogs or repositories that expose searchable metadata. A spreadsheet on a personal Dropbox isn&rsquo;t findable. A dataset on Zenodo with a DOI and DCAT metadata is.</p></div>
-    </div>
-
-    <!-- Accessible -->
-    <div class="principle-block">
-      <div class="principle-header">
-        <div class="principle-letter pl-a">A</div>
-        <div class="principle-header-text">
-          <h3>Accessible</h3>
-          <p>Once found, data must be retrievable&mdash;or you must know exactly how to request access.</p>
-        </div>
-      </div>
-      <ul class="sub-principles">
-        <li><span class="sub-num green">A1</span>(Meta)data are retrievable by their identifier using a standardised communications protocol.</li>
-        <li><span class="sub-num green">A1.1</span>The protocol is open, free, and universally implementable.</li>
-        <li><span class="sub-num green">A1.2</span>The protocol allows for an authentication and authorisation procedure, where necessary.</li>
-        <li><span class="sub-num green">A2</span>Metadata are accessible, even when the data are no longer available.</li>
-      </ul>
-      <div class="callout" style="background:var(--green-bg);border-color:var(--green-bdr)"><p><strong>The underappreciated A2:</strong> Even if a dataset is deleted, withdrawn, or behind a paywall, the <em>metadata</em> describing it should remain. This preserves the scientific record and lets future researchers know what existed and why.</p></div>
-    </div>
-
-    <!-- Interoperable -->
-    <div class="principle-block">
-      <div class="principle-header">
-        <div class="principle-letter pl-i">I</div>
-        <div class="principle-header-text">
-          <h3>Interoperable</h3>
-          <p>The hardest principle to implement&mdash;and the most often skipped. It&rsquo;s what unlocks cross-system integration.</p>
-        </div>
-      </div>
-      <ul class="sub-principles">
-        <li><span class="sub-num purple">I1</span>(Meta)data use a formal, accessible, shared, and broadly applicable language for knowledge representation.</li>
-        <li><span class="sub-num purple">I2</span>(Meta)data use vocabularies that follow FAIR principles.</li>
-        <li><span class="sub-num purple">I3</span>(Meta)data include qualified references to other (meta)data.</li>
-      </ul>
-      <div class="callout" style="background:var(--purple-lt);border-color:var(--purple-mid)"><p><strong>In practice:</strong> Interoperability is what lets a clinical dataset from one hospital combine cleanly with one from another. It requires shared vocabularies (SNOMED CT in medicine, MeSH in biomedical literature, Schema.org on the web), shared data models (RDF, JSON-LD), and explicit links between related resources.</p></div>
-    </div>
-
-    <!-- Reusable -->
-    <div class="principle-block">
-      <div class="principle-header">
-        <div class="principle-letter pl-r">R</div>
-        <div class="principle-header-text">
-          <h3>Reusable</h3>
-          <p>The end goal: data that someone else can pick up and confidently use, possibly years later, possibly for a purpose you didn&rsquo;t anticipate.</p>
-        </div>
-      </div>
-      <ul class="sub-principles">
-        <li><span class="sub-num amber">R1</span>(Meta)data are richly described with a plurality of accurate and relevant attributes.</li>
-        <li><span class="sub-num amber">R1.1</span>(Meta)data are released with a clear and accessible data usage license.</li>
-        <li><span class="sub-num amber">R1.2</span>(Meta)data are associated with detailed provenance.</li>
-        <li><span class="sub-num amber">R1.3</span>(Meta)data meet domain-relevant community standards.</li>
-      </ul>
-      <div class="callout" style="background:var(--amber-bg);border-color:var(--amber-bdr)"><p><strong>The three pillars of reusability:</strong> Rich description (so users understand what the data represent), explicit licensing (so users know what they&rsquo;re allowed to do), and provenance (so users know where the data came from and how it was processed). The W3C&rsquo;s PROV-O ontology is the standard reference for representing provenance.<sup><a href="#ref-5">[5]</a></sup></p></div>
-    </div>
-  </div>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow"><svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><rect height="18" rx="2" width="18" x="3" y="3"></rect><path d="M9 9h6M9 12h6M9 15h4"></path></svg>03. Core Framework</div>
+<div class="section-title">The Four Principles, Unpacked</div>
+<p class="section-sub">The original paper breaks each letter into sub-principles. Here’s what each actually requires, and what it means in practice.</p>
+</div>
+<!-- Findable -->
+<div class="principle-block">
+<div class="principle-header">
+<div class="principle-letter pl-f">F</div>
+<div class="principle-header-text">
+<h3>Findable</h3>
+<p>Data and metadata must be discoverable: by humans and, critically, by software agents.</p>
+</div>
+</div>
+<ul class="sub-principles">
+<li><span class="sub-num">F1</span>(Meta)data are assigned a globally unique and persistent identifier.</li>
+<li><span class="sub-num">F2</span>Data are described with rich metadata.</li>
+<li><span class="sub-num">F3</span>Metadata clearly and explicitly include the identifier of the data they describe.</li>
+<li><span class="sub-num">F4</span>(Meta)data are registered or indexed in a searchable resource.</li>
+</ul>
+<div class="callout"><p><strong>In practice:</strong> Use persistent identifiers like DOIs (via DataCite or Crossref), ORCIDs for people, and register datasets in catalogs or repositories that expose searchable metadata. A spreadsheet on a personal Dropbox isn’t findable. A dataset on Zenodo with a DOI and DCAT metadata is.</p></div>
+</div>
+<!-- Accessible -->
+<div class="principle-block">
+<div class="principle-header">
+<div class="principle-letter pl-a">A</div>
+<div class="principle-header-text">
+<h3>Accessible</h3>
+<p>Once found, data must be retrievable, or you must know exactly how to request access.</p>
+</div>
+</div>
+<ul class="sub-principles">
+<li><span class="sub-num green">A1</span>(Meta)data are retrievable by their identifier using a standardised communications protocol.</li>
+<li><span class="sub-num green">A1.1</span>The protocol is open, free, and universally implementable.</li>
+<li><span class="sub-num green">A1.2</span>The protocol allows for an authentication and authorisation procedure, where necessary.</li>
+<li><span class="sub-num green">A2</span>Metadata are accessible, even when the data are no longer available.</li>
+</ul>
+<div class="callout" style="background:var(--green-bg);border-color:var(--green-bdr)"><p><strong>The underappreciated A2:</strong> Even if a dataset is deleted, withdrawn, or behind a paywall, the <em>metadata</em> describing it should remain. This preserves the scientific record and lets future researchers know what existed and why.</p></div>
+</div>
+<!-- Interoperable -->
+<div class="principle-block">
+<div class="principle-header">
+<div class="principle-letter pl-i">I</div>
+<div class="principle-header-text">
+<h3>Interoperable</h3>
+<p>The hardest principle to implement, and the most often skipped. It’s what makes cross-system integration possible.</p>
+</div>
+</div>
+<ul class="sub-principles">
+<li><span class="sub-num purple">I1</span>(Meta)data use a formal, accessible, shared, and broadly applicable language for knowledge representation.</li>
+<li><span class="sub-num purple">I2</span>(Meta)data use vocabularies that follow FAIR principles.</li>
+<li><span class="sub-num purple">I3</span>(Meta)data include qualified references to other (meta)data.</li>
+</ul>
+<div class="callout" style="background:var(--purple-lt);border-color:var(--purple-mid)"><p><strong>In practice:</strong> Interoperability is what lets a clinical dataset from one hospital combine cleanly with one from another. It requires shared vocabularies (SNOMED CT in medicine, MeSH in biomedical literature, Schema.org on the web), shared data models (RDF, JSON-LD), and explicit links between related resources.</p></div>
+</div>
+<!-- Reusable -->
+<div class="principle-block">
+<div class="principle-header">
+<div class="principle-letter pl-r">R</div>
+<div class="principle-header-text">
+<h3>Reusable</h3>
+<p>The end goal: data that someone else can pick up and confidently use, possibly years later, possibly for a purpose you didn’t anticipate.</p>
+</div>
+</div>
+<ul class="sub-principles">
+<li><span class="sub-num amber">R1</span>(Meta)data are richly described with a plurality of accurate and relevant attributes.</li>
+<li><span class="sub-num amber">R1.1</span>(Meta)data are released with a clear and accessible data usage license.</li>
+<li><span class="sub-num amber">R1.2</span>(Meta)data are associated with detailed provenance.</li>
+<li><span class="sub-num amber">R1.3</span>(Meta)data meet domain-relevant community standards.</li>
+</ul>
+<div class="callout" style="background:var(--amber-bg);border-color:var(--amber-bdr)"><p><strong>The three pillars of reusability:</strong> Rich description (so users understand what the data represent), explicit licensing (so users know what they’re allowed to do), and provenance (so users know where the data came from and how it was processed). The W3C’s PROV-O ontology is the standard reference for representing provenance.<sup><a href="#ref-5">[5]</a></sup></p></div>
+</div>
+</div>
 </section>
-
 <!-- 4. Why now -->
 <section class="section section-alt" id="why-now">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>04 &mdash; Relevance</div>
-      <div class="section-title">Why FAIR Matters Now</div>
-      <p class="section-sub">FAIR was published in 2016, but several converging forces make it more relevant in 2026 than it was at launch.</p>
-    </div>
-    <div class="feat-grid">
-      <div class="feat-card">
-        <div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg></div>
-        <div class="feat-title">Machine Learning Eats Data</div>
-        <div class="feat-desc">Every modern ML system is bottlenecked by the quality and accessibility of its training data. FAIR data is dramatically easier to discover, validate, license, and reuse. &ldquo;Is this dataset FAIR?&rdquo; is increasingly the first question ML engineers ask.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
-        <div class="feat-title">Funders Now Require It</div>
-        <div class="feat-desc">The NIH Data Management and Sharing Policy (effective January 2023) explicitly references FAIR principles.<sup><a href="#ref-6">[6]</a></sup> Horizon Europe mandates FAIR-aligned data.<sup><a href="#ref-7">[7]</a></sup> Wellcome, NSF, and most major funders have followed.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
-        <div class="feat-title">The Economic Case Is Concrete</div>
-        <div class="feat-desc">A 2018 European Commission study estimated the cost of <em>not</em> having FAIR research data in Europe at at least &euro;10.2 billion per year.<sup><a href="#ref-8">[8]</a></sup> That figure helped shift FAIR from a research nicety to an economic priority.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon purple"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-        <div class="feat-title">Reproducibility Pressure</div>
-        <div class="feat-desc">Across fields from psychology to cancer biology to ML benchmarks, reproducibility crises have made well-documented, accessible data table-stakes rather than a bonus.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
-        <div class="feat-title">Industry Is Catching On</div>
-        <div class="feat-desc">Pharma R&amp;D consortia like the Pistoia Alliance have been driving FAIR adoption inside drug discovery for years.<sup><a href="#ref-9">[9]</a></sup> Manufacturing initiatives under Industry 4.0, the EU&rsquo;s Gaia-X project, and large-pharma internal data lakes all draw on FAIR vocabulary.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg></div>
-        <div class="feat-title">AI Governance Is Maturing</div>
-        <div class="feat-desc">As AI regulation accelerates globally, data provenance and licensing metadata&mdash;core FAIR requirements&mdash;are becoming legal prerequisites for deploying AI systems in regulated industries.</div>
-      </div>
-    </div>
-  </div>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow"><svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>04. Relevance</div>
+<div class="section-title">Why FAIR Matters Now</div>
+<p class="section-sub">FAIR was published in 2016, but several converging forces make it more relevant in 2026 than it was at launch.</p>
+</div>
+<div class="feat-grid">
+<div class="feat-card">
+<div class="feat-icon"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"></path></svg></div>
+<div class="feat-title">Machine Learning Eats Data</div>
+<div class="feat-desc">Every modern ML system is bottlenecked by the quality and accessibility of its training data. FAIR data is dramatically easier to discover, validate, license, and reuse. “Is this dataset FAIR?” is increasingly the first question ML engineers ask.</div>
+</div>
+<div class="feat-card">
+<div class="feat-icon green"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
+<div class="feat-title">Funders Now Require It</div>
+<div class="feat-desc">The NIH Data Management and Sharing Policy (effective January 2023) explicitly references FAIR principles.<sup><a href="#ref-6">[6]</a></sup> Horizon Europe mandates FAIR-aligned data.<sup><a href="#ref-7">[7]</a></sup> Wellcome, NSF, and most major funders have followed.</div>
+</div>
+<div class="feat-card">
+<div class="feat-icon amber"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><line x1="12" x2="12" y1="1" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+<div class="feat-title">The Economic Case Is Concrete</div>
+<div class="feat-desc">A 2018 European Commission study estimated the cost of <em>not</em> having FAIR research data in Europe at at least €10.2 billion per year.<sup><a href="#ref-8">[8]</a></sup> That figure helped shift FAIR from a research nicety to an economic priority.</div>
+</div>
+<div class="feat-card">
+<div class="feat-icon purple"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+<div class="feat-title">Reproducibility Pressure</div>
+<div class="feat-desc">Across fields from psychology to cancer biology to ML benchmarks, reproducibility crises have made well-documented, accessible data table-stakes rather than a bonus.</div>
+</div>
+<div class="feat-card">
+<div class="feat-icon"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><rect height="14" rx="2" width="20" x="2" y="7"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg></div>
+<div class="feat-title">Industry Is Catching On</div>
+<div class="feat-desc">Pharma R&amp;D consortia like the Pistoia Alliance have been driving FAIR adoption inside drug discovery for years.<sup><a href="#ref-9">[9]</a></sup> Manufacturing initiatives under Industry 4.0, the EU’s Gaia-X project, and large-pharma internal data lakes all draw on FAIR vocabulary.</div>
+</div>
+<div class="feat-card">
+<div class="feat-icon green"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M18 20V10"></path><path d="M12 20V4"></path><path d="M6 20v-6"></path></svg></div>
+<div class="feat-title">AI Governance Is Maturing</div>
+<div class="feat-desc">As AI regulation accelerates globally, data provenance and licensing metadata (core FAIR requirements) are becoming legal prerequisites for deploying AI systems in regulated industries.</div>
+</div>
+</div>
+</div>
 </section>
-
 <!-- 5. Domains -->
 <section class="section" id="domains">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>05 &mdash; Domains</div>
-      <div class="section-title">FAIR Across Domains</div>
-      <p class="section-sub">FAIR started in life sciences but has spread widely&mdash;wherever large datasets are generated, shared, or federated.</p>
-    </div>
-    <div class="domain-grid">
-      <div class="domain-card">
-        <div class="domain-icon">🧬</div>
-        <div class="domain-title">Biomedical &amp; Life Sciences</div>
-        <div class="domain-detail">ELIXIR, the European Nucleotide Archive, UniProt, and the Protein Data Bank were FAIR-aligned before the term existed.<sup><a href="#ref-10">[10]</a></sup></div>
-      </div>
-      <div class="domain-card">
-        <div class="domain-icon">🌍</div>
-        <div class="domain-title">Earth &amp; Environmental Science</div>
-        <div class="domain-detail">NASA&rsquo;s Open Source Science Initiative, ESA, and the Copernicus climate services have formally adopted FAIR.<sup><a href="#ref-11">[11]</a></sup></div>
-      </div>
-      <div class="domain-card">
-        <div class="domain-icon">⚗️</div>
-        <div class="domain-title">Chemistry &amp; Materials</div>
-        <div class="domain-detail">The Materials Project and NOMAD Laboratory pioneer FAIR computational materials data, enabling machine learning across published DFT calculations.<sup><a href="#ref-12">[12]</a></sup></div>
-      </div>
-      <div class="domain-card">
-        <div class="domain-icon">📊</div>
-        <div class="domain-title">Social Sciences</div>
-        <div class="domain-detail">ICPSR and CESSDA operate large FAIR-aligned repositories for political, economic, and social research data across dozens of countries.</div>
-      </div>
-      <div class="domain-card">
-        <div class="domain-icon">💊</div>
-        <div class="domain-title">Pharmaceutical R&amp;D</div>
-        <div class="domain-detail">Pre-competitive consortia use FAIR to share assay and target data without compromising IP, enabling federated drug discovery.</div>
-      </div>
-      <div class="domain-card">
-        <div class="domain-icon">🏛️</div>
-        <div class="domain-title">Government Open Data</div>
-        <div class="domain-detail">Data.gov and data.europa.eu draw heavily on FAIR-compatible metadata standards like DCAT.<sup><a href="#ref-13">[13]</a></sup></div>
-      </div>
-    </div>
-  </div>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow"><svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><circle cx="12" cy="12" r="10"></circle><line x1="2" x2="22" y1="12" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>05. Domains</div>
+<div class="section-title">FAIR Across Domains</div>
+<p class="section-sub">FAIR started in life sciences but has spread widely. Wherever large datasets are generated, shared, or federated.</p>
+</div>
+<div class="domain-grid">
+<div class="domain-card">
+<div class="domain-icon">🧬</div>
+<div class="domain-title">Biomedical &amp; Life Sciences</div>
+<div class="domain-detail">ELIXIR, the European Nucleotide Archive, UniProt, and the Protein Data Bank were FAIR-aligned before the term existed.<sup><a href="#ref-10">[10]</a></sup></div>
+</div>
+<div class="domain-card">
+<div class="domain-icon">🌍</div>
+<div class="domain-title">Earth &amp; Environmental Science</div>
+<div class="domain-detail">NASA’s Open Source Science Initiative, ESA, and the Copernicus climate services have formally adopted FAIR.<sup><a href="#ref-11">[11]</a></sup></div>
+</div>
+<div class="domain-card">
+<div class="domain-icon">⚗️</div>
+<div class="domain-title">Chemistry &amp; Materials</div>
+<div class="domain-detail">The Materials Project and NOMAD Laboratory pioneer FAIR computational materials data, enabling machine learning across published DFT calculations.<sup><a href="#ref-12">[12]</a></sup></div>
+</div>
+<div class="domain-card">
+<div class="domain-icon">📊</div>
+<div class="domain-title">Social Sciences</div>
+<div class="domain-detail">ICPSR and CESSDA operate large FAIR-aligned repositories for political, economic, and social research data across dozens of countries.</div>
+</div>
+<div class="domain-card">
+<div class="domain-icon">💊</div>
+<div class="domain-title">Pharmaceutical R&amp;D</div>
+<div class="domain-detail">Pre-competitive consortia use FAIR to share assay and target data without compromising IP, enabling federated drug discovery.</div>
+</div>
+<div class="domain-card">
+<div class="domain-icon">🏛️</div>
+<div class="domain-title">Government Open Data</div>
+<div class="domain-detail">Data.gov and data.europa.eu draw heavily on FAIR-compatible metadata standards like DCAT.<sup><a href="#ref-13">[13]</a></sup></div>
+</div>
+</div>
+</div>
 </section>
-
 <!-- 6. Implement -->
 <section class="section section-alt" id="implement">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>06 &mdash; Implementation</div>
-      <div class="section-title">How to Implement FAIR</div>
-      <p class="section-sub">Implementing FAIR is a journey, not a checkbox. A pragmatic sequence that rewards forward motion over perfection.</p>
-    </div>
-    <div class="steps-list">
-      <div class="step-row">
-        <div class="step-num">01</div>
-        <div>
-          <div class="step-title">Assess where you are</div>
-          <div class="step-desc">Run a FAIR maturity assessment before changing anything. The RDA FAIR Data Maturity Model is the most widely-used framework,<sup><a href="#ref-4">[4]</a></sup> and tools like F-UJI and the FAIR Evaluator can produce automated reports.<sup><a href="#ref-14">[14]</a></sup></div>
-        </div>
-      </div>
-      <div class="step-row">
-        <div class="step-num">02</div>
-        <div>
-          <div class="step-title">Adopt persistent identifiers</div>
-          <div class="step-desc">Mint DOIs for datasets through DataCite; use ORCIDs to identify people; consider ROR IDs for institutions. Persistent identifiers are the single highest-leverage FAIR investment.</div>
-        </div>
-      </div>
-      <div class="step-row">
-        <div class="step-num">03</div>
-        <div>
-          <div class="step-title">Choose appropriate metadata standards</div>
-          <div class="step-desc">Generic standards like the DataCite Metadata Schema, Dublin Core, DCAT, and Schema.org/Dataset cover broad cases. Domain-specific standards (DICOM for medical imaging, ISA-Tab for life-science experiments, CF Conventions for climate data) should be used where available.</div>
-        </div>
-      </div>
-      <div class="step-row">
-        <div class="step-num">04</div>
-        <div>
-          <div class="step-title">Use controlled vocabularies and ontologies</div>
-          <div class="step-desc">Search BioPortal,<sup><a href="#ref-15">[15]</a></sup> the OBO Foundry,<sup><a href="#ref-16">[16]</a></sup> or the EMBL-EBI Ontology Lookup Service for established vocabularies in your domain before inventing your own.</div>
-        </div>
-      </div>
-      <div class="step-row">
-        <div class="step-num">05</div>
-        <div>
-          <div class="step-title">Pick the right repository</div>
-          <div class="step-desc">Domain-specific repositories (GenBank, PDB, ICPSR) are almost always preferable to generalist ones. For data that doesn&rsquo;t fit a domain repository, Zenodo, Figshare, and Dryad are well-regarded generalist options. The re3data.org registry is the most comprehensive directory.<sup><a href="#ref-18">[18]</a></sup></div>
-        </div>
-      </div>
-      <div class="step-row">
-        <div class="step-num">06</div>
-        <div>
-          <div class="step-title">Write a Data Management Plan</div>
-          <div class="step-desc">Tools like DMPTool<sup><a href="#ref-17">[17]</a></sup> and Argos help structure plans aligned with funder requirements. A DMP written at project start saves significant time at project end.</div>
-        </div>
-      </div>
-      <div class="step-row">
-        <div class="step-num">07</div>
-        <div>
-          <div class="step-title">License explicitly</div>
-          <div class="step-desc">Creative Commons licenses (CC BY 4.0 or CC0 for fully open data) are standard. For restricted data, use clear access policies and consider machine-readable license tags.</div>
-        </div>
-      </div>
-      <div class="step-row">
-        <div class="step-num">08</div>
-        <div>
-          <div class="step-title">Document provenance</div>
-          <div class="step-desc">Capture not just what the data are but how they were produced&mdash;instruments, software versions, processing steps, people involved. PROV-O provides a standard model.<sup><a href="#ref-5">[5]</a></sup></div>
-        </div>
-      </div>
-      <div class="step-row">
-        <div class="step-num">09</div>
-        <div>
-          <div class="step-title">Build FAIR in from the start</div>
-          <div class="step-desc">Retrofitting FAIR onto legacy data is far more expensive than designing for it. Update workflows, templates, and pipelines so that FAIR metadata is captured at source.</div>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow"><svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>06. Implementation</div>
+<div class="section-title">How to Implement FAIR</div>
+<p class="section-sub">Implementing FAIR is a journey, not a checkbox. A pragmatic sequence that rewards forward motion over perfection.</p>
+</div>
+<div class="steps-list">
+<div class="step-row">
+<div class="step-num">01</div>
+<div>
+<div class="step-title">Assess where you are</div>
+<div class="step-desc">Run a FAIR maturity assessment before changing anything. The RDA FAIR Data Maturity Model is the most widely-used framework,<sup><a href="#ref-4">[4]</a></sup> and tools like F-UJI and the FAIR Evaluator can produce automated reports.<sup><a href="#ref-14">[14]</a></sup></div>
+</div>
+</div>
+<div class="step-row">
+<div class="step-num">02</div>
+<div>
+<div class="step-title">Adopt persistent identifiers</div>
+<div class="step-desc">Mint DOIs for datasets through DataCite; use ORCIDs to identify people; consider ROR IDs for institutions. Persistent identifiers are the single highest-leverage FAIR investment.</div>
+</div>
+</div>
+<div class="step-row">
+<div class="step-num">03</div>
+<div>
+<div class="step-title">Choose appropriate metadata standards</div>
+<div class="step-desc">Generic standards like the DataCite Metadata Schema, Dublin Core, DCAT, and Schema.org/Dataset cover broad cases. Domain-specific standards (DICOM for medical imaging, ISA-Tab for life-science experiments, CF Conventions for climate data) should be used where available.</div>
+</div>
+</div>
+<div class="step-row">
+<div class="step-num">04</div>
+<div>
+<div class="step-title">Use controlled vocabularies and ontologies</div>
+<div class="step-desc">Search BioPortal,<sup><a href="#ref-15">[15]</a></sup> the OBO Foundry,<sup><a href="#ref-16">[16]</a></sup> or the EMBL-EBI Ontology Lookup Service for established vocabularies in your domain before inventing your own.</div>
+</div>
+</div>
+<div class="step-row">
+<div class="step-num">05</div>
+<div>
+<div class="step-title">Pick the right repository</div>
+<div class="step-desc">Domain-specific repositories (GenBank, PDB, ICPSR) are almost always preferable to generalist ones. For data that doesn’t fit a domain repository, Zenodo, Figshare, and Dryad are well-regarded generalist options. The re3data.org registry is the most comprehensive directory.<sup><a href="#ref-18">[18]</a></sup></div>
+</div>
+</div>
+<div class="step-row">
+<div class="step-num">06</div>
+<div>
+<div class="step-title">Write a Data Management Plan</div>
+<div class="step-desc">Tools like DMPTool<sup><a href="#ref-17">[17]</a></sup> and Argos help structure plans aligned with funder requirements. A DMP written at project start saves significant time at project end.</div>
+</div>
+</div>
+<div class="step-row">
+<div class="step-num">07</div>
+<div>
+<div class="step-title">License explicitly</div>
+<div class="step-desc">Creative Commons licenses (CC BY 4.0 or CC0 for fully open data) are standard. For restricted data, use clear access policies and consider machine-readable license tags.</div>
+</div>
+</div>
+<div class="step-row">
+<div class="step-num">08</div>
+<div>
+<div class="step-title">Document provenance</div>
+<div class="step-desc">Capture not just what the data are but how they were produced. Instruments, software versions, processing steps, people involved. PROV-O provides a standard model.<sup><a href="#ref-5">[5]</a></sup></div>
+</div>
+</div>
+<div class="step-row">
+<div class="step-num">09</div>
+<div>
+<div class="step-title">Build FAIR in from the start</div>
+<div class="step-desc">Retrofitting FAIR onto legacy data is far more expensive than designing for it. Update workflows, templates, and pipelines so that FAIR metadata is captured at source.</div>
+</div>
+</div>
+</div>
+</div>
 </section>
-
 <!-- 7. Tools -->
 <section class="section" id="tools">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>07 &mdash; Ecosystem</div>
-      <div class="section-title">Tools &amp; Resources</div>
-      <p class="section-sub">The FAIR tooling ecosystem has matured significantly. A non-exhaustive map of the most useful resources.</p>
-    </div>
-    <div class="tools-grid">
-      <div class="tool-section">
-        <div class="tool-section-title">Assessment</div>
-        <ul class="tool-list">
-          <li>FAIR Evaluator (machine-readable test suite)</li>
-          <li>F-UJI Automated FAIR Assessment Tool</li>
-          <li>ARDC FAIR Self-Assessment Tool</li>
-          <li>RDA FAIR Data Maturity Model</li>
-        </ul>
-      </div>
-      <div class="tool-section">
-        <div class="tool-section-title">Persistent Identifiers</div>
-        <ul class="tool-list">
-          <li>DataCite (DOIs for datasets)</li>
-          <li>Crossref (DOIs for publications)</li>
-          <li>ORCID (IDs for researchers)</li>
-          <li>ROR (Research Organization Registry)</li>
-          <li>Handle System, ARK identifiers</li>
-        </ul>
-      </div>
-      <div class="tool-section">
-        <div class="tool-section-title">Repositories</div>
-        <ul class="tool-list">
-          <li>Zenodo, Figshare, Dryad (generalist)</li>
-          <li>GenBank, PDB, UniProt (life sciences)</li>
-          <li>ICPSR, PANGAEA (social &amp; earth science)</li>
-          <li>re3data.org (comprehensive directory)</li>
-        </ul>
-      </div>
-      <div class="tool-section">
-        <div class="tool-section-title">Metadata Standards</div>
-        <ul class="tool-list">
-          <li>DataCite Metadata Schema</li>
-          <li>Dublin Core &amp; DCAT</li>
-          <li>Schema.org/Dataset</li>
-          <li>DICOM, ISA-Tab, CF Conventions</li>
-          <li>OME-TIFF, MIAME (domain-specific)</li>
-        </ul>
-      </div>
-      <div class="tool-section">
-        <div class="tool-section-title">Vocabularies &amp; Ontologies</div>
-        <ul class="tool-list">
-          <li>BioPortal</li>
-          <li>OBO Foundry</li>
-          <li>EMBL-EBI Ontology Lookup Service</li>
-          <li>Linked Open Vocabularies (LOV)</li>
-        </ul>
-      </div>
-      <div class="tool-section">
-        <div class="tool-section-title">Data Management Planning</div>
-        <ul class="tool-list">
-          <li>DMPTool (US-focused)</li>
-          <li>DMPonline (UK-focused)</li>
-          <li>Argos (EU-focused)</li>
-        </ul>
-      </div>
-      <div class="tool-section">
-        <div class="tool-section-title">FAIR Infrastructure</div>
-        <ul class="tool-list">
-          <li>FAIR Data Point (reference implementation)</li>
-          <li>CEDAR Workbench (metadata authoring)</li>
-          <li>Frictionless Data (tabular data standards)</li>
-        </ul>
-      </div>
-      <div class="tool-section">
-        <div class="tool-section-title">Provenance</div>
-        <ul class="tool-list">
-          <li>W3C PROV-O ontology</li>
-          <li>RO-Crate (research object packaging)</li>
-        </ul>
-      </div>
-      <div class="tool-section">
-        <div class="tool-section-title">Community</div>
-        <ul class="tool-list">
-          <li>GO FAIR initiative (implementation networks)</li>
-          <li>FORCE11 (community &amp; standards)</li>
-          <li>RDA Working Groups</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow"><svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>07. Ecosystem</div>
+<div class="section-title">Tools &amp; Resources</div>
+<p class="section-sub">The FAIR tooling ecosystem has matured significantly. A non-exhaustive map of the most useful resources.</p>
+</div>
+<div class="tools-grid">
+<div class="tool-section">
+<div class="tool-section-title">Assessment</div>
+<ul class="tool-list">
+<li>FAIR Evaluator (machine-readable test suite)</li>
+<li>F-UJI Automated FAIR Assessment Tool</li>
+<li>ARDC FAIR Self-Assessment Tool</li>
+<li>RDA FAIR Data Maturity Model</li>
+</ul>
+</div>
+<div class="tool-section">
+<div class="tool-section-title">Persistent Identifiers</div>
+<ul class="tool-list">
+<li>DataCite (DOIs for datasets)</li>
+<li>Crossref (DOIs for publications)</li>
+<li>ORCID (IDs for researchers)</li>
+<li>ROR (Research Organization Registry)</li>
+<li>Handle System, ARK identifiers</li>
+</ul>
+</div>
+<div class="tool-section">
+<div class="tool-section-title">Repositories</div>
+<ul class="tool-list">
+<li>Zenodo, Figshare, Dryad (generalist)</li>
+<li>GenBank, PDB, UniProt (life sciences)</li>
+<li>ICPSR, PANGAEA (social &amp; earth science)</li>
+<li>re3data.org (comprehensive directory)</li>
+</ul>
+</div>
+<div class="tool-section">
+<div class="tool-section-title">Metadata Standards</div>
+<ul class="tool-list">
+<li>DataCite Metadata Schema</li>
+<li>Dublin Core &amp; DCAT</li>
+<li>Schema.org/Dataset</li>
+<li>DICOM, ISA-Tab, CF Conventions</li>
+<li>OME-TIFF, MIAME (domain-specific)</li>
+</ul>
+</div>
+<div class="tool-section">
+<div class="tool-section-title">Vocabularies &amp; Ontologies</div>
+<ul class="tool-list">
+<li>BioPortal</li>
+<li>OBO Foundry</li>
+<li>EMBL-EBI Ontology Lookup Service</li>
+<li>Linked Open Vocabularies (LOV)</li>
+</ul>
+</div>
+<div class="tool-section">
+<div class="tool-section-title">Data Management Planning</div>
+<ul class="tool-list">
+<li>DMPTool (US-focused)</li>
+<li>DMPonline (UK-focused)</li>
+<li>Argos (EU-focused)</li>
+</ul>
+</div>
+<div class="tool-section">
+<div class="tool-section-title">FAIR Infrastructure</div>
+<ul class="tool-list">
+<li>FAIR Data Point (reference implementation)</li>
+<li>CEDAR Workbench (metadata authoring)</li>
+<li>Frictionless Data (tabular data standards)</li>
+</ul>
+</div>
+<div class="tool-section">
+<div class="tool-section-title">Provenance</div>
+<ul class="tool-list">
+<li>W3C PROV-O ontology</li>
+<li>RO-Crate (research object packaging)</li>
+</ul>
+</div>
+<div class="tool-section">
+<div class="tool-section-title">Community</div>
+<ul class="tool-list">
+<li>GO FAIR initiative (implementation networks)</li>
+<li>FORCE11 (community &amp; standards)</li>
+<li>RDA Working Groups</li>
+</ul>
+</div>
+</div>
+</div>
 </section>
-
 <!-- 8. Caveats -->
 <section class="section section-alt" id="caveats">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>08 &mdash; Honest Assessment</div>
-      <div class="section-title">Challenges, Critiques, and What FAIR Doesn&rsquo;t Address</div>
-      <p class="section-sub">FAIR isn&rsquo;t a panacea. Some honest caveats worth knowing before you commit.</p>
-    </div>
-    <div class="caveat-grid">
-      <div class="caveat-card warn">
-        <div class="caveat-title">FAIRification Is Expensive</div>
-        <div class="caveat-desc">Especially for legacy data. Estimates suggest meaningful FAIR retrofits can consume 5&ndash;10% of a project&rsquo;s budget. The case for doing it is strong, but it isn&rsquo;t free&mdash;and leaders need to budget for it explicitly.</div>
-      </div>
-      <div class="caveat-card warn">
-        <div class="caveat-title">The Skills Gap Is Real</div>
-        <div class="caveat-desc">&ldquo;Data steward&rdquo; is a young profession. Most organizations don&rsquo;t yet have the people who can operationalize FAIR end-to-end. This is a workforce development challenge as much as a technical one.</div>
-      </div>
-      <div class="caveat-card warn">
-        <div class="caveat-title">Lip-Service FAIR Is Rampant</div>
-        <div class="caveat-desc">Many datasets that claim to be FAIR have minted a DOI and called it a day. True interoperability&mdash;the &ldquo;I&rdquo; in FAIR&mdash;remains the hardest principle to deliver and the most often skipped.</div>
-      </div>
-      <div class="caveat-card warn">
-        <div class="caveat-title">Domain Fragmentation Slows Things Down</div>
-        <div class="caveat-desc">Every field has its own metadata standards, ontologies, and conventions, and harmonizing across them is genuinely hard. Cross-domain interoperability remains an open research problem.</div>
-      </div>
-      <div class="caveat-card info">
-        <div class="caveat-title">CARE Principles: The Missing Ethics Layer</div>
-        <div class="caveat-desc">FAIR is silent on ethics, equity, and consent. The <strong>CARE Principles for Indigenous Data Governance</strong> (Collective benefit, Authority to control, Responsibility, Ethics) were published in 2019 to sit alongside FAIR, addressing whether and for whom data should be open.<sup><a href="#ref-20">[20]</a></sup></div>
-      </div>
-      <div class="caveat-card info">
-        <div class="caveat-title">Complementary Frameworks</div>
-        <div class="caveat-desc">The <strong>TRUST Principles</strong> address digital repositories (Transparency, Responsibility, User focus, Sustainability, Technology).<sup><a href="#ref-21">[21]</a></sup> <strong>FAIR for AI</strong> applies the same principles to ML models and training datasets&mdash;an increasingly active frontier.</div>
-      </div>
-    </div>
-  </div>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow"><svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" x2="12" y1="9" y2="13"></line><line x1="12" x2="12.01" y1="17" y2="17"></line></svg>08. Honest Assessment</div>
+<div class="section-title">Challenges, Critiques, and What FAIR Doesn’t Address</div>
+<p class="section-sub">FAIR isn’t a panacea. Some honest caveats worth knowing before you commit.</p>
+</div>
+<div class="caveat-grid">
+<div class="caveat-card warn">
+<div class="caveat-title">FAIRification Is Expensive</div>
+<div class="caveat-desc">Especially for legacy data. Estimates suggest meaningful FAIR retrofits can consume 5–10% of a project’s budget. The case for doing it is strong, but it isn’t free, and leaders need to budget for it explicitly.</div>
+</div>
+<div class="caveat-card warn">
+<div class="caveat-title">The Skills Gap Is Real</div>
+<div class="caveat-desc">“Data steward” is a young profession. Most organizations don’t yet have the people who can operationalize FAIR end-to-end. This is a workforce development challenge as much as a technical one.</div>
+</div>
+<div class="caveat-card warn">
+<div class="caveat-title">Lip-Service FAIR Is Rampant</div>
+<div class="caveat-desc">Many datasets that claim to be FAIR have minted a DOI and called it a day. True interoperability (the “I” in FAIR) remains the hardest principle to deliver and the most often skipped.</div>
+</div>
+<div class="caveat-card warn">
+<div class="caveat-title">Domain Fragmentation Slows Things Down</div>
+<div class="caveat-desc">Every field has its own metadata standards, ontologies, and conventions, and harmonizing across them is genuinely hard. Cross-domain interoperability remains an open research problem.</div>
+</div>
+<div class="caveat-card info">
+<div class="caveat-title">CARE Principles: The Missing Ethics Layer</div>
+<div class="caveat-desc">FAIR is silent on ethics, equity, and consent. The <strong>CARE Principles for Indigenous Data Governance</strong> (Collective benefit, Authority to control, Responsibility, Ethics) were published in 2019 to sit alongside FAIR, addressing whether and for whom data should be open.<sup><a href="#ref-20">[20]</a></sup></div>
+</div>
+<div class="caveat-card info">
+<div class="caveat-title">Complementary Frameworks</div>
+<div class="caveat-desc">The <strong>TRUST Principles</strong> address digital repositories (Transparency, Responsibility, User focus, Sustainability, Technology).<sup><a href="#ref-21">[21]</a></sup> <strong>FAIR for AI</strong> applies the same principles to ML models and training datasets. An increasingly active frontier.</div>
+</div>
+</div>
+</div>
 </section>
-
 <!-- 9. Future -->
 <section class="section" id="future">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>09 &mdash; Looking Ahead</div>
-      <div class="section-title">Where This Is Heading</div>
-      <p class="section-sub">Four trends reshaping how FAIR evolves in the next five years.</p>
-    </div>
-    <div class="fw-grid">
-      <div class="fw-card">
-        <div class="fw-icon-row">
-          <div class="fw-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg></div>
-          <div><h3>FAIR Digital Objects (FDOs)</h3><div class="fw-sub">FDO Forum</div></div>
-        </div>
-        <p>An emerging architectural concept that bundles data, metadata, and operations into a self-describing, machine-actionable unit. FDOs are designed to be the building blocks of a truly interoperable internet of FAIR data.<sup><a href="#ref-22">[22]</a></sup></p>
-        <div class="tag-row"><span class="tag blue">Emerging standard</span><span class="tag">Machine-actionable</span></div>
-      </div>
-      <div class="fw-card">
-        <div class="fw-icon-row">
-          <div class="fw-icon green"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
-          <div><h3>European Data Spaces</h3><div class="fw-sub">Gaia-X &amp; Common Data Spaces</div></div>
-        </div>
-        <p>Gaia-X and the European Common Data Spaces initiative are building federated FAIR-compliant ecosystems for sharing industrial and public-sector data across organizations without centralizing it.</p>
-        <div class="tag-row"><span class="tag green">Federated</span><span class="tag">Industrial</span><span class="tag green">Policy-driven</span></div>
-      </div>
-      <div class="fw-card">
-        <div class="fw-icon-row">
-          <div class="fw-icon purple"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
-          <div><h3>FAIR for AI/ML</h3><div class="fw-sub">Models, datasets &amp; benchmarks</div></div>
-        </div>
-        <p>Extending the principles to ML models, training datasets, and evaluation benchmarks&mdash;an increasingly active area as AI governance frameworks mature and demand for model cards and dataset documentation accelerates.</p>
-        <div class="tag-row"><span class="tag purple">Model cards</span><span class="tag purple">Dataset docs</span><span class="tag">AI Act</span></div>
-      </div>
-      <div class="fw-card">
-        <div class="fw-icon-row">
-          <div class="fw-icon amber"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
-          <div><h3>Automated FAIRification</h3><div class="fw-sub">LLM-assisted tooling</div></div>
-        </div>
-        <p>LLM-assisted tools are starting to make the grunt work of metadata generation and ontology mapping much cheaper. Expect agentic FAIRification pipelines to become standard practice within a few years.</p>
-        <div class="tag-row"><span class="tag amber">LLM-assisted</span><span class="tag">Ontology mapping</span></div>
-      </div>
-    </div>
-  </div>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow"><svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>09. Looking Ahead</div>
+<div class="section-title">Where This Is Heading</div>
+<p class="section-sub">Four trends reshaping how FAIR evolves in the next five years.</p>
+</div>
+<div class="fw-grid">
+<div class="fw-card">
+<div class="fw-icon-row">
+<div class="fw-icon"><svg fill="none" height="20" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="20"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"></path></svg></div>
+<div><h3>FAIR Digital Objects (FDOs)</h3><div class="fw-sub">FDO Forum</div></div>
+</div>
+<p>An emerging architectural concept that bundles data, metadata, and operations into a self-describing, machine-actionable unit. FDOs are designed to be the building blocks of a truly interoperable internet of FAIR data.<sup><a href="#ref-22">[22]</a></sup></p>
+<div class="tag-row"><span class="tag blue">Emerging standard</span><span class="tag">Machine-actionable</span></div>
+</div>
+<div class="fw-card">
+<div class="fw-icon-row">
+<div class="fw-icon green"><svg fill="none" height="20" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="20"><rect height="14" rx="2" width="20" x="2" y="3"></rect><line x1="8" x2="16" y1="21" y2="21"></line><line x1="12" x2="12" y1="17" y2="21"></line></svg></div>
+<div><h3>European Data Spaces</h3><div class="fw-sub">Gaia-X &amp; Common Data Spaces</div></div>
+</div>
+<p>Gaia-X and the European Common Data Spaces initiative are building federated FAIR-compliant ecosystems for sharing industrial and public-sector data across organizations without centralizing it.</p>
+<div class="tag-row"><span class="tag green">Federated</span><span class="tag">Industrial</span><span class="tag green">Policy-driven</span></div>
+</div>
+<div class="fw-card">
+<div class="fw-icon-row">
+<div class="fw-icon purple"><svg fill="none" height="20" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="20"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></div>
+<div><h3>FAIR for AI/ML</h3><div class="fw-sub">Models, datasets &amp; benchmarks</div></div>
+</div>
+<p>Extending the principles to ML models, training datasets, and evaluation benchmarks: an increasingly active area as AI governance frameworks mature and demand for model cards and dataset documentation accelerates.</p>
+<div class="tag-row"><span class="tag purple">Model cards</span><span class="tag purple">Dataset docs</span><span class="tag">AI Act</span></div>
+</div>
+<div class="fw-card">
+<div class="fw-icon-row">
+<div class="fw-icon amber"><svg fill="none" height="20" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="20"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" x2="12.01" y1="17" y2="17"></line></svg></div>
+<div><h3>Automated FAIRification</h3><div class="fw-sub">LLM-assisted tooling</div></div>
+</div>
+<p>LLM-assisted tools are starting to make the grunt work of metadata generation and ontology mapping much cheaper. Expect agentic FAIRification pipelines to become standard practice within a few years.</p>
+<div class="tag-row"><span class="tag amber">LLM-assisted</span><span class="tag">Ontology mapping</span></div>
+</div>
+</div>
+</div>
 </section>
-
 <!-- 10. Starter plan -->
 <section class="section section-alt" id="starter-plan">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>10 &mdash; Getting Started</div>
-      <div class="section-title">A 5-Step Starter Plan</div>
-      <p class="section-sub">If you&rsquo;re staring at a data landscape and wondering where to begin, start here. FAIR rewards small, concrete steps.</p>
-    </div>
-    <div class="steps-list">
-      <div class="step-row">
-        <div class="step-num" style="color:var(--accent);">01</div>
-        <div>
-          <div class="step-title">Pick one dataset that matters</div>
-          <div class="step-desc">Don&rsquo;t try to FAIRify everything at once. Choose a dataset that is actively used, has clear business value, and is representative of your typical data type.</div>
-        </div>
-      </div>
-      <div class="step-row">
-        <div class="step-num" style="color:var(--accent);">02</div>
-        <div>
-          <div class="step-title">Run a maturity assessment</div>
-          <div class="step-desc">Use F-UJI or the RDA model so you have a baseline score across all four principles and their sub-criteria. You can&rsquo;t improve what you don&rsquo;t measure.</div>
-        </div>
-      </div>
-      <div class="step-row">
-        <div class="step-num" style="color:var(--accent);">03</div>
-        <div>
-          <div class="step-title">Mint a persistent identifier and use a recognized repository</div>
-          <div class="step-desc">A single DOI from DataCite and a deposit in Zenodo or a domain repository immediately addresses F1, F4, A1, and A1.1. It&rsquo;s the highest-leverage single action.</div>
-        </div>
-      </div>
-      <div class="step-row">
-        <div class="step-num" style="color:var(--accent);">04</div>
-        <div>
-          <div class="step-title">Add rich, standards-aligned metadata with a license and provenance</div>
-          <div class="step-desc">Fill in the DataCite Metadata Schema fields thoroughly. Add a CC BY 4.0 or CC0 license. Capture key provenance in a README or a PROV-O statement.</div>
-        </div>
-      </div>
-      <div class="step-row">
-        <div class="step-num" style="color:var(--accent);">05</div>
-        <div>
-          <div class="step-title">Document the journey and use it as a template</div>
-          <div class="step-desc">Write up what you did, what the baseline score was, and what improved. Use it as a reusable workflow template for the next dataset&mdash;and the one after that.</div>
-        </div>
-      </div>
-    </div>
-    <div class="callout" style="margin-top:2rem;">
-      <p><strong>The key insight:</strong> FAIR is one of those rare frameworks that rewards small, concrete steps. You don&rsquo;t need to boil the ocean. You just need to make the next dataset findable, accessible, interoperable, and reusable&mdash;and then the one after that.</p>
-    </div>
-  </div>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow"><svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>10. Getting Started</div>
+<div class="section-title">A 5-Step Starter Plan</div>
+<p class="section-sub">If you’re staring at a pile of ungoverned data and wondering where to begin, start here. FAIR rewards small, concrete steps.</p>
+</div>
+<div class="steps-list">
+<div class="step-row">
+<div class="step-num" style="color:var(--accent);">01</div>
+<div>
+<div class="step-title">Pick one dataset that matters</div>
+<div class="step-desc">Don’t try to FAIRify everything at once. Choose a dataset that is actively used, has clear business value, and is representative of your typical data type.</div>
+</div>
+</div>
+<div class="step-row">
+<div class="step-num" style="color:var(--accent);">02</div>
+<div>
+<div class="step-title">Run a maturity assessment</div>
+<div class="step-desc">Use F-UJI or the RDA model so you have a baseline score across all four principles and their sub-criteria. You can’t improve what you don’t measure.</div>
+</div>
+</div>
+<div class="step-row">
+<div class="step-num" style="color:var(--accent);">03</div>
+<div>
+<div class="step-title">Mint a persistent identifier and use a recognized repository</div>
+<div class="step-desc">A single DOI from DataCite and a deposit in Zenodo or a domain repository immediately addresses F1, F4, A1, and A1.1. It’s the highest-leverage single action.</div>
+</div>
+</div>
+<div class="step-row">
+<div class="step-num" style="color:var(--accent);">04</div>
+<div>
+<div class="step-title">Add rich, standards-aligned metadata with a license and provenance</div>
+<div class="step-desc">Fill in the DataCite Metadata Schema fields thoroughly. Add a CC BY 4.0 or CC0 license. Capture key provenance in a README or a PROV-O statement.</div>
+</div>
+</div>
+<div class="step-row">
+<div class="step-num" style="color:var(--accent);">05</div>
+<div>
+<div class="step-title">Document the journey and use it as a template</div>
+<div class="step-desc">Write up what you did, what the baseline score was, and what improved. Use it as a reusable workflow template for the next dataset, and the one after that.</div>
+</div>
+</div>
+</div>
+<div class="callout" style="margin-top:2rem;">
+<p><strong>The key insight:</strong> FAIR is one of those rare frameworks that rewards small, concrete steps. You don’t need to boil the ocean. You just need to make the next dataset findable, accessible, interoperable, and reusable, and then the one after that.</p>
+</div>
+</div>
 </section>
-
 <!-- 11. References -->
 <section class="section" id="references">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>11 &mdash; References</div>
-      <div class="section-title">References</div>
-    </div>
-    <ol class="refs-list">
-      <li id="ref-1"><span class="ref-num">1</span>Vines, T. H., et al. (2014). The availability of research data declines rapidly with article age. <em>Current Biology</em>, 24(1), 94&ndash;97. <a href="https://doi.org/10.1016/j.cub.2013.11.014" target="_blank" rel="noopener">https://doi.org/10.1016/j.cub.2013.11.014</a></li>
-      <li id="ref-2"><span class="ref-num">2</span>Wilkinson, M. D., Dumontier, M., Aalbersberg, I. J., et al. (2016). The FAIR Guiding Principles for scientific data management and stewardship. <em>Scientific Data</em>, 3, 160018. <a href="https://doi.org/10.1038/sdata.2016.18" target="_blank" rel="noopener">https://doi.org/10.1038/sdata.2016.18</a></li>
-      <li id="ref-3"><span class="ref-num">3</span>FORCE11. The FAIR Data Principles. <a href="https://force11.org/info/the-fair-data-principles/" target="_blank" rel="noopener">https://force11.org/info/the-fair-data-principles/</a></li>
-      <li id="ref-4"><span class="ref-num">4</span>Research Data Alliance. (2020). FAIR Data Maturity Model: Specification and Guidelines. <a href="https://doi.org/10.15497/rda00050" target="_blank" rel="noopener">https://doi.org/10.15497/rda00050</a></li>
-      <li id="ref-5"><span class="ref-num">5</span>W3C. (2013). PROV-O: The PROV Ontology. <a href="https://www.w3.org/TR/prov-o/" target="_blank" rel="noopener">https://www.w3.org/TR/prov-o/</a></li>
-      <li id="ref-6"><span class="ref-num">6</span>National Institutes of Health. NIH Data Management and Sharing Policy. <a href="https://sharing.nih.gov/data-management-and-sharing-policy" target="_blank" rel="noopener">https://sharing.nih.gov/data-management-and-sharing-policy</a></li>
-      <li id="ref-7"><span class="ref-num">7</span>European Commission. Horizon Europe Open Science Requirements. <a href="https://research-and-innovation.ec.europa.eu/strategy/strategy-research-and-innovation/our-digital-future/open-science_en" target="_blank" rel="noopener">https://research-and-innovation.ec.europa.eu</a></li>
-      <li id="ref-8"><span class="ref-num">8</span>PwC EU Services for the European Commission. (2018). Cost-benefit analysis for FAIR research data. <a href="https://op.europa.eu/en/publication-detail/-/publication/d375368c-1a0a-11e9-8d04-01aa75ed71a1" target="_blank" rel="noopener">https://op.europa.eu</a></li>
-      <li id="ref-9"><span class="ref-num">9</span>Pistoia Alliance. FAIR Implementation. <a href="https://www.pistoiaalliance.org/" target="_blank" rel="noopener">https://www.pistoiaalliance.org/</a></li>
-      <li id="ref-10"><span class="ref-num">10</span>ELIXIR. FAIR Data Management. <a href="https://elixir-europe.org/platforms/data" target="_blank" rel="noopener">https://elixir-europe.org/platforms/data</a></li>
-      <li id="ref-11"><span class="ref-num">11</span>NASA Open Source Science Initiative. <a href="https://science.nasa.gov/open-science/" target="_blank" rel="noopener">https://science.nasa.gov/open-science/</a></li>
-      <li id="ref-12"><span class="ref-num">12</span>The Materials Project. <a href="https://materialsproject.org/" target="_blank" rel="noopener">https://materialsproject.org/</a>; NOMAD Laboratory. <a href="https://nomad-lab.eu/" target="_blank" rel="noopener">https://nomad-lab.eu/</a></li>
-      <li id="ref-13"><span class="ref-num">13</span>W3C. Data Catalog Vocabulary (DCAT) &mdash; Version 3. <a href="https://www.w3.org/TR/vocab-dcat-3/" target="_blank" rel="noopener">https://www.w3.org/TR/vocab-dcat-3/</a></li>
-      <li id="ref-14"><span class="ref-num">14</span>Devaraju, A., &amp; Huber, R. (2021). An automated solution for measuring the progress toward FAIR research data. <em>Patterns</em>, 2(11), 100370. <a href="https://doi.org/10.1016/j.patter.2021.100370" target="_blank" rel="noopener">https://doi.org/10.1016/j.patter.2021.100370</a></li>
-      <li id="ref-15"><span class="ref-num">15</span>BioPortal. <a href="https://bioportal.bioontology.org/" target="_blank" rel="noopener">https://bioportal.bioontology.org/</a></li>
-      <li id="ref-16"><span class="ref-num">16</span>The OBO Foundry. <a href="https://obofoundry.org/" target="_blank" rel="noopener">https://obofoundry.org/</a></li>
-      <li id="ref-17"><span class="ref-num">17</span>DMPTool. <a href="https://dmptool.org/" target="_blank" rel="noopener">https://dmptool.org/</a></li>
-      <li id="ref-18"><span class="ref-num">18</span>re3data &mdash; Registry of Research Data Repositories. <a href="https://www.re3data.org/" target="_blank" rel="noopener">https://www.re3data.org/</a></li>
-      <li id="ref-19"><span class="ref-num">19</span>GO FAIR initiative. <a href="https://www.go-fair.org/" target="_blank" rel="noopener">https://www.go-fair.org/</a></li>
-      <li id="ref-20"><span class="ref-num">20</span>Carroll, S. R., et al. (2020). The CARE Principles for Indigenous Data Governance. <em>Data Science Journal</em>, 19(1), 43. <a href="https://doi.org/10.5334/dsj-2020-043" target="_blank" rel="noopener">https://doi.org/10.5334/dsj-2020-043</a></li>
-      <li id="ref-21"><span class="ref-num">21</span>Lin, D., et al. (2020). The TRUST Principles for digital repositories. <em>Scientific Data</em>, 7, 144. <a href="https://doi.org/10.1038/s41597-020-0486-7" target="_blank" rel="noopener">https://doi.org/10.1038/s41597-020-0486-7</a></li>
-      <li id="ref-22"><span class="ref-num">22</span>FAIR Digital Object Forum. <a href="https://fairdo.org/" target="_blank" rel="noopener">https://fairdo.org/</a></li>
-    </ol>
-  </div>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow"><svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>11. References</div>
+<div class="section-title">References</div>
+</div>
+<ol class="refs-list">
+<li id="ref-1"><span class="ref-num">1</span>Vines, T. H., et al. (2014). The availability of research data declines rapidly with article age. <em>Current Biology</em>, 24(1), 94–97. <a href="https://doi.org/10.1016/j.cub.2013.11.014" rel="noopener" target="_blank">https://doi.org/10.1016/j.cub.2013.11.014</a></li>
+<li id="ref-2"><span class="ref-num">2</span>Wilkinson, M. D., Dumontier, M., Aalbersberg, I. J., et al. (2016). The FAIR Guiding Principles for scientific data management and stewardship. <em>Scientific Data</em>, 3, 160018. <a href="https://doi.org/10.1038/sdata.2016.18" rel="noopener" target="_blank">https://doi.org/10.1038/sdata.2016.18</a></li>
+<li id="ref-3"><span class="ref-num">3</span>FORCE11. The FAIR Data Principles. <a href="https://force11.org/info/the-fair-data-principles/" rel="noopener" target="_blank">https://force11.org/info/the-fair-data-principles/</a></li>
+<li id="ref-4"><span class="ref-num">4</span>Research Data Alliance. (2020). FAIR Data Maturity Model: Specification and Guidelines. <a href="https://doi.org/10.15497/rda00050" rel="noopener" target="_blank">https://doi.org/10.15497/rda00050</a></li>
+<li id="ref-5"><span class="ref-num">5</span>W3C. (2013). PROV-O: The PROV Ontology. <a href="https://www.w3.org/TR/prov-o/" rel="noopener" target="_blank">https://www.w3.org/TR/prov-o/</a></li>
+<li id="ref-6"><span class="ref-num">6</span>National Institutes of Health. NIH Data Management and Sharing Policy. <a href="https://sharing.nih.gov/data-management-and-sharing-policy" rel="noopener" target="_blank">https://sharing.nih.gov/data-management-and-sharing-policy</a></li>
+<li id="ref-7"><span class="ref-num">7</span>European Commission. Horizon Europe Open Science Requirements. <a href="https://research-and-innovation.ec.europa.eu/strategy/strategy-research-and-innovation/our-digital-future/open-science_en" rel="noopener" target="_blank">https://research-and-innovation.ec.europa.eu</a></li>
+<li id="ref-8"><span class="ref-num">8</span>PwC EU Services for the European Commission. (2018). Cost-benefit analysis for FAIR research data. <a href="https://op.europa.eu/en/publication-detail/-/publication/d375368c-1a0a-11e9-8d04-01aa75ed71a1" rel="noopener" target="_blank">https://op.europa.eu</a></li>
+<li id="ref-9"><span class="ref-num">9</span>Pistoia Alliance. FAIR Implementation. <a href="https://www.pistoiaalliance.org/" rel="noopener" target="_blank">https://www.pistoiaalliance.org/</a></li>
+<li id="ref-10"><span class="ref-num">10</span>ELIXIR. FAIR Data Management. <a href="https://elixir-europe.org/platforms/data" rel="noopener" target="_blank">https://elixir-europe.org/platforms/data</a></li>
+<li id="ref-11"><span class="ref-num">11</span>NASA Open Source Science Initiative. <a href="https://science.nasa.gov/open-science/" rel="noopener" target="_blank">https://science.nasa.gov/open-science/</a></li>
+<li id="ref-12"><span class="ref-num">12</span>The Materials Project. <a href="https://materialsproject.org/" rel="noopener" target="_blank">https://materialsproject.org/</a>; NOMAD Laboratory. <a href="https://nomad-lab.eu/" rel="noopener" target="_blank">https://nomad-lab.eu/</a></li>
+<li id="ref-13"><span class="ref-num">13</span>W3C. Data Catalog Vocabulary (DCAT): Version 3. <a href="https://www.w3.org/TR/vocab-dcat-3/" rel="noopener" target="_blank">https://www.w3.org/TR/vocab-dcat-3/</a></li>
+<li id="ref-14"><span class="ref-num">14</span>Devaraju, A., &amp; Huber, R. (2021). An automated solution for measuring the progress toward FAIR research data. <em>Patterns</em>, 2(11), 100370. <a href="https://doi.org/10.1016/j.patter.2021.100370" rel="noopener" target="_blank">https://doi.org/10.1016/j.patter.2021.100370</a></li>
+<li id="ref-15"><span class="ref-num">15</span>BioPortal. <a href="https://bioportal.bioontology.org/" rel="noopener" target="_blank">https://bioportal.bioontology.org/</a></li>
+<li id="ref-16"><span class="ref-num">16</span>The OBO Foundry. <a href="https://obofoundry.org/" rel="noopener" target="_blank">https://obofoundry.org/</a></li>
+<li id="ref-17"><span class="ref-num">17</span>DMPTool. <a href="https://dmptool.org/" rel="noopener" target="_blank">https://dmptool.org/</a></li>
+<li id="ref-18"><span class="ref-num">18</span>re3data: Registry of Research Data Repositories. <a href="https://www.re3data.org/" rel="noopener" target="_blank">https://www.re3data.org/</a></li>
+<li id="ref-19"><span class="ref-num">19</span>GO FAIR initiative. <a href="https://www.go-fair.org/" rel="noopener" target="_blank">https://www.go-fair.org/</a></li>
+<li id="ref-20"><span class="ref-num">20</span>Carroll, S. R., et al. (2020). The CARE Principles for Indigenous Data Governance. <em>Data Science Journal</em>, 19(1), 43. <a href="https://doi.org/10.5334/dsj-2020-043" rel="noopener" target="_blank">https://doi.org/10.5334/dsj-2020-043</a></li>
+<li id="ref-21"><span class="ref-num">21</span>Lin, D., et al. (2020). The TRUST Principles for digital repositories. <em>Scientific Data</em>, 7, 144. <a href="https://doi.org/10.1038/s41597-020-0486-7" rel="noopener" target="_blank">https://doi.org/10.1038/s41597-020-0486-7</a></li>
+<li id="ref-22"><span class="ref-num">22</span>FAIR Digital Object Forum. <a href="https://fairdo.org/" rel="noopener" target="_blank">https://fairdo.org/</a></li>
+</ol>
+</div>
 </section>
-
 <!-- Footer -->
+<div class="related-reading reveal">
+<p class="rr-label">Related reading</p>
+<div class="rr-grid">
+<a class="rr-card" href="90-day-pharma-catalog-maturity.html"><span class="rr-title">A 90-Day Maturity Assessment for Pharmaceutical R&amp;D Data Catalogs</span><span class="rr-go">Read article &#8594;</span></a>
+<a class="rr-card" href="ai-driven-harmonization-pharma.html"><span class="rr-title">Bridging the Data Divide: AI-Driven Harmonization in Pharma</span><span class="rr-go">Read article &#8594;</span></a>
+<a class="rr-card" href="semantic-layer-replacing-mdm-pharma.html"><span class="rr-title">From Ontology to MDM: How Semantic Layers Are Replacing Hub-and-Spoke Architectures</span><span class="rr-go">Read article &#8594;</span></a>
+</div>
+</div>
 <footer class="site-footer">
-  <div class="foot-lead">
-    <p class="foot-name">Ali Shahmohammadi, Ph.D.</p>
-    <p class="foot-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p>
-  </div>
-  <nav class="foot-nav" aria-label="Footer">
-    <a href="../index.html#writing">Writing</a>
-    <a href="../index.html#career">Career</a>
-    <a href="../resume.html">Resume</a>
-    <a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
-    <a href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
-  </nav>
-  <div class="foot-base">
-    <span>&copy; 2026 Ali Shahmohammadi, Ph.D.</span>
-    <a class="to-top" href="#top">Back to top &uarr;</a>
-  </div>
+<div class="foot-lead">
+<p class="foot-name">Ali Shahmohammadi, Ph.D.</p>
+<p class="foot-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p>
+</div>
+<nav aria-label="Footer" class="foot-nav">
+<a href="../index.html#writing">Writing</a>
+<a href="../index.html#career">Career</a>
+<a href="../resume.html">Resume</a>
+<a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
+<a href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
+</nav>
+<div class="foot-base">
+<span>© 2026 Ali Shahmohammadi, Ph.D.</span>
+<a class="to-top" href="#top">Back to top ↑</a>
+</div>
 </footer>
-
 <script>
 (function(){
   var header = document.querySelector('.site-header');
@@ -1317,4 +1319,12 @@ code:not(pre code){font-family:var(--font-mono);font-size:.9em;background:var(--
 })();
 </script>
 </body>
+<script>
+(function(){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}
+  });},{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
 </html>

@@ -1,20 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html data-theme="light" lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Van der Pol Oscillator: Recovering Nonlinear Damping from Vibration Data | Ali Shahmohammadi</title>
-<meta name="description" content="Estimating the nonlinear damping coefficient μ from 45 noisy samples. The time-scaling trick, nested autograd for second derivatives, and why large μ breaks the plain MLP.">
-
-<meta property="og:type" content="article">
-
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<meta content="Estimating the nonlinear damping coefficient μ from 45 noisy samples. The time-scaling trick, nested autograd for second derivatives, and why large μ breaks the plain MLP." name="description"/>
+<meta content="article" property="og:type"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" rel="stylesheet"/>
+<script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})" src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <script>
   (function(){var t=localStorage.getItem('theme');
    if(!t)t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
@@ -316,55 +313,72 @@ hr.divider{background:var(--line-strong)}
 
 /* Old nav — hide fixed positioning; handled by new .site-header */
 nav:not(.site-nav):not(.foot-nav){display:none}
+
+/* ===== Related reading ===== */
+.related-reading{margin:var(--sp-10) 0 var(--sp-8);padding-top:var(--sp-8);border-top:1px solid var(--line)}
+.related-reading .rr-label{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 var(--sp-4)}
+.related-reading .rr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--sp-4)}
+.related-reading .rr-card{display:block;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:var(--sp-4) var(--sp-5);text-decoration:none;transition:border-color .2s,box-shadow .2s,transform .2s}
+.related-reading .rr-card:hover{border-color:var(--accent);box-shadow:var(--shadow-2);transform:translateY(-2px);text-decoration:none}
+.related-reading .rr-card .rr-title{display:block;font-family:var(--font-display);font-weight:600;color:var(--navy);
+  font-size:var(--text-base);line-height:var(--lh-snug);margin-bottom:6px}
+.related-reading .rr-card .rr-go{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--accent);letter-spacing:.05em}
+
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
 </style>
 </head>
 <body>
 <header class="site-header" data-elevate="false">
-  <a class="brand" href="../index.html">Ali Shahmohammadi <span class="deg">Ph.D.</span></a>
-  <nav class="site-nav" aria-label="Primary">
-    <a href="../index.html#writing">Writing</a>
-    <a href="../index.html#career">Career</a>
-    <a href="../resume.html">Resume</a>
-    <a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
-  </nav>
-  <button class="theme-toggle" id="themeBtn" type="button" aria-label="Toggle dark mode"><b></b></button>
-  <div class="read-progress" role="presentation"><span id="progress"></span></div>
+<a class="brand" href="../index.html">Ali Shahmohammadi <span class="deg">Ph.D.</span></a>
+<nav aria-label="Primary" class="site-nav">
+<a href="../index.html#writing">Writing</a>
+<a href="../index.html#career">Career</a>
+<a href="../resume.html">Resume</a>
+<a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
+</nav>
+<button aria-label="Toggle dark mode" class="theme-toggle" id="themeBtn" type="button"><b></b></button>
+<div class="read-progress" role="presentation"><span id="progress"></span></div>
 </header>
 <div class="article-page">
-  <div class="article-hero">
-    <div class="article-hero-inner">
-      <div class="hero-series">Physics AI · ODEs Series · <a href="pinn-inverse-problems.html"><em>Inverse Problems</em></a> of 7</div>
-      <h1 class="article-title">Van der Pol Oscillator<br><em>Recovering Nonlinear Damping from Noisy Vibration Records</em></h1>
-      <p class="article-sub">Recovering $\mu = 1.075$ (true 1.0) from 45 noisy trajectory samples of a self-sustained nonlinear oscillator, including the time-scaling trick that makes second-derivative residuals numerically stable.</p>
-      <div class="article-meta"><span class="meta-pill  highlight">Scientific ML</span><span class="meta-pill  highlight">Nonlinear Dynamics</span><span class="meta-pill">Feb 2026</span><span class="meta-pill">13 min read</span><span class="meta-pill">Intermediate</span><span class="meta-pill">PyTorch</span></div>
-    </div>
-  </div>
-  <div class="article-body">
-<div class="callout insight"><div class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="callout-body"><strong>Prerequisites</strong>Familiarity with the PINN loss structure and autograd from the <a href="pinn-introduction.html">introductory article</a>. This series applies those tools to seven real biotech and pharma ODE problems.</div></div>
-    <div id="s1" style="margin-top:3rem;">
-      <div class="section-label">01, The Problem</div>
-      <h2 class="section-h">Recovering Nonlinear Damping from a Vibration Record</h2>
-      <p class="body-text">Many physical systems sustain oscillations by nonlinear energy exchange, injecting energy when amplitude is low, dissipating it when amplitude is high, and settling onto a stable limit cycle. The Van der Pol equation is the canonical second-order model of this behaviour:</p>
-      <div class="math-block">$$\ddot{x} - \mu\,(1-x^2)\,\dot{x} + x = 0$$</div>
-      <p class="body-text">The nonlinear damping parameter $\mu$ appears in cardiac pacemaker cell models, electronic oscillator circuits, pressure oscillation models in packed-bed reactors, and respiratory mechanics. Estimating $\mu$ from a measured time series, with noise, is the relevant inverse problem.</p>
-      <table class="data-table">
-        <thead><tr><th>$\mu$</th><th>Oscillation character</th><th>PINN difficulty</th></tr></thead>
-        <tbody>
-          <tr><td>0.1</td><td>Near-sinusoidal, gentle</td><td>Easy</td></tr>
-          <tr><td>1.0 (this notebook)</td><td>Moderate nonlinearity, clean limit cycle</td><td>Tractable</td></tr>
-          <tr><td>5.0</td><td>Sharp relaxation oscillations</td><td>Spectral bias failure, see below</td></tr>
-        </tbody>
-      </table>
-    </div>
-        <div class="fig-wrap">
-      <img src="../assets/images/blog/ode-series/comparison_vdp.png" alt="Van der Pol oscillator PINN: nonlinear limit cycle dynamics" loading="lazy">
-      <p class="fig-caption">Fig. A &mdash; Van der Pol oscillator ($\mu=1$). The system exhibits a stable limit cycle in phase space. PINNs trained with a standard collocation grid struggle with the multi-frequency relaxation dynamics over long time horizons.</p>
-    </div>
-<hr class="divider">
-    <div id="s2">
-      <div class="section-label">02, The Critical Implementation Technique</div>
-      <h2 class="section-h">Time Scaling: Why O(1) Residuals Are Not Optional</h2>
-      <p class="body-text">The Van der Pol equation requires $\ddot{x}$, two nested autograd calls. The critical stability trick: <strong>normalise time to $\tau = t/T \in [0,1]$, then convert derivatives back to real time inside the loss</strong>. Without this, the residual terms differ by $T$ and $T^2$ in magnitude (here $T = 16$ s, so $T^2 = 256$). The optimizer ignores the smallest-magnitude terms, training collapses.</p>
+<div class="article-hero">
+<div class="article-hero-inner">
+<div class="hero-series">Physics AI · ODEs Series · <a href="pinn-inverse-problems.html"><em>Inverse Problems</em></a> of 7</div>
+<h1 class="article-title">Van der Pol Oscillator<br/><em>Recovering Nonlinear Damping from Noisy Vibration Records</em></h1>
+<p class="article-sub">Recovering $\mu = 1.075$ (true 1.0) from 45 noisy trajectory samples of a self-sustained nonlinear oscillator, including the time-scaling trick that makes second-derivative residuals numerically stable.</p>
+<div class="article-meta"><span class="meta-pill highlight">Scientific ML</span><span class="meta-pill highlight">Nonlinear Dynamics</span><span class="meta-pill">Feb 2026</span><span class="meta-pill">13 min read</span><span class="meta-pill">Intermediate</span><span class="meta-pill">PyTorch</span></div>
+</div>
+</div>
+<div class="article-body">
+<div class="callout insight"><div class="callout-icon"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></div><div class="callout-body"><strong>Prerequisites</strong>Familiarity with the PINN loss structure and autograd from the <a href="pinn-introduction.html">introductory article</a>. This series applies those tools to seven real biotech and pharma ODE problems.</div></div>
+<div id="s1" style="margin-top:3rem;">
+<div class="section-label">01, The Problem</div>
+<h2 class="section-h">Recovering Nonlinear Damping from a Vibration Record</h2>
+<p class="body-text">Many physical systems sustain oscillations by nonlinear energy exchange, injecting energy when amplitude is low, dissipating it when amplitude is high, and settling onto a stable limit cycle. The Van der Pol equation is the canonical second-order model of this behaviour:</p>
+<div class="math-block">$$\ddot{x} - \mu\,(1-x^2)\,\dot{x} + x = 0$$</div>
+<p class="body-text">The nonlinear damping parameter $\mu$ appears in cardiac pacemaker cell models, electronic oscillator circuits, pressure oscillation models in packed-bed reactors, and respiratory mechanics. Estimating $\mu$ from a measured time series, with noise, is the relevant inverse problem.</p>
+<table class="data-table">
+<thead><tr><th>$\mu$</th><th>Oscillation character</th><th>PINN difficulty</th></tr></thead>
+<tbody>
+<tr><td>0.1</td><td>Near-sinusoidal, gentle</td><td>Easy</td></tr>
+<tr><td>1.0 (this notebook)</td><td>Moderate nonlinearity, clean limit cycle</td><td>Tractable</td></tr>
+<tr><td>5.0</td><td>Sharp relaxation oscillations</td><td>Spectral bias failure, see below</td></tr>
+</tbody>
+</table>
+</div>
+<div class="fig-wrap">
+<img alt="Van der Pol oscillator PINN: nonlinear limit cycle dynamics" loading="lazy" src="../assets/images/blog/ode-series/comparison_vdp.png"/>
+<p class="fig-caption">Fig. A: Van der Pol oscillator ($\mu=1$). The system exhibits a stable limit cycle in phase space. PINNs trained with a standard collocation grid struggle with the multi-frequency relaxation dynamics over long time horizons.</p>
+</div>
+<hr class="divider"/>
+<div id="s2">
+<div class="section-label">02, The Critical Implementation Technique</div>
+<h2 class="section-h">Time Scaling: Why O(1) Residuals Are Not Optional</h2>
+<p class="body-text">The Van der Pol equation requires $\ddot{x}$, two nested autograd calls. The critical stability trick: <strong>normalise time to $\tau = t/T \in [0,1]$, then convert derivatives back to real time inside the loss</strong>. Without this, the residual terms differ by $T$ and $T^2$ in magnitude (here $T = 16$ s, so $T^2 = 256$). The optimizer ignores the smallest-magnitude terms, training collapses.</p>
 <div class="code-block"><div class="code-header"><span class="code-lang">Python · PyTorch</span><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div></div><pre class="code-body"><span class="kw">def</span> <span class="fn">derivs</span>(tau):
     x   = model(tau)
     xt  = torch.autograd.grad(x,  tau, torch.ones_like(x),  create_graph=<span class="kw">True</span>)[<span class="nm">0</span>]
@@ -377,56 +391,60 @@ nav:not(.site-nav):not(.foot-nav){display:none}
     mu  = sp(raw_mu)
     res = xddot - mu*(<span class="nm">1</span>-x**<span class="nm">2</span>)*xdot + x  <span class="cm"># Van der Pol residual, all O(1)</span>
     <span class="kw">return</span> torch.mean(res**<span class="nm">2</span>) + torch.mean((model(t_data)-x_data)**<span class="nm">2</span>) + l_ic</pre></div>
-<div class="callout success"><div class="callout-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="callout-body"><strong>Actual notebook output</strong>45 noisy trajectory samples, 5% noise, T = 16 s (~2.4 oscillation periods). Adam (20,000 epochs) + L-BFGS (600 steps). Recovered: μ = 1.075 (true 1.0, error 7.5%). The limit cycle shape and oscillation frequency are both well-recovered.</div></div>
-    </div>
-    <hr class="divider">
-    <div id="s3">
-      <div class="section-label">03, The Spectral Bias Wall</div>
-      <h2 class="section-h">Why Large μ Breaks the Plain MLP</h2>
-      <p class="body-text">Set $\mu = 5$ and re-run. The relaxation oscillations become sharp, significant energy at $2\omega_0$, $3\omega_0$, and beyond. A standard MLP with Tanh activations cannot represent high-frequency content efficiently; it learns smooth sinusoidal approximations and the physics residual stagnates.</p>
-      <p class="body-text">This is not a PINN-specific limitation, it is a fundamental property of neural network function approximation (Rahaman et al. 2019). The fix: Fourier feature inputs embed time as $[\sin(2\pi k \tau/T), \cos(2\pi k \tau/T)]$ before the MLP, seeding the network with explicit high-frequency components. This is implemented in Module 01, Notebook 12.</p>
-    </div>
-        <div style="margin-top:var(--sp-5);display:flex;gap:var(--sp-3);flex-wrap:wrap;align-items:center">
-      <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;flex-basis:100%">Notebook — Van der Pol Oscillator</span>
-      <a href="https://github.com/alishahmohammadi26/physics-ai-pinns/blob/main/02_Solving_ODEs_with_Neural_Networks/notebooks/05_van_der_pol_oscillator.ipynb" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;font:600 var(--text-sm)/1 var(--font-body);padding:10px 18px;border-radius:999px;background:var(--surface);border:1px solid var(--line-strong);color:var(--navy);text-decoration:none">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+<div class="callout success"><div class="callout-icon"><svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div><div class="callout-body"><strong>Actual notebook output</strong>45 noisy trajectory samples, 5% noise, T = 16 s (~2.4 oscillation periods). Adam (20,000 epochs) + L-BFGS (600 steps). Recovered: μ = 1.075 (true 1.0, error 7.5%). The limit cycle shape and oscillation frequency are both well-recovered.</div></div>
+</div>
+<hr class="divider"/>
+<div id="s3">
+<div class="section-label">03, The Spectral Bias Wall</div>
+<h2 class="section-h">Why Large μ Breaks the Plain MLP</h2>
+<p class="body-text">Set $\mu = 5$ and re-run. The relaxation oscillations become sharp, significant energy at $2\omega_0$, $3\omega_0$, and beyond. A standard MLP with Tanh activations cannot represent high-frequency content efficiently; it learns smooth sinusoidal approximations and the physics residual stagnates.</p>
+<p class="body-text">This is not a PINN-specific limitation, it is a fundamental property of neural network function approximation (Rahaman et al. 2019). The fix: Fourier feature inputs embed time as $[\sin(2\pi k \tau/T), \cos(2\pi k \tau/T)]$ before the MLP, seeding the network with explicit high-frequency components. This is implemented in Module 01, Notebook 12.</p>
+</div>
+<div style="margin-top:var(--sp-5);display:flex;gap:var(--sp-3);flex-wrap:wrap;align-items:center">
+<span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;flex-basis:100%">Notebook: Van der Pol Oscillator</span>
+<a href="https://github.com/alishahmohammadi26/physics-ai-pinns/blob/main/02_Solving_ODEs_with_Neural_Networks/notebooks/05_van_der_pol_oscillator.ipynb" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;font:600 var(--text-sm)/1 var(--font-body);padding:10px 18px;border-radius:999px;background:var(--surface);border:1px solid var(--line-strong);color:var(--navy);text-decoration:none" target="_blank">
+<svg fill="currentColor" height="15" viewbox="0 0 24 24" width="15"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg>
         View notebook on GitHub
       </a>
-      <a href="https://colab.research.google.com/github/alishahmohammadi26/physics-ai-pinns/blob/main/02_Solving_ODEs_with_Neural_Networks/notebooks/05_van_der_pol_oscillator.ipynb" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;font:600 var(--text-sm)/1 var(--font-body);padding:10px 18px;border-radius:999px;background:var(--accent);color:#fff;border:1px solid transparent;text-decoration:none">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z" fill="currentColor" stroke="none"/></svg>
+<a href="https://colab.research.google.com/github/alishahmohammadi26/physics-ai-pinns/blob/main/02_Solving_ODEs_with_Neural_Networks/notebooks/05_van_der_pol_oscillator.ipynb" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;font:600 var(--text-sm)/1 var(--font-body);padding:10px 18px;border-radius:999px;background:var(--accent);color:#fff;border:1px solid transparent;text-decoration:none" target="_blank">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><circle cx="12" cy="12" r="10"></circle><path d="M10 8l6 4-6 4V8z" fill="currentColor" stroke="none"></path></svg>
         Open in Colab
       </a>
-    </div>
-
-    <hr class="divider">
-    <div id="refs">
-      <div class="section-label">References</div>
-      <div class="ref-list">
-        <div class="ref-item"><span class="ref-num">1</span>van der Pol, B. (1926). On relaxation-oscillations. <em>Philosophical Magazine</em>, 2(11), 978–992.</div>
-        <div class="ref-item"><span class="ref-num">2</span>Wang, S., Teng, Y. &amp; Perdikaris, P. (2021). Understanding and mitigating gradient flow pathologies in PINNs. <em>SIAM J. Sci. Comput.</em>, 43(5), A3055–A3081.</div>
-        <div class="ref-item"><span class="ref-num">3</span>Notebook: <a href="https://github.com/alishahmohammadi26/physics-ai-pinns" target="_blank" rel="noopener">physics-ai-pinns</a> · <code>02_Solving_ODEs/05_van_der_pol_oscillator.ipynb</code></div>
-      </div>
-    </div>
-  </div>
 </div>
-
+<hr class="divider"/>
+<div id="refs">
+<div class="section-label">References</div>
+<div class="ref-list">
+<div class="ref-item"><span class="ref-num">1</span>van der Pol, B. (1926). On relaxation-oscillations. <em>Philosophical Magazine</em>, 2(11), 978–992.</div>
+<div class="ref-item"><span class="ref-num">2</span>Wang, S., Teng, Y. &amp; Perdikaris, P. (2021). Understanding and mitigating gradient flow pathologies in PINNs. <em>SIAM J. Sci. Comput.</em>, 43(5), A3055–A3081.</div>
+<div class="ref-item"><span class="ref-num">3</span>Notebook: <a href="https://github.com/alishahmohammadi26/physics-ai-pinns" rel="noopener" target="_blank">physics-ai-pinns</a> · <code>02_Solving_ODEs/05_van_der_pol_oscillator.ipynb</code></div>
+</div>
+</div>
+</div>
+</div>
+<div class="related-reading reveal">
+<p class="rr-label">Related reading</p>
+<div class="rr-grid">
+<a class="rr-card" href="pinn-odes-sir-epidemic.html"><span class="rr-title">SIR Epidemic Model: Hidden State Inference from Partial Observations</span><span class="rr-go">Read article &#8594;</span></a>
+<a class="rr-card" href="pinn-odes-stiff-enzyme-kinetics.html"><span class="rr-title">Stiff Enzyme Kinetics &amp; QSSA: Michaelis-Menten Progress Curve with PINNs</span><span class="rr-go">Read article &#8594;</span></a>
+</div>
 </div>
 <footer class="site-footer">
-  <div class="foot-lead">
-    <p class="foot-name">Ali Shahmohammadi, Ph.D.</p>
-    <p class="foot-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p>
-  </div>
-  <nav class="foot-nav" aria-label="Footer">
-    <a href="../index.html#writing">Writing</a>
-    <a href="../index.html#career">Career</a>
-    <a href="../resume.html">Resume</a>
-    <a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
-    <a href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
-  </nav>
-  <div class="foot-base">
-    <span>&copy; 2026 Ali Shahmohammadi, Ph.D.</span>
-    <a class="to-top" href="#top">Back to top &uarr;</a>
-  </div>
+<div class="foot-lead">
+<p class="foot-name">Ali Shahmohammadi, Ph.D.</p>
+<p class="foot-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p>
+</div>
+<nav aria-label="Footer" class="foot-nav">
+<a href="../index.html#writing">Writing</a>
+<a href="../index.html#career">Career</a>
+<a href="../resume.html">Resume</a>
+<a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
+<a href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
+</nav>
+<div class="foot-base">
+<span>© 2026 Ali Shahmohammadi, Ph.D.</span>
+<a class="to-top" href="#top">Back to top ↑</a>
+</div>
 </footer>
 <script>
 (function(){
@@ -445,6 +463,14 @@ nav:not(.site-nav):not(.foot-nav){display:none}
     document.documentElement.dataset.theme = n;
     localStorage.setItem('theme', n);
   });
+})();
+</script>
+<script>
+(function(){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}
+  });},{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
 })();
 </script>
 </body></html>

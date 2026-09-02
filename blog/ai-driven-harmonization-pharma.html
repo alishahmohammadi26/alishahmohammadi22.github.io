@@ -1,27 +1,26 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html data-theme="light" lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Bridging the Data Divide: AI-Driven Harmonization in Pharma | Ali Shahmohammadi</title>
-<meta name="description" content="Why the most successful AI programs in pharma won't start with models, they'll start with harmonized data, shared semantics, and an enterprise knowledge foundation. Includes a reproducible Python case study: 44 raw lab terms to 8 LOINC concepts, 98% auto-mapping accuracy." />
-
-<meta property="og:title" content="Bridging the Data Divide: AI-Driven Harmonization in Pharma" />
-<meta property="og:description" content="How AI-driven harmonization is transforming pharma R&D, from siloed data to a shared semantic layer. With a reproducible LOINC-mapping case study." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://alishahmohammadi26.github.io/blog/ai-driven-harmonization-pharma.html" />
-<meta property="og:image" content="https://alishahmohammadi26.github.io/assets/images/og-preview.png" />
-<meta property="og:image:type" content="image/png" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://alishahmohammadi26.github.io/assets/images/og-preview.png" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<meta content="Why the most successful AI programs in pharma won't start with models, they'll start with harmonized data, shared semantics, and an enterprise knowledge foundation. Includes a reproducible Python case study: 44 raw lab terms to 8 LOINC concepts, 98% auto-mapping accuracy." name="description"/>
+<meta content="Bridging the Data Divide: AI-Driven Harmonization in Pharma" property="og:title"/>
+<meta content="How AI-driven harmonization is transforming pharma R&amp;D, from siloed data to a shared semantic layer. With a reproducible LOINC-mapping case study." property="og:description"/>
+<meta content="article" property="og:type"/>
+<meta content="https://alishahmohammadi26.github.io/blog/ai-driven-harmonization-pharma.html" property="og:url"/>
+<meta content="https://alishahmohammadi26.github.io/assets/images/og-preview.png" property="og:image"/>
+<meta content="image/png" property="og:image:type"/>
+<meta content="1200" property="og:image:width"/>
+<meta content="630" property="og:image:height"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="https://alishahmohammadi26.github.io/assets/images/og-preview.png" name="twitter:image"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" rel="stylesheet"/>
+<script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})" src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <script>
   (function(){var t=localStorage.getItem('theme');
    if(!t)t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
@@ -323,8 +322,24 @@ hr.divider{background:var(--line-strong)}
 
 /* Old nav — hide fixed positioning; handled by new .site-header */
 nav:not(.site-nav):not(.foot-nav){display:none}
-</style>
 
+/* ===== Related reading ===== */
+.related-reading{margin:var(--sp-10) 0 var(--sp-8);padding-top:var(--sp-8);border-top:1px solid var(--line)}
+.related-reading .rr-label{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 var(--sp-4)}
+.related-reading .rr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--sp-4)}
+.related-reading .rr-card{display:block;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:var(--sp-4) var(--sp-5);text-decoration:none;transition:border-color .2s,box-shadow .2s,transform .2s}
+.related-reading .rr-card:hover{border-color:var(--accent);box-shadow:var(--shadow-2);transform:translateY(-2px);text-decoration:none}
+.related-reading .rr-card .rr-title{display:block;font-family:var(--font-display);font-weight:600;color:var(--navy);
+  font-size:var(--text-base);line-height:var(--lh-snug);margin-bottom:6px}
+.related-reading .rr-card .rr-go{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--accent);letter-spacing:.05em}
+
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+</style>
 <style>
 /* ═══════════════════════════════════════════════════════════════════════
    NON-PINN ARTICLE COMPATIBILITY CSS
@@ -634,493 +649,451 @@ code:not(pre code){font-family:var(--font-mono);font-size:.9em;background:var(--
 </head>
 <body>
 <header class="site-header" data-elevate="false">
-  <a class="brand" href="../index.html">Ali Shahmohammadi <span class="deg">Ph.D.</span></a>
-  <nav class="site-nav" aria-label="Primary">
-    <a href="../index.html#writing">Writing</a>
-    <a href="../index.html#career">Career</a>
-    <a href="../resume.html">Resume</a>
-    <a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
-  </nav>
-  <button class="theme-toggle" id="themeBtn" type="button" aria-label="Toggle dark mode"><b></b></button>
-  <div class="read-progress" role="presentation"><span id="progress"></span></div>
+<a class="brand" href="../index.html">Ali Shahmohammadi <span class="deg">Ph.D.</span></a>
+<nav aria-label="Primary" class="site-nav">
+<a href="../index.html#writing">Writing</a>
+<a href="../index.html#career">Career</a>
+<a href="../resume.html">Resume</a>
+<a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
+</nav>
+<button aria-label="Toggle dark mode" class="theme-toggle" id="themeBtn" type="button"><b></b></button>
+<div class="read-progress" role="presentation"><span id="progress"></span></div>
 </header>
-
 <!-- ── Hero ── -->
 <section class="hero">
-  <div class="hero-pill">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-    Data Harmonization &nbsp;&middot;&nbsp; AI Strategy &nbsp;&middot;&nbsp; Pharma R&amp;D
+<div class="hero-pill">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+    Data Harmonization  ·  AI Strategy  ·  Pharma R&amp;D
   </div>
-  <h1>Bridging the <span class="accent">Data Divide</span>:<br>AI-Driven <span class="accent-amber">Harmonization</span> in Pharma</h1>
-  <p class="hero-sub">Why the most successful AI programs in pharma won&rsquo;t start with models &mdash; they&rsquo;ll start with harmonized data, shared semantics, and an enterprise knowledge foundation.</p>
-  <div class="hero-meta">
-    <span class="meta-tag">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+<h1>Bridging the <span class="accent">Data Divide</span>:<br/>AI-Driven <span class="accent-amber">Harmonization</span> in Pharma</h1>
+<p class="hero-sub">Why the most successful AI programs in pharma won’t start with models. They’ll start with harmonized data, shared semantics, and an enterprise knowledge foundation.</p>
+<div class="hero-meta">
+<span class="meta-tag">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><rect height="18" rx="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
       January 2026
     </span>
-    <span class="meta-dot"></span>
-    <span class="meta-tag">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+<span class="meta-dot"></span>
+<span class="meta-tag">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
       ~12 min read
     </span>
-    <span class="meta-dot"></span>
-    <span class="meta-tag">Ali Shahmohammadi, Ph.D.</span>
-    <span class="meta-dot"></span>
-    <span class="meta-tag">7 references</span>
-  </div>
-  <div class="hero-cta">
-    <a href="#the-problem" class="btn btn-primary">Read Article</a>
-    <a href="https://github.com/alishahmohammadi26/ai-driven-harmonization-pharma" target="_blank" rel="noopener" class="btn btn-gh">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+<span class="meta-dot"></span>
+<span class="meta-tag">Ali Shahmohammadi, Ph.D.</span>
+<span class="meta-dot"></span>
+<span class="meta-tag">7 references</span>
+</div>
+<div class="hero-cta">
+<a class="btn btn-primary" href="#the-problem">Read Article</a>
+<a class="btn btn-gh" href="https://github.com/alishahmohammadi26/ai-driven-harmonization-pharma" rel="noopener" target="_blank">
+<svg fill="currentColor" height="15" viewbox="0 0 24 24" width="15"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg>
       GitHub Repo
     </a>
-    <a href="https://loinc.org" target="_blank" rel="noopener" class="btn btn-outline">LOINC Standard</a>
-  </div>
+<a class="btn btn-outline" href="https://loinc.org" rel="noopener" target="_blank">LOINC Standard</a>
+</div>
 </section>
-
 <!-- ── Key stats ── -->
 <div class="container" style="margin:3rem auto;">
-  <div class="stats-row">
-    <div class="stat">
-      <div class="stat-num">80%</div>
-      <div class="stat-label">Of a data scientist&rsquo;s time spent finding, cleaning &amp; organizing data &mdash; not analyzing it</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num green">98%</div>
-      <div class="stat-label">Auto-mapping accuracy achieved in the LOINC harmonization case study (9,280 records, 3 sources)</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num amber">44&rarr;8</div>
-      <div class="stat-label">Raw term strings collapsed to canonical LOINC concepts, from local noise to shared standard</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num" style="color:var(--teal);font-size:1.5rem;letter-spacing:-.02em;">$60–110B</div>
-      <div class="stat-label">Estimated annual gen-AI value for pharma &amp; medical products, McKinsey Global Institute (2024)</div>
-    </div>
-  </div>
+<div class="stats-row">
+<div class="stat">
+<div class="stat-num">80%</div>
+<div class="stat-label">Of a data scientist’s time spent finding, cleaning &amp; organizing data: not analyzing it</div>
 </div>
-
+<div class="stat">
+<div class="stat-num green">98%</div>
+<div class="stat-label">Auto-mapping accuracy achieved in the LOINC harmonization case study (9,280 records, 3 sources)</div>
+</div>
+<div class="stat">
+<div class="stat-num amber">44→8</div>
+<div class="stat-label">Raw term strings collapsed to canonical LOINC concepts, from local noise to shared standard</div>
+</div>
+<div class="stat">
+<div class="stat-num" style="color:var(--teal);font-size:1.5rem;letter-spacing:-.02em;">$60–110B</div>
+<div class="stat-label">Estimated annual gen-AI value for pharma &amp; medical products, McKinsey Global Institute (2024)</div>
+</div>
+</div>
+</div>
 <!-- ── Table of Contents ── -->
 <div class="container" style="margin-bottom:3rem;">
-  <div class="toc">
-    <div class="toc-head">Table of Contents</div>
-    <ol>
-      <li><span class="toc-n">01</span><a href="#the-problem">Pharma Has a Data Problem Before It Has an AI Problem</a></li>
-      <li><span class="toc-n">02</span><a href="#data-silos">The Hidden Tax on Innovation</a></li>
-      <li><span class="toc-n">03</span><a href="#role-of-ai">The Role of AI: A Common Language</a></li>
-      <li><span class="toc-n">04</span><a href="#key-benefits">Why Harmonization Becomes Competitive Advantage</a></li>
-      <li><span class="toc-n">05</span><a href="#case-study">Case Study: 44 Lab Names to One Shared Standard</a></li>
-      <li><span class="toc-n">06</span><a href="#github-project">GitHub Project: Reproducible Pipeline</a></li>
-      <li><span class="toc-n">07</span><a href="#looking-ahead">Harmonization as Strategic Infrastructure</a></li>
-      <li><span class="toc-n">08</span><a href="#conclusion">Conclusion</a></li>
-    </ol>
-  </div>
+<div class="toc">
+<div class="toc-head">Table of Contents</div>
+<ol>
+<li><span class="toc-n">01</span><a href="#the-problem">Pharma Has a Data Problem Before It Has an AI Problem</a></li>
+<li><span class="toc-n">02</span><a href="#data-silos">The Hidden Tax on Innovation</a></li>
+<li><span class="toc-n">03</span><a href="#role-of-ai">The Role of AI: A Common Language</a></li>
+<li><span class="toc-n">04</span><a href="#key-benefits">Why Harmonization Becomes Competitive Advantage</a></li>
+<li><span class="toc-n">05</span><a href="#case-study">Case Study: 44 Lab Names to One Shared Standard</a></li>
+<li><span class="toc-n">06</span><a href="#github-project">GitHub Project: Reproducible Pipeline</a></li>
+<li><span class="toc-n">07</span><a href="#looking-ahead">Harmonization as Strategic Infrastructure</a></li>
+<li><span class="toc-n">08</span><a href="#conclusion">Conclusion</a></li>
+</ol>
 </div>
-
+</div>
 <!-- ── Article body ── -->
 <div class="container section">
-
-  <!-- Section 1 -->
-  <div id="the-problem" style="margin-bottom:4rem;">
-    <div class="eyebrow">01 &mdash; The Challenge</div>
-    <h2 style="font-size:1.9rem;font-weight:800;letter-spacing:-.03em;margin-bottom:1rem;">Pharma Has a Data Problem Before It Has an AI Problem</h2>
-    <div class="prose">
-      <p>The pharmaceutical industry has never had more data. Clinical trials, omics, manufacturing records, real-world evidence, regulatory submissions, safety reports, laboratory measurements, imaging, and scientific literature are all growing at unprecedented rates. Yet despite this abundance, many organizations still struggle to realize the full promise of AI.</p>
-      <p>The reason is surprisingly simple: <strong>most pharmaceutical data was never designed to work together.</strong></p>
-      <p>Data lives in different systems, follows different standards, uses different terminologies, and often lacks context. One team may describe an attribute using one vocabulary while another uses a completely different representation. By long-standing estimates, data professionals spend up to <strong>80% of their time</strong> finding, cleaning, and organizing data &mdash; leaving only 20% for the analysis that actually creates value.</p>
-      <p>This has elevated data harmonization from a technical concern to a strategic imperative. The FAIR principles &mdash; that data should be Findable, Accessible, Interoperable, and Reusable &mdash; have become the reference standard for this shift since their publication in 2016. Organizations such as Novo Nordisk have publicly described moving toward ontology-based data management to operationalize FAIR at enterprise scale.</p>
+<!-- Section 1 -->
+<div id="the-problem" style="margin-bottom:4rem;">
+<div class="eyebrow">01. The Challenge</div>
+<h2 style="font-size:1.9rem;font-weight:800;letter-spacing:-.03em;margin-bottom:1rem;">Pharma Has a Data Problem Before It Has an AI Problem</h2>
+<div class="prose">
+<p>The pharmaceutical industry has never had more data. Clinical trials, omics, manufacturing records, real-world evidence, regulatory submissions, safety reports, laboratory measurements, imaging, and scientific literature are all growing at unprecedented rates. Yet despite this abundance, many organizations still struggle to realize the full promise of AI.</p>
+<p>The reason is surprisingly simple: <strong>most pharmaceutical data was never designed to work together.</strong></p>
+<p>Data lives in different systems, follows different standards, uses different terminologies, and often lacks context. One team may describe an attribute using one vocabulary while another uses a completely different representation. By long-standing estimates, data professionals spend up to <strong>80% of their time</strong> finding, cleaning, and organizing data: leaving only 20% for the analysis that actually creates value.</p>
+<p>This has elevated data harmonization from a technical concern to a strategic imperative. The FAIR principles (that data should be Findable, Accessible, Interoperable, and Reusable) have become the reference standard for this shift since their publication in 2016. Organizations such as Novo Nordisk have publicly described moving toward ontology-based data management to operationalize FAIR at enterprise scale.</p>
+</div>
+<div class="quote">
+      “The future competitive advantage in pharma may not come from having more data. It may come from having the most <em>interoperable</em> data.”
     </div>
-
-    <div class="quote">
-      &ldquo;The future competitive advantage in pharma may not come from having more data &mdash; it may come from having the most <em>interoperable</em> data.&rdquo;
-    </div>
-  </div>
-
-  <!-- Section 2 + Infographic 1 -->
-  <div id="data-silos" style="margin-bottom:4rem;">
-    <div class="eyebrow">02 &mdash; The Problem</div>
-    <h2 style="font-size:1.9rem;font-weight:800;letter-spacing:-.03em;margin-bottom:1rem;">Data Silos Are the Hidden Tax on Innovation</h2>
-    <div class="prose">
-      <p>For decades, pharma optimized systems around specific functions &mdash; clinical, laboratory, manufacturing, regulatory, and safety. Each served its purpose well. Collectively, however, they created fragmented information ecosystems.</p>
-      <p>A scientist searching for a simple answer often encounters multiple sources of truth. The same concept appears under different names across departments, metadata quality varies, and historical information may exist only in documents rather than structured databases. The consequences compound:</p>
-    </div>
-
-    <div class="grid-4" style="margin:1.5rem 0 2rem;">
-      <div class="card teal">
-        <div class="mini">Reduced discoverability</div>
-        <h3>Can&rsquo;t find what exists</h3>
-        <p>Researchers can&rsquo;t locate datasets that already exist &mdash; so work is duplicated.</p>
-      </div>
-      <div class="card amber">
-        <div class="mini" style="color:var(--amber)">Excessive curation</div>
-        <h3>Scientists clean instead of discover</h3>
-        <p>Highly trained scientists spend time cleaning data instead of generating insight.</p>
-      </div>
-      <div class="card" style="border-color:#fecaca;background:#fef2f2;">
-        <div class="mini" style="color:#dc2626">Poor AI readiness</div>
-        <h3>Fragmentation degrades models</h3>
-        <p>ML models need consistent, structured inputs. Fragmented data degrades accuracy.</p>
-      </div>
-      <div class="card purple">
-        <div class="mini">Regulatory risk</div>
-        <h3>Broken lineage</h3>
-        <p>Inconsistent data lineage makes traceability &mdash; required by regulators &mdash; harder to establish.</p>
-      </div>
-    </div>
-
-    <!-- Infographic 1: Pharma's Hidden Data Tax -->
-    <div class="infographic">
-      <div style="background:#f8fafc;padding:2.5rem 2.5rem 2rem;">
-
-        <!-- Header -->
-        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:2rem;">
-          <div style="width:4px;height:2.5rem;background:var(--teal);border-radius:2px;flex-shrink:0;"></div>
-          <div>
-            <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:.15rem;">The Challenge</div>
-            <div style="font-size:1.35rem;font-weight:800;color:#0f172a;letter-spacing:-.02em;">Pharma&rsquo;s Hidden Data Tax</div>
-          </div>
-        </div>
-
-        <!-- Big stat -->
-        <div style="background:#0f172a;border-radius:12px;padding:1.75rem 2rem;margin-bottom:2rem;display:flex;align-items:center;gap:2rem;flex-wrap:wrap;">
-          <div style="flex-shrink:0;">
-            <span style="font-size:4rem;font-weight:900;color:#fff;letter-spacing:-.04em;line-height:1;">80%</span>
-          </div>
-          <div style="flex:1;min-width:220px;">
-            <p style="font-size:1.05rem;color:rgba(255,255,255,.85);line-height:1.6;margin:0;">of a data scientist&rsquo;s time is spent <strong style="color:#fff;">finding, cleaning &amp; organizing data</strong> &mdash; not analyzing it.</p>
-          </div>
-        </div>
-
-        <!-- 4 consequence cards -->
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;">
-          <div style="background:#fff;border:1px solid #e2e8f0;border-top:3px solid var(--teal);border-radius:10px;padding:1.25rem 1rem;">
-            <div style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);margin-bottom:.65rem;">Discoverability</div>
-            <div style="font-size:.98rem;font-weight:700;color:#0f172a;margin-bottom:.5rem;line-height:1.3;">Reduced discoverability</div>
-            <div style="font-size:.82rem;color:#64748b;line-height:1.55;">Teams can&rsquo;t find data that already exists.</div>
-          </div>
-          <div style="background:#fff;border:1px solid #e2e8f0;border-top:3px solid var(--amber);border-radius:10px;padding:1.25rem 1rem;">
-            <div style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--amber);margin-bottom:.65rem;">Productivity</div>
-            <div style="font-size:.98rem;font-weight:700;color:#0f172a;margin-bottom:.5rem;line-height:1.3;">Excessive curation</div>
-            <div style="font-size:.82rem;color:#64748b;line-height:1.55;">Scientists clean data instead of creating insight.</div>
-          </div>
-          <div style="background:#fff;border:1px solid #e2e8f0;border-top:3px solid #e53e3e;border-radius:10px;padding:1.25rem 1rem;">
-            <div style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#e53e3e;margin-bottom:.65rem;">AI Readiness</div>
-            <div style="font-size:.98rem;font-weight:700;color:#0f172a;margin-bottom:.5rem;line-height:1.3;">Poor AI readiness</div>
-            <div style="font-size:.82rem;color:#64748b;line-height:1.55;">Fragmented inputs degrade model accuracy.</div>
-          </div>
-          <div style="background:#fff;border:1px solid #e2e8f0;border-top:3px solid var(--purple);border-radius:10px;padding:1.25rem 1rem;">
-            <div style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--purple);margin-bottom:.65rem;">Compliance</div>
-            <div style="font-size:.98rem;font-weight:700;color:#0f172a;margin-bottom:.5rem;line-height:1.3;">Regulatory risk</div>
-            <div style="font-size:.82rem;color:#64748b;line-height:1.55;">Broken lineage weakens traceability &amp; trust.</div>
-          </div>
-        </div>
-
-        <!-- Quote -->
-        <div style="background:#fff;border-left:4px solid var(--teal);border-radius:0 8px 8px 0;padding:1rem 1.25rem;">
-          <p style="margin:0;font-style:italic;font-size:.95rem;color:#334155;line-height:1.65;">&ldquo;Many AI initiatives fail not because of model limitations, but because of data quality and interoperability.&rdquo;</p>
-        </div>
-
-      </div>
-      <div class="infographic-caption"><strong>Figure 1</strong> &mdash; The consequences of fragmented pharmaceutical data. Data-prep estimate: widely cited 80/20 rule in data science (Pragmatic Institute; Anaconda).</div>
-    </div>
-
-    <div class="callout amber">
-      <p><strong>The core irony:</strong> many AI initiatives fail not because of model limitations, but because of data quality and interoperability. Before AI can transform R&amp;D, organizations must first transform how data is organized and understood.</p>
-    </div>
-  </div>
-
-  <!-- Section 3 + Infographic 2 -->
-  <div id="role-of-ai" style="margin-bottom:4rem;">
-    <div class="eyebrow">03 &mdash; The Solution</div>
-    <h2 style="font-size:1.9rem;font-weight:800;letter-spacing:-.03em;margin-bottom:1rem;">The Role of AI: Turning Data Into a Common Language</h2>
-    <div class="prose">
-      <p>Traditional harmonization relied on manual mapping, predefined rules, and extensive human effort. AI is changing that equation &mdash; creating semantic connections across datasets, systems, and documents at a scale previously impossible.</p>
-    </div>
-
-    <div class="grid-3" style="margin:1.5rem 0 2rem;">
-      <div class="card teal">
-        <div style="display:flex;align-items:center;justify-content:center;width:2.2rem;height:2.2rem;border-radius:50%;background:var(--teal);color:#fff;font-size:1rem;font-weight:800;margin-bottom:.85rem;">1</div>
-        <div class="mini">Ontology-Aware Intelligence</div>
-        <h3>Understands concepts, not just strings</h3>
-        <p>&ldquo;ALT&rdquo; and &ldquo;Alanine Aminotransferase&rdquo; can be recognized as the same concept. Divergent lab naming conventions are mapped automatically; metadata gaps are inferred and enriched.</p>
-      </div>
-      <div class="card amber">
-        <div style="display:flex;align-items:center;justify-content:center;width:2.2rem;height:2.2rem;border-radius:50%;background:var(--amber);color:#fff;font-size:1rem;font-weight:800;margin-bottom:.85rem;">2</div>
-        <div class="mini" style="color:var(--amber)">Generative AI Enrichment</div>
-        <h3>Unlocks unstructured text</h3>
-        <p>LLMs extract entities, relationships, and context from scientific reports, protocols, and lab notebooks &mdash; generating metadata and standardizing annotations at scale.</p>
-      </div>
-      <div class="card green">
-        <div style="display:flex;align-items:center;justify-content:center;width:2.2rem;height:2.2rem;border-radius:50%;background:var(--green);color:#fff;font-size:1rem;font-weight:800;margin-bottom:.85rem;">3</div>
-        <div class="mini" style="color:var(--green)">Intelligent Data Mapping</div>
-        <h3>Mappings in hours, not months</h3>
-        <p>AI surfaces relationships between datasets that were never explicitly linked. What once took months can increasingly be done in days &mdash; or hours.</p>
-      </div>
-    </div>
-
-    <!-- Infographic 2: Common Language -->
-    <div class="infographic">
-      <div style="background:#f8fafc;padding:2.5rem 2.5rem 2rem;">
-
-        <!-- Header -->
-        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:2rem;">
-          <div style="width:4px;height:2.5rem;background:var(--teal);border-radius:2px;flex-shrink:0;"></div>
-          <div>
-            <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:.15rem;">The Role of AI</div>
-            <div style="font-size:1.35rem;font-weight:800;color:#0f172a;letter-spacing:-.02em;">Turning Data Into a Common Language</div>
-          </div>
-        </div>
-
-        <!-- 3 capability cards -->
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:2rem;">
-          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:1.5rem 1.25rem;">
-            <div style="width:2.2rem;height:2.2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;margin-bottom:1rem;">1</div>
-            <div style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);margin-bottom:.5rem;">Ontology-Aware Intelligence</div>
-            <div style="font-size:.93rem;font-weight:700;color:#0f172a;margin-bottom:.5rem;line-height:1.35;">Understands concepts, not just strings</div>
-            <div style="font-size:.82rem;color:#64748b;line-height:1.55;">Understands that concepts are equivalent &mdash; not just that strings match.</div>
-          </div>
-          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:1.5rem 1.25rem;position:relative;">
-            <!-- connector arrow left -->
-            <div style="position:absolute;left:-14px;top:50%;transform:translateY(-50%);width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:14px solid #cbd5e1;"></div>
-            <div style="width:2.2rem;height:2.2rem;border-radius:50%;background:#1d4e89;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;margin-bottom:1rem;">2</div>
-            <div style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#1d4e89;margin-bottom:.5rem;">Generative AI Enrichment</div>
-            <div style="font-size:.93rem;font-weight:700;color:#0f172a;margin-bottom:.5rem;line-height:1.35;">Unlocks unstructured text</div>
-            <div style="font-size:.82rem;color:#64748b;line-height:1.55;">Extracts entities &amp; context from scientific reports and lab notebooks.</div>
-          </div>
-          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:1.5rem 1.25rem;position:relative;">
-            <!-- connector arrow left -->
-            <div style="position:absolute;left:-14px;top:50%;transform:translateY(-50%);width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:14px solid #cbd5e1;"></div>
-            <div style="width:2.2rem;height:2.2rem;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;margin-bottom:1rem;">3</div>
-            <div style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--green);margin-bottom:.5rem;">Intelligent Data Mapping</div>
-            <div style="font-size:.93rem;font-weight:700;color:#0f172a;margin-bottom:.5rem;line-height:1.35;">Mappings in hours, not months</div>
-            <div style="font-size:.82rem;color:#64748b;line-height:1.55;">Learns patterns and recommends harmonization strategies at scale.</div>
-          </div>
-        </div>
-
-        <!-- One concept many names example -->
-        <div style="background:#0f172a;border-radius:12px;padding:1.75rem 2rem;">
-          <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);text-align:center;margin-bottom:1.25rem;">One Concept, Many Local Names</div>
-          <div style="display:flex;justify-content:center;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:1.25rem;">
-            <span style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:.35rem .8rem;font-size:.88rem;font-weight:600;font-family:'JetBrains Mono',monospace;">ALT</span>
-            <span style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:.35rem .8rem;font-size:.88rem;font-weight:600;font-family:'JetBrains Mono',monospace;">SGPT</span>
-            <span style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:.35rem .8rem;font-size:.88rem;font-weight:600;font-family:'JetBrains Mono',monospace;">Alanine Aminotransferase</span>
-            <span style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:.35rem .8rem;font-size:.88rem;font-weight:600;font-family:'JetBrains Mono',monospace;">ALAT</span>
-            <span style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:.35rem .8rem;font-size:.88rem;font-weight:600;font-family:'JetBrains Mono',monospace;">GPT</span>
-          </div>
-          <div style="display:flex;justify-content:center;margin-bottom:1rem;">
-            <div style="width:2px;height:24px;background:var(--teal);"></div>
-          </div>
-          <div style="display:flex;justify-content:center;">
-            <div style="background:var(--teal);color:#fff;border-radius:8px;padding:.55rem 1.5rem;font-size:.95rem;font-weight:700;letter-spacing:.02em;">LOINC 1742-6 &nbsp;&middot;&nbsp; harmonized</div>
-          </div>
-        </div>
-
-      </div>
-      <div class="infographic-caption"><strong>Figure 2</strong> &mdash; Three ways AI creates a shared understanding layer across the enterprise. LOINC &mdash; Logical Observation Identifiers Names and Codes, a public standard (Regenstrief Institute).</div>
-    </div>
-  </div>
-
-  <!-- Section 4 -->
-  <div id="key-benefits" style="margin-bottom:4rem;">
-    <div class="eyebrow">04 &mdash; Business Value</div>
-    <h2 style="font-size:1.9rem;font-weight:800;letter-spacing:-.03em;margin-bottom:1rem;">Why Harmonization Becomes a Competitive Advantage</h2>
-    <div class="prose">
-      <p>Organizations often view harmonization as infrastructure. In reality, it creates measurable business value across five dimensions.</p>
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:.85rem;margin:1.5rem 0 2rem;">
-      <div style="display:flex;align-items:flex-start;gap:1rem;background:var(--surface);border:1px solid var(--teal-bdr);border-radius:var(--r);padding:1.1rem 1.35rem;">
-        <div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;">✓</div>
-        <div><strong>Better data quality.</strong> <span style="color:var(--muted)">AI continuously identifies inconsistencies, duplicates, missing values, and semantic conflicts &mdash; a stronger foundation for analytics and machine learning.</span></div>
-      </div>
-      <div style="display:flex;align-items:flex-start;gap:1rem;background:var(--surface);border:1px solid var(--teal-bdr);border-radius:var(--r);padding:1.1rem 1.35rem;">
-        <div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;">✓</div>
-        <div><strong>Faster scientific insight.</strong> <span style="color:var(--muted)">When data is searchable and interoperable, researchers spend less time finding and more time discovering.</span></div>
-      </div>
-      <div style="display:flex;align-items:flex-start;gap:1rem;background:var(--surface);border:1px solid var(--teal-bdr);border-radius:var(--r);padding:1.1rem 1.35rem;">
-        <div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;">✓</div>
-        <div><strong>Improved AI performance.</strong> <span style="color:var(--muted)">&ldquo;Garbage in, garbage out&rdquo; still holds. Harmonized data improves model accuracy, reproducibility, and scalability.</span></div>
-      </div>
-      <div style="display:flex;align-items:flex-start;gap:1rem;background:var(--surface);border:1px solid var(--teal-bdr);border-radius:var(--r);padding:1.1rem 1.35rem;">
-        <div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;">✓</div>
-        <div><strong>Regulatory confidence.</strong> <span style="color:var(--muted)">The FDA&rsquo;s January 2025 draft guidance introduces a risk-based credibility framework for AI supporting regulatory decisions, emphasizing data quality, transparency, and lifecycle management. Harmonized data makes those requirements far easier to demonstrate.</span></div>
-      </div>
-      <div style="display:flex;align-items:flex-start;gap:1rem;background:var(--surface);border:1px solid var(--teal-bdr);border-radius:var(--r);padding:1.1rem 1.35rem;">
-        <div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;">✓</div>
-        <div><strong>Enterprise knowledge retention.</strong> <span style="color:var(--muted)">Harmonization turns isolated data assets into organizational knowledge, reusable across therapeutic areas and future initiatives.</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Section 5 + Infographic 3 -->
-  <div id="case-study" style="margin-bottom:4rem;">
-    <div class="eyebrow">05 &mdash; Case Study</div>
-    <h2 style="font-size:1.9rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.5rem;">From 44 Local Lab Names to One Shared Standard</h2>
-    <p style="color:var(--muted);font-size:.93rem;margin-bottom:1.75rem;">Built in Python &middot; 9,280 simulated records &middot; 3 source systems &middot; 8 analytes &middot; pandas + difflib + LOINC</p>
-
-    <div class="prose">
-      <p>The abstract argument becomes concrete when you build it. To demonstrate, I created a small, fully reproducible pipeline in Python (pandas + difflib) that harmonizes messy multi-site laboratory data to LOINC &mdash; the public Logical Observation Identifiers Names and Codes standard maintained by the Regenstrief Institute.</p>
-      <p>The setup mirrors a real data-pooling problem. I simulated 9,280 lab results from three source systems &mdash; a legacy EHR, a CRO reporting in SI units, and a partner lab &mdash; each recording the same eight analytes under its own local names, units, and formatting. <code>"ALT"</code>, <code>"SGPT"</code>, and <code>"Alanine Aminotransferase"</code> all appear; glucose arrives in both mg/dL and mmol/L; hemoglobin in g/dL and g/L. (The data is simulated; the LOINC standard, codes, and libraries are real.)</p>
-    </div>
-
-    <div class="callout teal" style="margin:1.5rem 0;">
-      <p><strong>Pipeline: four steps.</strong> Normalize each raw term &rarr; match to a concept via an ontology-style synonym dictionary &rarr; fall back to fuzzy semantic matching for near-misses &rarr; assign the canonical LOINC code and convert every value to a standard unit &mdash; flagging anything it can&rsquo;t resolve for human review, not silently guessing.</p>
-    </div>
-
-    <div class="metric-row">
-      <div class="metric">
-        <div class="metric-val">44&rarr;8</div>
-        <div class="metric-lbl">Distinct raw term strings collapsed to 8 LOINC concepts</div>
-      </div>
-      <div class="metric">
-        <div class="metric-val">11&rarr;5</div>
-        <div class="metric-lbl">Inconsistent unit representations standardized to 5 canonical units</div>
-      </div>
-      <div class="metric">
-        <div class="metric-val green">98%</div>
-        <div class="metric-lbl">Auto-mapped to LOINC (96.3% dictionary &middot; 1.6% fuzzy) &mdash; 2% flagged for review</div>
-      </div>
-      <div class="metric">
-        <div class="metric-val green">99.9%</div>
-        <div class="metric-lbl">Mapping accuracy against known ground truth</div>
-      </div>
-    </div>
-
-    <div class="callout green" style="margin:1.5rem 0 2rem;">
-      <p><strong>Cross-site findability jumped from 34.8% to 99.9%.</strong> Before harmonization, a query for &ldquo;ALT&rdquo; surfaced only the one site that used that exact label. After, it retrieved the analyte across all three sources.</p>
-    </div>
-
-    <!-- Infographic 3: Case Study Results -->
-    <div class="infographic">
-      <div style="background:#f8fafc;padding:2.5rem 2.5rem 2rem;">
-
-        <!-- Header -->
-        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;">
-          <div style="width:4px;height:2.5rem;background:var(--teal);border-radius:2px;flex-shrink:0;"></div>
-          <div>
-            <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:.15rem;">Case Study &middot; Built in Python</div>
-            <div style="font-size:1.35rem;font-weight:800;color:#0f172a;letter-spacing:-.02em;">Harmonizing Multi-Site Lab Data to LOINC</div>
-          </div>
-        </div>
-        <div style="font-size:.82rem;color:#64748b;margin-bottom:1.75rem;padding-left:1.25rem;">9,280 records &middot; 3 sources &middot; 8 analytes &middot; pandas + difflib + LOINC</div>
-
-        <!-- 4 metric cards -->
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;">
-          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1.25rem 1rem;text-align:center;">
-            <div style="font-size:1.9rem;font-weight:900;color:var(--teal);letter-spacing:-.03em;line-height:1;margin-bottom:.5rem;">44 &rarr; 8</div>
-            <div style="font-size:.78rem;color:#64748b;line-height:1.45;">term strings collapsed to LOINC concepts</div>
-          </div>
-          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1.25rem 1rem;text-align:center;">
-            <div style="font-size:1.9rem;font-weight:900;color:var(--teal);letter-spacing:-.03em;line-height:1;margin-bottom:.5rem;">11 &rarr; 5</div>
-            <div style="font-size:.78rem;color:#64748b;line-height:1.45;">inconsistent units standardized</div>
-          </div>
-          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1.25rem 1rem;text-align:center;">
-            <div style="font-size:1.9rem;font-weight:900;color:#0f172a;letter-spacing:-.03em;line-height:1;margin-bottom:.5rem;">98%</div>
-            <div style="font-size:.78rem;color:#64748b;line-height:1.45;">auto-mapped to LOINC (dictionary + fuzzy)</div>
-          </div>
-          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1.25rem 1rem;text-align:center;">
-            <div style="font-size:1.9rem;font-weight:900;color:var(--green);letter-spacing:-.03em;line-height:1;margin-bottom:.5rem;">99.9%</div>
-            <div style="font-size:.78rem;color:#64748b;line-height:1.45;">mapping accuracy vs. ground truth</div>
-          </div>
-        </div>
-
-        <!-- Cross-site findability highlight -->
-        <div style="background:#fff;border:2px solid var(--teal);border-radius:10px;padding:1.1rem 1.5rem;margin-bottom:1.75rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
-          <div style="font-size:.9rem;font-weight:700;color:#0f172a;flex-shrink:0;">Cross-site findability</div>
-          <div style="display:flex;align-items:center;gap:1rem;flex:1;flex-wrap:wrap;">
-            <div style="text-align:center;">
-              <div style="font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#64748b;margin-bottom:.2rem;">Before</div>
-              <div style="font-size:1.75rem;font-weight:900;color:#e53e3e;letter-spacing:-.03em;">34.8%</div>
-            </div>
-            <div style="font-size:1.5rem;color:#94a3b8;font-weight:700;">&#8594;</div>
-            <div style="text-align:center;">
-              <div style="font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#64748b;margin-bottom:.2rem;">After</div>
-              <div style="font-size:1.75rem;font-weight:900;color:var(--green);letter-spacing:-.03em;">99.9%</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Two-column: bar chart + mapping breakdown -->
-        <div style="display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:start;">
-
-          <!-- Bar chart -->
-          <div>
-            <div style="font-size:.82rem;font-weight:700;color:#0f172a;margin-bottom:1rem;">Findability by analyte &mdash; before vs. after</div>
-            <div style="display:flex;flex-direction:column;gap:.55rem;">
-              <!-- ALT --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">ALT</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:35%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
-              <!-- AST --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">AST</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:38%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
-              <!-- Glucose --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">Glucose</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:34%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
-              <!-- Creatinine --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">Creatinine</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:33%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
-              <!-- HbA1C --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">HbA1C</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:37%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
-              <!-- Cholesterol --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">Cholesterol</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:34%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
-              <!-- Platelets --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">Platelets</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:31%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
-              <!-- Hemoglobin --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">Hemoglobin</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:36%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
-            </div>
-            <!-- X-axis label -->
-            <div style="font-size:.7rem;color:#94a3b8;margin-top:.75rem;padding-left:88px;">% of records discoverable by a name query &mdash; 0 to 100%</div>
-            <!-- Legend -->
-            <div style="display:flex;gap:1.25rem;margin-top:.75rem;padding-left:88px;">
-              <div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;color:#475569;"><div style="width:16px;height:9px;border-radius:3px;background:#e53e3e;"></div>Before</div>
-              <div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;color:#475569;"><div style="width:16px;height:9px;border-radius:3px;background:var(--teal);"></div>After</div>
-            </div>
-          </div>
-
-          <!-- Mapping method breakdown -->
-          <div style="min-width:160px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1.25rem;text-align:center;">
-            <div style="font-size:.75rem;font-weight:700;color:#0f172a;margin-bottom:1rem;">How records mapped</div>
-            <!-- Donut representation as stacked bars -->
-            <div style="width:80px;height:80px;border-radius:50%;background:conic-gradient(var(--teal) 0% 96.3%, #1d4e89 96.3% 97.9%, #e53e3e 97.9% 100%);margin:0 auto 1rem;"></div>
-            <div style="font-size:1.5rem;font-weight:900;color:#0f172a;letter-spacing:-.03em;margin-bottom:.75rem;">98%</div>
-            <div style="display:flex;flex-direction:column;gap:.45rem;text-align:left;">
-              <div style="display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:#475569;"><div style="width:10px;height:10px;border-radius:50%;background:var(--teal);flex-shrink:0;"></div>Dictionary 96.3%</div>
-              <div style="display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:#475569;"><div style="width:10px;height:10px;border-radius:50%;background:#1d4e89;flex-shrink:0;"></div>Fuzzy 1.6%</div>
-              <div style="display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:#e53e3e;"><div style="width:10px;height:10px;border-radius:50%;background:#e53e3e;flex-shrink:0;"></div>Review 2.0%</div>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-      <div class="infographic-caption"><strong>Figure 3</strong> &mdash; Harmonization results: term and unit consolidation, mapping coverage, and the jump in cross-site findability. Reproducible Python pipeline over a simulated 3-source pooling problem; harmonized to real LOINC codes.</div>
-    </div>
-
-    <div class="prose" style="margin-top:1.5rem;">
-      <p>The takeaway matches the thesis. <strong>The value did not come primarily from a sophisticated model &mdash; the matching logic is deliberately simple.</strong> It came from harmonizing disparate sources into a unified, standards-based knowledge layer that any tool, dashboard, or model can reason over. AI was the accelerator; harmonization was the foundation.</p>
-      <p>The same pattern extends directly to public resources like openFDA, ClinicalTrials.gov, and ChEMBL, where identical terminology and unit fragmentation must be resolved before analysis.</p>
-      <p>Industry echo: the same principle underpins AI-powered regulatory-intelligence platforms, where organizations integrate internal quality data &mdash; deviations, CAPAs, risk assessments &mdash; with external FDA communications and guidance, then apply NLP to surface compliance trends. The reporting system is only as good as the harmonized foundation beneath it.</p>
-    </div>
-  </div>
-
-  <!-- Section 6: GitHub -->
-  <div id="github-project" style="margin-bottom:4rem;">
-    <div class="eyebrow">06 &mdash; Open Source</div>
-    <h2 style="font-size:1.9rem;font-weight:800;letter-spacing:-.03em;margin-bottom:1rem;">GitHub Project: Reproducible Pipeline</h2>
-    <div class="prose">
-      <p>The full pipeline from this article is available as an open-source Python project. It includes the simulated dataset generator, the synonym dictionary, the fuzzy-matching fallback, LOINC code assignment, unit conversion logic, and a data-quality report. You can run it end-to-end with a single command.</p>
-    </div>
-
-    <div class="repo-banner">
-      <div class="repo-banner-text">
-        <strong>alishahmohammadi26 / ai-driven-harmonization-pharma</strong>
-        Reproducible Python pipeline for harmonizing messy multi-site lab data to LOINC. Simulates 9,280 records across 3 source systems &mdash; 8 analytes, mixed naming conventions, mixed units &mdash; and maps them to canonical LOINC codes with 98% auto-mapping accuracy.
-        <span>pandas &middot; difflib &middot; LOINC &middot; pytest &middot; GitHub Actions CI</span>
-      </div>
-      <a href="https://github.com/alishahmohammadi26/ai-driven-harmonization-pharma" target="_blank" rel="noopener" class="btn btn-gh" style="flex-shrink:0;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+</div>
+<!-- Section 2 + Infographic 1 -->
+<div id="data-silos" style="margin-bottom:4rem;">
+<div class="eyebrow">02. The Problem</div>
+<h2 style="font-size:1.9rem;font-weight:800;letter-spacing:-.03em;margin-bottom:1rem;">Data Silos Are the Hidden Tax on Innovation</h2>
+<div class="prose">
+<p>For decades, pharma optimized systems around specific functions: clinical, laboratory, manufacturing, regulatory, and safety. Each served its purpose well. Collectively, however, they created fragmented information ecosystems.</p>
+<p>A scientist searching for a simple answer often encounters multiple sources of truth. The same concept appears under different names across departments, metadata quality varies, and historical information may exist only in documents rather than structured databases. The consequences compound:</p>
+</div>
+<div class="grid-4" style="margin:1.5rem 0 2rem;">
+<div class="card teal">
+<div class="mini">Reduced discoverability</div>
+<h3>Can’t find what exists</h3>
+<p>Researchers can’t locate datasets that already exist, so work is duplicated.</p>
+</div>
+<div class="card amber">
+<div class="mini" style="color:var(--amber)">Excessive curation</div>
+<h3>Scientists clean instead of discover</h3>
+<p>Highly trained scientists spend time cleaning data instead of generating insight.</p>
+</div>
+<div class="card" style="border-color:#fecaca;background:#fef2f2;">
+<div class="mini" style="color:#dc2626">Poor AI readiness</div>
+<h3>Fragmentation degrades models</h3>
+<p>ML models need consistent, structured inputs. Fragmented data degrades accuracy.</p>
+</div>
+<div class="card purple">
+<div class="mini">Regulatory risk</div>
+<h3>Broken lineage</h3>
+<p>Inconsistent data lineage makes traceability (required by regulators) harder to establish.</p>
+</div>
+</div>
+<!-- Infographic 1: Pharma's Hidden Data Tax -->
+<div class="infographic">
+<div style="background:#f8fafc;padding:2.5rem 2.5rem 2rem;">
+<!-- Header -->
+<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:2rem;">
+<div style="width:4px;height:2.5rem;background:var(--teal);border-radius:2px;flex-shrink:0;"></div>
+<div>
+<div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:.15rem;">The Challenge</div>
+<div style="font-size:1.35rem;font-weight:800;color:#0f172a;letter-spacing:-.02em;">Pharma’s Hidden Data Tax</div>
+</div>
+</div>
+<!-- Big stat -->
+<div style="background:#0f172a;border-radius:12px;padding:1.75rem 2rem;margin-bottom:2rem;display:flex;align-items:center;gap:2rem;flex-wrap:wrap;">
+<div style="flex-shrink:0;">
+<span style="font-size:4rem;font-weight:900;color:#fff;letter-spacing:-.04em;line-height:1;">80%</span>
+</div>
+<div style="flex:1;min-width:220px;">
+<p style="font-size:1.05rem;color:rgba(255,255,255,.85);line-height:1.6;margin:0;">of a data scientist’s time is spent <strong style="color:#fff;">finding, cleaning &amp; organizing data</strong>. Not analyzing it.</p>
+</div>
+</div>
+<!-- 4 consequence cards -->
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;">
+<div style="background:#fff;border:1px solid #e2e8f0;border-top:3px solid var(--teal);border-radius:10px;padding:1.25rem 1rem;">
+<div style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);margin-bottom:.65rem;">Discoverability</div>
+<div style="font-size:.98rem;font-weight:700;color:#0f172a;margin-bottom:.5rem;line-height:1.3;">Reduced discoverability</div>
+<div style="font-size:.82rem;color:#64748b;line-height:1.55;">Teams can’t find data that already exists.</div>
+</div>
+<div style="background:#fff;border:1px solid #e2e8f0;border-top:3px solid var(--amber);border-radius:10px;padding:1.25rem 1rem;">
+<div style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--amber);margin-bottom:.65rem;">Productivity</div>
+<div style="font-size:.98rem;font-weight:700;color:#0f172a;margin-bottom:.5rem;line-height:1.3;">Excessive curation</div>
+<div style="font-size:.82rem;color:#64748b;line-height:1.55;">Scientists clean data instead of creating insight.</div>
+</div>
+<div style="background:#fff;border:1px solid #e2e8f0;border-top:3px solid #e53e3e;border-radius:10px;padding:1.25rem 1rem;">
+<div style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#e53e3e;margin-bottom:.65rem;">AI Readiness</div>
+<div style="font-size:.98rem;font-weight:700;color:#0f172a;margin-bottom:.5rem;line-height:1.3;">Poor AI readiness</div>
+<div style="font-size:.82rem;color:#64748b;line-height:1.55;">Fragmented inputs degrade model accuracy.</div>
+</div>
+<div style="background:#fff;border:1px solid #e2e8f0;border-top:3px solid var(--purple);border-radius:10px;padding:1.25rem 1rem;">
+<div style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--purple);margin-bottom:.65rem;">Compliance</div>
+<div style="font-size:.98rem;font-weight:700;color:#0f172a;margin-bottom:.5rem;line-height:1.3;">Regulatory risk</div>
+<div style="font-size:.82rem;color:#64748b;line-height:1.55;">Broken lineage weakens traceability &amp; trust.</div>
+</div>
+</div>
+<!-- Quote -->
+<div style="background:#fff;border-left:4px solid var(--teal);border-radius:0 8px 8px 0;padding:1rem 1.25rem;">
+<p style="margin:0;font-style:italic;font-size:.95rem;color:#334155;line-height:1.65;">“Many AI initiatives fail not because of model limitations, but because of data quality and interoperability.”</p>
+</div>
+</div>
+<div class="infographic-caption"><strong>Figure 1</strong>. The consequences of fragmented pharmaceutical data. Data-prep estimate: widely cited 80/20 rule in data science (Pragmatic Institute; Anaconda).</div>
+</div>
+<div class="callout amber">
+<p><strong>The core irony:</strong> many AI initiatives fail not because of model limitations, but because of data quality and interoperability. Before AI can transform R&amp;D, organizations must first transform how data is organized and understood.</p>
+</div>
+</div>
+<!-- Section 3 + Infographic 2 -->
+<div id="role-of-ai" style="margin-bottom:4rem;">
+<div class="eyebrow">03. The Solution</div>
+<h2 style="font-size:1.9rem;font-weight:800;letter-spacing:-.03em;margin-bottom:1rem;">The Role of AI: Turning Data Into a Common Language</h2>
+<div class="prose">
+<p>Traditional harmonization relied on manual mapping, predefined rules, and extensive human effort. AI is changing that equation. Creating semantic connections across datasets, systems, and documents at a scale previously impossible.</p>
+</div>
+<div class="grid-3" style="margin:1.5rem 0 2rem;">
+<div class="card teal">
+<div style="display:flex;align-items:center;justify-content:center;width:2.2rem;height:2.2rem;border-radius:50%;background:var(--teal);color:#fff;font-size:1rem;font-weight:800;margin-bottom:.85rem;">1</div>
+<div class="mini">Ontology-Aware Intelligence</div>
+<h3>Understands concepts, not just strings</h3>
+<p>“ALT” and “Alanine Aminotransferase” can be recognized as the same concept. Divergent lab naming conventions are mapped automatically; metadata gaps are inferred and enriched.</p>
+</div>
+<div class="card amber">
+<div style="display:flex;align-items:center;justify-content:center;width:2.2rem;height:2.2rem;border-radius:50%;background:var(--amber);color:#fff;font-size:1rem;font-weight:800;margin-bottom:.85rem;">2</div>
+<div class="mini" style="color:var(--amber)">Generative AI Enrichment</div>
+<h3>Reads unstructured text</h3>
+<p>LLMs extract entities, relationships, and context from scientific reports, protocols, and lab notebooks: generating metadata and standardizing annotations at scale.</p>
+</div>
+<div class="card green">
+<div style="display:flex;align-items:center;justify-content:center;width:2.2rem;height:2.2rem;border-radius:50%;background:var(--green);color:#fff;font-size:1rem;font-weight:800;margin-bottom:.85rem;">3</div>
+<div class="mini" style="color:var(--green)">Intelligent Data Mapping</div>
+<h3>Mappings in hours, not months</h3>
+<p>AI surfaces relationships between datasets that were never explicitly linked. What once took months can increasingly be done in days, or hours.</p>
+</div>
+</div>
+<!-- Infographic 2: Common Language -->
+<div class="infographic">
+<div style="background:#f8fafc;padding:2.5rem 2.5rem 2rem;">
+<!-- Header -->
+<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:2rem;">
+<div style="width:4px;height:2.5rem;background:var(--teal);border-radius:2px;flex-shrink:0;"></div>
+<div>
+<div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:.15rem;">The Role of AI</div>
+<div style="font-size:1.35rem;font-weight:800;color:#0f172a;letter-spacing:-.02em;">Turning Data Into a Common Language</div>
+</div>
+</div>
+<!-- 3 capability cards -->
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:2rem;">
+<div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:1.5rem 1.25rem;">
+<div style="width:2.2rem;height:2.2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;margin-bottom:1rem;">1</div>
+<div style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);margin-bottom:.5rem;">Ontology-Aware Intelligence</div>
+<div style="font-size:.93rem;font-weight:700;color:#0f172a;margin-bottom:.5rem;line-height:1.35;">Understands concepts, not just strings</div>
+<div style="font-size:.82rem;color:#64748b;line-height:1.55;">Understands that concepts are equivalent: not just that strings match.</div>
+</div>
+<div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:1.5rem 1.25rem;position:relative;">
+<!-- connector arrow left -->
+<div style="position:absolute;left:-14px;top:50%;transform:translateY(-50%);width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:14px solid #cbd5e1;"></div>
+<div style="width:2.2rem;height:2.2rem;border-radius:50%;background:#1d4e89;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;margin-bottom:1rem;">2</div>
+<div style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#1d4e89;margin-bottom:.5rem;">Generative AI Enrichment</div>
+<div style="font-size:.93rem;font-weight:700;color:#0f172a;margin-bottom:.5rem;line-height:1.35;">Unlocks unstructured text</div>
+<div style="font-size:.82rem;color:#64748b;line-height:1.55;">Extracts entities &amp; context from scientific reports and lab notebooks.</div>
+</div>
+<div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:1.5rem 1.25rem;position:relative;">
+<!-- connector arrow left -->
+<div style="position:absolute;left:-14px;top:50%;transform:translateY(-50%);width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:14px solid #cbd5e1;"></div>
+<div style="width:2.2rem;height:2.2rem;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;margin-bottom:1rem;">3</div>
+<div style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--green);margin-bottom:.5rem;">Intelligent Data Mapping</div>
+<div style="font-size:.93rem;font-weight:700;color:#0f172a;margin-bottom:.5rem;line-height:1.35;">Mappings in hours, not months</div>
+<div style="font-size:.82rem;color:#64748b;line-height:1.55;">Learns patterns and recommends harmonization strategies at scale.</div>
+</div>
+</div>
+<!-- One concept many names example -->
+<div style="background:#0f172a;border-radius:12px;padding:1.75rem 2rem;">
+<div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);text-align:center;margin-bottom:1.25rem;">One Concept, Many Local Names</div>
+<div style="display:flex;justify-content:center;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:1.25rem;">
+<span style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:.35rem .8rem;font-size:.88rem;font-weight:600;font-family:'JetBrains Mono',monospace;">ALT</span>
+<span style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:.35rem .8rem;font-size:.88rem;font-weight:600;font-family:'JetBrains Mono',monospace;">SGPT</span>
+<span style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:.35rem .8rem;font-size:.88rem;font-weight:600;font-family:'JetBrains Mono',monospace;">Alanine Aminotransferase</span>
+<span style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:.35rem .8rem;font-size:.88rem;font-weight:600;font-family:'JetBrains Mono',monospace;">ALAT</span>
+<span style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:.35rem .8rem;font-size:.88rem;font-weight:600;font-family:'JetBrains Mono',monospace;">GPT</span>
+</div>
+<div style="display:flex;justify-content:center;margin-bottom:1rem;">
+<div style="width:2px;height:24px;background:var(--teal);"></div>
+</div>
+<div style="display:flex;justify-content:center;">
+<div style="background:var(--teal);color:#fff;border-radius:8px;padding:.55rem 1.5rem;font-size:.95rem;font-weight:700;letter-spacing:.02em;">LOINC 1742-6  ·  harmonized</div>
+</div>
+</div>
+</div>
+<div class="infographic-caption"><strong>Figure 2</strong> (Three ways AI creates a shared understanding layer across the enterprise. LOINC) Logical Observation Identifiers Names and Codes, a public standard (Regenstrief Institute).</div>
+</div>
+</div>
+<!-- Section 4 -->
+<div id="key-benefits" style="margin-bottom:4rem;">
+<div class="eyebrow">04. Business Value</div>
+<h2 style="font-size:1.9rem;font-weight:800;letter-spacing:-.03em;margin-bottom:1rem;">Why Harmonization Becomes a Competitive Advantage</h2>
+<div class="prose">
+<p>Organizations often view harmonization as infrastructure. In reality, it creates measurable business value across five dimensions.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:.85rem;margin:1.5rem 0 2rem;">
+<div style="display:flex;align-items:flex-start;gap:1rem;background:var(--surface);border:1px solid var(--teal-bdr);border-radius:var(--r);padding:1.1rem 1.35rem;">
+<div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;">✓</div>
+<div><strong>Better data quality.</strong> <span style="color:var(--muted)">AI continuously identifies inconsistencies, duplicates, missing values, and semantic conflicts: a stronger foundation for analytics and machine learning.</span></div>
+</div>
+<div style="display:flex;align-items:flex-start;gap:1rem;background:var(--surface);border:1px solid var(--teal-bdr);border-radius:var(--r);padding:1.1rem 1.35rem;">
+<div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;">✓</div>
+<div><strong>Faster scientific insight.</strong> <span style="color:var(--muted)">When data is searchable and interoperable, researchers spend less time finding and more time discovering.</span></div>
+</div>
+<div style="display:flex;align-items:flex-start;gap:1rem;background:var(--surface);border:1px solid var(--teal-bdr);border-radius:var(--r);padding:1.1rem 1.35rem;">
+<div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;">✓</div>
+<div><strong>Improved AI performance.</strong> <span style="color:var(--muted)">“Garbage in, garbage out” still holds. Harmonized data improves model accuracy, reproducibility, and scalability.</span></div>
+</div>
+<div style="display:flex;align-items:flex-start;gap:1rem;background:var(--surface);border:1px solid var(--teal-bdr);border-radius:var(--r);padding:1.1rem 1.35rem;">
+<div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;">✓</div>
+<div><strong>Regulatory confidence.</strong> <span style="color:var(--muted)">The FDA’s January 2025 draft guidance introduces a risk-based credibility framework for AI supporting regulatory decisions, emphasizing data quality, transparency, and lifecycle management. Harmonized data makes those requirements far easier to demonstrate.</span></div>
+</div>
+<div style="display:flex;align-items:flex-start;gap:1rem;background:var(--surface);border:1px solid var(--teal-bdr);border-radius:var(--r);padding:1.1rem 1.35rem;">
+<div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;">✓</div>
+<div><strong>Enterprise knowledge retention.</strong> <span style="color:var(--muted)">Harmonization turns isolated data assets into organizational knowledge, reusable across therapeutic areas and future initiatives.</span></div>
+</div>
+</div>
+</div>
+<!-- Section 5 + Infographic 3 -->
+<div id="case-study" style="margin-bottom:4rem;">
+<div class="eyebrow">05. Case Study</div>
+<h2 style="font-size:1.9rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.5rem;">From 44 Local Lab Names to One Shared Standard</h2>
+<p style="color:var(--muted);font-size:.93rem;margin-bottom:1.75rem;">Built in Python · 9,280 simulated records · 3 source systems · 8 analytes · pandas + difflib + LOINC</p>
+<div class="prose">
+<p>The abstract argument becomes concrete when you build it. To demonstrate, I created a small, fully reproducible pipeline in Python (pandas + difflib) that harmonizes messy multi-site laboratory data to LOINC: the public Logical Observation Identifiers Names and Codes standard maintained by the Regenstrief Institute.</p>
+<p>The setup mirrors a real data-pooling problem. I simulated 9,280 lab results from three source systems (a legacy EHR, a CRO reporting in SI units, and a partner lab) each recording the same eight analytes under its own local names, units, and formatting. <code>"ALT"</code>, <code>"SGPT"</code>, and <code>"Alanine Aminotransferase"</code> all appear; glucose arrives in both mg/dL and mmol/L; hemoglobin in g/dL and g/L. (The data is simulated; the LOINC standard, codes, and libraries are real.)</p>
+</div>
+<div class="callout teal" style="margin:1.5rem 0;">
+<p><strong>Pipeline: four steps.</strong> Normalize each raw term → match to a concept via an ontology-style synonym dictionary → fall back to fuzzy semantic matching for near-misses → assign the canonical LOINC code and convert every value to a standard unit. Flagging anything it can’t resolve for human review, not silently guessing.</p>
+</div>
+<div class="metric-row">
+<div class="metric">
+<div class="metric-val">44→8</div>
+<div class="metric-lbl">Distinct raw term strings collapsed to 8 LOINC concepts</div>
+</div>
+<div class="metric">
+<div class="metric-val">11→5</div>
+<div class="metric-lbl">Inconsistent unit representations standardized to 5 canonical units</div>
+</div>
+<div class="metric">
+<div class="metric-val green">98%</div>
+<div class="metric-lbl">Auto-mapped to LOINC (96.3% dictionary · 1.6% fuzzy). 2% flagged for review</div>
+</div>
+<div class="metric">
+<div class="metric-val green">99.9%</div>
+<div class="metric-lbl">Mapping accuracy against known ground truth</div>
+</div>
+</div>
+<div class="callout green" style="margin:1.5rem 0 2rem;">
+<p><strong>Cross-site findability jumped from 34.8% to 99.9%.</strong> Before harmonization, a query for “ALT” surfaced only the one site that used that exact label. After, it retrieved the analyte across all three sources.</p>
+</div>
+<!-- Infographic 3: Case Study Results -->
+<div class="infographic">
+<div style="background:#f8fafc;padding:2.5rem 2.5rem 2rem;">
+<!-- Header -->
+<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;">
+<div style="width:4px;height:2.5rem;background:var(--teal);border-radius:2px;flex-shrink:0;"></div>
+<div>
+<div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:.15rem;">Case Study · Built in Python</div>
+<div style="font-size:1.35rem;font-weight:800;color:#0f172a;letter-spacing:-.02em;">Harmonizing Multi-Site Lab Data to LOINC</div>
+</div>
+</div>
+<div style="font-size:.82rem;color:#64748b;margin-bottom:1.75rem;padding-left:1.25rem;">9,280 records · 3 sources · 8 analytes · pandas + difflib + LOINC</div>
+<!-- 4 metric cards -->
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;">
+<div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1.25rem 1rem;text-align:center;">
+<div style="font-size:1.9rem;font-weight:900;color:var(--teal);letter-spacing:-.03em;line-height:1;margin-bottom:.5rem;">44 → 8</div>
+<div style="font-size:.78rem;color:#64748b;line-height:1.45;">term strings collapsed to LOINC concepts</div>
+</div>
+<div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1.25rem 1rem;text-align:center;">
+<div style="font-size:1.9rem;font-weight:900;color:var(--teal);letter-spacing:-.03em;line-height:1;margin-bottom:.5rem;">11 → 5</div>
+<div style="font-size:.78rem;color:#64748b;line-height:1.45;">inconsistent units standardized</div>
+</div>
+<div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1.25rem 1rem;text-align:center;">
+<div style="font-size:1.9rem;font-weight:900;color:#0f172a;letter-spacing:-.03em;line-height:1;margin-bottom:.5rem;">98%</div>
+<div style="font-size:.78rem;color:#64748b;line-height:1.45;">auto-mapped to LOINC (dictionary + fuzzy)</div>
+</div>
+<div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1.25rem 1rem;text-align:center;">
+<div style="font-size:1.9rem;font-weight:900;color:var(--green);letter-spacing:-.03em;line-height:1;margin-bottom:.5rem;">99.9%</div>
+<div style="font-size:.78rem;color:#64748b;line-height:1.45;">mapping accuracy vs. ground truth</div>
+</div>
+</div>
+<!-- Cross-site findability highlight -->
+<div style="background:#fff;border:2px solid var(--teal);border-radius:10px;padding:1.1rem 1.5rem;margin-bottom:1.75rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
+<div style="font-size:.9rem;font-weight:700;color:#0f172a;flex-shrink:0;">Cross-site findability</div>
+<div style="display:flex;align-items:center;gap:1rem;flex:1;flex-wrap:wrap;">
+<div style="text-align:center;">
+<div style="font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#64748b;margin-bottom:.2rem;">Before</div>
+<div style="font-size:1.75rem;font-weight:900;color:#e53e3e;letter-spacing:-.03em;">34.8%</div>
+</div>
+<div style="font-size:1.5rem;color:#94a3b8;font-weight:700;">→</div>
+<div style="text-align:center;">
+<div style="font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#64748b;margin-bottom:.2rem;">After</div>
+<div style="font-size:1.75rem;font-weight:900;color:var(--green);letter-spacing:-.03em;">99.9%</div>
+</div>
+</div>
+</div>
+<!-- Two-column: bar chart + mapping breakdown -->
+<div style="display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:start;">
+<!-- Bar chart -->
+<div>
+<div style="font-size:.82rem;font-weight:700;color:#0f172a;margin-bottom:1rem;">Findability by analyte: before vs. After</div>
+<div style="display:flex;flex-direction:column;gap:.55rem;">
+<!-- ALT --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">ALT</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:35%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
+<!-- AST --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">AST</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:38%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
+<!-- Glucose --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">Glucose</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:34%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
+<!-- Creatinine --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">Creatinine</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:33%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
+<!-- HbA1C --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">HbA1C</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:37%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
+<!-- Cholesterol --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">Cholesterol</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:34%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
+<!-- Platelets --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">Platelets</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:31%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
+<!-- Hemoglobin --><div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"><span style="font-size:.78rem;color:#475569;text-align:right;">Hemoglobin</span><div style="display:flex;flex-direction:column;gap:3px;"><div style="height:9px;border-radius:3px;background:#e53e3e;width:36%;"></div><div style="height:9px;border-radius:3px;background:var(--teal);width:100%;"></div></div></div>
+</div>
+<!-- X-axis label -->
+<div style="font-size:.7rem;color:#94a3b8;margin-top:.75rem;padding-left:88px;">% of records discoverable by a name query. 0 to 100%</div>
+<!-- Legend -->
+<div style="display:flex;gap:1.25rem;margin-top:.75rem;padding-left:88px;">
+<div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;color:#475569;"><div style="width:16px;height:9px;border-radius:3px;background:#e53e3e;"></div>Before</div>
+<div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;color:#475569;"><div style="width:16px;height:9px;border-radius:3px;background:var(--teal);"></div>After</div>
+</div>
+</div>
+<!-- Mapping method breakdown -->
+<div style="min-width:160px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1.25rem;text-align:center;">
+<div style="font-size:.75rem;font-weight:700;color:#0f172a;margin-bottom:1rem;">How records mapped</div>
+<!-- Donut representation as stacked bars -->
+<div style="width:80px;height:80px;border-radius:50%;background:conic-gradient(var(--teal) 0% 96.3%, #1d4e89 96.3% 97.9%, #e53e3e 97.9% 100%);margin:0 auto 1rem;"></div>
+<div style="font-size:1.5rem;font-weight:900;color:#0f172a;letter-spacing:-.03em;margin-bottom:.75rem;">98%</div>
+<div style="display:flex;flex-direction:column;gap:.45rem;text-align:left;">
+<div style="display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:#475569;"><div style="width:10px;height:10px;border-radius:50%;background:var(--teal);flex-shrink:0;"></div>Dictionary 96.3%</div>
+<div style="display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:#475569;"><div style="width:10px;height:10px;border-radius:50%;background:#1d4e89;flex-shrink:0;"></div>Fuzzy 1.6%</div>
+<div style="display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:#e53e3e;"><div style="width:10px;height:10px;border-radius:50%;background:#e53e3e;flex-shrink:0;"></div>Review 2.0%</div>
+</div>
+</div>
+</div>
+</div>
+<div class="infographic-caption"><strong>Figure 3</strong>. Harmonization results: term and unit consolidation, mapping coverage, and the jump in cross-site findability. Reproducible Python pipeline over a simulated 3-source pooling problem; harmonized to real LOINC codes.</div>
+</div>
+<div class="prose" style="margin-top:1.5rem;">
+<p>The takeaway matches the thesis. <strong>The value did not come primarily from a sophisticated model: the matching logic is deliberately simple.</strong> It came from harmonizing disparate sources into a unified, standards-based knowledge layer that any tool, dashboard, or model can reason over. AI was the accelerator; harmonization was the foundation.</p>
+<p>The same pattern extends directly to public resources like openFDA, ClinicalTrials.gov, and ChEMBL, where identical terminology and unit fragmentation must be resolved before analysis.</p>
+<p>Industry echo: the same principle underpins AI-powered regulatory-intelligence platforms, where organizations integrate internal quality data (deviations, CAPAs, risk assessments) with external FDA communications and guidance, then apply NLP to surface compliance trends. The reporting system is only as good as the harmonized foundation beneath it.</p>
+</div>
+</div>
+<!-- Section 6: GitHub -->
+<div id="github-project" style="margin-bottom:4rem;">
+<div class="eyebrow">06. Open Source</div>
+<h2 style="font-size:1.9rem;font-weight:800;letter-spacing:-.03em;margin-bottom:1rem;">GitHub Project: Reproducible Pipeline</h2>
+<div class="prose">
+<p>The full pipeline from this article is available as an open-source Python project. It includes the simulated dataset generator, the synonym dictionary, the fuzzy-matching fallback, LOINC code assignment, unit conversion logic, and a data-quality report. You can run it end-to-end with a single command.</p>
+</div>
+<div class="repo-banner">
+<div class="repo-banner-text">
+<strong>alishahmohammadi26 / ai-driven-harmonization-pharma</strong>
+        Reproducible Python pipeline for harmonizing messy multi-site lab data to LOINC. Simulates 9,280 records across 3 source systems (8 analytes, mixed naming conventions, mixed units) and maps them to canonical LOINC codes with 98% auto-mapping accuracy.
+        <span>pandas · difflib · LOINC · pytest · GitHub Actions CI</span>
+</div>
+<a class="btn btn-gh" href="https://github.com/alishahmohammadi26/ai-driven-harmonization-pharma" rel="noopener" style="flex-shrink:0;" target="_blank">
+<svg fill="currentColor" height="16" viewbox="0 0 24 24" width="16"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg>
         View on GitHub
       </a>
-    </div>
-
-    <div class="code-block" style="margin-top:1.5rem;">
-      <div class="code-header">
-        <div class="code-dots">
-          <div class="code-dot dot-r"></div>
-          <div class="code-dot dot-y"></div>
-          <div class="code-dot dot-g"></div>
-        </div>
-        <span class="code-title">harmonize.py &mdash; four-step pipeline (simplified)</span>
-      </div>
-      <pre>
+</div>
+<div class="code-block" style="margin-top:1.5rem;">
+<div class="code-header">
+<div class="code-dots">
+<div class="code-dot dot-r"></div>
+<div class="code-dot dot-y"></div>
+<div class="code-dot dot-g"></div>
+</div>
+<span class="code-title">harmonize.py: four-step pipeline (simplified)</span>
+</div>
+<pre>
 <span style="color:#6b6b68;font-style:italic"># Step 1: Normalize raw term strings</span>
 normalized = df[<span style="color:#16a34a">"raw_term"</span>].str.strip().str.lower()
 
@@ -1137,141 +1110,135 @@ df.loc[unmapped.index, <span style="color:#16a34a">"loinc_code"</span>] = unmapp
 df[<span style="color:#16a34a">"std_value"</span>] = df.apply(convert_units, axis=<span style="color:#d97706">1</span>)
 df[<span style="color:#16a34a">"needs_review"</span>] = df[<span style="color:#16a34a">"loinc_code"</span>].isna()
       </pre>
+</div>
+<div class="tag-row">
+<span class="tag teal">Python</span>
+<span class="tag teal">pandas</span>
+<span class="tag teal">difflib</span>
+<span class="tag green">LOINC</span>
+<span class="tag green">FAIR Data</span>
+<span class="tag amber">Pharma R&amp;D</span>
+<span class="tag amber">Data Harmonization</span>
+<span class="tag">pytest</span>
+<span class="tag">GitHub Actions</span>
+</div>
+</div>
+<!-- Section 7 + Infographic 4 -->
+<div id="looking-ahead" style="margin-bottom:4rem;">
+<div class="eyebrow">07. Strategic Horizon</div>
+<h2 style="font-size:1.9rem;font-weight:800;letter-spacing:-.03em;margin-bottom:1rem;">Harmonization as Strategic Infrastructure</h2>
+<div class="prose">
+<p>Many organizations still view generative AI through the lens of productivity. Document generation, summarization, and copilots are valuable, but they are only the first phase. The larger opportunity is establishing AI as foundational infrastructure. Just as cloud computing became an enterprise capability rather than a standalone project, AI will become embedded in every scientific, operational, and regulatory process.</p>
+<p>The scale of the prize is significant: the McKinsey Global Institute estimates generative AI could create <strong>$60–110 billion in annual value</strong> for the pharma and medical-products industries. But AI cannot become foundational without harmonized data. Organizations that invest today in semantic data layers, ontology-driven architectures, and AI-enabled harmonization will be positioned to move faster tomorrow. Those that do not may find themselves with increasingly powerful models, but increasingly fragmented information.</p>
+</div>
+<!-- Infographic 4: The Payoff -->
+<div class="infographic">
+<div style="background:#f8fafc;padding:2.5rem 2.5rem 2rem;">
+<!-- Header -->
+<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:2rem;">
+<div style="width:4px;height:2.5rem;background:var(--teal);border-radius:2px;flex-shrink:0;"></div>
+<div>
+<div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:.15rem;">The Payoff</div>
+<div style="font-size:1.35rem;font-weight:800;color:#0f172a;letter-spacing:-.02em;">Harmonization as Strategic Infrastructure</div>
+</div>
+</div>
+<!-- 5 benefits -->
+<div style="display:flex;flex-direction:column;gap:.75rem;margin-bottom:2rem;">
+<div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;">
+<div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;font-weight:700;">✓</div>
+<div><strong style="color:#0f172a;">Better data quality</strong> <span style="color:#64748b;font-size:.88rem;">. Inconsistencies, duplicates &amp; semantic conflicts caught continuously.</span></div>
+</div>
+<div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;">
+<div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;font-weight:700;">✓</div>
+<div><strong style="color:#0f172a;">Faster insight</strong> <span style="color:#64748b;font-size:.88rem;">. Less time finding data, more time generating knowledge.</span></div>
+</div>
+<div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;">
+<div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;font-weight:700;">✓</div>
+<div><strong style="color:#0f172a;">Stronger AI</strong> <span style="color:#64748b;font-size:.88rem;">. Consistent, structured inputs lift model accuracy &amp; reproducibility.</span></div>
+</div>
+<div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;">
+<div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;font-weight:700;">✓</div>
+<div><strong style="color:#0f172a;">Regulatory confidence</strong> <span style="color:#64748b;font-size:.88rem;">. Clean lineage supports credibility &amp; traceability under FDA guidance.</span></div>
+</div>
+<div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;">
+<div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;font-weight:700;">✓</div>
+<div><strong style="color:#0f172a;">Knowledge retention</strong> <span style="color:#64748b;font-size:.88rem;">. Data becomes reusable organizational knowledge across therapeutic areas.</span></div>
+</div>
+</div>
+<!-- Prize + Bar two-column -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
+<div style="background:#0f172a;border-radius:12px;padding:1.75rem 2rem;">
+<div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:1rem;">The Prize</div>
+<div style="font-size:2.75rem;font-weight:900;color:#fff;letter-spacing:-.04em;line-height:1;margin-bottom:.75rem;">$60–110B</div>
+<div style="font-size:.88rem;color:rgba(255,255,255,.65);line-height:1.55;margin-bottom:.65rem;">potential annual gen-AI value for pharma &amp; medical products</div>
+<div style="font-size:.78rem;color:rgba(255,255,255,.35);font-style:italic;">. McKinsey Global Institute</div>
+</div>
+<div style="background:var(--teal);border-radius:12px;padding:1.75rem 2rem;">
+<div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:1rem;">The Bar</div>
+<div style="font-size:2.75rem;font-weight:900;color:#fff;letter-spacing:-.04em;line-height:1;margin-bottom:.75rem;">Credibility</div>
+<div style="font-size:.88rem;color:rgba(255,255,255,.85);line-height:1.55;margin-bottom:.65rem;">FDA’s 2025 draft guidance sets a risk-based framework for AI in regulatory decisions</div>
+<div style="font-size:.78rem;color:rgba(255,255,255,.55);font-style:italic;">. FDA-2024-D-4689</div>
+</div>
+</div>
+</div>
+<div class="infographic-caption"><strong>Figure 4</strong>. Five benefits, the value at stake, and the rising regulatory bar. McKinsey Global Institute (2024); FDA draft guidance on AI in regulatory decision-making (Jan 2025).</div>
+</div>
+</div>
+<!-- Section 8: Conclusion -->
+<div id="conclusion" style="margin-bottom:4rem;">
+<div class="eyebrow">08. Conclusion</div>
+<h2 style="font-size:1.9rem;font-weight:800;letter-spacing:-.03em;margin-bottom:1rem;">The Future Belongs to Harmonized Intelligence</h2>
+<div class="prose">
+<p>Pharma’s next wave of innovation will not be defined solely by advances in algorithms. It will be defined by the ability to create a connected ecosystem of data, knowledge, and decisions. AI can extract meaning from unstructured information; generative models can enrich metadata at scale; ontologies can establish a common scientific language; and regulatory frameworks are evolving to emphasize credibility, transparency, and data quality.</p>
+<p>Together, these mark a shift from data management to knowledge management. In that future, data harmonization will no longer be a back-office activity. It will be recognized as one of the most important strategic capabilities enabling AI-driven pharmaceutical innovation.</p>
+</div>
+<div class="quote">
+      “AI was the accelerator. Harmonization was the foundation.”
     </div>
-
-    <div class="tag-row">
-      <span class="tag teal">Python</span>
-      <span class="tag teal">pandas</span>
-      <span class="tag teal">difflib</span>
-      <span class="tag green">LOINC</span>
-      <span class="tag green">FAIR Data</span>
-      <span class="tag amber">Pharma R&amp;D</span>
-      <span class="tag amber">Data Harmonization</span>
-      <span class="tag">pytest</span>
-      <span class="tag">GitHub Actions</span>
-    </div>
-  </div>
-
-  <!-- Section 7 + Infographic 4 -->
-  <div id="looking-ahead" style="margin-bottom:4rem;">
-    <div class="eyebrow">07 &mdash; Strategic Horizon</div>
-    <h2 style="font-size:1.9rem;font-weight:800;letter-spacing:-.03em;margin-bottom:1rem;">Harmonization as Strategic Infrastructure</h2>
-    <div class="prose">
-      <p>Many organizations still view generative AI through the lens of productivity. Document generation, summarization, and copilots are valuable &mdash; but they are only the first phase. The larger opportunity is establishing AI as foundational infrastructure. Just as cloud computing became an enterprise capability rather than a standalone project, AI will become embedded in every scientific, operational, and regulatory process.</p>
-      <p>The scale of the prize is significant: the McKinsey Global Institute estimates generative AI could create <strong>$60&ndash;110 billion in annual value</strong> for the pharma and medical-products industries. But AI cannot become foundational without harmonized data. Organizations that invest today in semantic data layers, ontology-driven architectures, and AI-enabled harmonization will be positioned to move faster tomorrow. Those that do not may find themselves with increasingly powerful models &mdash; but increasingly fragmented information.</p>
-    </div>
-
-    <!-- Infographic 4: The Payoff -->
-    <div class="infographic">
-      <div style="background:#f8fafc;padding:2.5rem 2.5rem 2rem;">
-
-        <!-- Header -->
-        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:2rem;">
-          <div style="width:4px;height:2.5rem;background:var(--teal);border-radius:2px;flex-shrink:0;"></div>
-          <div>
-            <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:.15rem;">The Payoff</div>
-            <div style="font-size:1.35rem;font-weight:800;color:#0f172a;letter-spacing:-.02em;">Harmonization as Strategic Infrastructure</div>
-          </div>
-        </div>
-
-        <!-- 5 benefits -->
-        <div style="display:flex;flex-direction:column;gap:.75rem;margin-bottom:2rem;">
-          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;">
-            <div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;font-weight:700;">&#10003;</div>
-            <div><strong style="color:#0f172a;">Better data quality</strong> <span style="color:#64748b;font-size:.88rem;">&mdash; Inconsistencies, duplicates &amp; semantic conflicts caught continuously.</span></div>
-          </div>
-          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;">
-            <div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;font-weight:700;">&#10003;</div>
-            <div><strong style="color:#0f172a;">Faster insight</strong> <span style="color:#64748b;font-size:.88rem;">&mdash; Less time finding data, more time generating knowledge.</span></div>
-          </div>
-          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;">
-            <div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;font-weight:700;">&#10003;</div>
-            <div><strong style="color:#0f172a;">Stronger AI</strong> <span style="color:#64748b;font-size:.88rem;">&mdash; Consistent, structured inputs lift model accuracy &amp; reproducibility.</span></div>
-          </div>
-          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;">
-            <div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;font-weight:700;">&#10003;</div>
-            <div><strong style="color:#0f172a;">Regulatory confidence</strong> <span style="color:#64748b;font-size:.88rem;">&mdash; Clean lineage supports credibility &amp; traceability under FDA guidance.</span></div>
-          </div>
-          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;">
-            <div style="width:2rem;height:2rem;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;font-weight:700;">&#10003;</div>
-            <div><strong style="color:#0f172a;">Knowledge retention</strong> <span style="color:#64748b;font-size:.88rem;">&mdash; Data becomes reusable organizational knowledge across therapeutic areas.</span></div>
-          </div>
-        </div>
-
-        <!-- Prize + Bar two-column -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
-          <div style="background:#0f172a;border-radius:12px;padding:1.75rem 2rem;">
-            <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:1rem;">The Prize</div>
-            <div style="font-size:2.75rem;font-weight:900;color:#fff;letter-spacing:-.04em;line-height:1;margin-bottom:.75rem;">$60&ndash;110B</div>
-            <div style="font-size:.88rem;color:rgba(255,255,255,.65);line-height:1.55;margin-bottom:.65rem;">potential annual gen-AI value for pharma &amp; medical products</div>
-            <div style="font-size:.78rem;color:rgba(255,255,255,.35);font-style:italic;">&mdash; McKinsey Global Institute</div>
-          </div>
-          <div style="background:var(--teal);border-radius:12px;padding:1.75rem 2rem;">
-            <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:1rem;">The Bar</div>
-            <div style="font-size:2.75rem;font-weight:900;color:#fff;letter-spacing:-.04em;line-height:1;margin-bottom:.75rem;">Credibility</div>
-            <div style="font-size:.88rem;color:rgba(255,255,255,.85);line-height:1.55;margin-bottom:.65rem;">FDA&rsquo;s 2025 draft guidance sets a risk-based framework for AI in regulatory decisions</div>
-            <div style="font-size:.78rem;color:rgba(255,255,255,.55);font-style:italic;">&mdash; FDA-2024-D-4689</div>
-          </div>
-        </div>
-
-      </div>
-      <div class="infographic-caption"><strong>Figure 4</strong> &mdash; Five benefits, the value at stake, and the rising regulatory bar. McKinsey Global Institute (2024); FDA draft guidance on AI in regulatory decision-making (Jan 2025).</div>
-    </div>
-  </div>
-
-  <!-- Section 8: Conclusion -->
-  <div id="conclusion" style="margin-bottom:4rem;">
-    <div class="eyebrow">08 &mdash; Conclusion</div>
-    <h2 style="font-size:1.9rem;font-weight:800;letter-spacing:-.03em;margin-bottom:1rem;">The Future Belongs to Harmonized Intelligence</h2>
-    <div class="prose">
-      <p>Pharma&rsquo;s next wave of innovation will not be defined solely by advances in algorithms. It will be defined by the ability to create a connected ecosystem of data, knowledge, and decisions. AI can extract meaning from unstructured information; generative models can enrich metadata at scale; ontologies can establish a common scientific language; and regulatory frameworks are evolving to emphasize credibility, transparency, and data quality.</p>
-      <p>Together, these mark a shift from data management to knowledge management. In that future, data harmonization will no longer be a back-office activity &mdash; it will be recognized as one of the most important strategic capabilities enabling AI-driven pharmaceutical innovation.</p>
-    </div>
-
-    <div class="quote">
-      &ldquo;AI was the accelerator. Harmonization was the foundation.&rdquo;
-    </div>
-
-    <div class="callout teal" style="margin-top:2rem;">
-      <p><strong>Want to explore the code?</strong> The full Python pipeline &mdash; including dataset generation, the LOINC synonym map, fuzzy matching, unit conversion, and a data-quality report &mdash; is available open-source at <a href="https://github.com/alishahmohammadi26/ai-driven-harmonization-pharma" target="_blank" rel="noopener">github.com/alishahmohammadi26/ai-driven-harmonization-pharma</a>.</p>
-    </div>
-  </div>
-
-  <!-- References -->
-  <div class="section-alt" style="margin:0 -2rem;padding:3rem 2rem;" id="references">
-    <div style="max-width:980px;">
-      <h2 style="font-size:1.1rem;font-weight:700;margin-bottom:1.75rem;letter-spacing:-.01em;">References</h2>
-      <ul class="refs-list">
-        <li><span class="ref-num">1</span><span>Wilkinson, M. D., et al. (2016). The FAIR Guiding Principles for scientific data management and stewardship. <em>Scientific Data</em>, 3, 160018.</span></li>
-        <li><span class="ref-num">2</span><span>Novo Nordisk. Digital evolution: Novo Nordisk&rsquo;s shift to ontology-based data management. novonordisk.com</span></li>
-        <li><span class="ref-num">3</span><span>U.S. Food &amp; Drug Administration (Jan 2025). Considerations for the Use of Artificial Intelligence to Support Regulatory Decision-Making for Drug and Biological Products. Draft Guidance; Docket FDA-2024-D-4689.</span></li>
-        <li><span class="ref-num">4</span><span>McKinsey Global Institute (2024). Generative AI in the pharmaceutical industry: Moving from hype to reality.</span></li>
-        <li><span class="ref-num">5</span><span>Regenstrief Institute. LOINC &mdash; Logical Observation Identifiers Names and Codes. <a href="https://loinc.org" target="_blank" rel="noopener">loinc.org</a></span></li>
-        <li><span class="ref-num">6</span><span>Pistoia Alliance. FAIR implementation resources for life sciences. <a href="https://www.pistoiaalliance.org" target="_blank" rel="noopener">pistoiaalliance.org</a></span></li>
-        <li><span class="ref-num">7</span><span>Data-preparation estimate (&ldquo;80/20 rule&rdquo;): Pragmatic Institute; Anaconda, State of Data Science.</span></li>
-      </ul>
-    </div>
-  </div>
-
+<div class="callout teal" style="margin-top:2rem;">
+<p><strong>Want to explore the code?</strong> The full Python pipeline: including dataset generation, the LOINC synonym map, fuzzy matching, unit conversion, and a data-quality report: is available open-source at <a href="https://github.com/alishahmohammadi26/ai-driven-harmonization-pharma" rel="noopener" target="_blank">github.com/alishahmohammadi26/ai-driven-harmonization-pharma</a>.</p>
+</div>
+</div>
+<!-- References -->
+<div class="section-alt" id="references" style="margin:0 -2rem;padding:3rem 2rem;">
+<div style="max-width:980px;">
+<h2 style="font-size:1.1rem;font-weight:700;margin-bottom:1.75rem;letter-spacing:-.01em;">References</h2>
+<ul class="refs-list">
+<li><span class="ref-num">1</span><span>Wilkinson, M. D., et al. (2016). The FAIR Guiding Principles for scientific data management and stewardship. <em>Scientific Data</em>, 3, 160018.</span></li>
+<li><span class="ref-num">2</span><span>Novo Nordisk. Digital evolution: Novo Nordisk’s shift to ontology-based data management. novonordisk.com</span></li>
+<li><span class="ref-num">3</span><span>U.S. Food &amp; Drug Administration (Jan 2025). Considerations for the Use of Artificial Intelligence to Support Regulatory Decision-Making for Drug and Biological Products. Draft Guidance; Docket FDA-2024-D-4689.</span></li>
+<li><span class="ref-num">4</span><span>McKinsey Global Institute (2024). Generative AI in the pharmaceutical industry: Moving from hype to reality.</span></li>
+<li><span class="ref-num">5</span><span>Regenstrief Institute. LOINC: Logical Observation Identifiers Names and Codes. <a href="https://loinc.org" rel="noopener" target="_blank">loinc.org</a></span></li>
+<li><span class="ref-num">6</span><span>Pistoia Alliance. FAIR implementation resources for life sciences. <a href="https://www.pistoiaalliance.org" rel="noopener" target="_blank">pistoiaalliance.org</a></span></li>
+<li><span class="ref-num">7</span><span>Data-preparation estimate (“80/20 rule”): Pragmatic Institute; Anaconda, State of Data Science.</span></li>
+</ul>
+</div>
+</div>
 </div><!-- /container -->
-
 <!-- ── Footer ── -->
+<div class="related-reading reveal">
+<p class="rr-label">Related reading</p>
+<div class="rr-grid">
+<a class="rr-card" href="fair-data-principles.html"><span class="rr-title">FAIR Data Principles: A Practical Guide</span><span class="rr-go">Read article &#8594;</span></a>
+<a class="rr-card" href="90-day-pharma-catalog-maturity.html"><span class="rr-title">A 90-Day Maturity Assessment for Pharmaceutical R&amp;D Data Catalogs</span><span class="rr-go">Read article &#8594;</span></a>
+</div>
+</div>
 <footer class="site-footer">
-  <div class="foot-lead">
-    <p class="foot-name">Ali Shahmohammadi, Ph.D.</p>
-    <p class="foot-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p>
-  </div>
-  <nav class="foot-nav" aria-label="Footer">
-    <a href="../index.html#writing">Writing</a>
-    <a href="../index.html#career">Career</a>
-    <a href="../resume.html">Resume</a>
-    <a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
-    <a href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
-  </nav>
-  <div class="foot-base">
-    <span>&copy; 2026 Ali Shahmohammadi, Ph.D.</span>
-    <a class="to-top" href="#top">Back to top &uarr;</a>
-  </div>
+<div class="foot-lead">
+<p class="foot-name">Ali Shahmohammadi, Ph.D.</p>
+<p class="foot-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p>
+</div>
+<nav aria-label="Footer" class="foot-nav">
+<a href="../index.html#writing">Writing</a>
+<a href="../index.html#career">Career</a>
+<a href="../resume.html">Resume</a>
+<a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
+<a href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
+</nav>
+<div class="foot-base">
+<span>© 2026 Ali Shahmohammadi, Ph.D.</span>
+<a class="to-top" href="#top">Back to top ↑</a>
+</div>
 </footer>
 <script>
 (function(){
@@ -1293,4 +1260,12 @@ df[<span style="color:#16a34a">"needs_review"</span>] = df[<span style="color:#1
 })();
 </script>
 </body>
+<script>
+(function(){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}
+  });},{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
 </html>

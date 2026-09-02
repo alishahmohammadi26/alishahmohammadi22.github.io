@@ -1,30 +1,27 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html data-theme="light" lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ali Shahmohammadi, Ph.D. — Applied AI Engineering &amp; Scientific Data</title>
-<meta name="description" content="I build MCP servers, agentic pipelines, and evaluation harnesses that make scientific data trustworthy for AI — with a decade in pharmaceutical R&D and physics-informed machine learning.">
-<link rel="canonical" href="https://alishahmohammadi.com/">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Ali Shahmohammadi, Ph.D. — Applied AI Engineering & Scientific Data">
-<meta property="og:description" content="MCP servers, agentic pipelines, and evaluation harnesses that make scientific data trustworthy for AI.">
-<meta property="og:url" content="https://alishahmohammadi.com/">
-<meta property="og:image" content="https://alishahmohammadi.com/assets/images/og-preview.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ali Shahmohammadi, Ph.D. Applied AI Engineering &amp; Scientific Data</title>
+<meta content="I build MCP servers, agentic pipelines, and evaluation harnesses that make scientific data trustworthy for AI — with a decade in pharmaceutical R&amp;D and physics-informed machine learning." name="description"/>
+<link href="https://alishahmohammadi.com/" rel="canonical"/>
+<meta content="website" property="og:type"/>
+<meta content="Ali Shahmohammadi, Ph.D. — Applied AI Engineering &amp; Scientific Data" property="og:title"/>
+<meta content="MCP servers, agentic pipelines, and evaluation harnesses that make scientific data trustworthy for AI." property="og:description"/>
+<meta content="https://alishahmohammadi.com/" property="og:url"/>
+<meta content="https://alishahmohammadi.com/assets/images/og-preview.png" property="og:image"/>
+<meta content="1200" property="og:image:width"/>
+<meta content="630" property="og:image:height"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <script>
   (function(){var t=localStorage.getItem('theme');
    if(!t)t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
    document.documentElement.dataset.theme=t;})();
 </script>
-
 <style>
 /* ===== theme.css tokens (shared with articles & index) ===== */
 :root{
@@ -132,6 +129,11 @@ img{max-width:100%;height:auto}
 .pyr-in{animation:pyr-fade .9s ease-out both}
 @keyframes pyr-fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @media (prefers-reduced-motion:reduce){.pyr-in{opacity:1;animation:none}}
+
+/* Scroll-reveal (entrance animation as sections come into view) */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
 .hero-legend{display:flex;gap:var(--sp-4);flex-wrap:wrap;font-family:var(--font-mono);font-size:var(--text-xs);margin-top:var(--sp-3)}
 .hero-legend span{display:inline-flex;align-items:center;gap:6px;color:var(--ink-2)}
 .hero-legend i{width:16px;border-top-width:2px;border-top-style:solid;display:inline-block}
@@ -171,7 +173,7 @@ img{max-width:100%;height:auto}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:var(--sp-5)}
 .card{position:relative;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);
   border-radius:var(--r-lg);padding:var(--sp-5);transition:border-color .2s,box-shadow .2s,transform .2s}
-.card:hover{border-color:var(--accent);box-shadow:var(--shadow-2)}
+.card:hover{border-color:var(--accent);box-shadow:var(--shadow-2);transform:translateY(-2px)}
 .card.coming{border-style:dashed}
 .card-top{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3);margin-bottom:var(--sp-3)}
 .cat{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
@@ -232,360 +234,298 @@ img{max-width:100%;height:auto}
 .to-top{color:var(--muted)}.to-top:hover{color:var(--accent)}
 </style>
 </head>
-
 <body id="top">
-
 <!-- ===== HEADER ===== -->
 <header class="site-header" data-elevate="false">
-  <a class="brand" href="index.html">Ali Shahmohammadi <span class="deg">Ph.D.</span></a>
-  <nav class="site-nav" aria-label="Primary">
-    <a href="#focus">Focus</a>
-    <a href="#writing" class="keep">Writing</a>
-    <a href="#career">Career</a>
-    <a href="#contact">Contact</a>
-    <a href="resume.html">Resume</a>
-  </nav>
-  <button class="theme-toggle" id="themeBtn" type="button" aria-label="Toggle dark mode"><b></b></button>
+<a class="brand" href="index.html">Ali Shahmohammadi <span class="deg">Ph.D.</span></a>
+<nav aria-label="Primary" class="site-nav">
+<a href="#focus">Focus</a>
+<a class="keep" href="#writing">Writing</a>
+<a href="#career">Career</a>
+<a href="#contact">Contact</a>
+<a href="resume.html">Resume</a>
+</nav>
+<button aria-label="Toggle dark mode" class="theme-toggle" id="themeBtn" type="button"><b></b></button>
 </header>
-
 <!-- ===== HERO ===== -->
 <section class="hero">
-  <div class="wrap hero-inner">
-    <div class="hero-text">
-      <span class="hero-eyebrow"><span class="pulse"></span>Applied AI Engineering · Scientific Data</span>
-      <h1>I make scientific data <span class="hl">trustworthy</span> for AI.</h1>
-      <p class="hero-sub">Agentic AI that designs experiments, physics-informed models that learn from them, and FAIR data foundations that make it all reliable — from a decade in pharmaceutical R&amp;D.</p>
-      <div class="hero-cta">
-        <a class="btn btn-primary" href="#writing">Read the writing →</a>
-        <a class="btn btn-ghost" href="resume.html">View résumé</a>
-      </div>
-    </div>
-
-    <figure class="hero-visual" aria-label="AI Ecosystem Pyramid: Data Foundations at base, Physics-Informed ML, Design of Experiments, and Agentic AI Systems interconnected in a feedback cycle.">
-      <svg class="pyr-in" viewBox="0 0 480 315" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <clipPath id="cp-pinn"><rect x="24" y="62" width="106" height="185" rx="9"/></clipPath>
-          <clipPath id="cp-doe"><rect x="180" y="50" width="120" height="197" rx="9"/></clipPath>
-          <clipPath id="cp-agnt"><rect x="350" y="62" width="106" height="185" rx="9"/></clipPath>
-          <marker id="marr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
-            <path d="M0,1 L9,5 L0,9Z" fill="var(--accent)"/>
-          </marker>
-          <marker id="marrn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
-            <path d="M0,1 L9,5 L0,9Z" fill="var(--plot-navy)"/>
-          </marker>
-        </defs>
-
-        <!-- Pyramid slope lines (decorative) -->
-        <line x1="24" y1="62" x2="6" y2="257" stroke="var(--line)" stroke-width="1" stroke-dasharray="5 4"/>
-        <line x1="456" y1="62" x2="474" y2="257" stroke="var(--line)" stroke-width="1" stroke-dasharray="5 4"/>
-
-        <!-- Long arc: ML feedback → Agentic -->
-        <path d="M77,62 Q240,5 403,62" fill="none" stroke="var(--accent)" stroke-width="1.6"
-              stroke-dasharray="5 3" marker-end="url(#marr)"/>
-        <text x="240" y="12" text-anchor="middle" font-family="var(--font-mono)" font-size="7"
-              fill="var(--accent)" letter-spacing=".07em">ML FEEDBACK → AGENTIC</text>
-
-        <!-- Short arrow: Agent → DoE (right gap, y=100) -->
-        <line x1="349" y1="100" x2="302" y2="100" stroke="var(--accent)" stroke-width="1.6"
-              marker-end="url(#marr)"/>
-        <text x="325" y="93" text-anchor="middle" font-family="var(--font-mono)" font-size="6.5"
-              fill="var(--accent)" letter-spacing=".05em">designs exp.</text>
-
-        <!-- Short arrow: DoE → PINN (left gap, y=100) -->
-        <line x1="178" y1="100" x2="131" y2="100" stroke="var(--plot-navy)" stroke-width="1.6"
-              marker-end="url(#marrn)"/>
-        <text x="155" y="93" text-anchor="middle" font-family="var(--font-mono)" font-size="6.5"
-              fill="var(--plot-navy)" letter-spacing=".05em">informs ML</text>
-
-        <!-- ══ PHYSICS-INFORMED ML ══ -->
-        <rect x="24" y="62" width="106" height="185" rx="9"
-              fill="var(--surface)" stroke="var(--line-strong)" stroke-width="1.5"/>
-        <!-- Header band — title only, no icon -->
-        <rect x="24" y="62" width="106" height="36" clip-path="url(#cp-pinn)" fill="var(--accent-wash)"/>
-        <text x="77" y="85" text-anchor="middle" font-family="var(--font-body)" font-size="9"
-              font-weight="700" fill="var(--navy)">Physics-Informed ML</text>
-        <!-- Wave icon below header -->
-        <path d="M47,114 C50,108 53,120 56,114 C59,108 62,120 65,114 C68,108 71,120 74,114
-                 C77,108 80,120 83,114 C86,108 89,120 92,114 C95,108 98,120 101,114 C104,108 107,120 110,114"
-              fill="none" stroke="var(--plot-navy)" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>
-        <text x="77" y="138" text-anchor="middle" font-family="var(--font-body)" font-size="8.5"
-              fill="var(--muted)">PINNs · Neural ODEs</text>
-        <text x="77" y="153" text-anchor="middle" font-family="var(--font-body)" font-size="8.5"
-              fill="var(--muted)">Neural Operators</text>
-        <text x="77" y="168" text-anchor="middle" font-family="var(--font-mono)" font-size="8"
-              fill="var(--muted)">DeepONet · FNO</text>
-        <text x="77" y="205" text-anchor="middle" font-family="var(--font-mono)" font-size="22"
-              fill="var(--plot-navy)" opacity="0.07" font-weight="700">∇²u=f</text>
-        <rect x="34" y="229" width="86" height="13" rx="6"
-              fill="var(--accent-wash)" stroke="var(--line-strong)" stroke-width="1"/>
-        <text x="77" y="239" text-anchor="middle" font-family="var(--font-mono)" font-size="7"
-              fill="var(--accent)">Physics Priors</text>
-
-        <!-- ══ DESIGN OF EXPERIMENTS (center, featured) ══ -->
-        <rect x="180" y="50" width="120" height="197" rx="9"
-              fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
-        <!-- Header band — title only -->
-        <rect x="180" y="50" width="120" height="38" clip-path="url(#cp-doe)"
-              fill="var(--accent)" fill-opacity="0.13"/>
-        <text x="240" y="74" text-anchor="middle" font-family="var(--font-body)" font-size="9"
-              font-weight="700" fill="var(--accent)">Design of Experiments</text>
-        <!-- Flask icon below header -->
-        <g transform="translate(228,96)">
-          <path d="M9,0 L9,10 L1,23 L23,23 L15,10 L15,0"
-                fill="var(--accent)" fill-opacity="0.15"
-                stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-          <line x1="5" y1="0" x2="19" y2="0" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round"/>
-          <circle cx="7" cy="18" r="2"   fill="var(--accent)" fill-opacity="0.8"/>
-          <circle cx="14" cy="20" r="1.6" fill="var(--accent)" fill-opacity="0.6"/>
-          <circle cx="11" cy="15" r="1.3" fill="var(--accent)" fill-opacity="0.7"/>
-        </g>
-        <text x="240" y="136" text-anchor="middle" font-family="var(--font-body)" font-size="8.5"
-              fill="var(--muted)">Sequential DoE</text>
-        <text x="240" y="151" text-anchor="middle" font-family="var(--font-body)" font-size="8.5"
-              fill="var(--muted)">Bayesian Opt.</text>
-        <text x="240" y="166" text-anchor="middle" font-family="var(--font-body)" font-size="8.5"
-              fill="var(--muted)">Active Learning</text>
-        <g fill="var(--accent)" opacity="0.18">
-          <circle cx="198" cy="182" r="2.5"/><circle cx="212" cy="182" r="2.5"/>
-          <circle cx="226" cy="182" r="2.5"/><circle cx="240" cy="182" r="2.5"/>
-          <circle cx="254" cy="182" r="2.5"/><circle cx="268" cy="182" r="2.5"/><circle cx="282" cy="182" r="2.5"/>
-          <circle cx="198" cy="194" r="2.5"/><circle cx="212" cy="194" r="4" opacity=".38"/>
-          <circle cx="226" cy="194" r="2.5"/><circle cx="240" cy="194" r="4" opacity=".38"/>
-          <circle cx="254" cy="194" r="2.5"/><circle cx="268" cy="194" r="2.5"/><circle cx="282" cy="194" r="2.5"/>
-        </g>
-        <rect x="190" y="229" width="100" height="13" rx="6"
-              fill="var(--accent-wash)" stroke="var(--accent)" stroke-width="1"/>
-        <text x="240" y="239" text-anchor="middle" font-family="var(--font-mono)" font-size="7"
-              fill="var(--accent)">Efficient Exploration</text>
-
-        <!-- ══ AGENTIC AI SYSTEMS ══ -->
-        <rect x="350" y="62" width="106" height="185" rx="9"
-              fill="var(--surface)" stroke="var(--line-strong)" stroke-width="1.5"/>
-        <!-- Header band — title only -->
-        <rect x="350" y="62" width="106" height="36" clip-path="url(#cp-agnt)" fill="var(--accent-wash)"/>
-        <text x="403" y="85" text-anchor="middle" font-family="var(--font-body)" font-size="9"
-              font-weight="700" fill="var(--navy)">Agentic AI Systems</text>
-        <!-- Network icon below header -->
-        <g transform="translate(378,104)">
-          <circle cx="25" cy="6"  r="5"   fill="none" stroke="var(--plot-navy)" stroke-width="1.6"/>
-          <circle cx="8"  cy="24" r="3.5" fill="none" stroke="var(--plot-navy)" stroke-width="1.3"/>
-          <circle cx="42" cy="24" r="3.5" fill="none" stroke="var(--plot-navy)" stroke-width="1.3"/>
-          <circle cx="25" cy="30" r="3"   fill="none" stroke="var(--plot-navy)" stroke-width="1.3"/>
-          <line x1="21" y1="11" x2="11" y2="20.5" stroke="var(--plot-navy)" stroke-width="1.2"/>
-          <line x1="29" y1="11" x2="39" y2="20.5" stroke="var(--plot-navy)" stroke-width="1.2"/>
-          <line x1="25" y1="11" x2="25" y2="27"   stroke="var(--plot-navy)" stroke-width="1.2"/>
-        </g>
-        <text x="403" y="152" text-anchor="middle" font-family="var(--font-body)" font-size="8.5"
-              fill="var(--muted)">Multi-Agent Pipeline</text>
-        <text x="403" y="167" text-anchor="middle" font-family="var(--font-body)" font-size="8.5"
-              fill="var(--muted)">Human Oversight</text>
-        <text x="403" y="182" text-anchor="middle" font-family="var(--font-mono)" font-size="8"
-              fill="var(--muted)">Orchestration · Eval</text>
-        <circle cx="403" cy="208" r="20" fill="none" stroke="var(--plot-navy)" stroke-width="1" opacity="0.06"/>
-        <circle cx="403" cy="208" r="12" fill="none" stroke="var(--plot-navy)" stroke-width="1" opacity="0.09"/>
-        <circle cx="403" cy="208" r="5"  fill="var(--plot-navy)" opacity="0.08"/>
-        <rect x="360" y="229" width="86" height="13" rx="6"
-              fill="var(--accent-wash)" stroke="var(--line-strong)" stroke-width="1"/>
-        <text x="403" y="239" text-anchor="middle" font-family="var(--font-mono)" font-size="7"
-              fill="var(--accent)">Autonomous · Audit</text>
-
-        <!-- Dashed connectors: foundation → tier 2 -->
-        <line x1="77"  y1="247" x2="77"  y2="257" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="3 2" opacity="0.4"/>
-        <line x1="240" y1="247" x2="240" y2="257" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="3 2" opacity="0.4"/>
-        <line x1="403" y1="247" x2="403" y2="257" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="3 2" opacity="0.4"/>
-
-        <!-- ══ DATA FOUNDATIONS BASE ══ -->
-        <rect x="6" y="257" width="468" height="52" rx="10"
-              fill="var(--accent-wash)" stroke="var(--accent)" stroke-width="1.5" stroke-opacity="0.6"/>
-        <g transform="translate(22,266)">
-          <ellipse cx="16" cy="6"    rx="16" ry="5"   fill="var(--accent)" fill-opacity="0.25" stroke="var(--accent)" stroke-width="1.3" stroke-opacity="0.6"/>
-          <path d="M0,6 L0,19 A16,5 0 0,0 32,19 L32,6" fill="var(--accent)" fill-opacity="0.1" stroke="var(--accent)" stroke-width="1.3" stroke-opacity="0.5"/>
-          <ellipse cx="16" cy="19"   rx="16" ry="5"   fill="var(--accent)" fill-opacity="0.18" stroke="var(--accent)" stroke-width="1.3" stroke-opacity="0.6"/>
-          <ellipse cx="16" cy="12.5" rx="16" ry="5"   fill="none" stroke="var(--accent)" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="3 2"/>
-        </g>
-        <g transform="translate(435,265)">
-          <path d="M13,2 L22,6 L22,13 C22,18 18,22 13,24 C8,22 4,18 4,13 L4,6 Z"
-                fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-opacity="0.7"/>
-          <path d="M9,13 L12,16 L18,10" fill="none" stroke="var(--accent)" stroke-width="1.6"
-                stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7"/>
-        </g>
-        <text x="240" y="280" text-anchor="middle" font-family="var(--font-body)" font-size="14"
-              font-weight="700" fill="var(--navy)">Data Foundations</text>
-        <text x="240" y="297" text-anchor="middle" font-family="var(--font-body)" font-size="9.5"
-              fill="var(--ink-2)">FAIR · Ontologies · Semantic Layer · Master Data · AI Governance</text>
-      </svg>
-      <div class="hero-legend" aria-hidden="true">
-        <span><i style="border-color:var(--accent)"></i>Data Foundation</span>
-        <span><i style="border-color:var(--accent);border-top-style:dashed"></i>ML → Agentic</span>
-        <span><i style="border-color:var(--plot-navy)"></i>DoE → ML</span>
-      </div>
-    </figure>
-  </div>
-
-  <!-- Stats — understated band (edit numbers to match résumé; keep the year figure consistent with "a decade" above) -->
-  <div class="wrap">
-    <div class="stats">
-      <div class="stat"><div class="n">10+</div><div class="l">years bridging science &amp; AI</div></div>
-      <div class="stat"><div class="n">20+</div><div class="l">open-source projects</div></div>
-      <div class="stat"><div class="n">12+</div><div class="l">production agentic systems</div></div>
-      <div class="stat"><div class="n">25+</div><div class="l">published articles</div></div>
-    </div>
-  </div>
+<div class="wrap hero-inner">
+<div class="hero-text">
+<span class="hero-eyebrow"><span class="pulse"></span>Applied AI Engineering · Scientific Data</span>
+<h1>I make scientific data <span class="hl">trustworthy</span> for AI.</h1>
+<p class="hero-sub">Agentic AI that designs experiments, physics-informed models that learn from them, and FAIR data foundations that make it all reliable. From a decade in pharmaceutical R&amp;D.</p>
+<div class="hero-cta">
+<a class="btn btn-primary" href="#writing">Read the writing →</a>
+<a class="btn btn-ghost" href="resume.html">View résumé</a>
+</div>
+</div>
+<figure aria-label="AI Ecosystem Pyramid: Data Foundations at base, Physics-Informed ML, Design of Experiments, and Agentic AI Systems interconnected in a feedback cycle." class="hero-visual">
+<svg class="pyr-in" viewbox="0 0 480 315" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<clippath id="cp-pinn"><rect height="185" rx="9" width="106" x="24" y="62"></rect></clippath>
+<clippath id="cp-doe"><rect height="197" rx="9" width="120" x="180" y="50"></rect></clippath>
+<clippath id="cp-agnt"><rect height="185" rx="9" width="106" x="350" y="62"></rect></clippath>
+<marker id="marr" markerheight="5" markerwidth="5" orient="auto" refx="8" refy="5" viewbox="0 0 10 10">
+<path d="M0,1 L9,5 L0,9Z" fill="var(--accent)"></path>
+</marker>
+<marker id="marrn" markerheight="5" markerwidth="5" orient="auto" refx="8" refy="5" viewbox="0 0 10 10">
+<path d="M0,1 L9,5 L0,9Z" fill="var(--plot-navy)"></path>
+</marker>
+</defs>
+<!-- Pyramid slope lines (decorative) -->
+<line stroke="var(--line)" stroke-dasharray="5 4" stroke-width="1" x1="24" x2="6" y1="62" y2="257"></line>
+<line stroke="var(--line)" stroke-dasharray="5 4" stroke-width="1" x1="456" x2="474" y1="62" y2="257"></line>
+<!-- Long arc: ML feedback → Agentic -->
+<path d="M77,62 Q240,5 403,62" fill="none" marker-end="url(#marr)" stroke="var(--accent)" stroke-dasharray="5 3" stroke-width="1.6"></path>
+<text fill="var(--accent)" font-family="var(--font-mono)" font-size="7" letter-spacing=".07em" text-anchor="middle" x="240" y="12">ML FEEDBACK → AGENTIC</text>
+<!-- Short arrow: Agent → DoE (right gap, y=100) -->
+<line marker-end="url(#marr)" stroke="var(--accent)" stroke-width="1.6" x1="349" x2="302" y1="100" y2="100"></line>
+<text fill="var(--accent)" font-family="var(--font-mono)" font-size="6.5" letter-spacing=".05em" text-anchor="middle" x="325" y="93">designs exp.</text>
+<!-- Short arrow: DoE → PINN (left gap, y=100) -->
+<line marker-end="url(#marrn)" stroke="var(--plot-navy)" stroke-width="1.6" x1="178" x2="131" y1="100" y2="100"></line>
+<text fill="var(--plot-navy)" font-family="var(--font-mono)" font-size="6.5" letter-spacing=".05em" text-anchor="middle" x="155" y="93">informs ML</text>
+<!-- ══ PHYSICS-INFORMED ML ══ -->
+<rect fill="var(--surface)" height="185" rx="9" stroke="var(--line-strong)" stroke-width="1.5" width="106" x="24" y="62"></rect>
+<!-- Header band — title only, no icon -->
+<rect clip-path="url(#cp-pinn)" fill="var(--accent-wash)" height="36" width="106" x="24" y="62"></rect>
+<text fill="var(--navy)" font-family="var(--font-body)" font-size="9" font-weight="700" text-anchor="middle" x="77" y="85">Physics-Informed ML</text>
+<!-- Wave icon below header -->
+<path d="M47,114 C50,108 53,120 56,114 C59,108 62,120 65,114 C68,108 71,120 74,114
+                 C77,108 80,120 83,114 C86,108 89,120 92,114 C95,108 98,120 101,114 C104,108 107,120 110,114" fill="none" opacity="0.45" stroke="var(--plot-navy)" stroke-linecap="round" stroke-width="1.5"></path>
+<text fill="var(--muted)" font-family="var(--font-body)" font-size="8.5" text-anchor="middle" x="77" y="138">PINNs · Neural ODEs</text>
+<text fill="var(--muted)" font-family="var(--font-body)" font-size="8.5" text-anchor="middle" x="77" y="153">Neural Operators</text>
+<text fill="var(--muted)" font-family="var(--font-mono)" font-size="8" text-anchor="middle" x="77" y="168">DeepONet · FNO</text>
+<text fill="var(--plot-navy)" font-family="var(--font-mono)" font-size="22" font-weight="700" opacity="0.07" text-anchor="middle" x="77" y="205">∇²u=f</text>
+<rect fill="var(--accent-wash)" height="13" rx="6" stroke="var(--line-strong)" stroke-width="1" width="86" x="34" y="229"></rect>
+<text fill="var(--accent)" font-family="var(--font-mono)" font-size="7" text-anchor="middle" x="77" y="239">Physics Priors</text>
+<!-- ══ DESIGN OF EXPERIMENTS (center, featured) ══ -->
+<rect fill="var(--surface)" height="197" rx="9" stroke="var(--accent)" stroke-width="2" width="120" x="180" y="50"></rect>
+<!-- Header band — title only -->
+<rect clip-path="url(#cp-doe)" fill="var(--accent)" fill-opacity="0.13" height="38" width="120" x="180" y="50"></rect>
+<text fill="var(--accent)" font-family="var(--font-body)" font-size="9" font-weight="700" text-anchor="middle" x="240" y="74">Design of Experiments</text>
+<!-- Flask icon below header -->
+<g transform="translate(228,96)">
+<path d="M9,0 L9,10 L1,23 L23,23 L15,10 L15,0" fill="var(--accent)" fill-opacity="0.15" stroke="var(--accent)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7"></path>
+<line stroke="var(--accent)" stroke-linecap="round" stroke-width="1.7" x1="5" x2="19" y1="0" y2="0"></line>
+<circle cx="7" cy="18" fill="var(--accent)" fill-opacity="0.8" r="2"></circle>
+<circle cx="14" cy="20" fill="var(--accent)" fill-opacity="0.6" r="1.6"></circle>
+<circle cx="11" cy="15" fill="var(--accent)" fill-opacity="0.7" r="1.3"></circle>
+</g>
+<text fill="var(--muted)" font-family="var(--font-body)" font-size="8.5" text-anchor="middle" x="240" y="136">Sequential DoE</text>
+<text fill="var(--muted)" font-family="var(--font-body)" font-size="8.5" text-anchor="middle" x="240" y="151">Bayesian Opt.</text>
+<text fill="var(--muted)" font-family="var(--font-body)" font-size="8.5" text-anchor="middle" x="240" y="166">Active Learning</text>
+<g fill="var(--accent)" opacity="0.18">
+<circle cx="198" cy="182" r="2.5"></circle><circle cx="212" cy="182" r="2.5"></circle>
+<circle cx="226" cy="182" r="2.5"></circle><circle cx="240" cy="182" r="2.5"></circle>
+<circle cx="254" cy="182" r="2.5"></circle><circle cx="268" cy="182" r="2.5"></circle><circle cx="282" cy="182" r="2.5"></circle>
+<circle cx="198" cy="194" r="2.5"></circle><circle cx="212" cy="194" opacity=".38" r="4"></circle>
+<circle cx="226" cy="194" r="2.5"></circle><circle cx="240" cy="194" opacity=".38" r="4"></circle>
+<circle cx="254" cy="194" r="2.5"></circle><circle cx="268" cy="194" r="2.5"></circle><circle cx="282" cy="194" r="2.5"></circle>
+</g>
+<rect fill="var(--accent-wash)" height="13" rx="6" stroke="var(--accent)" stroke-width="1" width="100" x="190" y="229"></rect>
+<text fill="var(--accent)" font-family="var(--font-mono)" font-size="7" text-anchor="middle" x="240" y="239">Efficient Exploration</text>
+<!-- ══ AGENTIC AI SYSTEMS ══ -->
+<rect fill="var(--surface)" height="185" rx="9" stroke="var(--line-strong)" stroke-width="1.5" width="106" x="350" y="62"></rect>
+<!-- Header band — title only -->
+<rect clip-path="url(#cp-agnt)" fill="var(--accent-wash)" height="36" width="106" x="350" y="62"></rect>
+<text fill="var(--navy)" font-family="var(--font-body)" font-size="9" font-weight="700" text-anchor="middle" x="403" y="85">Agentic AI Systems</text>
+<!-- Network icon below header -->
+<g transform="translate(378,104)">
+<circle cx="25" cy="6" fill="none" r="5" stroke="var(--plot-navy)" stroke-width="1.6"></circle>
+<circle cx="8" cy="24" fill="none" r="3.5" stroke="var(--plot-navy)" stroke-width="1.3"></circle>
+<circle cx="42" cy="24" fill="none" r="3.5" stroke="var(--plot-navy)" stroke-width="1.3"></circle>
+<circle cx="25" cy="30" fill="none" r="3" stroke="var(--plot-navy)" stroke-width="1.3"></circle>
+<line stroke="var(--plot-navy)" stroke-width="1.2" x1="21" x2="11" y1="11" y2="20.5"></line>
+<line stroke="var(--plot-navy)" stroke-width="1.2" x1="29" x2="39" y1="11" y2="20.5"></line>
+<line stroke="var(--plot-navy)" stroke-width="1.2" x1="25" x2="25" y1="11" y2="27"></line>
+</g>
+<text fill="var(--muted)" font-family="var(--font-body)" font-size="8.5" text-anchor="middle" x="403" y="152">Multi-Agent Pipeline</text>
+<text fill="var(--muted)" font-family="var(--font-body)" font-size="8.5" text-anchor="middle" x="403" y="167">Human Oversight</text>
+<text fill="var(--muted)" font-family="var(--font-mono)" font-size="8" text-anchor="middle" x="403" y="182">Orchestration · Eval</text>
+<circle cx="403" cy="208" fill="none" opacity="0.06" r="20" stroke="var(--plot-navy)" stroke-width="1"></circle>
+<circle cx="403" cy="208" fill="none" opacity="0.09" r="12" stroke="var(--plot-navy)" stroke-width="1"></circle>
+<circle cx="403" cy="208" fill="var(--plot-navy)" opacity="0.08" r="5"></circle>
+<rect fill="var(--accent-wash)" height="13" rx="6" stroke="var(--line-strong)" stroke-width="1" width="86" x="360" y="229"></rect>
+<text fill="var(--accent)" font-family="var(--font-mono)" font-size="7" text-anchor="middle" x="403" y="239">Autonomous · Audit</text>
+<!-- Dashed connectors: foundation → tier 2 -->
+<line opacity="0.4" stroke="var(--accent)" stroke-dasharray="3 2" stroke-width="1.2" x1="77" x2="77" y1="247" y2="257"></line>
+<line opacity="0.4" stroke="var(--accent)" stroke-dasharray="3 2" stroke-width="1.5" x1="240" x2="240" y1="247" y2="257"></line>
+<line opacity="0.4" stroke="var(--accent)" stroke-dasharray="3 2" stroke-width="1.2" x1="403" x2="403" y1="247" y2="257"></line>
+<!-- ══ DATA FOUNDATIONS BASE ══ -->
+<rect fill="var(--accent-wash)" height="52" rx="10" stroke="var(--accent)" stroke-opacity="0.6" stroke-width="1.5" width="468" x="6" y="257"></rect>
+<g transform="translate(22,266)">
+<ellipse cx="16" cy="6" fill="var(--accent)" fill-opacity="0.25" rx="16" ry="5" stroke="var(--accent)" stroke-opacity="0.6" stroke-width="1.3"></ellipse>
+<path d="M0,6 L0,19 A16,5 0 0,0 32,19 L32,6" fill="var(--accent)" fill-opacity="0.1" stroke="var(--accent)" stroke-opacity="0.5" stroke-width="1.3"></path>
+<ellipse cx="16" cy="19" fill="var(--accent)" fill-opacity="0.18" rx="16" ry="5" stroke="var(--accent)" stroke-opacity="0.6" stroke-width="1.3"></ellipse>
+<ellipse cx="16" cy="12.5" fill="none" rx="16" ry="5" stroke="var(--accent)" stroke-dasharray="3 2" stroke-opacity="0.3" stroke-width="1"></ellipse>
+</g>
+<g transform="translate(435,265)">
+<path d="M13,2 L22,6 L22,13 C22,18 18,22 13,24 C8,22 4,18 4,13 L4,6 Z" fill="none" stroke="var(--accent)" stroke-opacity="0.7" stroke-width="1.5"></path>
+<path d="M9,13 L12,16 L18,10" fill="none" stroke="var(--accent)" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.7" stroke-width="1.6"></path>
+</g>
+<text fill="var(--navy)" font-family="var(--font-body)" font-size="14" font-weight="700" text-anchor="middle" x="240" y="280">Data Foundations</text>
+<text fill="var(--ink-2)" font-family="var(--font-body)" font-size="9.5" text-anchor="middle" x="240" y="297">FAIR · Ontologies · Semantic Layer · Master Data · AI Governance</text>
+</svg>
+<div aria-hidden="true" class="hero-legend">
+<span><i style="border-color:var(--accent)"></i>Data Foundation</span>
+<span><i style="border-color:var(--accent);border-top-style:dashed"></i>ML → Agentic</span>
+<span><i style="border-color:var(--plot-navy)"></i>DoE → ML</span>
+</div>
+</figure>
+</div>
+<!-- Stats — understated band (edit numbers to match résumé; keep the year figure consistent with "a decade" above) -->
+<div class="wrap">
+<div class="stats">
+<div class="stat"><div class="n">10+</div><div class="l">years bridging science &amp; AI</div></div>
+<div class="stat"><div class="n">20+</div><div class="l">open-source projects</div></div>
+<div class="stat"><div class="n">12+</div><div class="l">production agentic systems</div></div>
+<div class="stat"><div class="n">25+</div><div class="l">published articles</div></div>
+</div>
+</div>
 </section>
-
 <!-- ===== FOCUS ===== -->
 <section class="section" id="focus">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="kicker">What I work on</p>
-      <h2>Three threads, one goal: data AI can rely on</h2>
-      <p>The writing below is organized around these, so you can jump straight to the track you care about.</p>
-    </div>
-    <div class="focus-grid">
-      <a class="focus-card" href="#writing" data-jump="sciml">
-        <span class="focus-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M4 15c4 0 5-9 8-9s3 6 8 6"/></svg></span>
-        <h3>Physics-Informed ML</h3>
-        <p>Embedding differential equations in neural networks to learn from sparse, noisy data — a full beginner-to-advanced series on PINNs and neural operators.</p>
-        <span class="go">Scientific ML →</span>
-      </a>
-      <a class="focus-card" href="#writing" data-jump="agentic">
-        <span class="focus-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2.4"/><circle cx="5" cy="18" r="2.4"/><circle cx="19" cy="18" r="2.4"/><path d="M12 7.4v4M10.5 13l-4 3M13.5 13l4 3"/></svg></span>
-        <h3>Agentic AI Systems</h3>
-        <p>Multi-agent pipelines with human oversight — ontology curation, first-pass data governance, and audit-ready decision trails in regulated R&amp;D.</p>
-        <span class="go">Agentic AI →</span>
-      </a>
-      <a class="focus-card" href="#writing" data-jump="governance">
-        <span class="focus-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
-        <h3>Trustworthy Data &amp; FAIR</h3>
-        <p>Making R&amp;D data findable, interoperable, and AI-ready — FAIR maturity, semantic layers, master data, and AI governance you can actually operate.</p>
-        <span class="go">Data Governance &amp; FAIR →</span>
-      </a>
-    </div>
-  </div>
+<div class="wrap">
+<div class="section-head reveal">
+<p class="kicker">What I work on</p>
+<h2>Three threads, one goal: data AI can rely on</h2>
+<p>The writing below is organized around these, so you can jump straight to the track you care about.</p>
+</div>
+<div class="focus-grid reveal">
+<a class="focus-card" data-jump="sciml" href="#writing">
+<span class="focus-ico"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M3 3v18h18"></path><path d="M4 15c4 0 5-9 8-9s3 6 8 6"></path></svg></span>
+<h3>Physics-Informed ML</h3>
+<p>Embedding differential equations in neural networks to learn from sparse, noisy data. A full beginner-to-advanced series on PINNs and neural operators.</p>
+<span class="go">Scientific ML →</span>
+</a>
+<a class="focus-card" data-jump="agentic" href="#writing">
+<span class="focus-ico"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><circle cx="12" cy="5" r="2.4"></circle><circle cx="5" cy="18" r="2.4"></circle><circle cx="19" cy="18" r="2.4"></circle><path d="M12 7.4v4M10.5 13l-4 3M13.5 13l4 3"></path></svg></span>
+<h3>Agentic AI Systems</h3>
+<p>Multi-agent pipelines with human oversight: ontology curation, first-pass data governance, and audit-ready decision trails in regulated R&amp;D.</p>
+<span class="go">Agentic AI →</span>
+</a>
+<a class="focus-card" data-jump="governance" href="#writing">
+<span class="focus-ico"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"></path><path d="M9 12l2 2 4-4"></path></svg></span>
+<h3>Trustworthy Data &amp; FAIR</h3>
+<p>Making R&amp;D data findable, interoperable, and AI-ready: FAIR maturity, semantic layers, master data, and AI governance you can actually operate.</p>
+<span class="go">Data Governance &amp; FAIR →</span>
+</a>
+</div>
+</div>
 </section>
-
 <!-- ===== WRITING (sortable) ===== -->
 <section class="section" id="writing" style="background:var(--surface-2)">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="kicker">Writing</p>
-      <h2>Articles &amp; projects</h2>
-      <p>Filter by topic, then sort for where you are — a learning path from the basics, or the latest first.</p>
-    </div>
-
-    <div class="controls">
-      <div class="ctl-group">
-        <span class="ctl-label" id="filt-label">Topic</span>
-        <div class="segmented" role="group" aria-labelledby="filt-label" id="filters">
-          <button class="seg" data-filter="all" aria-pressed="true">All <span class="n" data-c="all"></span></button>
-          <button class="seg" data-filter="sciml" aria-pressed="false">Scientific ML <span class="n" data-c="sciml"></span></button>
-          <button class="seg" data-filter="agentic" aria-pressed="false">Agentic AI <span class="n" data-c="agentic"></span></button>
-          <button class="seg" data-filter="governance" aria-pressed="false">Data Governance &amp; FAIR <span class="n" data-c="governance"></span></button>
-        </div>
-      </div>
-      <div class="ctl-group">
-        <span class="ctl-label" id="sort-label">Sort</span>
-        <div class="segmented" role="group" aria-labelledby="sort-label" id="sorts">
-          <button class="seg" data-sort="path" aria-pressed="true">Beginner → Advanced</button>
-          <button class="seg" data-sort="pathDesc" aria-pressed="false">Advanced → Beginner</button>
-          <button class="seg" data-sort="newest" aria-pressed="false">Newest</button>
-          <button class="seg" data-sort="oldest" aria-pressed="false">Oldest</button>
-        </div>
-      </div>
-    </div>
-
-    <p class="count" id="count" aria-live="polite"></p>
-    <div class="grid" id="grid"></div>
-  </div>
+<div class="wrap">
+<div class="section-head reveal">
+<p class="kicker">Writing</p>
+<h2>Articles &amp; projects</h2>
+<p>Filter by topic, then sort for where you are. A learning path from the basics, or the latest first.</p>
+</div>
+<div class="controls reveal">
+<div class="ctl-group">
+<span class="ctl-label" id="filt-label">Topic</span>
+<div aria-labelledby="filt-label" class="segmented" id="filters" role="group">
+<button aria-pressed="true" class="seg" data-filter="all">All <span class="n" data-c="all"></span></button>
+<button aria-pressed="false" class="seg" data-filter="sciml">Scientific ML <span class="n" data-c="sciml"></span></button>
+<button aria-pressed="false" class="seg" data-filter="agentic">Agentic AI <span class="n" data-c="agentic"></span></button>
+<button aria-pressed="false" class="seg" data-filter="governance">Data Governance &amp; FAIR <span class="n" data-c="governance"></span></button>
+</div>
+</div>
+<div class="ctl-group">
+<span class="ctl-label" id="sort-label">Sort</span>
+<div aria-labelledby="sort-label" class="segmented" id="sorts" role="group">
+<button aria-pressed="true" class="seg" data-sort="path">Beginner → Advanced</button>
+<button aria-pressed="false" class="seg" data-sort="pathDesc">Advanced → Beginner</button>
+<button aria-pressed="false" class="seg" data-sort="newest">Newest</button>
+<button aria-pressed="false" class="seg" data-sort="oldest">Oldest</button>
+</div>
+</div>
+</div>
+<p aria-live="polite" class="count" id="count"></p>
+<div class="grid reveal" id="grid"></div>
+</div>
 </section>
-
 <!-- ===== CAREER / ABOUT ===== -->
 <section class="section" id="career">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="kicker">Career</p>
-      <h2>A decade turning science into systems</h2>
-    </div>
-
-    <div class="about-grid">
-      <div>
-        <!-- Real photo with graceful fallback -->
-        <img class="avatar" src="https://alishahmohammadi.com/assets/images/ali.jpeg" alt="Ali Shahmohammadi"
-             onerror="this.outerHTML='&lt;div class=\'avatar-fallback\'&gt;AS&lt;/div&gt;'">
-      </div>
-      <div class="bio">
-        <p>I work at the seam between rigorous science and shipped software: taking the messy,
+<div class="wrap">
+<div class="section-head reveal">
+<p class="kicker">Career</p>
+<h2>A decade turning science into systems</h2>
+</div>
+<div class="about-grid reveal">
+<div>
+<!-- Real photo with graceful fallback -->
+<img alt="Ali Shahmohammadi" class="avatar" onerror="this.outerHTML='&lt;div class=\'avatar-fallback\'&gt;AS&lt;/div&gt;'" src="https://alishahmohammadi.com/assets/images/ali.jpeg"/>
+</div>
+<div class="bio">
+<p>I work at the seam between rigorous science and shipped software: taking the messy,
           sparse, hard-won data of pharmaceutical R&amp;D and building the pipelines, agents, and
           evaluation harnesses that let AI use it without making things up. My background in
           physics-informed modeling keeps me honest about what models can and can't know.</p>
-
-        <!-- ===== EDIT: replace with your résumé entries ===== -->
-        <div class="timeline" style="margin-top:var(--sp-6)">
-          <div class="tl-item now">
-            <div class="tl-when">Sep 2022 — Present</div>
-            <div class="tl-role">Associate Director, Applied AI Engineering &amp; Scientific Data</div>
-            <div class="tl-org">Takeda Pharmaceutical Inc.</div>
-            <p class="tl-desc">Agentic AI for ontology curation, MCP-based scientific data connectors, enterprise FAIR data strategy, and a digital twin for continuous API manufacturing. Research partnerships with MIT, BYU, Brown, and Purdue on PINNs.</p>
-          </div>
-          <div class="tl-item">
-            <div class="tl-when">Aug 2021 — Sep 2022</div>
-            <div class="tl-role">Senior CMC Scientist</div>
-            <div class="tl-org">Moderna Inc.</div>
-            <p class="tl-desc">ML models for mRNA drug-substance stability and shelf-life prediction; IVT reaction optimization combining ML and mechanistic modeling; contributed to IND and BLA submissions.</p>
-          </div>
-          <div class="tl-item">
-            <div class="tl-when">Oct 2019 — Aug 2021</div>
-            <div class="tl-role">Post-Doctoral Research Fellow</div>
-            <div class="tl-org">The University of Texas at Austin</div>
-            <p class="tl-desc">Fundamental models for thin-film etch optimization; model-based DoE tooling in R Shiny; first-principles viscoelastic modeling; molecular-dynamics simulations at 100k+ particle scale.</p>
-          </div>
-          <div class="tl-item">
-            <div class="tl-when">2019</div>
-            <div class="tl-role">Ph.D., Chemical Engineering</div>
-            <div class="tl-org">Queen's University · Kingston, ON, Canada</div>
-            <p class="tl-desc">Process systems engineering &amp; statistical design of experiments.</p>
-          </div>
-        </div>
-        <p style="margin-top:var(--sp-6)"><a class="btn btn-ghost" href="resume.html">Full résumé →</a></p>
-      </div>
-    </div>
-  </div>
+<!-- ===== EDIT: replace with your résumé entries ===== -->
+<div class="timeline" style="margin-top:var(--sp-6)">
+<div class="tl-item now">
+<div class="tl-when">Sep 2022 – Present</div>
+<div class="tl-role">Associate Director, Applied AI Engineering &amp; Scientific Data</div>
+<div class="tl-org">Takeda Pharmaceutical Inc.</div>
+<p class="tl-desc">Agentic AI for ontology curation, MCP-based scientific data connectors, enterprise FAIR data strategy, and a digital twin for continuous API manufacturing. Research partnerships with MIT, BYU, Brown, and Purdue on PINNs.</p>
+</div>
+<div class="tl-item">
+<div class="tl-when">Aug 2021 – Sep 2022</div>
+<div class="tl-role">Senior CMC Scientist</div>
+<div class="tl-org">Moderna Inc.</div>
+<p class="tl-desc">ML models for mRNA drug-substance stability and shelf-life prediction; IVT reaction optimization combining ML and mechanistic modeling; contributed to IND and BLA submissions.</p>
+</div>
+<div class="tl-item">
+<div class="tl-when">Oct 2019 – Aug 2021</div>
+<div class="tl-role">Post-Doctoral Research Fellow</div>
+<div class="tl-org">The University of Texas at Austin</div>
+<p class="tl-desc">Fundamental models for thin-film etch optimization; model-based DoE tooling in R Shiny; first-principles viscoelastic modeling; molecular-dynamics simulations at 100k+ particle scale.</p>
+</div>
+<div class="tl-item">
+<div class="tl-when">2019</div>
+<div class="tl-role">Ph.D., Chemical Engineering</div>
+<div class="tl-org">Queen's University · Kingston, ON, Canada</div>
+<p class="tl-desc">Process systems engineering &amp; statistical design of experiments.</p>
+</div>
+</div>
+<p style="margin-top:var(--sp-6)"><a class="btn btn-ghost" href="resume.html">Full résumé →</a></p>
+</div>
+</div>
+</div>
 </section>
-
 <!-- ===== CONTACT ===== -->
 <section class="section" id="contact">
-  <div class="wrap">
-    <div class="contact">
-      <p class="kicker" style="color:var(--accent)">Contact</p>
-      <h2>Let's talk about trustworthy AI for science</h2>
-      <p>Open to conversations on agentic systems, scientific data infrastructure, and physics-informed ML.</p>
-      <div class="contact-links">
-        <a class="btn btn-primary" href="mailto:hello@alishahmohammadi.com">Email me</a>
-        <a class="btn btn-ghost" href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
-        <a class="btn btn-ghost" href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
-      </div>
-    </div>
-  </div>
+<div class="wrap">
+<div class="contact reveal">
+<p class="kicker" style="color:var(--accent)">Contact</p>
+<h2>Let's talk about trustworthy AI for science</h2>
+<p>Open to conversations on agentic systems, scientific data infrastructure, and physics-informed ML.</p>
+<div class="contact-links">
+<a class="btn btn-primary" href="mailto:hello@alishahmohammadi.com">Email me</a>
+<a class="btn btn-ghost" href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
+<a class="btn btn-ghost" href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
+</div>
+</div>
+</div>
 </section>
-
 <!-- ===== FOOTER ===== -->
 <footer class="site-footer">
-  <div class="foot-lead">
-    <p class="foot-name">Ali Shahmohammadi, Ph.D.</p>
-    <p class="foot-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p>
-  </div>
-  <nav class="foot-nav" aria-label="Footer">
-    <a href="#writing">Writing</a><a href="#career">Career</a><a href="#contact">Contact</a>
-    <a href="resume.html">Resume</a>
-    <a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
-    <a href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
-  </nav>
-  <div class="foot-base">
-    <span>© 2026 Ali Shahmohammadi, Ph.D.</span>
-    <a class="to-top" href="#top">Back to top ↑</a>
-  </div>
+<div class="foot-lead">
+<p class="foot-name">Ali Shahmohammadi, Ph.D.</p>
+<p class="foot-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p>
+</div>
+<nav aria-label="Footer" class="foot-nav">
+<a href="#writing">Writing</a><a href="#career">Career</a><a href="#contact">Contact</a>
+<a href="resume.html">Resume</a>
+<a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
+<a href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
+</nav>
+<div class="foot-base">
+<span>© 2026 Ali Shahmohammadi, Ph.D.</span>
+<a class="to-top" href="#top">Back to top ↑</a>
+</div>
 </footer>
-
 <script>
 /* ---- Header elevate + theme ---- */
 (function(){
@@ -628,6 +568,7 @@ const POSTS=[
  {t:"AI Governance Without the Theater: Operationalizing ISO/IEC 23894 in Pharma R&D",cat:"governance",series:"AI Governance",level:3,seq:25,date:"2026-05",read:"28 min",blurb:"Connecting ISO/IEC 23894 to ICH Q9(R1), NIST AI RMF crosswalks, and FAIR controls — evidence-ready operations over governance theater.",url:B("iso-23894-pharma-rd.html")},
  {t:"Product Mastering Across the R&D-to-Commercial Lifecycle: Why Knowledge Graphs Beat Traditional MDM",cat:"governance",series:"MDM",level:3,seq:26,date:"2026-05",read:"25 min",blurb:"Why the row-and-column gold record breaks down for medicinal products — ISO IDMP, bitemporal graphs, agentic entity resolution.",url:B("product-mastering-knowledge-graphs-vs-mdm.html")},
  {t:"From Ontology to MDM: How Semantic Layers Are Replacing Hub-and-Spoke Master Data in Pharma",cat:"governance",series:"Semantic Layers",level:3,seq:27,date:"2026-05",read:"30 min",blurb:"Treating meaning as a first-class artifact: OWL, SHACL, SKOS, data-mesh federation, exemplars from Bayer COLID and Roche EDIS.",url:B("semantic-layer-replacing-mdm-pharma.html")},
+ {t:"AI Fails at the Data Layer Before It Fails at the Model Layer",cat:"governance",series:"Data Reliability",level:2,seq:28,date:"2026-09",read:"20 min",blurb:"Why data quality, integration, interoperability, metadata, lineage, and FAIR data practices determine whether AI systems can be trusted, scaled, and reused.",url:B("ai-fails-at-the-data-layer.html")},
  {t:"What FAIR Data Actually Means for AI-Ready Pharmaceutical R&D (5-Part Series)",cat:"governance",series:"FAIR",level:2,seq:28,date:"2026-05",read:"~45 min",blurb:"A deep-dive into FAIR maturity frameworks — RDA (41 indicators) and Pistoia — with a CAR-T viability walkthrough and a Python scorer.",url:"https://alishahmohammadi26.github.io/fair-data-toolkit"},
 ];
 const LEVELS={1:"Beginner",2:"Intermediate",3:"Advanced",4:"Expert"};
@@ -675,6 +616,14 @@ document.getElementById("sorts").addEventListener("click",e=>{const b=e.target.c
 /* Focus cards jump to a pre-filtered writing section */
 document.querySelectorAll("[data-jump]").forEach(a=>a.addEventListener("click",()=>setFilter(a.dataset.jump)));
 render();
+
+/* Scroll-reveal: sections fade/slide into view as they're scrolled to */
+(function(){
+  const io=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}
+  }),{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+})();
 </script>
 </body>
 </html>

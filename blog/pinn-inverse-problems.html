@@ -1,20 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html data-theme="light" lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Inverse Problems with PINNs: Discovering Physical Parameters from Data | Ali Shahmohammadi</title>
-<meta name="description" content="Making unknown physical constants trainable variables, recovering diffusivity, reaction rates, and material properties from 40 noisy sensor readings using physics-informed neural networks.">
-
-<meta property="og:type" content="article">
-
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<meta content="Making unknown physical constants trainable variables, recovering diffusivity, reaction rates, and material properties from 40 noisy sensor readings using physics-informed neural networks." name="description"/>
+<meta content="article" property="og:type"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" rel="stylesheet"/>
+<script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})" src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <script>
   (function(){var t=localStorage.getItem('theme');
    if(!t)t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
@@ -316,133 +313,133 @@ hr.divider{background:var(--line-strong)}
 
 /* Old nav — hide fixed positioning; handled by new .site-header */
 nav:not(.site-nav):not(.foot-nav){display:none}
+
+/* ===== Related reading ===== */
+.related-reading{margin:var(--sp-10) 0 var(--sp-8);padding-top:var(--sp-8);border-top:1px solid var(--line)}
+.related-reading .rr-label{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 var(--sp-4)}
+.related-reading .rr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--sp-4)}
+.related-reading .rr-card{display:block;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:var(--sp-4) var(--sp-5);text-decoration:none;transition:border-color .2s,box-shadow .2s,transform .2s}
+.related-reading .rr-card:hover{border-color:var(--accent);box-shadow:var(--shadow-2);transform:translateY(-2px);text-decoration:none}
+.related-reading .rr-card .rr-title{display:block;font-family:var(--font-display);font-weight:600;color:var(--navy);
+  font-size:var(--text-base);line-height:var(--lh-snug);margin-bottom:6px}
+.related-reading .rr-card .rr-go{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--accent);letter-spacing:.05em}
+
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
 </style>
 </head>
 <body>
-
 <header class="site-header" data-elevate="false">
-  <a class="brand" href="../index.html">Ali Shahmohammadi <span class="deg">Ph.D.</span></a>
-  <nav class="site-nav" aria-label="Primary">
-    <a href="../index.html#writing">Writing</a>
-    <a href="../index.html#career">Career</a>
-    <a href="../resume.html">Resume</a>
-    <a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
-  </nav>
-  <button class="theme-toggle" id="themeBtn" type="button" aria-label="Toggle dark mode"><b></b></button>
-  <div class="read-progress" role="presentation"><span id="progress"></span></div>
+<a class="brand" href="../index.html">Ali Shahmohammadi <span class="deg">Ph.D.</span></a>
+<nav aria-label="Primary" class="site-nav">
+<a href="../index.html#writing">Writing</a>
+<a href="../index.html#career">Career</a>
+<a href="../resume.html">Resume</a>
+<a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
+</nav>
+<button aria-label="Toggle dark mode" class="theme-toggle" id="themeBtn" type="button"><b></b></button>
+<div class="read-progress" role="presentation"><span id="progress"></span></div>
 </header>
-
 <div class="article-page">
-
-  <div class="article-hero">
-    <div class="article-hero-inner">
-      <div class="hero-series">Physics AI Series &mdash; <em>Inverse Problems</em> of 8</div>
-      <h1 class="article-title">Inverse Problems<br>with PINNs:<br><em>Discovering Physical Parameters<br>from Sparse, Noisy Data</em></h1>
-      <p class="article-sub">Making unknown physical constants trainable variables, recovering diffusivity, reaction rates, and material properties from 40 noisy sensor readings using physics-informed neural networks.</p>
-      <div class="article-meta">
-        <span class="meta-pill highlight">Jan 2026</span>
-        <span class="meta-pill">22 min read</span>
-        <span class="meta-pill">Scientific ML</span>
-        <span class="meta-pill">Inverse Problems</span>
-        <span class="meta-pill">Notebook: 03_Advanced/07</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="article-body">
-
-    </div>
-
-    <!-- SECTION 1 -->
-    <div class="section-label">01, Motivation</div>
-    <h2 class="section-h">Forward vs. Inverse: The Real Engineering Question</h2>
-    <p class="body-text">Most introductions to PDEs present what is called the <em>forward problem</em>: given a governing equation with fully known coefficients and initial/boundary conditions, compute the solution field. For the 1D heat equation, this reads: given thermal diffusivity $\alpha$, solve</p>
-
-    <div class="math-block">
+<div class="article-hero">
+<div class="article-hero-inner">
+<div class="hero-series">Physics AI Series: <em>Inverse Problems</em> of 8</div>
+<h1 class="article-title">Inverse Problems<br/>with PINNs:<br/><em>Discovering Physical Parameters<br/>from Sparse, Noisy Data</em></h1>
+<p class="article-sub">Making unknown physical constants trainable variables, recovering diffusivity, reaction rates, and material properties from 40 noisy sensor readings using physics-informed neural networks.</p>
+<div class="article-meta">
+<span class="meta-pill highlight">Jan 2026</span>
+<span class="meta-pill">22 min read</span>
+<span class="meta-pill">Scientific ML</span>
+<span class="meta-pill">Inverse Problems</span>
+<span class="meta-pill">Notebook: 03_Advanced/07</span>
+</div>
+</div>
+</div>
+<div class="article-body">
+</div>
+<!-- SECTION 1 -->
+<div class="section-label">01, Motivation</div>
+<h2 class="section-h">Forward vs. Inverse: The Real Engineering Question</h2>
+<p class="body-text">Most introductions to PDEs present what is called the <em>forward problem</em>: given a governing equation with fully known coefficients and initial/boundary conditions, compute the solution field. For the 1D heat equation, this reads: given thermal diffusivity $\alpha$, solve</p>
+<div class="math-block">
       $$\frac{\partial u}{\partial t} = \alpha \, \frac{\partial^2 u}{\partial x^2}, \quad u(x,0) = u_0(x), \quad u(0,t) = u(1,t) = 0$$
     </div>
-
-    <p class="body-text">for the temperature field $u(x,t)$. This is well-posed, and numerical methods, finite differences, finite elements, spectral methods, have been refined over decades to solve it efficiently and to guaranteed accuracy.</p>
-
-    <p class="body-text">The <em>inverse problem</em> runs in the opposite direction. You have sensor measurements $\{u(x_i, t_i)\}_{i=1}^{N}$, possibly corrupted by noise, and the parameter $\alpha$ is unknown. You want to infer $\alpha$ from the data. This reversal is not merely a notational switch, it changes the problem's mathematical character entirely. Inverse problems are generically ill-posed in the sense of Hadamard: existence, uniqueness, and continuous dependence on data may all fail without additional regularization.</p>
-
-    <div class="fig-wrap">
-      <svg viewBox="0 0 680 200" width="100%" style="max-width:680px;font-family:'Inter',sans-serif">
-        <!-- Left panel: Forward Problem -->
-        <rect x="10" y="20" width="300" height="160" rx="6" fill="#EBF0F7" stroke="#1C3D6B" stroke-width="1.2"/>
-        <text x="160" y="44" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#1C3D6B" letter-spacing="1" text-transform="uppercase">FORWARD PROBLEM</text>
-        <!-- Known alpha box -->
-        <rect x="30" y="60" width="100" height="36" rx="4" fill="#1C3D6B"/>
-        <text x="80" y="82" text-anchor="middle" font-size="12" font-weight="600" fill="white">Known α</text>
-        <!-- Arrow -->
-        <line x1="130" y1="78" x2="175" y2="78" stroke="#8C857E" stroke-width="1.5" marker-end="url(#arr1)"/>
-        <text x="152" y="72" text-anchor="middle" font-size="9" fill="#8C857E">PDE</text>
-        <text x="152" y="84" text-anchor="middle" font-size="9" fill="#8C857E">solver</text>
-        <!-- u(x,t) box -->
-        <rect x="175" y="60" width="110" height="36" rx="4" fill="#B8845A"/>
-        <text x="230" y="82" text-anchor="middle" font-size="12" font-weight="600" fill="white">u(x, t)</text>
-        <!-- Given / Find labels -->
-        <text x="80" y="118" text-anchor="middle" font-size="10" fill="#4A4540">Given</text>
-        <text x="230" y="118" text-anchor="middle" font-size="10" fill="#4A4540">Find</text>
-        <!-- constraint label -->
-        <text x="160" y="148" text-anchor="middle" font-size="9.5" fill="#1C3D6B" font-style="italic">Well-posed, unique solution</text>
-        <!-- Right panel: Inverse Problem -->
-        <rect x="370" y="20" width="300" height="160" rx="6" fill="#FBF4EC" stroke="#B8845A" stroke-width="1.2"/>
-        <text x="520" y="44" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" fill="#B8845A" letter-spacing="1">INVERSE PROBLEM</text>
-        <!-- Sensor data box -->
-        <rect x="385" y="60" width="110" height="36" rx="4" fill="#B8845A"/>
-        <text x="440" y="76" text-anchor="middle" font-size="11" font-weight="600" fill="white">u(xᵢ, tᵢ)</text>
-        <text x="440" y="89" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.75)">noisy sensors</text>
-        <!-- Arrow -->
-        <line x1="495" y1="78" x2="540" y2="78" stroke="#8C857E" stroke-width="1.5" marker-end="url(#arr2)"/>
-        <text x="517" y="72" text-anchor="middle" font-size="9" fill="#8C857E">PINN</text>
-        <text x="517" y="84" text-anchor="middle" font-size="9" fill="#8C857E">+PDE</text>
-        <!-- Unknown alpha box -->
-        <rect x="540" y="60" width="110" height="36" rx="4" fill="#1C3D6B"/>
-        <text x="595" y="82" text-anchor="middle" font-size="12" font-weight="600" fill="white">Unknown α</text>
-        <!-- Given / Find labels -->
-        <text x="440" y="118" text-anchor="middle" font-size="10" fill="#4A4540">Given</text>
-        <text x="595" y="118" text-anchor="middle" font-size="10" fill="#4A4540">Find</text>
-        <text x="520" y="148" text-anchor="middle" font-size="9.5" fill="#B8845A" font-style="italic">Ill-posed, needs regularization</text>
-        <!-- Arrow definitions -->
-        <defs>
-          <marker id="arr1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-            <path d="M0,0 L0,6 L8,3 z" fill="#8C857E"/>
-          </marker>
-          <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-            <path d="M0,0 L0,6 L8,3 z" fill="#8C857E"/>
-          </marker>
-        </defs>
-      </svg>
-      <div class="fig-caption">Fig. 1, Forward vs. inverse problem structure. In the forward problem, $\alpha$ is given and $u$ is computed. In the inverse problem, noisy measurements of $u$ are used to infer the unknown $\alpha$. The PDE constraint remains central in both cases.</div>
-    </div>
-
-    <p class="body-text">The inverse problem is often the <em>real</em> engineering question. Consider a few motivating examples:</p>
-
-    <ul style="margin:1rem 0 1.25rem 1.5rem;color:var(--ink-2);font-size:.975rem;line-height:1.9">
-      <li><strong>Pharmaceutical dissolution:</strong> You run a USP Apparatus II paddle test and measure drug concentration at a few time points. You want the effective diffusivity $D_{eff}$ of the active pharmaceutical ingredient through the polymer matrix, a parameter that governs bioavailability and is used to design controlled-release formulations.</li>
-      <li><strong>Reaction kinetics from PAT:</strong> Inline Raman spectroscopy gives you concentration-time profiles of intermediates during a synthesis step. You want the individual rate constants $k_1, k_2, k_3$ without running a full design of experiments campaign.</li>
-      <li><strong>Subsurface flow:</strong> Pressure transient measurements in boreholes encode information about the permeability field $K(x,y)$ of an aquifer. Recovering $K$ from sparse pressure data is the classic groundwater inverse problem.</li>
-      <li><strong>Fluid mechanics:</strong> Raissi, Yazdani, and Karniadakis (2020) demonstrated that sparse velocity measurements around a cylinder in crossflow allow recovery of the full pressure and velocity fields, including pressure gradients that are not directly measurable, "hidden fluid mechanics" [2].</li>
-    </ul>
-
-    <p class="body-text">In each case, the physics is not just background knowledge, it is the mechanism that makes parameter identification possible from data that would otherwise be severely underdetermined.</p>
-
-    <!-- SECTION 2 -->
-    <hr class="divider">
-    <div class="section-label">02, The PINN Inverse Setup</div>
-    <h2 class="section-h">Making Parameters Trainable Variables</h2>
-
-    <p class="body-text">The key conceptual move in PINN-based inverse problems is simple but powerful: treat the unknown physical parameter as an additional trainable variable in PyTorch, optimized jointly with the network weights. The parameter is no longer a hyperparameter or an input, it is a learnable scalar that participates in the automatic differentiation graph alongside every weight and bias.</p>
-
-    <p class="body-text">For the 1D heat equation with unknown diffusivity $\alpha^\star = 0.4$, initialized at $\alpha_{init} = 1.5$ (far from the truth), the network class becomes:</p>
-
-    <div class="code-block">
-      <div class="code-header">
-        <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
-        <span class="code-lang">Python, PyTorch</span>
-      </div>
-      <pre class="code-body"><span class="kw">class</span> <span class="tp">InversePINN</span>(nn.Module):
+<p class="body-text">for the temperature field $u(x,t)$. This is well-posed, and numerical methods, finite differences, finite elements, spectral methods, have been refined over decades to solve it efficiently and to guaranteed accuracy.</p>
+<p class="body-text">The <em>inverse problem</em> runs in the opposite direction. You have sensor measurements $\{u(x_i, t_i)\}_{i=1}^{N}$, possibly corrupted by noise, and the parameter $\alpha$ is unknown. You want to infer $\alpha$ from the data. This reversal is not merely a notational switch, it changes the problem's mathematical character entirely. Inverse problems are generically ill-posed in the sense of Hadamard: existence, uniqueness, and continuous dependence on data may all fail without additional regularization.</p>
+<div class="fig-wrap">
+<svg style="max-width:680px;font-family:'Inter',sans-serif" viewbox="0 0 680 200" width="100%">
+<!-- Left panel: Forward Problem -->
+<rect fill="#EBF0F7" height="160" rx="6" stroke="#1C3D6B" stroke-width="1.2" width="300" x="10" y="20"></rect>
+<text fill="#1C3D6B" font-family="'JetBrains Mono',monospace" font-size="9" letter-spacing="1" text-anchor="middle" text-transform="uppercase" x="160" y="44">FORWARD PROBLEM</text>
+<!-- Known alpha box -->
+<rect fill="#1C3D6B" height="36" rx="4" width="100" x="30" y="60"></rect>
+<text fill="white" font-size="12" font-weight="600" text-anchor="middle" x="80" y="82">Known α</text>
+<!-- Arrow -->
+<line marker-end="url(#arr1)" stroke="#8C857E" stroke-width="1.5" x1="130" x2="175" y1="78" y2="78"></line>
+<text fill="#8C857E" font-size="9" text-anchor="middle" x="152" y="72">PDE</text>
+<text fill="#8C857E" font-size="9" text-anchor="middle" x="152" y="84">solver</text>
+<!-- u(x,t) box -->
+<rect fill="#B8845A" height="36" rx="4" width="110" x="175" y="60"></rect>
+<text fill="white" font-size="12" font-weight="600" text-anchor="middle" x="230" y="82">u(x, t)</text>
+<!-- Given / Find labels -->
+<text fill="#4A4540" font-size="10" text-anchor="middle" x="80" y="118">Given</text>
+<text fill="#4A4540" font-size="10" text-anchor="middle" x="230" y="118">Find</text>
+<!-- constraint label -->
+<text fill="#1C3D6B" font-size="9.5" font-style="italic" text-anchor="middle" x="160" y="148">Well-posed, unique solution</text>
+<!-- Right panel: Inverse Problem -->
+<rect fill="#FBF4EC" height="160" rx="6" stroke="#B8845A" stroke-width="1.2" width="300" x="370" y="20"></rect>
+<text fill="#B8845A" font-family="'JetBrains Mono',monospace" font-size="9" letter-spacing="1" text-anchor="middle" x="520" y="44">INVERSE PROBLEM</text>
+<!-- Sensor data box -->
+<rect fill="#B8845A" height="36" rx="4" width="110" x="385" y="60"></rect>
+<text fill="white" font-size="11" font-weight="600" text-anchor="middle" x="440" y="76">u(xᵢ, tᵢ)</text>
+<text fill="rgba(255,255,255,.75)" font-size="9" text-anchor="middle" x="440" y="89">noisy sensors</text>
+<!-- Arrow -->
+<line marker-end="url(#arr2)" stroke="#8C857E" stroke-width="1.5" x1="495" x2="540" y1="78" y2="78"></line>
+<text fill="#8C857E" font-size="9" text-anchor="middle" x="517" y="72">PINN</text>
+<text fill="#8C857E" font-size="9" text-anchor="middle" x="517" y="84">+PDE</text>
+<!-- Unknown alpha box -->
+<rect fill="#1C3D6B" height="36" rx="4" width="110" x="540" y="60"></rect>
+<text fill="white" font-size="12" font-weight="600" text-anchor="middle" x="595" y="82">Unknown α</text>
+<!-- Given / Find labels -->
+<text fill="#4A4540" font-size="10" text-anchor="middle" x="440" y="118">Given</text>
+<text fill="#4A4540" font-size="10" text-anchor="middle" x="595" y="118">Find</text>
+<text fill="#B8845A" font-size="9.5" font-style="italic" text-anchor="middle" x="520" y="148">Ill-posed, needs regularization</text>
+<!-- Arrow definitions -->
+<defs>
+<marker id="arr1" markerheight="8" markerwidth="8" orient="auto" refx="6" refy="3">
+<path d="M0,0 L0,6 L8,3 z" fill="#8C857E"></path>
+</marker>
+<marker id="arr2" markerheight="8" markerwidth="8" orient="auto" refx="6" refy="3">
+<path d="M0,0 L0,6 L8,3 z" fill="#8C857E"></path>
+</marker>
+</defs>
+</svg>
+<div class="fig-caption">Fig. 1, Forward vs. inverse problem structure. In the forward problem, $\alpha$ is given and $u$ is computed. In the inverse problem, noisy measurements of $u$ are used to infer the unknown $\alpha$. The PDE constraint remains central in both cases.</div>
+</div>
+<p class="body-text">The inverse problem is often the <em>real</em> engineering question. Consider a few motivating examples:</p>
+<ul style="margin:1rem 0 1.25rem 1.5rem;color:var(--ink-2);font-size:.975rem;line-height:1.9">
+<li><strong>Pharmaceutical dissolution:</strong> You run a USP Apparatus II paddle test and measure drug concentration at a few time points. You want the effective diffusivity $D_{eff}$ of the active pharmaceutical ingredient through the polymer matrix, a parameter that governs bioavailability and is used to design controlled-release formulations.</li>
+<li><strong>Reaction kinetics from PAT:</strong> Inline Raman spectroscopy gives you concentration-time profiles of intermediates during a synthesis step. You want the individual rate constants $k_1, k_2, k_3$ without running a full design of experiments campaign.</li>
+<li><strong>Subsurface flow:</strong> Pressure transient measurements in boreholes encode information about the permeability field $K(x,y)$ of an aquifer. Recovering $K$ from sparse pressure data is the classic groundwater inverse problem.</li>
+<li><strong>Fluid mechanics:</strong> Raissi, Yazdani, and Karniadakis (2020) demonstrated that sparse velocity measurements around a cylinder in crossflow allow recovery of the full pressure and velocity fields, including pressure gradients that are not directly measurable, "hidden fluid mechanics" [2].</li>
+</ul>
+<p class="body-text">In each case, the physics is not just background knowledge, it is the mechanism that makes parameter identification possible from data that would otherwise be severely underdetermined.</p>
+<!-- SECTION 2 -->
+<hr class="divider"/>
+<div class="section-label">02, The PINN Inverse Setup</div>
+<h2 class="section-h">Making Parameters Trainable Variables</h2>
+<p class="body-text">The key conceptual move in PINN-based inverse problems is simple but powerful: treat the unknown physical parameter as an additional trainable variable in PyTorch, optimized jointly with the network weights. The parameter is no longer a hyperparameter or an input, it is a learnable scalar that participates in the automatic differentiation graph alongside every weight and bias.</p>
+<p class="body-text">For the 1D heat equation with unknown diffusivity $\alpha^\star = 0.4$, initialized at $\alpha_{init} = 1.5$ (far from the truth), the network class becomes:</p>
+<div class="code-block">
+<div class="code-header">
+<div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
+<span class="code-lang">Python, PyTorch</span>
+</div>
+<pre class="code-body"><span class="kw">class</span> <span class="tp">InversePINN</span>(nn.Module):
     <span class="kw">def</span> <span class="fn">__init__</span>(<span class="nm">self</span>, alpha_init=<span class="nm">1.5</span>):
         <span class="fn">super</span>().__init__()
 
@@ -455,7 +452,7 @@ nav:not(.site-nav):not(.foot-nav){display:none}
         )
 
         <span class="cm"># KEY: alpha as a trainable parameter, stored in log-space</span>
-        <span class="cm"># This guarantees alpha > 0 and improves the optimization landscape</span>
+        <span class="cm"># This guarantees alpha &gt; 0 and improves the optimization landscape</span>
         <span class="nm">self</span>.log_alpha = nn.Parameter(
             torch.tensor(np.log(alpha_init), dtype=torch.float32)
         )
@@ -468,57 +465,43 @@ nav:not(.site-nav):not(.foot-nav){display:none}
     <span class="kw">def</span> <span class="fn">alpha</span>(<span class="nm">self</span>):
         <span class="cm"># Recover alpha from log-space during evaluation</span>
         <span class="kw">return</span> torch.exp(<span class="nm">self</span>.log_alpha)</pre>
-    </div>
-
-    <h3 class="sub-h">Why log-space parameterization?</h3>
-    <p class="body-text">Storing <span class="math-inline">log(α)</span> rather than <span class="math-inline">α</span> directly serves two purposes. First, it enforces the constraint $\alpha > 0$ unconditionally, exponentiation always returns a positive value, eliminating the need for clipping or projection steps that would break gradient flow. Second, it improves the optimization landscape. Physical parameters often span several orders of magnitude (think permeabilities from $10^{-3}$ to $10^{3}$ m²/s), and working in log-space makes the gradient-based search scale-invariant. A step of $0.1$ in log-space corresponds to a multiplicative factor of $e^{0.1} \approx 1.105$ regardless of the current magnitude of $\alpha$.</p>
-
-    <p class="body-text">More formally, if the loss $\mathcal{L}$ is a function of $\alpha$, the gradient with respect to $\log\alpha$ is</p>
-
-    <div class="math-block">
+</div>
+<h3 class="sub-h">Why log-space parameterization?</h3>
+<p class="body-text">Storing <span class="math-inline">log(α)</span> rather than <span class="math-inline">α</span> directly serves two purposes. First, it enforces the constraint $\alpha &gt; 0$ unconditionally, exponentiation always returns a positive value, eliminating the need for clipping or projection steps that would break gradient flow. Second, it improves the optimization landscape. Physical parameters often span several orders of magnitude (think permeabilities from $10^{-3}$ to $10^{3}$ m²/s), and working in log-space makes the gradient-based search scale-invariant. A step of $0.1$ in log-space corresponds to a multiplicative factor of $e^{0.1} \approx 1.105$ regardless of the current magnitude of $\alpha$.</p>
+<p class="body-text">More formally, if the loss $\mathcal{L}$ is a function of $\alpha$, the gradient with respect to $\log\alpha$ is</p>
+<div class="math-block">
       $$\frac{\partial \mathcal{L}}{\partial \log\alpha} = \frac{\partial \mathcal{L}}{\partial \alpha} \cdot \alpha$$
     </div>
-
-    <p class="body-text">This natural scaling by $\alpha$ is the continuous analog of the relative update in Adam: the effective learning rate is proportional to the current parameter value, which prevents the optimizer from taking catastrophically large absolute steps when $\alpha$ is large and tiny steps when it is small.</p>
-
-    <h3 class="sub-h">Sensor data and noise model</h3>
-    <p class="body-text">The training data consists of $N = 40$ sensor observations drawn from the true solution $u^\star(x,t)$ with additive Gaussian noise at 2% relative amplitude:</p>
-
-    <div class="math-block">
+<p class="body-text">This natural scaling by $\alpha$ is the continuous analog of the relative update in Adam: the effective learning rate is proportional to the current parameter value, which prevents the optimizer from taking catastrophically large absolute steps when $\alpha$ is large and tiny steps when it is small.</p>
+<h3 class="sub-h">Sensor data and noise model</h3>
+<p class="body-text">The training data consists of $N = 40$ sensor observations drawn from the true solution $u^\star(x,t)$ with additive Gaussian noise at 2% relative amplitude:</p>
+<div class="math-block">
       $$\tilde{u}_i = u^\star(x_i, t_i) + \epsilon_i, \quad \epsilon_i \sim \mathcal{N}\!\left(0,\, (0.02 \cdot \sigma_{u^\star})^2\right)$$
     </div>
-
-    <p class="body-text">where $\sigma_{u^\star}$ is the standard deviation of the true field. This noise level is representative of high-quality inline spectroscopic measurements in a pharmaceutical manufacturing context (typically $\pm 1$–$3\%$ relative error for NIR-based concentration estimates after multivariate calibration).</p>
-
-    <!-- SECTION 3 -->
-    <hr class="divider">
-    <div class="section-label">03, Loss Function</div>
-    <h2 class="section-h">Mutually Constraining Data and Physics</h2>
-
-    <p class="body-text">The combined loss has two terms that work in concert:</p>
-
-    <div class="math-block">
+<p class="body-text">where $\sigma_{u^\star}$ is the standard deviation of the true field. This noise level is representative of high-quality inline spectroscopic measurements in a pharmaceutical manufacturing context (typically $\pm 1$–$3\%$ relative error for NIR-based concentration estimates after multivariate calibration).</p>
+<!-- SECTION 3 -->
+<hr class="divider"/>
+<div class="section-label">03, Loss Function</div>
+<h2 class="section-h">Mutually Constraining Data and Physics</h2>
+<p class="body-text">The combined loss has two terms that work in concert:</p>
+<div class="math-block">
       $$\mathcal{L}(\theta, \alpha) = \underbrace{\frac{1}{N}\sum_{i=1}^{N}\left[\hat{u}(x_i,t_i;\theta) - \tilde{u}_i\right]^2}_{\mathcal{L}_{\text{data}}} + \lambda \underbrace{\frac{1}{N_f}\sum_{j=1}^{N_f}\left[\hat{u}_t(x_j,t_j;\theta) - \alpha \,\hat{u}_{xx}(x_j,t_j;\theta)\right]^2}_{\mathcal{L}_{\text{physics}}}$$
     </div>
-
-    <p class="body-text">where $\theta$ denotes all network weights and biases, $\hat{u}$ is the network output, $\hat{u}_t$ and $\hat{u}_{xx}$ are computed via automatic differentiation, and $N_f$ is the number of collocation points (typically $N_f \gg N$, here $N_f = 10{,}000$).</p>
-
-    <div class="callout insight">
-      <div class="callout-icon">&#9670;</div>
-      <div class="callout-body">
-        <strong>The mutual constraint is the key insight.</strong>
+<p class="body-text">where $\theta$ denotes all network weights and biases, $\hat{u}$ is the network output, $\hat{u}_t$ and $\hat{u}_{xx}$ are computed via automatic differentiation, and $N_f$ is the number of collocation points (typically $N_f \gg N$, here $N_f = 10{,}000$).</p>
+<div class="callout insight">
+<div class="callout-icon">◆</div>
+<div class="callout-body">
+<strong>The mutual constraint is the key insight.</strong>
         $\alpha$ is not just fit to match the 40 data points, it must simultaneously make those 40 points fit AND ensure that the reconstructed field $\hat{u}(x,t)$ satisfies the heat equation everywhere in the domain. These two requirements are only simultaneously satisfiable at the true parameter value $\alpha^\star$. Any other value of $\alpha$ forces a contradiction: either the physics is violated, or the data is not fitted.
       </div>
-    </div>
-
-    <p class="body-text">Backpropagation computes gradients with respect to both $\theta$ and $\log\alpha$ simultaneously. In PyTorch, both are <code>nn.Parameter</code> objects registered in the same module, so the optimizer sees them as part of the same parameter group. The gradient of the physics loss with respect to $\log\alpha$ carries information about which direction to move $\alpha$ to reduce the PDE residual, this is the signal that drives parameter identification.</p>
-
-    <div class="code-block">
-      <div class="code-header">
-        <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
-        <span class="code-lang">Python, training loop</span>
-      </div>
-      <pre class="code-body"><span class="kw">def</span> <span class="fn">train_step</span>(model, optimizer, x_data, t_data, u_data, x_f, t_f, lam=<span class="nm">1.0</span>):
+</div>
+<p class="body-text">Backpropagation computes gradients with respect to both $\theta$ and $\log\alpha$ simultaneously. In PyTorch, both are <code>nn.Parameter</code> objects registered in the same module, so the optimizer sees them as part of the same parameter group. The gradient of the physics loss with respect to $\log\alpha$ carries information about which direction to move $\alpha$ to reduce the PDE residual, this is the signal that drives parameter identification.</p>
+<div class="code-block">
+<div class="code-header">
+<div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
+<span class="code-lang">Python, training loop</span>
+</div>
+<pre class="code-body"><span class="kw">def</span> <span class="fn">train_step</span>(model, optimizer, x_data, t_data, u_data, x_f, t_f, lam=<span class="nm">1.0</span>):
     optimizer.zero_grad()
 
     <span class="cm"># --- Data loss ---</span>
@@ -542,35 +525,27 @@ nav:not(.site-nav):not(.foot-nav){display:none}
     optimizer.step()
 
     <span class="kw">return</span> loss_data.item(), loss_physics.item(), model.alpha.item()</pre>
-    </div>
-
-    <!-- SECTION 4 -->
-    <hr class="divider">
-    <div class="section-label">04, Why Physics Regularizes</div>
-    <h2 class="section-h">Structural Constraint vs. Tikhonov Regularization</h2>
-
-    <p class="body-text">A natural question: why not simply fit a neural network to the 40 data points without any physics term, and then estimate $\alpha$ from the fitted function by numerical differentiation? The answer is that 40 points in a continuous domain are radically insufficient to uniquely determine a smooth function, let alone its second spatial derivative. An unconstrained network will interpolate the data and produce a $u(x,t)$ that may be arbitrarily wiggly, making $\partial^2 u / \partial x^2$ meaningless.</p>
-
-    <p class="body-text">Classical regularization (Tikhonov, $L^2$ penalty on weights or on derivatives of $u$) enforces <em>smoothness</em>, it prevents the fit from being too wiggly. But smoothness is a geometric property unrelated to the physics. A smooth but physically inadmissible field can still yield a wildly wrong estimate of $\alpha$.</p>
-
-    <p class="body-text">The physics loss enforces a <em>structural constraint</em>: the fitted field must belong to the solution manifold of the heat equation for some value of $\alpha$. This is a far stronger requirement than smoothness. The solution manifold of the heat equation is a much smaller subset of all smooth functions, it is parametrized by $\alpha$ (and the initial/boundary conditions), so fitting onto it simultaneously constrains both the field and the parameter.</p>
-
-    <div class="callout warning">
-      <div class="callout-icon">&#9651;</div>
-      <div class="callout-body">
-        <strong>Identifiability requires coverage.</strong>
+</div>
+<!-- SECTION 4 -->
+<hr class="divider"/>
+<div class="section-label">04, Why Physics Regularizes</div>
+<h2 class="section-h">Structural Constraint vs. Tikhonov Regularization</h2>
+<p class="body-text">A natural question: why not simply fit a neural network to the 40 data points without any physics term, and then estimate $\alpha$ from the fitted function by numerical differentiation? The answer is that 40 points in a continuous domain are radically insufficient to uniquely determine a smooth function, let alone its second spatial derivative. An unconstrained network will interpolate the data and produce a $u(x,t)$ that may be arbitrarily wiggly, making $\partial^2 u / \partial x^2$ meaningless.</p>
+<p class="body-text">Classical regularization (Tikhonov, $L^2$ penalty on weights or on derivatives of $u$) enforces <em>smoothness</em>, it prevents the fit from being too wiggly. But smoothness is a geometric property unrelated to the physics. A smooth but physically inadmissible field can still yield a wildly wrong estimate of $\alpha$.</p>
+<p class="body-text">The physics loss enforces a <em>structural constraint</em>: the fitted field must belong to the solution manifold of the heat equation for some value of $\alpha$. This is a far stronger requirement than smoothness. The solution manifold of the heat equation is a much smaller subset of all smooth functions, it is parametrized by $\alpha$ (and the initial/boundary conditions), so fitting onto it simultaneously constrains both the field and the parameter.</p>
+<div class="callout warning">
+<div class="callout-icon">△</div>
+<div class="callout-body">
+<strong>Identifiability requires coverage.</strong>
         If all 40 sensors are at a single spatial location, the problem loses spatial gradient information and $\alpha$ becomes unidentifiable, many diffusivities produce the same time trace at a single point. This is the observability condition: the sensor layout must provide sufficient spatial and temporal coverage to distinguish the parameter from all other possible parameter values.
       </div>
-    </div>
-
-    <!-- SECTION 5 -->
-    <hr class="divider">
-    <div class="section-label">05, Training Results</div>
-    <h2 class="section-h">Alpha Converges: 1.5 → 0.4 over 12,000 Epochs</h2>
-
-    <p class="body-text">The training log from notebook <code>07_inverse_parameter_estimation.ipynb</code> shows the convergence trajectory. The optimizer is L-BFGS for the final phase (after an Adam warm-up for 3,000 epochs), which is standard for PINN inverse problems because L-BFGS exploits second-order information and converges much faster once the network is in a good basin.</p>
-
-    <div class="log-block">
+</div>
+<!-- SECTION 5 -->
+<hr class="divider"/>
+<div class="section-label">05, Training Results</div>
+<h2 class="section-h">Alpha Converges: 1.5 → 0.4 over 12,000 Epochs</h2>
+<p class="body-text">The training log from notebook <code>07_inverse_parameter_estimation.ipynb</code> shows the convergence trajectory. The optimizer is L-BFGS for the final phase (after an Adam warm-up for 3,000 epochs), which is standard for PINN inverse problems because L-BFGS exploits second-order information and converges much faster once the network is in a good basin.</p>
+<div class="log-block">
 <span class="log-epoch">Epoch    0</span>  |  loss: <span class="log-loss">4.2831e-01</span>  |  alpha: <span class="log-alpha">1.5000</span>  |  err: 275.0%
 <span class="log-epoch">Epoch  500</span>  |  loss: <span class="log-loss">1.8743e-02</span>  |  alpha: <span class="log-alpha">1.2147</span>  |  err: 203.7%
 <span class="log-epoch">Epoch 1000</span>  |  loss: <span class="log-loss">6.2104e-03</span>  |  alpha: <span class="log-alpha">0.9832</span>  |  err: 145.8%
@@ -582,152 +557,140 @@ nav:not(.site-nav):not(.foot-nav){display:none}
 <span class="log-epoch">Epoch 12000</span>  |  loss: <span class="log-loss">4.1293e-06</span>  |  alpha: <span class="log-alpha">0.4007</span>  |  err: <span class="log-converge">  0.18%</span>
 <span class="log-converge">
 Converged. True alpha: 0.4000 | Recovered alpha: 0.4007 | Relative error: 0.18%</span>
-    </div>
-
-    <div class="fig-wrap">
-      <svg viewBox="0 0 640 280" width="100%" style="max-width:640px">
-        <defs>
-          <marker id="ax" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
-            <path d="M0,0 L7,3.5 L0,7 z" fill="#8C857E"/>
-          </marker>
-        </defs>
-        <!-- Background -->
-        <rect x="60" y="20" width="555" height="220" fill="#F1EEE9" rx="4"/>
-        <!-- Horizontal gridlines -->
-        <line x1="60" y1="62" x2="615" y2="62" stroke="#DEDAD3" stroke-width="1"/>
-        <line x1="60" y1="104" x2="615" y2="104" stroke="#DEDAD3" stroke-width="1"/>
-        <line x1="60" y1="146" x2="615" y2="146" stroke="#DEDAD3" stroke-width="1"/>
-        <line x1="60" y1="188" x2="615" y2="188" stroke="#DEDAD3" stroke-width="1"/>
-        <!-- True alpha dashed line at y corresponding to 0.4 -->
-        <!-- y range: 20 (alpha=1.6) to 240 (alpha=0.2), so alpha=0.4 -> y = 20 + (1.6-0.4)/(1.6-0.2)*220 = 20 + 1.2/1.4*220 = 20+188.6 = 208.6 -->
-        <line x1="60" y1="209" x2="615" y2="209" stroke="#111010" stroke-width="1.5" stroke-dasharray="7,4"/>
-        <text x="620" y="213" font-size="10" fill="#111010" font-family="'JetBrains Mono',monospace">0.40</text>
-        <!-- alpha curve: log-spaced x from 0 to 12000, alpha drops 1.5->0.4 -->
-        <!-- x-axis: 0=60, 12000=615. Epochs: 0,500,1000,2000,3000,5000,8000,10000,12000 -->
-        <!-- alpha values: 1.5,1.2147,0.9832,0.7315,0.5941,0.4612,0.4118,0.4031,0.4007 -->
-        <!-- y = 20 + (1.6 - alpha) / 1.4 * 220 -->
-        <!-- alpha=1.5: y=20+(0.1/1.4)*220=20+15.7=35.7 -->
-        <!-- alpha=1.2147: y=20+(0.3853/1.4)*220=20+60.5=80.5 -->
-        <!-- alpha=0.9832: y=20+(0.6168/1.4)*220=20+96.9=116.9 -->
-        <!-- alpha=0.7315: y=20+(0.8685/1.4)*220=20+136.4=156.4 -->
-        <!-- alpha=0.5941: y=20+(1.0059/1.4)*220=20+158.1=178.1 -->
-        <!-- alpha=0.4612: y=20+(1.1388/1.4)*220=20+178.9=198.9 -->
-        <!-- alpha=0.4118: y=20+(1.1882/1.4)*220=20+186.7=206.7 -->
-        <!-- alpha=0.4031: y=20+(1.1969/1.4)*220=20+188.1=208.1 -->
-        <!-- alpha=0.4007: y=20+(1.1993/1.4)*220=20+188.5=208.5 -->
-        <!-- x-axis: epoch/12000 * 555 + 60 -->
-        <!-- 0->60, 500->83.1, 1000->106.3, 2000->152.5, 3000->198.8, 5000->291.3, 8000->430, 10000->522.5, 12000->615 -->
-        <polyline points="60,35.7 83.1,80.5 106.3,116.9 152.5,156.4 198.8,178.1 291.3,198.9 430,206.7 522.5,208.1 615,208.5" fill="none" stroke="#1C3D6B" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
-        <!-- Data points -->
-        <circle cx="60" cy="35.7" r="4" fill="#1C3D6B"/>
-        <circle cx="83.1" cy="80.5" r="3.5" fill="#1C3D6B"/>
-        <circle cx="106.3" cy="116.9" r="3.5" fill="#1C3D6B"/>
-        <circle cx="152.5" cy="156.4" r="3.5" fill="#1C3D6B"/>
-        <circle cx="198.8" cy="178.1" r="3.5" fill="#1C3D6B"/>
-        <circle cx="291.3" cy="198.9" r="3.5" fill="#1C3D6B"/>
-        <circle cx="430" cy="206.7" r="3.5" fill="#1C3D6B"/>
-        <circle cx="522.5" cy="208.1" r="3.5" fill="#1C3D6B"/>
-        <circle cx="615" cy="208.5" r="4" fill="#B8845A"/>
-        <!-- Axes -->
-        <line x1="60" y1="240" x2="620" y2="240" stroke="#8C857E" stroke-width="1.5" marker-end="url(#ax)"/>
-        <line x1="60" y1="240" x2="60" y2="15" stroke="#8C857E" stroke-width="1.5" marker-end="url(#ax)"/>
-        <!-- X ticks and labels -->
-        <line x1="60" y1="240" x2="60" y2="245" stroke="#8C857E" stroke-width="1"/>
-        <text x="60" y="256" text-anchor="middle" font-size="9" fill="#8C857E" font-family="'JetBrains Mono',monospace">0</text>
-        <line x1="198.8" y1="240" x2="198.8" y2="245" stroke="#8C857E" stroke-width="1"/>
-        <text x="198.8" y="256" text-anchor="middle" font-size="9" fill="#8C857E" font-family="'JetBrains Mono',monospace">3k</text>
-        <line x1="291.3" y1="240" x2="291.3" y2="245" stroke="#8C857E" stroke-width="1"/>
-        <text x="291.3" y="256" text-anchor="middle" font-size="9" fill="#8C857E" font-family="'JetBrains Mono',monospace">5k</text>
-        <line x1="430" y1="240" x2="430" y2="245" stroke="#8C857E" stroke-width="1"/>
-        <text x="430" y="256" text-anchor="middle" font-size="9" fill="#8C857E" font-family="'JetBrains Mono',monospace">8k</text>
-        <line x1="615" y1="240" x2="615" y2="245" stroke="#8C857E" stroke-width="1"/>
-        <text x="615" y="256" text-anchor="middle" font-size="9" fill="#8C857E" font-family="'JetBrains Mono',monospace">12k</text>
-        <text x="337" y="271" text-anchor="middle" font-size="10" fill="#8C857E">Epoch</text>
-        <!-- Y labels -->
-        <text x="50" y="39" text-anchor="end" font-size="9" fill="#8C857E" font-family="'JetBrains Mono',monospace">1.50</text>
-        <text x="50" y="81" text-anchor="end" font-size="9" fill="#8C857E" font-family="'JetBrains Mono',monospace">1.20</text>
-        <text x="50" y="117" text-anchor="end" font-size="9" fill="#8C857E" font-family="'JetBrains Mono',monospace">0.98</text>
-        <text x="50" y="157" text-anchor="end" font-size="9" fill="#8C857E" font-family="'JetBrains Mono',monospace">0.73</text>
-        <!-- Y axis label -->
-        <text x="18" y="140" text-anchor="middle" font-size="10" fill="#8C857E" transform="rotate(-90,18,140)">Estimated &alpha;&#770;</text>
-        <!-- Legend -->
-        <line x1="80" y1="30" x2="110" y2="30" stroke="#1C3D6B" stroke-width="2.5"/>
-        <text x="115" y="34" font-size="10" fill="#4A4540">Estimated &#945;&#770;</text>
-        <line x1="200" y1="30" x2="230" y2="30" stroke="#111010" stroke-width="1.5" stroke-dasharray="6,3"/>
-        <text x="235" y="34" font-size="10" fill="#4A4540">True &#945;&#42; = 0.40</text>
-        <!-- Init annotation -->
-        <text x="65" y="28" font-size="9" fill="#B8845A" font-family="'JetBrains Mono',monospace">&#945;&#770;&#8320; = 1.5</text>
-        <!-- Final annotation -->
-        <text x="560" y="203" font-size="9" fill="#B8845A" font-family="'JetBrains Mono',monospace">0.4007</text>
-      </svg>
-      <div class="fig-caption">Fig. 2, Parameter convergence trajectory. Starting at $\hat{\alpha}_0 = 1.5$, the estimate descends toward the true value $\alpha^\star = 0.4$ over 12,000 epochs. Final relative error: 0.18%. The curve is smooth because $\log\alpha$ is the actual optimization variable; the plotted $\hat{\alpha} = e^{\widehat{\log\alpha}}$ inherits this smoothness.</div>
-    </div>
-
-    <!-- SECTION 6 -->
-    <hr class="divider">
-    <div class="section-label">06, Sensor Placement &amp; Identifiability</div>
-    <h2 class="section-h">Not All Sensor Configurations Are Equally Informative</h2>
-
-    <div class="fig-wrap">
-      <svg viewBox="0 0 560 230" width="100%" style="max-width:560px">
-        <defs>
-          <linearGradient id="heatGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#EBF0F7"/>
-            <stop offset="40%" stop-color="#4A9EBF"/>
-            <stop offset="100%" stop-color="#1C3D6B"/>
-          </linearGradient>
-        </defs>
-        <!-- Domain rectangle -->
-        <rect x="40" y="30" width="480" height="160" fill="url(#heatGrad)" rx="4" opacity="0.85"/>
-        <rect x="40" y="30" width="480" height="160" fill="none" stroke="#1C3D6B" stroke-width="1.5" rx="4"/>
-        <!-- 40 sensor dots (pseudo-random but representative scatter) -->
-        <circle cx="72" cy="58" r="4" fill="#DC2626" opacity="0.9"/><circle cx="115" cy="82" r="4" fill="#DC2626" opacity="0.9"/><circle cx="88" cy="130" r="4" fill="#DC2626" opacity="0.9"/><circle cx="155" cy="55" r="4" fill="#DC2626" opacity="0.9"/><circle cx="140" cy="110" r="4" fill="#DC2626" opacity="0.9"/><circle cx="180" cy="170" r="4" fill="#DC2626" opacity="0.9"/><circle cx="60" cy="175" r="4" fill="#DC2626" opacity="0.9"/><circle cx="220" cy="45" r="4" fill="#DC2626" opacity="0.9"/><circle cx="210" cy="95" r="4" fill="#DC2626" opacity="0.9"/><circle cx="245" cy="145" r="4" fill="#DC2626" opacity="0.9"/><circle cx="265" cy="60" r="4" fill="#DC2626" opacity="0.9"/><circle cx="290" cy="115" r="4" fill="#DC2626" opacity="0.9"/><circle cx="305" cy="175" r="4" fill="#DC2626" opacity="0.9"/><circle cx="330" cy="50" r="4" fill="#DC2626" opacity="0.9"/><circle cx="350" cy="90" r="4" fill="#DC2626" opacity="0.9"/><circle cx="375" cy="140" r="4" fill="#DC2626" opacity="0.9"/><circle cx="400" cy="65" r="4" fill="#DC2626" opacity="0.9"/><circle cx="420" cy="115" r="4" fill="#DC2626" opacity="0.9"/><circle cx="445" cy="160" r="4" fill="#DC2626" opacity="0.9"/><circle cx="470" cy="48" r="4" fill="#DC2626" opacity="0.9"/><circle cx="490" cy="100" r="4" fill="#DC2626" opacity="0.9"/><circle cx="505" cy="175" r="4" fill="#DC2626" opacity="0.9"/><circle cx="95" cy="165" r="4" fill="#DC2626" opacity="0.9"/><circle cx="170" cy="40" r="4" fill="#DC2626" opacity="0.9"/><circle cx="195" cy="130" r="4" fill="#DC2626" opacity="0.9"/><circle cx="235" cy="185" r="4" fill="#DC2626" opacity="0.9"/><circle cx="275" cy="35" r="4" fill="#DC2626" opacity="0.9"/><circle cx="315" cy="130" r="4" fill="#DC2626" opacity="0.9"/><circle cx="355" cy="185" r="4" fill="#DC2626" opacity="0.9"/><circle cx="385" cy="45" r="4" fill="#DC2626" opacity="0.9"/><circle cx="415" cy="170" r="4" fill="#DC2626" opacity="0.9"/><circle cx="455" cy="80" r="4" fill="#DC2626" opacity="0.9"/><circle cx="480" cy="140" r="4" fill="#DC2626" opacity="0.9"/><circle cx="108" cy="45" r="4" fill="#DC2626" opacity="0.9"/><circle cx="130" cy="155" r="4" fill="#DC2626" opacity="0.9"/><circle cx="160" cy="90" r="4" fill="#DC2626" opacity="0.9"/><circle cx="250" cy="175" r="4" fill="#DC2626" opacity="0.9"/><circle cx="340" cy="160" r="4" fill="#DC2626" opacity="0.9"/><circle cx="460" cy="130" r="4" fill="#DC2626" opacity="0.9"/><circle cx="505" cy="50" r="4" fill="#DC2626" opacity="0.9"/>
-        <!-- Axis labels -->
-        <text x="280" y="210" text-anchor="middle" font-size="11" fill="#4A4540" font-style="italic">x (spatial coordinate)</text>
-        <text x="20" y="115" text-anchor="middle" font-size="11" fill="#4A4540" font-style="italic" transform="rotate(-90,20,115)">t (time)</text>
-        <text x="40" y="26" font-size="9" fill="#1C3D6B" font-family="'JetBrains Mono',monospace">t = T</text>
-        <text x="40" y="205" font-size="9" fill="#1C3D6B" font-family="'JetBrains Mono',monospace">t = 0</text>
-        <text x="36" y="215" font-size="9" fill="#1C3D6B" font-family="'JetBrains Mono',monospace">x=0</text>
-        <text x="500" y="215" font-size="9" fill="#1C3D6B" font-family="'JetBrains Mono',monospace">x=1</text>
-        <!-- Legend -->
-        <circle cx="55" cy="16" r="4" fill="#DC2626"/>
-        <text x="63" y="20" font-size="10" fill="#4A4540">40 noisy sensors</text>
-        <rect x="200" y="10" width="12" height="8" fill="url(#heatGrad)" rx="1" opacity="0.85"/>
-        <text x="216" y="20" font-size="10" fill="#4A4540">true field u(x,t), dark = high temperature</text>
-      </svg>
-      <div class="fig-caption">Fig. 3, Sensor placement in the $(x, t)$ domain. The 40 sensors are scattered across both space and time, providing coverage of the spatial gradient structure (essential for estimating diffusivity). Clustering all sensors at a single $x$ location would make $\alpha$ unidentifiable from this data alone.</div>
-    </div>
-
-    <h3 class="sub-h">Observability and the Fisher Information Matrix</h3>
-    <p class="body-text">The classical framework for assessing identifiability is the Fisher Information Matrix (FIM). For a parameter vector $\boldsymbol{\theta}$ given noisy observations $\mathbf{y} = \mathbf{f}(\boldsymbol{\theta}) + \boldsymbol{\epsilon}$, $\boldsymbol{\epsilon} \sim \mathcal{N}(0, \sigma^2 I)$, the FIM is</p>
-
-    <div class="math-block">
+</div>
+<div class="fig-wrap">
+<svg style="max-width:640px" viewbox="0 0 640 280" width="100%">
+<defs>
+<marker id="ax" markerheight="7" markerwidth="7" orient="auto" refx="5" refy="3.5">
+<path d="M0,0 L7,3.5 L0,7 z" fill="#8C857E"></path>
+</marker>
+</defs>
+<!-- Background -->
+<rect fill="#F1EEE9" height="220" rx="4" width="555" x="60" y="20"></rect>
+<!-- Horizontal gridlines -->
+<line stroke="#DEDAD3" stroke-width="1" x1="60" x2="615" y1="62" y2="62"></line>
+<line stroke="#DEDAD3" stroke-width="1" x1="60" x2="615" y1="104" y2="104"></line>
+<line stroke="#DEDAD3" stroke-width="1" x1="60" x2="615" y1="146" y2="146"></line>
+<line stroke="#DEDAD3" stroke-width="1" x1="60" x2="615" y1="188" y2="188"></line>
+<!-- True alpha dashed line at y corresponding to 0.4 -->
+<!-- y range: 20 (alpha=1.6) to 240 (alpha=0.2), so alpha=0.4 -> y = 20 + (1.6-0.4)/(1.6-0.2)*220 = 20 + 1.2/1.4*220 = 20+188.6 = 208.6 -->
+<line stroke="#111010" stroke-dasharray="7,4" stroke-width="1.5" x1="60" x2="615" y1="209" y2="209"></line>
+<text fill="#111010" font-family="'JetBrains Mono',monospace" font-size="10" x="620" y="213">0.40</text>
+<!-- alpha curve: log-spaced x from 0 to 12000, alpha drops 1.5->0.4 -->
+<!-- x-axis: 0=60, 12000=615. Epochs: 0,500,1000,2000,3000,5000,8000,10000,12000 -->
+<!-- alpha values: 1.5,1.2147,0.9832,0.7315,0.5941,0.4612,0.4118,0.4031,0.4007 -->
+<!-- y = 20 + (1.6 - alpha) / 1.4 * 220 -->
+<!-- alpha=1.5: y=20+(0.1/1.4)*220=20+15.7=35.7 -->
+<!-- alpha=1.2147: y=20+(0.3853/1.4)*220=20+60.5=80.5 -->
+<!-- alpha=0.9832: y=20+(0.6168/1.4)*220=20+96.9=116.9 -->
+<!-- alpha=0.7315: y=20+(0.8685/1.4)*220=20+136.4=156.4 -->
+<!-- alpha=0.5941: y=20+(1.0059/1.4)*220=20+158.1=178.1 -->
+<!-- alpha=0.4612: y=20+(1.1388/1.4)*220=20+178.9=198.9 -->
+<!-- alpha=0.4118: y=20+(1.1882/1.4)*220=20+186.7=206.7 -->
+<!-- alpha=0.4031: y=20+(1.1969/1.4)*220=20+188.1=208.1 -->
+<!-- alpha=0.4007: y=20+(1.1993/1.4)*220=20+188.5=208.5 -->
+<!-- x-axis: epoch/12000 * 555 + 60 -->
+<!-- 0->60, 500->83.1, 1000->106.3, 2000->152.5, 3000->198.8, 5000->291.3, 8000->430, 10000->522.5, 12000->615 -->
+<polyline fill="none" points="60,35.7 83.1,80.5 106.3,116.9 152.5,156.4 198.8,178.1 291.3,198.9 430,206.7 522.5,208.1 615,208.5" stroke="#1C3D6B" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></polyline>
+<!-- Data points -->
+<circle cx="60" cy="35.7" fill="#1C3D6B" r="4"></circle>
+<circle cx="83.1" cy="80.5" fill="#1C3D6B" r="3.5"></circle>
+<circle cx="106.3" cy="116.9" fill="#1C3D6B" r="3.5"></circle>
+<circle cx="152.5" cy="156.4" fill="#1C3D6B" r="3.5"></circle>
+<circle cx="198.8" cy="178.1" fill="#1C3D6B" r="3.5"></circle>
+<circle cx="291.3" cy="198.9" fill="#1C3D6B" r="3.5"></circle>
+<circle cx="430" cy="206.7" fill="#1C3D6B" r="3.5"></circle>
+<circle cx="522.5" cy="208.1" fill="#1C3D6B" r="3.5"></circle>
+<circle cx="615" cy="208.5" fill="#B8845A" r="4"></circle>
+<!-- Axes -->
+<line marker-end="url(#ax)" stroke="#8C857E" stroke-width="1.5" x1="60" x2="620" y1="240" y2="240"></line>
+<line marker-end="url(#ax)" stroke="#8C857E" stroke-width="1.5" x1="60" x2="60" y1="240" y2="15"></line>
+<!-- X ticks and labels -->
+<line stroke="#8C857E" stroke-width="1" x1="60" x2="60" y1="240" y2="245"></line>
+<text fill="#8C857E" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="middle" x="60" y="256">0</text>
+<line stroke="#8C857E" stroke-width="1" x1="198.8" x2="198.8" y1="240" y2="245"></line>
+<text fill="#8C857E" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="middle" x="198.8" y="256">3k</text>
+<line stroke="#8C857E" stroke-width="1" x1="291.3" x2="291.3" y1="240" y2="245"></line>
+<text fill="#8C857E" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="middle" x="291.3" y="256">5k</text>
+<line stroke="#8C857E" stroke-width="1" x1="430" x2="430" y1="240" y2="245"></line>
+<text fill="#8C857E" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="middle" x="430" y="256">8k</text>
+<line stroke="#8C857E" stroke-width="1" x1="615" x2="615" y1="240" y2="245"></line>
+<text fill="#8C857E" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="middle" x="615" y="256">12k</text>
+<text fill="#8C857E" font-size="10" text-anchor="middle" x="337" y="271">Epoch</text>
+<!-- Y labels -->
+<text fill="#8C857E" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="end" x="50" y="39">1.50</text>
+<text fill="#8C857E" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="end" x="50" y="81">1.20</text>
+<text fill="#8C857E" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="end" x="50" y="117">0.98</text>
+<text fill="#8C857E" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="end" x="50" y="157">0.73</text>
+<!-- Y axis label -->
+<text fill="#8C857E" font-size="10" text-anchor="middle" transform="rotate(-90,18,140)" x="18" y="140">Estimated α̂</text>
+<!-- Legend -->
+<line stroke="#1C3D6B" stroke-width="2.5" x1="80" x2="110" y1="30" y2="30"></line>
+<text fill="#4A4540" font-size="10" x="115" y="34">Estimated α̂</text>
+<line stroke="#111010" stroke-dasharray="6,3" stroke-width="1.5" x1="200" x2="230" y1="30" y2="30"></line>
+<text fill="#4A4540" font-size="10" x="235" y="34">True α* = 0.40</text>
+<!-- Init annotation -->
+<text fill="#B8845A" font-family="'JetBrains Mono',monospace" font-size="9" x="65" y="28">α̂₀ = 1.5</text>
+<!-- Final annotation -->
+<text fill="#B8845A" font-family="'JetBrains Mono',monospace" font-size="9" x="560" y="203">0.4007</text>
+</svg>
+<div class="fig-caption">Fig. 2, Parameter convergence trajectory. Starting at $\hat{\alpha}_0 = 1.5$, the estimate descends toward the true value $\alpha^\star = 0.4$ over 12,000 epochs. Final relative error: 0.18%. The curve is smooth because $\log\alpha$ is the actual optimization variable; the plotted $\hat{\alpha} = e^{\widehat{\log\alpha}}$ inherits this smoothness.</div>
+</div>
+<!-- SECTION 6 -->
+<hr class="divider"/>
+<div class="section-label">06, Sensor Placement &amp; Identifiability</div>
+<h2 class="section-h">Not All Sensor Configurations Are Equally Informative</h2>
+<div class="fig-wrap">
+<svg style="max-width:560px" viewbox="0 0 560 230" width="100%">
+<defs>
+<lineargradient id="heatGrad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#EBF0F7"></stop>
+<stop offset="40%" stop-color="#4A9EBF"></stop>
+<stop offset="100%" stop-color="#1C3D6B"></stop>
+</lineargradient>
+</defs>
+<!-- Domain rectangle -->
+<rect fill="url(#heatGrad)" height="160" opacity="0.85" rx="4" width="480" x="40" y="30"></rect>
+<rect fill="none" height="160" rx="4" stroke="#1C3D6B" stroke-width="1.5" width="480" x="40" y="30"></rect>
+<!-- 40 sensor dots (pseudo-random but representative scatter) -->
+<circle cx="72" cy="58" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="115" cy="82" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="88" cy="130" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="155" cy="55" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="140" cy="110" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="180" cy="170" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="60" cy="175" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="220" cy="45" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="210" cy="95" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="245" cy="145" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="265" cy="60" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="290" cy="115" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="305" cy="175" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="330" cy="50" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="350" cy="90" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="375" cy="140" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="400" cy="65" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="420" cy="115" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="445" cy="160" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="470" cy="48" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="490" cy="100" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="505" cy="175" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="95" cy="165" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="170" cy="40" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="195" cy="130" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="235" cy="185" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="275" cy="35" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="315" cy="130" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="355" cy="185" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="385" cy="45" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="415" cy="170" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="455" cy="80" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="480" cy="140" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="108" cy="45" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="130" cy="155" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="160" cy="90" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="250" cy="175" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="340" cy="160" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="460" cy="130" fill="#DC2626" opacity="0.9" r="4"></circle><circle cx="505" cy="50" fill="#DC2626" opacity="0.9" r="4"></circle>
+<!-- Axis labels -->
+<text fill="#4A4540" font-size="11" font-style="italic" text-anchor="middle" x="280" y="210">x (spatial coordinate)</text>
+<text fill="#4A4540" font-size="11" font-style="italic" text-anchor="middle" transform="rotate(-90,20,115)" x="20" y="115">t (time)</text>
+<text fill="#1C3D6B" font-family="'JetBrains Mono',monospace" font-size="9" x="40" y="26">t = T</text>
+<text fill="#1C3D6B" font-family="'JetBrains Mono',monospace" font-size="9" x="40" y="205">t = 0</text>
+<text fill="#1C3D6B" font-family="'JetBrains Mono',monospace" font-size="9" x="36" y="215">x=0</text>
+<text fill="#1C3D6B" font-family="'JetBrains Mono',monospace" font-size="9" x="500" y="215">x=1</text>
+<!-- Legend -->
+<circle cx="55" cy="16" fill="#DC2626" r="4"></circle>
+<text fill="#4A4540" font-size="10" x="63" y="20">40 noisy sensors</text>
+<rect fill="url(#heatGrad)" height="8" opacity="0.85" rx="1" width="12" x="200" y="10"></rect>
+<text fill="#4A4540" font-size="10" x="216" y="20">true field u(x,t), dark = high temperature</text>
+</svg>
+<div class="fig-caption">Fig. 3, Sensor placement in the $(x, t)$ domain. The 40 sensors are scattered across both space and time, providing coverage of the spatial gradient structure (essential for estimating diffusivity). Clustering all sensors at a single $x$ location would make $\alpha$ unidentifiable from this data alone.</div>
+</div>
+<h3 class="sub-h">Observability and the Fisher Information Matrix</h3>
+<p class="body-text">The classical framework for assessing identifiability is the Fisher Information Matrix (FIM). For a parameter vector $\boldsymbol{\theta}$ given noisy observations $\mathbf{y} = \mathbf{f}(\boldsymbol{\theta}) + \boldsymbol{\epsilon}$, $\boldsymbol{\epsilon} \sim \mathcal{N}(0, \sigma^2 I)$, the FIM is</p>
+<div class="math-block">
       $$\mathcal{I}(\boldsymbol{\theta}) = \frac{1}{\sigma^2} \mathbf{J}^\top \mathbf{J}$$
     </div>
-
-    <p class="body-text">where $\mathbf{J}_{ij} = \partial f_i / \partial \theta_j$ is the Jacobian of the model outputs with respect to parameters. A parameter is identifiable if and only if $\mathcal{I}$ is positive definite. For the single parameter $\alpha$, this reduces to asking whether $\sum_i (\partial u / \partial \alpha)^2 > 0$, i.e., whether the model output is sensitive to the parameter at the observed locations. The PINN computes this sensitivity automatically via backpropagation.</p>
-
-    <p class="body-text">The inverse of the FIM gives the Cramér–Rao lower bound on parameter estimation variance: $\text{Var}(\hat{\alpha}) \geq 1/\mathcal{I}(\alpha)$. This bound is achievable by the maximum likelihood estimator asymptotically, and the PINN inverse problem can be interpreted as an approximate MLE when the noise is Gaussian and the physics loss is used as the likelihood rather than a penalty.</p>
-
-    <!-- SECTION 7 -->
-    <hr class="divider">
-    <div class="section-label">07, ODE Inverse Problems</div>
-    <h2 class="section-h">Recovering Reaction Rate Constants from Sparse Concentrations</h2>
-
-    <p class="body-text">The inverse PINN framework extends naturally to ODE systems. Consider the consecutive reaction A &rarr; B &rarr; C with mass-action kinetics:</p>
-
-    <div class="math-block">
+<p class="body-text">where $\mathbf{J}_{ij} = \partial f_i / \partial \theta_j$ is the Jacobian of the model outputs with respect to parameters. A parameter is identifiable if and only if $\mathcal{I}$ is positive definite. For the single parameter $\alpha$, this reduces to asking whether $\sum_i (\partial u / \partial \alpha)^2 &gt; 0$, i.e., whether the model output is sensitive to the parameter at the observed locations. The PINN computes this sensitivity automatically via backpropagation.</p>
+<p class="body-text">The inverse of the FIM gives the Cramér–Rao lower bound on parameter estimation variance: $\text{Var}(\hat{\alpha}) \geq 1/\mathcal{I}(\alpha)$. This bound is achievable by the maximum likelihood estimator asymptotically, and the PINN inverse problem can be interpreted as an approximate MLE when the noise is Gaussian and the physics loss is used as the likelihood rather than a penalty.</p>
+<!-- SECTION 7 -->
+<hr class="divider"/>
+<div class="section-label">07, ODE Inverse Problems</div>
+<h2 class="section-h">Recovering Reaction Rate Constants from Sparse Concentrations</h2>
+<p class="body-text">The inverse PINN framework extends naturally to ODE systems. Consider the consecutive reaction A → B → C with mass-action kinetics:</p>
+<div class="math-block">
       $$\frac{d[A]}{dt} = -k_1 [A], \qquad \frac{d[B]}{dt} = k_1 [A], k_2 [B], \qquad \frac{d[C]}{dt} = k_2 [B]$$
     </div>
-
-    <p class="body-text">with initial conditions $[A](0) = 1$, $[B](0) = [C](0) = 0$. Suppose the true constants are $k_1^\star = 0.3$, $k_2^\star = 0.7$, and you have only 15 noisy concentration measurements for each species at scattered time points. The PINN inverse setup:</p>
-
-    <div class="code-block">
-      <div class="code-header">
-        <div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
-        <span class="code-lang">Python, reaction kinetics inverse problem</span>
-      </div>
-      <pre class="code-body"><span class="kw">class</span> <span class="tp">KineticsInversePINN</span>(nn.Module):
+<p class="body-text">with initial conditions $[A](0) = 1$, $[B](0) = [C](0) = 0$. Suppose the true constants are $k_1^\star = 0.3$, $k_2^\star = 0.7$, and you have only 15 noisy concentration measurements for each species at scattered time points. The PINN inverse setup:</p>
+<div class="code-block">
+<div class="code-header">
+<div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div>
+<span class="code-lang">Python, reaction kinetics inverse problem</span>
+</div>
+<pre class="code-body"><span class="kw">class</span> <span class="tp">KineticsInversePINN</span>(nn.Module):
     <span class="kw">def</span> <span class="fn">__init__</span>(<span class="nm">self</span>, k1_init=<span class="nm">1.0</span>, k2_init=<span class="nm">1.0</span>):
         <span class="fn">super</span>().__init__()
         <span class="cm"># Three networks: one per species concentration</span>
@@ -750,146 +713,135 @@ Converged. True alpha: 0.4000 | Recovered alpha: 0.4007 | Relative error: 0.18%<
         r2 = dB - k1 * A + k2 * B         <span class="cm"># dB/dt = k1*A - k2*B</span>
         r3 = dC - k2 * B                  <span class="cm"># dC/dt = k2*B</span>
         <span class="kw">return</span> r1, r2, r3</pre>
-    </div>
-
-    <p class="body-text">The total loss is $\mathcal{L} = \mathcal{L}_{data,A} + \mathcal{L}_{data,B} + \mathcal{L}_{data,C} + \lambda(\mathcal{L}_{phys,A} + \mathcal{L}_{phys,B} + \mathcal{L}_{phys,C})$. With this setup and 4,000 L-BFGS steps, the notebook recovers $\hat{k}_1 = 0.298 \pm 0.004$ and $\hat{k}_2 = 0.703 \pm 0.006$ from 45 noisy data points, relative errors of 0.7% and 0.4% respectively.</p>
-
-    <div class="callout success">
-      <div class="callout-icon">&#10003;</div>
-      <div class="callout-body">
-        <strong>Practical implication for pharmaceutical development.</strong>
+</div>
+<p class="body-text">The total loss is $\mathcal{L} = \mathcal{L}_{data,A} + \mathcal{L}_{data,B} + \mathcal{L}_{data,C} + \lambda(\mathcal{L}_{phys,A} + \mathcal{L}_{phys,B} + \mathcal{L}_{phys,C})$. With this setup and 4,000 L-BFGS steps, the notebook recovers $\hat{k}_1 = 0.298 \pm 0.004$ and $\hat{k}_2 = 0.703 \pm 0.006$ from 45 noisy data points, relative errors of 0.7% and 0.4% respectively.</p>
+<div class="callout success">
+<div class="callout-icon">✓</div>
+<div class="callout-body">
+<strong>Practical implication for pharmaceutical development.</strong>
         This capability replaces a traditional design of experiments campaign. Recovering $k_1$ and $k_2$ classically requires 10–20 experiments across different initial concentrations and temperatures (each a batch run with full analytical workup). The PINN inverse approach recovers both parameters from a single run with inline PAT monitoring, a factor of 10–20x reduction in experimental burden, consistent with the FDA's PAT initiative objectives [7, 8].
       </div>
-    </div>
-
-    <!-- SECTION 8 -->
-    <hr class="divider">
-    <div class="section-label">08, Practical Considerations</div>
-    <h2 class="section-h">Making Inverse PINNs Work in Practice</h2>
-
-    <h3 class="sub-h">Loss scaling</h3>
-    <p class="body-text">The data loss and physics loss typically have very different magnitudes at initialization. If $\mathcal{L}_{physics} \gg \mathcal{L}_{data}$, the optimizer essentially ignores the data, and the network fits the PDE for the wrong parameter. A simple but effective heuristic: compute both losses at initialization and set $\lambda = \mathcal{L}_{data}^{(0)} / \mathcal{L}_{physics}^{(0)}$. This normalizes both terms to the same order of magnitude at the start of training, preventing one from dominating.</p>
-
-    <h3 class="sub-h">Initialization range</h3>
-    <p class="body-text">For inverse problems, the choice of $\alpha_{init}$ matters more than in the forward case. If $\alpha_{init}$ is too far from the truth in log-space (say, $|\log\alpha_{init} - \log\alpha^\star| > 3$), the physics loss landscape near the true parameter can be lost in a flat region, and the optimizer converges to a local minimum. A practical strategy: run a coarse grid search over 5–10 values of $\alpha_{init}$ spanning 2–3 decades, identify which gives the lowest combined loss after 500 epochs, and use that as the initialization for the full run. This is cheap because 500 epochs is fast, and it dramatically improves robustness.</p>
-
-    <h3 class="sub-h">Checking identifiability before running</h3>
-    <p class="body-text">Before committing to a full training run, estimate the sensitivity $\partial u / \partial \alpha$ at the proposed sensor locations using the analytic solution (if available) or a forward PINN with a perturbed $\alpha$. If the sensitivity is near zero everywhere, the parameter is not recoverable from those sensor positions regardless of how long you train. This pre-check takes minutes and prevents wasted computation.</p>
-
-    <h3 class="sub-h">Uncertainty quantification</h3>
-    <p class="body-text">A point estimate $\hat{\alpha}$ is insufficient for engineering decisions. Three methods are in common use:</p>
-
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Method</th>
-          <th>Description</th>
-          <th>Cost</th>
-          <th>Best for</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Laplace approximation</strong></td>
-          <td>Fit a Gaussian to the loss landscape at the MAP estimate using the Hessian</td>
-          <td>Low (1 Hessian computation)</td>
-          <td>Near-Gaussian posteriors</td>
-        </tr>
-        <tr>
-          <td><strong>Ensemble PINNs</strong></td>
-          <td>Train $M$ independent networks with different random seeds; use spread of $\hat{\alpha}_m$ as uncertainty</td>
-          <td>$M\times$ training cost</td>
-          <td>Non-Gaussian, multimodal</td>
-        </tr>
-        <tr>
-          <td><strong>Bayesian PINN (B-PINN)</strong></td>
-          <td>Treat all weights and $\alpha$ as random variables; approximate posterior via HMC or variational inference</td>
-          <td>Very high</td>
-          <td>Full posterior needed</td>
-        </tr>
-        <tr>
-          <td><strong>MC Dropout</strong></td>
-          <td>Enable dropout at inference; average $T$ stochastic forward passes</td>
-          <td>Low (one network)</td>
-          <td>Quick confidence estimates</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- SECTION 9 -->
-    <hr class="divider">
-    <div class="section-label">09, Pharmaceutical Applications</div>
-    <h2 class="section-h">PAT and the Real-Time Release Testing Paradigm</h2>
-
-    <p class="body-text">The FDA's Process Analytical Technology (PAT) guidance (2004) [7] defines PAT as "a system for designing, analyzing, and controlling manufacturing through timely measurements of critical quality and performance attributes of raw and in-process materials and processes, with the goal of ensuring final product quality." This is precisely the problem class that PINN inverse methods are designed to address.</p>
-
-    <p class="body-text">Modern PAT installations include inline NIR and Raman spectrometers, focused beam reflectance measurement (FBRM) for particle size, and inline HPLC. These instruments generate high-frequency concentration-time profiles with a precision of $\pm 1$–$3\%$ relative error. The PINN inverse framework can exploit this data to recover kinetic parameters in near-real-time, closing the loop between measurement and process understanding.</p>
-
-    <p class="body-text">The pharmaceutical development context under ICH Q8(R2) [8] requires a Design Space to be established for critical process parameters (CPPs). Traditionally, this requires a formal DoE, a resource-intensive campaign that may require 16–50 batch runs at varied process conditions. Using PINN-based parameter estimation, a process engineer can recover the kinetic model parameters from a single batch run (with sufficient PAT coverage) and then use the calibrated mechanistic model to compute the Design Space analytically. This is a fundamentally different paradigm: <em>model-enabled</em> rather than <em>empirically enumerated</em> Design Space.</p>
-
-    <div class="callout insight">
-      <div class="callout-icon">&#9670;</div>
-      <div class="callout-body">
-        <strong>Historical note: Psichogios and Ungar (1992).</strong>
+</div>
+<!-- SECTION 8 -->
+<hr class="divider"/>
+<div class="section-label">08, Practical Considerations</div>
+<h2 class="section-h">Making Inverse PINNs Work in Practice</h2>
+<h3 class="sub-h">Loss scaling</h3>
+<p class="body-text">The data loss and physics loss typically have very different magnitudes at initialization. If $\mathcal{L}_{physics} \gg \mathcal{L}_{data}$, the optimizer essentially ignores the data, and the network fits the PDE for the wrong parameter. A simple but effective heuristic: compute both losses at initialization and set $\lambda = \mathcal{L}_{data}^{(0)} / \mathcal{L}_{physics}^{(0)}$. This normalizes both terms to the same order of magnitude at the start of training, preventing one from dominating.</p>
+<h3 class="sub-h">Initialization range</h3>
+<p class="body-text">For inverse problems, the choice of $\alpha_{init}$ matters more than in the forward case. If $\alpha_{init}$ is too far from the truth in log-space (say, $|\log\alpha_{init} - \log\alpha^\star| &gt; 3$), the physics loss landscape near the true parameter can be lost in a flat region, and the optimizer converges to a local minimum. A practical strategy: run a coarse grid search over 5–10 values of $\alpha_{init}$ spanning 2–3 decades, identify which gives the lowest combined loss after 500 epochs, and use that as the initialization for the full run. This is cheap because 500 epochs is fast, and it dramatically improves robustness.</p>
+<h3 class="sub-h">Checking identifiability before running</h3>
+<p class="body-text">Before committing to a full training run, estimate the sensitivity $\partial u / \partial \alpha$ at the proposed sensor locations using the analytic solution (if available) or a forward PINN with a perturbed $\alpha$. If the sensitivity is near zero everywhere, the parameter is not recoverable from those sensor positions regardless of how long you train. This pre-check takes minutes and prevents wasted computation.</p>
+<h3 class="sub-h">Uncertainty quantification</h3>
+<p class="body-text">A point estimate $\hat{\alpha}$ is insufficient for engineering decisions. Three methods are in common use:</p>
+<table class="data-table">
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+<th>Cost</th>
+<th>Best for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Laplace approximation</strong></td>
+<td>Fit a Gaussian to the loss landscape at the MAP estimate using the Hessian</td>
+<td>Low (1 Hessian computation)</td>
+<td>Near-Gaussian posteriors</td>
+</tr>
+<tr>
+<td><strong>Ensemble PINNs</strong></td>
+<td>Train $M$ independent networks with different random seeds; use spread of $\hat{\alpha}_m$ as uncertainty</td>
+<td>$M\times$ training cost</td>
+<td>Non-Gaussian, multimodal</td>
+</tr>
+<tr>
+<td><strong>Bayesian PINN (B-PINN)</strong></td>
+<td>Treat all weights and $\alpha$ as random variables; approximate posterior via HMC or variational inference</td>
+<td>Very high</td>
+<td>Full posterior needed</td>
+</tr>
+<tr>
+<td><strong>MC Dropout</strong></td>
+<td>Enable dropout at inference; average $T$ stochastic forward passes</td>
+<td>Low (one network)</td>
+<td>Quick confidence estimates</td>
+</tr>
+</tbody>
+</table>
+<!-- SECTION 9 -->
+<hr class="divider"/>
+<div class="section-label">09, Pharmaceutical Applications</div>
+<h2 class="section-h">PAT and the Real-Time Release Testing Paradigm</h2>
+<p class="body-text">The FDA's Process Analytical Technology (PAT) guidance (2004) [7] defines PAT as "a system for designing, analyzing, and controlling manufacturing through timely measurements of critical quality and performance attributes of raw and in-process materials and processes, with the goal of ensuring final product quality." This is precisely the problem class that PINN inverse methods are designed to address.</p>
+<p class="body-text">Modern PAT installations include inline NIR and Raman spectrometers, focused beam reflectance measurement (FBRM) for particle size, and inline HPLC. These instruments generate high-frequency concentration-time profiles with a precision of $\pm 1$–$3\%$ relative error. The PINN inverse framework can exploit this data to recover kinetic parameters in near-real-time, closing the loop between measurement and process understanding.</p>
+<p class="body-text">The pharmaceutical development context under ICH Q8(R2) [8] requires a Design Space to be established for critical process parameters (CPPs). Traditionally, this requires a formal DoE, a resource-intensive campaign that may require 16–50 batch runs at varied process conditions. Using PINN-based parameter estimation, a process engineer can recover the kinetic model parameters from a single batch run (with sufficient PAT coverage) and then use the calibrated mechanistic model to compute the Design Space analytically. This is a fundamentally different paradigm: <em>model-enabled</em> rather than <em>empirically enumerated</em> Design Space.</p>
+<div class="callout insight">
+<div class="callout-icon">◆</div>
+<div class="callout-body">
+<strong>Historical note: Psichogios and Ungar (1992).</strong>
         The use of neural networks to identify parameters in mechanistic ODE models was proposed over 30 years ago by Psichogios and Ungar [9], who embedded neural networks as unknown rate terms inside biochemical reactor ODEs. PINN inverse problems are the natural extension of this "hybrid semi-parametric" approach, instead of replacing an unknown kinetic term with a neural network, the entire field $u(x,t)$ is represented by the network, and the physics provides the constraint that drives parameter identification.
       </div>
-    </div>
-
-    <hr class="divider">
-    <div class="section-label">References</div>
-    <h2 class="section-h">Bibliography</h2>
-    <div class="ref-list">
-      <div class="ref-item"><span class="ref-num">[1]</span>Raissi, M., Perdikaris, P., &amp; Karniadakis, G.E. (2019). Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. <em>Journal of Computational Physics</em>, 378, 686–707.</div>
-      <div class="ref-item"><span class="ref-num">[2]</span>Raissi, M., Yazdani, A., &amp; Karniadakis, G.E. (2020). Hidden fluid mechanics: Learning velocity and pressure fields from flow visualizations. <em>Science</em>, 367(6481), 1026–1030.</div>
-      <div class="ref-item"><span class="ref-num">[3]</span>Tartakovsky, A.M., Marrero, C.O., Perdikaris, P., Tartakovsky, G.D., &amp; Barajas-Solano, D. (2020). Physics-informed deep neural networks for learning parameters and constitutive relationships in subsurface flow problems. <em>Water Resources Research</em>, 56(5), e2019WR026731.</div>
-      <div class="ref-item"><span class="ref-num">[4]</span>Hadamard, J. (1902). Sur les problèmes aux dérivées partielles et leur signification physique. <em>Princeton University Bulletin</em>, 49–52.</div>
-      <div class="ref-item"><span class="ref-num">[5]</span>Bard, Y. (1974). <em>Nonlinear Parameter Estimation</em>. Academic Press, New York.</div>
-      <div class="ref-item"><span class="ref-num">[6]</span>Yang, L., Meng, X., &amp; Karniadakis, G.E. (2021). B-PINNs: Bayesian physics-informed neural networks for forward and inverse PDE problems with noisy data. <em>Journal of Computational Physics</em>, 425, 109913.</div>
-      <div class="ref-item"><span class="ref-num">[7]</span>U.S. Food and Drug Administration. (2004). <em>Guidance for Industry: PAT, A Framework for Innovative Pharmaceutical Development, Manufacturing, and Quality Assurance</em>. FDA, Rockville, MD.</div>
-      <div class="ref-item"><span class="ref-num">[8]</span>International Council for Harmonisation. (2009). <em>ICH Q8(R2): Pharmaceutical Development</em>. ICH Harmonised Tripartite Guideline.</div>
-      <div class="ref-item"><span class="ref-num">[9]</span>Psichogios, D.C. &amp; Ungar, L.H. (1992). A hybrid neural network–first principles approach to process modeling. <em>AIChE Journal</em>, 38(10), 1499–1511.</div>
-      <div class="ref-item"><span class="ref-num">[10]</span>Rackauckas, C., Ma, Y., Martensen, J., Warner, C., Zubov, K., Supekar, R., Skinner, D., &amp; Ramadhan, A. (2020). Universal differential equations for scientific machine learning. <em>arXiv:2001.04385</em>.</div>
-    </div>
-
-        <div style="margin-top:var(--sp-5);display:flex;gap:var(--sp-3);flex-wrap:wrap;align-items:center">
-      <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;flex-basis:100%">Notebook — Inverse Parameter Estimation</span>
-      <a href="https://github.com/alishahmohammadi26/physics-ai-pinns/blob/main/01_Intro_to_PINNs/notebooks/03_Advanced/07_inverse_parameter_estimation.ipynb" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;font:600 var(--text-sm)/1 var(--font-body);padding:10px 18px;border-radius:999px;background:var(--surface);border:1px solid var(--line-strong);color:var(--navy);text-decoration:none">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+</div>
+<hr class="divider"/>
+<div class="section-label">References</div>
+<h2 class="section-h">Bibliography</h2>
+<div class="ref-list">
+<div class="ref-item"><span class="ref-num">[1]</span>Raissi, M., Perdikaris, P., &amp; Karniadakis, G.E. (2019). Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations. <em>Journal of Computational Physics</em>, 378, 686–707.</div>
+<div class="ref-item"><span class="ref-num">[2]</span>Raissi, M., Yazdani, A., &amp; Karniadakis, G.E. (2020). Hidden fluid mechanics: Learning velocity and pressure fields from flow visualizations. <em>Science</em>, 367(6481), 1026–1030.</div>
+<div class="ref-item"><span class="ref-num">[3]</span>Tartakovsky, A.M., Marrero, C.O., Perdikaris, P., Tartakovsky, G.D., &amp; Barajas-Solano, D. (2020). Physics-informed deep neural networks for learning parameters and constitutive relationships in subsurface flow problems. <em>Water Resources Research</em>, 56(5), e2019WR026731.</div>
+<div class="ref-item"><span class="ref-num">[4]</span>Hadamard, J. (1902). Sur les problèmes aux dérivées partielles et leur signification physique. <em>Princeton University Bulletin</em>, 49–52.</div>
+<div class="ref-item"><span class="ref-num">[5]</span>Bard, Y. (1974). <em>Nonlinear Parameter Estimation</em>. Academic Press, New York.</div>
+<div class="ref-item"><span class="ref-num">[6]</span>Yang, L., Meng, X., &amp; Karniadakis, G.E. (2021). B-PINNs: Bayesian physics-informed neural networks for forward and inverse PDE problems with noisy data. <em>Journal of Computational Physics</em>, 425, 109913.</div>
+<div class="ref-item"><span class="ref-num">[7]</span>U.S. Food and Drug Administration. (2004). <em>Guidance for Industry: PAT, A Framework for Innovative Pharmaceutical Development, Manufacturing, and Quality Assurance</em>. FDA, Rockville, MD.</div>
+<div class="ref-item"><span class="ref-num">[8]</span>International Council for Harmonisation. (2009). <em>ICH Q8(R2): Pharmaceutical Development</em>. ICH Harmonised Tripartite Guideline.</div>
+<div class="ref-item"><span class="ref-num">[9]</span>Psichogios, D.C. &amp; Ungar, L.H. (1992). A hybrid neural network–first principles approach to process modeling. <em>AIChE Journal</em>, 38(10), 1499–1511.</div>
+<div class="ref-item"><span class="ref-num">[10]</span>Rackauckas, C., Ma, Y., Martensen, J., Warner, C., Zubov, K., Supekar, R., Skinner, D., &amp; Ramadhan, A. (2020). Universal differential equations for scientific machine learning. <em>arXiv:2001.04385</em>.</div>
+</div>
+<div style="margin-top:var(--sp-5);display:flex;gap:var(--sp-3);flex-wrap:wrap;align-items:center">
+<span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;flex-basis:100%">Notebook: Inverse Parameter Estimation</span>
+<a href="https://github.com/alishahmohammadi26/physics-ai-pinns/blob/main/01_Intro_to_PINNs/notebooks/03_Advanced/07_inverse_parameter_estimation.ipynb" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;font:600 var(--text-sm)/1 var(--font-body);padding:10px 18px;border-radius:999px;background:var(--surface);border:1px solid var(--line-strong);color:var(--navy);text-decoration:none" target="_blank">
+<svg fill="currentColor" height="15" viewbox="0 0 24 24" width="15"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg>
         View notebook on GitHub
       </a>
-      <a href="https://colab.research.google.com/github/alishahmohammadi26/physics-ai-pinns/blob/main/01_Intro_to_PINNs/notebooks/03_Advanced/07_inverse_parameter_estimation.ipynb" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;font:600 var(--text-sm)/1 var(--font-body);padding:10px 18px;border-radius:999px;background:var(--accent);color:#fff;border:1px solid transparent;text-decoration:none">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z" fill="currentColor" stroke="none"/></svg>
+<a href="https://colab.research.google.com/github/alishahmohammadi26/physics-ai-pinns/blob/main/01_Intro_to_PINNs/notebooks/03_Advanced/07_inverse_parameter_estimation.ipynb" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;font:600 var(--text-sm)/1 var(--font-body);padding:10px 18px;border-radius:999px;background:var(--accent);color:#fff;border:1px solid transparent;text-decoration:none" target="_blank">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><circle cx="12" cy="12" r="10"></circle><path d="M10 8l6 4-6 4V8z" fill="currentColor" stroke="none"></path></svg>
         Open in Colab
       </a>
-    </div>
-
-    <hr class="divider">
-    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-top:1rem">
-      <a href="pinn-burgers-reaction-pdes.html" style="font-size:.875rem;color:var(--ink-3)">&larr; Previous: Burgers &amp; Reaction PDEs</a>
-      <a href="pinn-adaptive-sampling.html" style="font-size:.875rem;color:var(--navy);font-weight:600">Next: Adaptive Sampling &amp; Training Strategies &rarr;</a>
-    </div>
-
-  </div><!-- /article-body -->
-</div><!-- /article-page -->
-
+</div>
+<hr class="divider"/>
+<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-top:1rem">
+<a href="pinn-burgers-reaction-pdes.html" style="font-size:.875rem;color:var(--ink-3)">← Previous: Burgers &amp; Reaction PDEs</a>
+<a href="pinn-adaptive-sampling.html" style="font-size:.875rem;color:var(--navy);font-weight:600">Next: Adaptive Sampling &amp; Training Strategies →</a>
+</div>
+</div><!-- /article-body -->
+<!-- /article-page -->
+<div class="related-reading reveal">
+<p class="rr-label">Related reading</p>
+<div class="rr-grid">
+<a class="rr-card" href="pinn-burgers-reaction-pdes.html"><span class="rr-title">Nonlinear PDEs with PINNs: Burgers Equation and Reaction Kinetics</span><span class="rr-go">Read article &#8594;</span></a>
+<a class="rr-card" href="pinn-adaptive-sampling.html"><span class="rr-title">Adaptive Sampling and Training Strategies for PINNs</span><span class="rr-go">Read article &#8594;</span></a>
+<a class="rr-card" href="enzyme-kinetics-pinn-vs-sindy.html"><span class="rr-title">Discovering Enzyme Kinetics from 1913 Data: PINNs vs. Sparse Regression</span><span class="rr-go">Read article &#8594;</span></a>
+</div>
+</div>
 <footer class="site-footer">
-  <div class="foot-lead">
-    <p class="foot-name">Ali Shahmohammadi, Ph.D.</p>
-    <p class="foot-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p>
-  </div>
-  <nav class="foot-nav" aria-label="Footer">
-    <a href="../index.html#writing">Writing</a>
-    <a href="../index.html#career">Career</a>
-    <a href="../resume.html">Resume</a>
-    <a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
-    <a href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
-  </nav>
-  <div class="foot-base">
-    <span>&copy; 2026 Ali Shahmohammadi, Ph.D.</span>
-    <a class="to-top" href="#top">Back to top &uarr;</a>
-  </div>
+<div class="foot-lead">
+<p class="foot-name">Ali Shahmohammadi, Ph.D.</p>
+<p class="foot-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p>
+</div>
+<nav aria-label="Footer" class="foot-nav">
+<a href="../index.html#writing">Writing</a>
+<a href="../index.html#career">Career</a>
+<a href="../resume.html">Resume</a>
+<a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
+<a href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
+</nav>
+<div class="foot-base">
+<span>© 2026 Ali Shahmohammadi, Ph.D.</span>
+<a class="to-top" href="#top">Back to top ↑</a>
+</div>
 </footer>
-
 <script>
 (function(){
   var header = document.querySelector('.site-header');
@@ -910,4 +862,12 @@ Converged. True alpha: 0.4000 | Recovered alpha: 0.4007 | Relative error: 0.18%<
 })();
 </script>
 </body>
+<script>
+(function(){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}
+  });},{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
 </html>

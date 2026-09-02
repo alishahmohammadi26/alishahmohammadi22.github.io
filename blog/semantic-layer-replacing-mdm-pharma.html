@@ -1,27 +1,26 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html data-theme="light" lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>From Ontology to MDM: How Semantic Layers Are Replacing Hub-and-Spoke Master Data Architectures in Pharma | Ali Shahmohammadi</title>
-<meta name="description" content="Why the next generation of pharma data architecture treats meaning as a first-class artifact, and what that demands of the teams who build it. Covers OWL, SHACL, SKOS, R2RML, data mesh, and the migration pattern from hub to semantic layer." />
-
-<meta property="og:title" content="Semantic Layers Replacing Hub-and-Spoke MDM in Pharma" />
-<meta property="og:description" content="How semantic layers built on W3C standards are replacing hub-and-spoke MDM for pharma master data, with production exemplars from Bayer, Roche, and the Pistoia Alliance." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://alishahmohammadi26.github.io/blog/semantic-layer-replacing-mdm-pharma.html" />
-<meta property="og:image" content="https://alishahmohammadi26.github.io/assets/images/og-preview.png" />
-<meta property="og:image:type" content="image/png" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://alishahmohammadi26.github.io/assets/images/og-preview.png" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<meta content="Why the next generation of pharma data architecture treats meaning as a first-class artifact, and what that demands of the teams who build it. Covers OWL, SHACL, SKOS, R2RML, data mesh, and the migration pattern from hub to semantic layer." name="description"/>
+<meta content="Semantic Layers Replacing Hub-and-Spoke MDM in Pharma" property="og:title"/>
+<meta content="How semantic layers built on W3C standards are replacing hub-and-spoke MDM for pharma master data, with production exemplars from Bayer, Roche, and the Pistoia Alliance." property="og:description"/>
+<meta content="article" property="og:type"/>
+<meta content="https://alishahmohammadi26.github.io/blog/semantic-layer-replacing-mdm-pharma.html" property="og:url"/>
+<meta content="https://alishahmohammadi26.github.io/assets/images/og-preview.png" property="og:image"/>
+<meta content="image/png" property="og:image:type"/>
+<meta content="1200" property="og:image:width"/>
+<meta content="630" property="og:image:height"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="https://alishahmohammadi26.github.io/assets/images/og-preview.png" name="twitter:image"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" rel="stylesheet"/>
+<script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})" src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <script>
   (function(){var t=localStorage.getItem('theme');
    if(!t)t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
@@ -323,8 +322,24 @@ hr.divider{background:var(--line-strong)}
 
 /* Old nav — hide fixed positioning; handled by new .site-header */
 nav:not(.site-nav):not(.foot-nav){display:none}
-</style>
 
+/* ===== Related reading ===== */
+.related-reading{margin:var(--sp-10) 0 var(--sp-8);padding-top:var(--sp-8);border-top:1px solid var(--line)}
+.related-reading .rr-label{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 var(--sp-4)}
+.related-reading .rr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--sp-4)}
+.related-reading .rr-card{display:block;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:var(--sp-4) var(--sp-5);text-decoration:none;transition:border-color .2s,box-shadow .2s,transform .2s}
+.related-reading .rr-card:hover{border-color:var(--accent);box-shadow:var(--shadow-2);transform:translateY(-2px);text-decoration:none}
+.related-reading .rr-card .rr-title{display:block;font-family:var(--font-display);font-weight:600;color:var(--navy);
+  font-size:var(--text-base);line-height:var(--lh-snug);margin-bottom:6px}
+.related-reading .rr-card .rr-go{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--accent);letter-spacing:.05em}
+
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+</style>
 <style>
 /* ═══════════════════════════════════════════════════════════════════════
    NON-PINN ARTICLE COMPATIBILITY CSS
@@ -633,688 +648,657 @@ code:not(pre code){font-family:var(--font-mono);font-size:.9em;background:var(--
 </style>
 </head>
 <body>
-
 <!-- ── Nav ── -->
 <header class="site-header" data-elevate="false">
-  <a class="brand" href="../index.html">Ali Shahmohammadi <span class="deg">Ph.D.</span></a>
-  <nav class="site-nav" aria-label="Primary">
-    <a href="../index.html#writing">Writing</a>
-    <a href="../index.html#career">Career</a>
-    <a href="../resume.html">Resume</a>
-    <a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
-  </nav>
-  <button class="theme-toggle" id="themeBtn" type="button" aria-label="Toggle dark mode"><b></b></button>
-  <div class="read-progress" role="presentation"><span id="progress"></span></div>
+<a class="brand" href="../index.html">Ali Shahmohammadi <span class="deg">Ph.D.</span></a>
+<nav aria-label="Primary" class="site-nav">
+<a href="../index.html#writing">Writing</a>
+<a href="../index.html#career">Career</a>
+<a href="../resume.html">Resume</a>
+<a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
+</nav>
+<button aria-label="Toggle dark mode" class="theme-toggle" id="themeBtn" type="button"><b></b></button>
+<div class="read-progress" role="presentation"><span id="progress"></span></div>
 </header>
-
 <!-- ── Hero ── -->
 <section class="hero">
-  <div class="hero-pill">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-    Semantic Layers &nbsp;&middot;&nbsp; MDM &nbsp;&middot;&nbsp; Pharma Data Architecture
+<div class="hero-pill">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+    Semantic Layers  ·  MDM  ·  Pharma Data Architecture
   </div>
-  <h1>From Ontology to MDM:<br><span class="accent-green">How Semantic Layers Are Replacing</span><br>Hub-and-Spoke Master Data Architectures in Pharma</h1>
-  <p class="hero-sub">Why the next generation of pharma data architecture treats meaning as a first-class artifact &mdash; and what that demands of the teams who build it. OWL, SHACL, SKOS, R2RML, data mesh, production exemplars, and a five-step migration pattern.</p>
-  <div class="hero-meta">
-    <span class="meta-tag">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+<h1>From Ontology to MDM:<br/><span class="accent-green">How Semantic Layers Are Replacing</span><br/>Hub-and-Spoke Master Data Architectures in Pharma</h1>
+<p class="hero-sub">Why the next generation of pharma data architecture treats meaning as a first-class artifact, and what that demands of the teams who build it. OWL, SHACL, SKOS, R2RML, data mesh, production exemplars, and a five-step migration pattern.</p>
+<div class="hero-meta">
+<span class="meta-tag">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><rect height="18" rx="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
       May 26, 2026
     </span>
-    <span class="meta-dot"></span>
-    <span class="meta-tag">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+<span class="meta-dot"></span>
+<span class="meta-tag">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
       ~30 min read
     </span>
-    <span class="meta-dot"></span>
-    <span class="meta-tag">Ali Shahmohammadi, Ph.D.</span>
-    <span class="meta-dot"></span>
-    <span class="meta-tag">24 references</span>
-  </div>
-  <div class="hero-cta">
-    <a href="#mdm-gap" class="btn btn-primary">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+<span class="meta-dot"></span>
+<span class="meta-tag">Ali Shahmohammadi, Ph.D.</span>
+<span class="meta-dot"></span>
+<span class="meta-tag">24 references</span>
+</div>
+<div class="hero-cta">
+<a class="btn btn-primary" href="#mdm-gap">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="15"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
       Read Article
     </a>
-    <a href="https://www.w3.org/TR/owl2-overview/" target="_blank" rel="noopener" class="btn btn-outline">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+<a class="btn btn-outline" href="https://www.w3.org/TR/owl2-overview/" rel="noopener" target="_blank">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" x2="21" y1="14" y2="3"></line></svg>
       OWL 2 Spec (W3C)
     </a>
-  </div>
+</div>
 </section>
-
 <!-- ── Key stats ── -->
 <div class="container" style="margin:3rem auto;">
-  <div class="stats-row">
-    <div class="stat">
-      <div class="stat-num">75%</div>
-      <div class="stat-label">MDM programs fail to meet business objectives (Gartner via Dataversity)</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num purple">4</div>
-      <div class="stat-label">W3C Recommendations (OWL, SKOS, SHACL, R2RML) that form the entire semantic stack</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num green">3+</div>
-      <div class="stat-label">Major pharma semantic-layer implementations in production (Bayer COLID, Roche EDIS, Pistoia FAIR)</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num amber">Sep 2026</div>
-      <div class="stat-label">EMA eAF mandatory for all Centrally Authorised Products &mdash; the forcing function</div>
-    </div>
-  </div>
+<div class="stats-row">
+<div class="stat">
+<div class="stat-num">75%</div>
+<div class="stat-label">MDM programs fail to meet business objectives (Gartner via Dataversity)</div>
 </div>
-
+<div class="stat">
+<div class="stat-num purple">4</div>
+<div class="stat-label">W3C Recommendations (OWL, SKOS, SHACL, R2RML) that form the entire semantic stack</div>
+</div>
+<div class="stat">
+<div class="stat-num green">3+</div>
+<div class="stat-label">Major pharma semantic-layer implementations in production (Bayer COLID, Roche EDIS, Pistoia FAIR)</div>
+</div>
+<div class="stat">
+<div class="stat-num amber">Sep 2026</div>
+<div class="stat-label">EMA eAF mandatory for all Centrally Authorised Products: the forcing function</div>
+</div>
+</div>
+</div>
 <!-- ── Table of Contents ── -->
 <div class="container" style="margin-bottom:3rem;">
-  <div class="toc">
-    <div class="toc-head">Table of Contents</div>
-    <ol>
-      <li><span class="toc-n">01</span><a href="#mdm-gap">The Gap Between MDM-as-Sold and MDM-as-Needed</a></li>
-      <li><span class="toc-n">02</span><a href="#semantic-layer">Semantic Layer: A Working Definition</a></li>
-      <li><span class="toc-n">03</span><a href="#pharma-fit">Why Pharma Is Unusually Suited to Semantic Layers</a></li>
-      <li><span class="toc-n">04</span><a href="#w3c-stack">The W3C Stack That Does the Actual Work</a></li>
-      <li><span class="toc-n">05</span><a href="#data-mesh">The Federation Angle: Data Mesh as Operating Model</a></li>
-      <li><span class="toc-n">06</span><a href="#exemplars">Pharma Exemplars Already in Production</a></li>
-      <li><span class="toc-n">07</span><a href="#migration">Migration Pattern: Hub to Read Model</a></li>
-      <li><span class="toc-n">08</span><a href="#pitfalls">Implementation Pitfalls Worth Naming</a></li>
-      <li><span class="toc-n">09</span><a href="#next24">Where the Next 24 Months Go</a></li>
-    </ol>
-  </div>
+<div class="toc">
+<div class="toc-head">Table of Contents</div>
+<ol>
+<li><span class="toc-n">01</span><a href="#mdm-gap">The Gap Between MDM-as-Sold and MDM-as-Needed</a></li>
+<li><span class="toc-n">02</span><a href="#semantic-layer">Semantic Layer: A Working Definition</a></li>
+<li><span class="toc-n">03</span><a href="#pharma-fit">Why Pharma Is Unusually Suited to Semantic Layers</a></li>
+<li><span class="toc-n">04</span><a href="#w3c-stack">The W3C Stack That Does the Actual Work</a></li>
+<li><span class="toc-n">05</span><a href="#data-mesh">The Federation Angle: Data Mesh as Operating Model</a></li>
+<li><span class="toc-n">06</span><a href="#exemplars">Pharma Exemplars Already in Production</a></li>
+<li><span class="toc-n">07</span><a href="#migration">Migration Pattern: Hub to Read Model</a></li>
+<li><span class="toc-n">08</span><a href="#pitfalls">Implementation Pitfalls Worth Naming</a></li>
+<li><span class="toc-n">09</span><a href="#next24">Where the Next 24 Months Go</a></li>
+</ol>
 </div>
-
+</div>
 <!-- ══════════════════════════════════════ -->
 <!-- §1, The MDM Gap                      -->
 <!-- ══════════════════════════════════════ -->
 <section class="section" id="mdm-gap">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>
         01, The Problem
       </div>
-      <h2 class="section-title">The Gap Between MDM-as-Sold and MDM-as-Needed</h2>
-      <p class="section-sub">Pharma has mature, well-funded MDM capability. And almost nobody downstream trusts it completely.</p>
-    </div>
-
-    <div class="prose" style="margin-bottom:2rem;">
-      <p>Walk into almost any large pharma&rsquo;s enterprise architecture function today and you will find a mature, well-funded Master Data Management capability. Customer, product, organization, site, study, asset &mdash; each has a hub, a steward, a workflow, an integration layer, and a roadmap of &ldquo;domains still to onboard.&rdquo; It looks like a solved problem.</p>
-      <p>Then ask anyone downstream &mdash; a clinical data manager, a regulatory writer, a pharmacovigilance analyst, an R&amp;D data scientist &mdash; whether they trust it. The answer is almost always the same: <em>for some things, in some systems, sometimes.</em></p>
-      <p>The gap is not a tooling failure. The hubs do what hubs do. The gap is architectural: the row-and-column &ldquo;golden record&rdquo; is the wrong unit of mastering for an industry whose data exchange surface is a stack of evolving, machine-processable, semantically rich standards. Per Gartner research cited via Dataversity, around 75% of MDM programs fail to meet their business objectives &mdash; a figure that has reportedly worsened since 2015.<sup><a href="#ref-1">1</a></sup></p>
-      <p>In pharma, the failure is usually not &ldquo;we couldn&rsquo;t deduplicate customers.&rdquo; It&rsquo;s &ldquo;we built a hub, and then we still had to maintain a parallel translation layer for every regulatory submission, every clinical standard, every research consumer.&rdquo; That parallel translation layer <em>is</em> the de facto semantic layer. The question facing pharma enterprise architecture in 2026 is whether to keep treating it as an integration tax &mdash; or to promote it to the primary architectural primitive and demote the hub to a derived view.</p>
-    </div>
-
-    <div class="callout blue">
-      <p><strong>The core argument:</strong> Stop maintaining translation tiers. Promote them. The semantic layer is not a new technology &mdash; every piece of the stack has been a stable W3C Recommendation for over a decade. The production exemplars (Bayer COLID since 2019, Roche EDIS since 2017) have been running long enough to call them proven. What is new is the willingness to make the semantic layer the actual master.</p>
-    </div>
-  </div>
+<h2 class="section-title">The Gap Between MDM-as-Sold and MDM-as-Needed</h2>
+<p class="section-sub">Pharma has mature, well-funded MDM capability. And almost nobody downstream trusts it completely.</p>
+</div>
+<div class="prose" style="margin-bottom:2rem;">
+<p>Walk into almost any large pharma’s enterprise architecture function today and you will find a mature, well-funded Master Data Management capability. Customer, product, organization, site, study, asset: each has a hub, a steward, a workflow, an integration layer, and a roadmap of “domains still to onboard.” It looks like a solved problem.</p>
+<p>Then ask anyone downstream: a clinical data manager, a regulatory writer, a pharmacovigilance analyst, an R&amp;D data scientist: whether they trust it. The answer is almost always the same: <em>for some things, in some systems, sometimes.</em></p>
+<p>The gap is not a tooling failure. The hubs do what hubs do. The gap is architectural: the row-and-column “golden record” is the wrong unit of mastering for an industry whose data exchange surface is a stack of evolving, machine-processable, semantically rich standards. Per Gartner research cited via Dataversity, around 75% of MDM programs fail to meet their business objectives. A figure that has reportedly worsened since 2015.<sup><a href="#ref-1">1</a></sup></p>
+<p>In pharma, the failure is usually not “we couldn’t deduplicate customers.” It’s “we built a hub, and then we still had to maintain a parallel translation layer for every regulatory submission, every clinical standard, every research consumer.” That parallel translation layer <em>is</em> the de facto semantic layer. The question facing pharma enterprise architecture in 2026 is whether to keep treating it as an integration tax, or to promote it to the primary architectural primitive and demote the hub to a derived view.</p>
+</div>
+<div class="callout blue">
+<p><strong>The core argument:</strong> Stop maintaining translation tiers. Promote them. The semantic layer is not a new technology. Every piece of the stack has been a stable W3C Recommendation for over a decade. The production exemplars (Bayer COLID since 2019, Roche EDIS since 2017) have been running long enough to call them proven. What is new is the willingness to make the semantic layer the actual master.</p>
+</div>
+</div>
 </section>
-
 <!-- ══════════════════════════════════════ -->
 <!-- §2, Semantic Layer Definition        -->
 <!-- ══════════════════════════════════════ -->
 <section class="section section-alt" id="semantic-layer">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow purple">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow purple">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
         02, Definition
       </div>
-      <h2 class="section-title">Semantic Layer: A Working Definition</h2>
-      <p class="section-sub">A semantic layer is logical, not physical. It holds the <em>meaning</em> of the data, not the data itself &mdash; and that distinction is the whole architectural argument.</p>
-    </div>
-
-    <div class="prose" style="margin-bottom:2rem;">
-      <p>Strip it back to the architectural definition: <em>&ldquo;A semantic layer is a piece of enterprise data architecture designed to simplify interactions between complex data storage systems and business users&hellip; The semantic layer provides an intuitive interface that converts that data into meaningful business terms.&rdquo;</em><sup><a href="#ref-2">2</a></sup></p>
-      <p>The crucial property is <strong>logical, not physical</strong>. A semantic layer does not hold the data; it holds the <em>meaning of the data</em>, expressed as a model that downstream consumers &mdash; humans, BI tools, agents, regulators &mdash; query against. The data itself can live in a lake, a warehouse, a relational system, a graph store, or all of those at once.</p>
-      <p>The lineage is older than most pharma teams realize. The first commercial semantic layers were the BusinessObjects &ldquo;Universe&rdquo; and the MicroStrategy &ldquo;Semantic Graph&rdquo; in the 1990s.<sup><a href="#ref-3">3</a></sup> Looker&rsquo;s LookML (2012) made &ldquo;semantics as code&rdquo; &mdash; Git-versioned, peer-reviewed model definitions &mdash; into a mainstream practice.<sup><a href="#ref-3">3</a></sup> Today&rsquo;s iteration is the <strong>universal or headless semantic layer</strong>: a tool-agnostic platform (dbt Semantic Layer, Cube, AtScale, Power BI semantic models) that defines logic once and serves it through APIs to every downstream consumer.<sup><a href="#ref-3">3</a></sup> Gartner explicitly positions semantic layers as a structural component of AI-era analytics architecture.<sup><a href="#ref-4">4</a></sup></p>
-    </div>
-
-    <!-- Comparison table -->
-    <div style="overflow-x:auto;border:1px solid var(--border);border-radius:var(--r);margin-bottom:2rem;">
-      <table class="comp-table">
-        <thead>
-          <tr>
-            <th>Primitive</th>
-            <th>Holds</th>
-            <th>Optimized for</th>
-            <th>Failure mode</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><span class="comp-badge cb-gray">MDM hub</span></td>
-            <td>Reference records (gold)</td>
-            <td>Operational reconciliation</td>
-            <td>Lossy denormalization, brittle survivorship</td>
-          </tr>
-          <tr>
-            <td><span class="comp-badge cb-blue">Data warehouse / lake</span></td>
-            <td>Facts and history</td>
-            <td>Analytics throughput</td>
-            <td>Schema sprawl, no shared meaning</td>
-          </tr>
-          <tr>
-            <td><span class="comp-badge cb-green">Knowledge graph</span></td>
-            <td>Entities + typed edges + provenance</td>
-            <td>Compositional reasoning</td>
-            <td>Governance scale, query latency</td>
-          </tr>
-          <tr>
-            <td><span class="comp-badge cb-purple">Semantic layer</span></td>
-            <td>Definitions, mappings, constraints</td>
-            <td>Consistent interpretation across consumers</td>
-            <td>Drift if not version-controlled</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="callout purple">
-      <p><strong>The key insight:</strong> The semantic layer is not a substitute for the others &mdash; it is the <em>contract</em> that binds them. It says: &ldquo;Wherever this entity lives, this is what it means, these are the rules it must satisfy, and these are the names it answers to across the standards we care about.&rdquo;</p>
-    </div>
-  </div>
+<h2 class="section-title">Semantic Layer: A Working Definition</h2>
+<p class="section-sub">A semantic layer is logical, not physical. It holds the <em>meaning</em> of the data, not the data itself, and that distinction is the whole architectural argument.</p>
+</div>
+<div class="prose" style="margin-bottom:2rem;">
+<p>Strip it back to the architectural definition: <em>“A semantic layer is a piece of enterprise data architecture designed to simplify interactions between complex data storage systems and business users… The semantic layer provides an intuitive interface that converts that data into meaningful business terms.”</em><sup><a href="#ref-2">2</a></sup></p>
+<p>The crucial property is <strong>logical, not physical</strong>. A semantic layer does not hold the data; it holds the <em>meaning of the data</em>, expressed as a model that downstream consumers (humans, BI tools, agents, regulators) query against. The data itself can live in a lake, a warehouse, a relational system, a graph store, or all of those at once.</p>
+<p>The lineage is older than most pharma teams realize. The first commercial semantic layers were the BusinessObjects “Universe” and the MicroStrategy “Semantic Graph” in the 1990s.<sup><a href="#ref-3">3</a></sup> Looker’s LookML (2012) made “semantics as code” (Git-versioned, peer-reviewed model definitions) into a mainstream practice.<sup><a href="#ref-3">3</a></sup> Today’s iteration is the <strong>universal or headless semantic layer</strong>: a tool-agnostic platform (dbt Semantic Layer, Cube, AtScale, Power BI semantic models) that defines logic once and serves it through APIs to every downstream consumer.<sup><a href="#ref-3">3</a></sup> Gartner explicitly positions semantic layers as a structural component of AI-era analytics architecture.<sup><a href="#ref-4">4</a></sup></p>
+</div>
+<!-- Comparison table -->
+<div style="overflow-x:auto;border:1px solid var(--border);border-radius:var(--r);margin-bottom:2rem;">
+<table class="comp-table">
+<thead>
+<tr>
+<th>Primitive</th>
+<th>Holds</th>
+<th>Optimized for</th>
+<th>Failure mode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="comp-badge cb-gray">MDM hub</span></td>
+<td>Reference records (gold)</td>
+<td>Operational reconciliation</td>
+<td>Lossy denormalization, brittle survivorship</td>
+</tr>
+<tr>
+<td><span class="comp-badge cb-blue">Data warehouse / lake</span></td>
+<td>Facts and history</td>
+<td>Analytics throughput</td>
+<td>Schema sprawl, no shared meaning</td>
+</tr>
+<tr>
+<td><span class="comp-badge cb-green">Knowledge graph</span></td>
+<td>Entities + typed edges + provenance</td>
+<td>Compositional reasoning</td>
+<td>Governance scale, query latency</td>
+</tr>
+<tr>
+<td><span class="comp-badge cb-purple">Semantic layer</span></td>
+<td>Definitions, mappings, constraints</td>
+<td>Consistent interpretation across consumers</td>
+<td>Drift if not version-controlled</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="callout purple">
+<p><strong>The key insight:</strong> The semantic layer is not a substitute for the others. It is the <em>contract</em> that binds them. It says: “Wherever this entity lives, this is what it means, these are the rules it must satisfy, and these are the names it answers to across the standards we care about.”</p>
+</div>
+</div>
 </section>
-
 <!-- ══════════════════════════════════════ -->
 <!-- §3, Pharma Fit                       -->
 <!-- ══════════════════════════════════════ -->
 <section class="section" id="pharma-fit">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow green">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow green">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><polyline points="20 6 9 17 4 12"></polyline></svg>
         03, The Pharma Case
       </div>
-      <h2 class="section-title">Why Pharma Is Unusually Suited to Semantic Layers</h2>
-      <p class="section-sub">Almost every industry has standards. Pharma has a <em>stack</em> of them, each authoritative for a different slice of the same entity, each maintained by a different body, each updated on its own cadence.</p>
-    </div>
-
-    <div class="prose" style="margin-bottom:2rem;">
-      <p>The multi-standard reality of pharma is not a problem to be solved &mdash; it is the reason a semantic layer outperforms a hub. A hub-and-spoke MDM has to either flatten all of this into a denormalized row (and lose the semantics that make the standards regulatorily binding) or replicate the relationships in custom mapping tables that drift over time. A semantic layer treats every standard as a <strong>named, versioned view onto a common underlying model</strong>.</p>
-      <p>The same molecule, viewed through the CDISC lens, appears as <code>STUDYID.SUBJID.EXTRT</code>; viewed through the IDMP lens, as an MPID with linked substances; viewed through the OMOP lens, as a concept in the Drug Exposure domain. One model. Many projections.</p>
-    </div>
-
-    <div style="overflow-x:auto;border:1px solid var(--border);border-radius:var(--r);margin-bottom:2rem;">
-      <table class="comp-table">
-        <thead>
-          <tr>
-            <th>Standard</th>
-            <th>Governing Body</th>
-            <th>Scope</th>
-            <th>Regulatory binding</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><span class="comp-badge cb-blue">CDISC SDTM / ADaM / CDASH</span></td>
-            <td>CDISC</td>
-            <td>Clinical study data</td>
-            <td>FDA, PMDA (required)<sup><a href="#ref-5">5</a></sup></td>
-          </tr>
-          <tr>
-            <td><span class="comp-badge cb-green">OMOP CDM</span></td>
-            <td>OHDSI</td>
-            <td>Observational / RWD</td>
-            <td>Open community standard<sup><a href="#ref-8">8</a></sup></td>
-          </tr>
-          <tr>
-            <td><span class="comp-badge cb-amber">HL7 SPL</span></td>
-            <td>HL7 / FDA</td>
-            <td>Product labeling</td>
-            <td>FDA-binding<sup><a href="#ref-10">10</a></sup></td>
-          </tr>
-          <tr>
-            <td><span class="comp-badge cb-purple">EMA eAF</span></td>
-            <td>EMA</td>
-            <td>Regulatory applications</td>
-            <td>Mandatory for CAPs from Sep 1, 2026<sup><a href="#ref-11">11</a></sup></td>
-          </tr>
-          <tr>
-            <td><span class="comp-badge cb-gray">ISO IDMP</span></td>
-            <td>ISO / EMA</td>
-            <td>Product identification</td>
-            <td>EMA SPOR services</td>
-          </tr>
-          <tr>
-            <td><span class="comp-badge cb-blue">MedDRA / RxNorm / NCIt / UNII</span></td>
-            <td>ICH / NLM / NCI / FDA</td>
-            <td>Terminologies</td>
-            <td>Overlay every layer</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="callout green">
-      <p><strong>Historical precedent &mdash; BRIDG Model (ISO 14199, Dec 2024):</strong> The Biomedical Research Integrated Domain Group model &mdash; jointly governed by CDISC, HL7, ISO, NCI, and FDA &mdash; demonstrated that one harmonized semantic model can underpin many surface standards.<sup><a href="#ref-12">12</a></sup> Its real legacy is proof of concept: one model, many standards. NCI/CBIIT now notes the model is &ldquo;no longer actively maintained&rdquo; as a living artifact and should be treated as a foundational reference.<sup><a href="#ref-13">13</a></sup></p>
-    </div>
-  </div>
+<h2 class="section-title">Why Pharma Is Unusually Suited to Semantic Layers</h2>
+<p class="section-sub">Almost every industry has standards. Pharma has a <em>stack</em> of them, each authoritative for a different slice of the same entity, each maintained by a different body, each updated on its own cadence.</p>
+</div>
+<div class="prose" style="margin-bottom:2rem;">
+<p>The multi-standard reality of pharma is not a problem to be solved. It is the reason a semantic layer outperforms a hub. A hub-and-spoke MDM has to either flatten all of this into a denormalized row (and lose the semantics that make the standards regulatorily binding) or replicate the relationships in custom mapping tables that drift over time. A semantic layer treats every standard as a <strong>named, versioned view onto a common underlying model</strong>.</p>
+<p>The same molecule, viewed through the CDISC lens, appears as <code>STUDYID.SUBJID.EXTRT</code>; viewed through the IDMP lens, as an MPID with linked substances; viewed through the OMOP lens, as a concept in the Drug Exposure domain. One model. Many projections.</p>
+</div>
+<div style="overflow-x:auto;border:1px solid var(--border);border-radius:var(--r);margin-bottom:2rem;">
+<table class="comp-table">
+<thead>
+<tr>
+<th>Standard</th>
+<th>Governing Body</th>
+<th>Scope</th>
+<th>Regulatory binding</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="comp-badge cb-blue">CDISC SDTM / ADaM / CDASH</span></td>
+<td>CDISC</td>
+<td>Clinical study data</td>
+<td>FDA, PMDA (required)<sup><a href="#ref-5">5</a></sup></td>
+</tr>
+<tr>
+<td><span class="comp-badge cb-green">OMOP CDM</span></td>
+<td>OHDSI</td>
+<td>Observational / RWD</td>
+<td>Open community standard<sup><a href="#ref-8">8</a></sup></td>
+</tr>
+<tr>
+<td><span class="comp-badge cb-amber">HL7 SPL</span></td>
+<td>HL7 / FDA</td>
+<td>Product labeling</td>
+<td>FDA-binding<sup><a href="#ref-10">10</a></sup></td>
+</tr>
+<tr>
+<td><span class="comp-badge cb-purple">EMA eAF</span></td>
+<td>EMA</td>
+<td>Regulatory applications</td>
+<td>Mandatory for CAPs from Sep 1, 2026<sup><a href="#ref-11">11</a></sup></td>
+</tr>
+<tr>
+<td><span class="comp-badge cb-gray">ISO IDMP</span></td>
+<td>ISO / EMA</td>
+<td>Product identification</td>
+<td>EMA SPOR services</td>
+</tr>
+<tr>
+<td><span class="comp-badge cb-blue">MedDRA / RxNorm / NCIt / UNII</span></td>
+<td>ICH / NLM / NCI / FDA</td>
+<td>Terminologies</td>
+<td>Overlay every layer</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="callout green">
+<p><strong>Historical precedent: BRIDG Model (ISO 14199, Dec 2024):</strong> The Biomedical Research Integrated Domain Group model (jointly governed by CDISC, HL7, ISO, NCI, and FDA) demonstrated that one harmonized semantic model can underpin many surface standards.<sup><a href="#ref-12">12</a></sup> Its real legacy is proof of concept: one model, many standards. NCI/CBIIT now notes the model is “no longer actively maintained” as a living artifact and should be treated as a foundational reference.<sup><a href="#ref-13">13</a></sup></p>
+</div>
+</div>
 </section>
-
 <!-- ══════════════════════════════════════ -->
 <!-- §4, W3C Stack                        -->
 <!-- ══════════════════════════════════════ -->
 <section class="section section-alt" id="w3c-stack">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow amber">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow amber">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><rect height="7" width="7" x="3" y="3"></rect><rect height="7" width="7" x="14" y="3"></rect><rect height="7" width="7" x="3" y="14"></rect><rect height="7" width="7" x="14" y="14"></rect></svg>
         04, The Stack
       </div>
-      <h2 class="section-title">The W3C Stack That Does the Actual Work</h2>
-      <p class="section-sub">Four W3C Recommendations, all stable for over a decade, give you everything needed to build a declarative, version-controllable, queryable semantic layer from end to end.</p>
-    </div>
-
-    <div class="stack-grid" style="margin-bottom:2rem;">
-      <div class="stack-card">
-        <div class="stack-spec">OWL 2</div>
-        <div class="stack-title">Web Ontology Language</div>
-        <p class="stack-desc">Provides formal class semantics: subClass, equivalentClass, disjointness, property characteristics, and the reasoning substrate behind any nontrivial enterprise ontology. <strong>OWL defines what entities exist.</strong></p>
-        <div class="stack-date">W3C Recommendation &mdash; 11 December 2012<sup><a href="#ref-14">14</a></sup></div>
-      </div>
-      <div class="stack-card purple">
-        <div class="stack-spec">SKOS</div>
-        <div class="stack-title">Simple Knowledge Organization System</div>
-        <p class="stack-desc">Represents controlled vocabularies, thesauri, and taxonomies in RDF. The right tool for MedDRA-style hierarchies and value sets. <strong>SKOS defines how entities are labeled and arranged.</strong></p>
-        <div class="stack-date">W3C Recommendation &mdash; 18 August 2009<sup><a href="#ref-15">15</a></sup></div>
-      </div>
-      <div class="stack-card green">
-        <div class="stack-spec">SHACL</div>
-        <div class="stack-title">Shapes Constraint Language</div>
-        <p class="stack-desc">Validates RDF graphs against declarative constraints. In a semantic layer, SHACL is what makes &ldquo;this CDISC dataset is conformant&rdquo; or &ldquo;this IDMP submission is complete&rdquo; into a query, not a code path. <strong>SHACL defines what is true of entities.</strong></p>
-        <div class="stack-date">W3C Recommendation &mdash; 20 July 2017<sup><a href="#ref-16">16</a></sup></div>
-      </div>
-      <div class="stack-card amber">
-        <div class="stack-spec">R2RML</div>
-        <div class="stack-title">RDB to RDF Mapping Language</div>
-        <p class="stack-desc">Projects existing relational systems into the semantic layer without rebuilding them. This is the key to incremental migration: your MDM hub becomes one input among several. <strong>R2RML defines how relational data projects into the model.</strong></p>
-        <div class="stack-date">W3C Recommendation &mdash; 27 September 2012<sup><a href="#ref-17">17</a></sup></div>
-      </div>
-    </div>
-
-    <div class="callout amber">
-      <p><strong>What this means in practice:</strong> OWL defines what entities exist. SKOS defines how they are labeled and arranged. SHACL defines what is true of them. R2RML defines how to project the relational systems you already have. The same query can resolve an entity across a clinical warehouse (via R2RML), a regulatory submission (via IDMP shapes), and a SharePoint document library (via SKOS tagging). There is no comparable native primitive in any hub-and-spoke MDM product.</p>
-    </div>
-  </div>
+<h2 class="section-title">The W3C Stack That Does the Actual Work</h2>
+<p class="section-sub">Four W3C Recommendations, all stable for over a decade, give you everything needed to build a declarative, version-controllable, queryable semantic layer from end to end.</p>
+</div>
+<div class="stack-grid" style="margin-bottom:2rem;">
+<div class="stack-card">
+<div class="stack-spec">OWL 2</div>
+<div class="stack-title">Web Ontology Language</div>
+<p class="stack-desc">Provides formal class semantics: subClass, equivalentClass, disjointness, property characteristics, and the reasoning substrate behind any nontrivial enterprise ontology. <strong>OWL defines what entities exist.</strong></p>
+<div class="stack-date">W3C Recommendation: 11 December 2012<sup><a href="#ref-14">14</a></sup></div>
+</div>
+<div class="stack-card purple">
+<div class="stack-spec">SKOS</div>
+<div class="stack-title">Simple Knowledge Organization System</div>
+<p class="stack-desc">Represents controlled vocabularies, thesauri, and taxonomies in RDF. The right tool for MedDRA-style hierarchies and value sets. <strong>SKOS defines how entities are labeled and arranged.</strong></p>
+<div class="stack-date">W3C Recommendation: 18 August 2009<sup><a href="#ref-15">15</a></sup></div>
+</div>
+<div class="stack-card green">
+<div class="stack-spec">SHACL</div>
+<div class="stack-title">Shapes Constraint Language</div>
+<p class="stack-desc">Validates RDF graphs against declarative constraints. In a semantic layer, SHACL is what makes “this CDISC dataset is conformant” or “this IDMP submission is complete” into a query, not a code path. <strong>SHACL defines what is true of entities.</strong></p>
+<div class="stack-date">W3C Recommendation: 20 July 2017<sup><a href="#ref-16">16</a></sup></div>
+</div>
+<div class="stack-card amber">
+<div class="stack-spec">R2RML</div>
+<div class="stack-title">RDB to RDF Mapping Language</div>
+<p class="stack-desc">Projects existing relational systems into the semantic layer without rebuilding them. This is the key to incremental migration: your MDM hub becomes one input among several. <strong>R2RML defines how relational data projects into the model.</strong></p>
+<div class="stack-date">W3C Recommendation: 27 September 2012<sup><a href="#ref-17">17</a></sup></div>
+</div>
+</div>
+<div class="callout amber">
+<p><strong>What this means in practice:</strong> OWL defines what entities exist. SKOS defines how they are labeled and arranged. SHACL defines what is true of them. R2RML defines how to project the relational systems you already have. The same query can resolve an entity across a clinical warehouse (via R2RML), a regulatory submission (via IDMP shapes), and a SharePoint document library (via SKOS tagging). There is no comparable native primitive in any hub-and-spoke MDM product.</p>
+</div>
+</div>
 </section>
-
 <!-- ══════════════════════════════════════ -->
 <!-- §5, Data Mesh                        -->
 <!-- ══════════════════════════════════════ -->
 <section class="section" id="data-mesh">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><line x1="3" y1="3" x2="12" y2="12"/><line x1="21" y1="3" x2="12" y2="12"/><line x1="12" y1="12" x2="12" y2="21"/></svg>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><circle cx="12" cy="12" r="3"></circle><line x1="3" x2="12" y1="3" y2="12"></line><line x1="21" x2="12" y1="3" y2="12"></line><line x1="12" x2="12" y1="12" y2="21"></line></svg>
         05, Operating Model
       </div>
-      <h2 class="section-title">The Federation Angle: Data Mesh as the Operating Model</h2>
-      <p class="section-sub">A semantic layer owned by a central team and consumed by everyone else is just a centralized warehouse with a fancier query language. The pattern that holds up under pharma&rsquo;s organizational scale is a federation.</p>
-    </div>
-
-    <div class="prose" style="margin-bottom:2rem;">
-      <p>Zhamak Dehghani&rsquo;s data mesh thesis articulates the operating model in four principles: <em>&ldquo;domain-oriented decentralized data ownership and architecture, data as a product, self-serve data infrastructure as a platform, and federated computational governance.&rdquo;</em><sup><a href="#ref-18">18</a><a href="#ref-19">19</a></sup></p>
-      <p>For pharma, the mapping is direct. Each functional domain &mdash; discovery, translational, clinical, regulatory, manufacturing, commercial, safety &mdash; owns its slice of the model. Each publishes data products with explicit contracts. A central platform team operates the substrate (the graph store, the mapping engine, the SHACL validator, the SKOS service). A federated governance body (semantic council, ontology board &mdash; call it what you like) arbitrates cross-domain alignment.</p>
-    </div>
-
-    <div style="overflow-x:auto;border:1px solid var(--border);border-radius:var(--r);margin-bottom:2rem;">
-      <table class="comp-table">
-        <thead>
-          <tr>
-            <th>Architectural primitive</th>
-            <th>Is about&hellip;</th>
-            <th>Role in the federated model</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><span class="comp-badge cb-blue">Data mesh</span></td>
-            <td>Ownership and contract</td>
-            <td>Who owns which slice and what they guarantee</td>
-          </tr>
-          <tr>
-            <td><span class="comp-badge cb-purple">Semantic layer</span></td>
-            <td>Meaning</td>
-            <td>What entities mean and how they relate across domains</td>
-          </tr>
-          <tr>
-            <td><span class="comp-badge cb-gray">MDM hub</span></td>
-            <td>Reference-record reconciliation</td>
-            <td>A <em>derived</em> asset serving legacy operational systems &mdash; not the master</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="callout blue">
-      <p><strong>The mistake the last decade made</strong> was treating MDM as if it could do all three at once. These three primitives are complementary, not alternative. The hub does not disappear &mdash; it just stops being the master.</p>
-    </div>
-  </div>
+<h2 class="section-title">The Federation Angle: Data Mesh as the Operating Model</h2>
+<p class="section-sub">A semantic layer owned by a central team and consumed by everyone else is just a centralized warehouse with a fancier query language. The pattern that holds up under pharma’s organizational scale is a federation.</p>
+</div>
+<div class="prose" style="margin-bottom:2rem;">
+<p>Zhamak Dehghani’s data mesh thesis articulates the operating model in four principles: <em>“domain-oriented decentralized data ownership and architecture, data as a product, self-serve data infrastructure as a platform, and federated computational governance.”</em><sup><a href="#ref-18">18</a><a href="#ref-19">19</a></sup></p>
+<p>For pharma, the mapping is direct. Each functional domain (discovery, translational, clinical, regulatory, manufacturing, commercial, safety) owns its slice of the model. Each publishes data products with explicit contracts. A central platform team operates the substrate (the graph store, the mapping engine, the SHACL validator, the SKOS service). A federated governance body (semantic council, ontology board: call it what you like) arbitrates cross-domain alignment.</p>
+</div>
+<div style="overflow-x:auto;border:1px solid var(--border);border-radius:var(--r);margin-bottom:2rem;">
+<table class="comp-table">
+<thead>
+<tr>
+<th>Architectural primitive</th>
+<th>Is about…</th>
+<th>Role in the federated model</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="comp-badge cb-blue">Data mesh</span></td>
+<td>Ownership and contract</td>
+<td>Who owns which slice and what they guarantee</td>
+</tr>
+<tr>
+<td><span class="comp-badge cb-purple">Semantic layer</span></td>
+<td>Meaning</td>
+<td>What entities mean and how they relate across domains</td>
+</tr>
+<tr>
+<td><span class="comp-badge cb-gray">MDM hub</span></td>
+<td>Reference-record reconciliation</td>
+<td>A <em>derived</em> asset serving legacy operational systems: not the master</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="callout blue">
+<p><strong>The mistake the last decade made</strong> was treating MDM as if it could do all three at once. These three primitives are complementary, not alternative. The hub does not disappear: it just stops being the master.</p>
+</div>
+</div>
 </section>
-
 <!-- ══════════════════════════════════════ -->
 <!-- §6, Exemplars                        -->
 <!-- ══════════════════════════════════════ -->
 <section class="section section-alt" id="exemplars">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow green">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow green">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
         06, Production Evidence
       </div>
-      <h2 class="section-title">Pharma Exemplars Already in Production</h2>
-      <p class="section-sub">This is not theoretical. Three pharma-authored implementations are openly documented and worth looking at.</p>
-    </div>
-
-    <div class="exemplar-grid" style="margin-bottom:2rem;">
-      <div class="exemplar-card">
-        <div class="exemplar-company">Bayer</div>
-        <div class="exemplar-title">COLID &mdash; Corporate Linked Data</div>
-        <p class="exemplar-desc">Fully operational across all Bayer divisions since January 2019. Provides persistent, globally unique URIs for corporate metadata assets, an RDF data model, and a SPARQL endpoint for consumers. Published under BSD-3-Clause license &mdash; to date, the most concrete example of a major pharma replacing a traditional MDM-style metadata registry with a semantic-layer architecture.<sup><a href="#ref-20">20</a></sup></p>
-        <div class="exemplar-since">In production since Jan 2019 &bull; Open source (BSD-3-Clause)</div>
-      </div>
-      <div class="exemplar-card">
-        <div class="exemplar-company">Roche</div>
-        <div class="exemplar-title">EDIS + Lynx</div>
-        <p class="exemplar-desc">EDIS (Enhanced Data and Insight Sharing) launched in 2017 as a company-wide program to transform Roche&rsquo;s data management strategy. The Roche Dataset Portal&rsquo;s metamodel is &ldquo;entirely specified using FAIR standards and community vocabularies.&rdquo;<sup><a href="#ref-21">21</a></sup> The companion Lynx system is a knowledge-graph engine for reference data integration across Roche&rsquo;s semantic ecosystem.<sup><a href="#ref-22">22</a></sup></p>
-        <div class="exemplar-since">EDIS launched 2017 &bull; Lynx: SEMANTiCS 2021</div>
-      </div>
-      <div class="exemplar-card">
-        <div class="exemplar-company">Pistoia Alliance</div>
-        <div class="exemplar-title">FAIR Implementation Project</div>
-        <p class="exemplar-desc">Cross-pharma project with deliverables including the FAIR Toolkit, the FAIR Maturity Matrix (v1.1, March 2025), and FAIR-aligned submission frameworks for in vitro pharmacology and bioassay metadata.<sup><a href="#ref-23">23</a></sup> The FAIR Maturity Matrix provides a defensible target state for a semantic-layer program and lets you measure progress without inventing metrics from scratch.</p>
-        <div class="exemplar-since">FAIR Maturity Matrix v1.1 &mdash; March 2025</div>
-      </div>
-    </div>
-
-    <div class="callout green">
-      <p><strong>MELLODDY (IMI) &mdash; the federation proof of concept:</strong> The European IMI MELLODDY project (Bayer, GSK, Novartis, Janssen, and six other pharmas) built an industry-scale federated machine-learning platform for drug discovery without sharing the underlying data. The architectural lesson is the same one the semantic-layer pattern enforces: <strong>the unit of sharing is contracts and meaning, not raw rows.</strong></p>
-    </div>
-  </div>
+<h2 class="section-title">Pharma Exemplars Already in Production</h2>
+<p class="section-sub">This is not theoretical. Three pharma-authored implementations are openly documented and worth looking at.</p>
+</div>
+<div class="exemplar-grid" style="margin-bottom:2rem;">
+<div class="exemplar-card">
+<div class="exemplar-company">Bayer</div>
+<div class="exemplar-title">COLID: Corporate Linked Data</div>
+<p class="exemplar-desc">Fully operational across all Bayer divisions since January 2019. Provides persistent, globally unique URIs for corporate metadata assets, an RDF data model, and a SPARQL endpoint for consumers. Published under BSD-3-Clause license: to date, the most concrete example of a major pharma replacing a traditional MDM-style metadata registry with a semantic-layer architecture.<sup><a href="#ref-20">20</a></sup></p>
+<div class="exemplar-since">In production since Jan 2019 • Open source (BSD-3-Clause)</div>
+</div>
+<div class="exemplar-card">
+<div class="exemplar-company">Roche</div>
+<div class="exemplar-title">EDIS + Lynx</div>
+<p class="exemplar-desc">EDIS (Enhanced Data and Insight Sharing) launched in 2017 as a company-wide program to transform Roche’s data management strategy. The Roche Dataset Portal’s metamodel is “entirely specified using FAIR standards and community vocabularies.”<sup><a href="#ref-21">21</a></sup> The companion Lynx system is a knowledge-graph engine for reference data integration across Roche’s semantic ecosystem.<sup><a href="#ref-22">22</a></sup></p>
+<div class="exemplar-since">EDIS launched 2017 • Lynx: SEMANTiCS 2021</div>
+</div>
+<div class="exemplar-card">
+<div class="exemplar-company">Pistoia Alliance</div>
+<div class="exemplar-title">FAIR Implementation Project</div>
+<p class="exemplar-desc">Cross-pharma project with deliverables including the FAIR Toolkit, the FAIR Maturity Matrix (v1.1, March 2025), and FAIR-aligned submission frameworks for in vitro pharmacology and bioassay metadata.<sup><a href="#ref-23">23</a></sup> The FAIR Maturity Matrix provides a defensible target state for a semantic-layer program and lets you measure progress without inventing metrics from scratch.</p>
+<div class="exemplar-since">FAIR Maturity Matrix v1.1: March 2025</div>
+</div>
+</div>
+<div class="callout green">
+<p><strong>MELLODDY (IMI): the federation proof of concept:</strong> The European IMI MELLODDY project (Bayer, GSK, Novartis, Janssen, and six other pharmas) built an industry-scale federated machine-learning platform for drug discovery without sharing the underlying data. The architectural lesson is the same one the semantic-layer pattern enforces: <strong>the unit of sharing is contracts and meaning, not raw rows.</strong></p>
+</div>
+</div>
 </section>
-
 <!-- ══════════════════════════════════════ -->
 <!-- §7, Migration Pattern               -->
 <!-- ══════════════════════════════════════ -->
 <section class="section" id="migration">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow purple">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow purple">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
         07, Migration Pattern
       </div>
-      <h2 class="section-title">Migration Pattern: How a Hub Becomes a Read Model</h2>
-      <p class="section-sub">The hardest question is not &ldquo;should we build a semantic layer?&rdquo; &mdash; that is a settled bet. It&rsquo;s &ldquo;what happens to the MDM hub we already have?&rdquo;</p>
-    </div>
-
-    <div class="prose" style="margin-bottom:2rem;">
-      <p>The wrong answers are &ldquo;rip it out&rdquo; (politically and operationally untenable) and &ldquo;ignore the new architecture&rdquo; (which is how parallel-stack rot starts). The pattern that works, in roughly this order:</p>
-    </div>
-
-    <div class="migration" style="margin-bottom:2rem;">
-      <div class="migration-row step-1">
-        <div class="migration-label">
-          <div class="migration-step">Step</div>
-          <div class="migration-num">1</div>
-        </div>
-        <div class="migration-body">
-          <div class="migration-title">Stand up the semantic layer alongside the hub</div>
-          <p class="migration-desc">Pick one anchor domain &mdash; products and substances is usually the right starting point, given the IDMP-O foundation already exists. Define the ontology in OWL, the value sets in SKOS, the constraints in SHACL. Use R2RML to project the existing MDM hub <em>into</em> the semantic layer, so the hub becomes one source among several rather than the source of truth.</p>
-          <div class="migration-tags">
-            <span class="migration-tag">OWL ontology</span>
-            <span class="migration-tag">SKOS value sets</span>
-            <span class="migration-tag">SHACL constraints</span>
-            <span class="migration-tag">R2RML mapping</span>
-          </div>
-        </div>
-      </div>
-      <div class="migration-row step-2">
-        <div class="migration-label">
-          <div class="migration-step">Step</div>
-          <div class="migration-num">2</div>
-        </div>
-        <div class="migration-body">
-          <div class="migration-title">Make the semantic layer authoritative for new uses</div>
-          <p class="migration-desc">New downstream consumers (regulatory submission generators, AI agents, FAIR data products, cross-domain analytics) read from the semantic layer, never the hub directly. This is the moment the architectural center of gravity actually moves.</p>
-          <div class="migration-tags">
-            <span class="migration-tag">Regulatory submission generators</span>
-            <span class="migration-tag">AI agents</span>
-            <span class="migration-tag">FAIR data products</span>
-          </div>
-        </div>
-      </div>
-      <div class="migration-row step-3">
-        <div class="migration-label">
-          <div class="migration-step">Step</div>
-          <div class="migration-num">3</div>
-        </div>
-        <div class="migration-body">
-          <div class="migration-title">Demote the hub to a write-side cache</div>
-          <p class="migration-desc">The hub continues to serve legacy operational systems that need a flat API. But the hub&rsquo;s <em>content</em> is now derived from the semantic layer &mdash; facts asserted in the graph project down into hub rows, not the other way around. The survivorship rules that used to be the hub&rsquo;s secret sauce become declarative SHACL constraints, version-controlled and auditable.</p>
-          <div class="migration-tags">
-            <span class="migration-tag">Legacy system bridge</span>
-            <span class="migration-tag">SHACL replaces survivorship rules</span>
-          </div>
-        </div>
-      </div>
-      <div class="migration-row step-4">
-        <div class="migration-label">
-          <div class="migration-step">Step</div>
-          <div class="migration-num">4</div>
-        </div>
-        <div class="migration-body">
-          <div class="migration-title">Federate ownership</div>
-          <p class="migration-desc">As more domains stand up their own slice of the semantic model, the central team&rsquo;s job shifts from &ldquo;owning the master records&rdquo; to &ldquo;operating the platform and arbitrating cross-domain alignment.&rdquo; This is when data mesh principles stop being slogans and start being how the system actually runs.</p>
-          <div class="migration-tags">
-            <span class="migration-tag">Semantic council</span>
-            <span class="migration-tag">Domain ownership</span>
-            <span class="migration-tag">Cross-domain invariants</span>
-          </div>
-        </div>
-      </div>
-      <div class="migration-row step-5">
-        <div class="migration-label">
-          <div class="migration-step">Step</div>
-          <div class="migration-num">5</div>
-        </div>
-        <div class="migration-body">
-          <div class="migration-title">Project into external standards as views</div>
-          <p class="migration-desc">CDISC Define-XML, IDMP submission XML, FDA SPL, EMA eAF &mdash; each becomes a generated artifact, produced by querying the semantic layer through the appropriate shapes. New regulatory standards require a new projection, not a re-platforming. EMA eAF goes mandatory for CAPs on 1 September 2026<sup><a href="#ref-11">11</a></sup> &mdash; that is the near-term forcing function.</p>
-          <div class="migration-tags">
-            <span class="migration-tag">CDISC Define-XML</span>
-            <span class="migration-tag">IDMP submission XML</span>
-            <span class="migration-tag">FDA SPL</span>
-            <span class="migration-tag">EMA eAF (Sep 2026)</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="callout blue">
-      <p><strong>The economic case</strong> writes itself once a single regulatory submission is materially cheaper to generate. The integration tax in pharma R&amp;D is structurally large and increasingly avoidable &mdash; the marginal cost of integrating a new system is now genuinely lower than maintaining a custom hub mapping, particularly with LLMs handling schema-mapping tasks.<sup><a href="#ref-24">24</a></sup></p>
-    </div>
-  </div>
+<h2 class="section-title">Migration Pattern: How a Hub Becomes a Read Model</h2>
+<p class="section-sub">The hardest question is not “should we build a semantic layer?”. That is a settled bet. It’s “what happens to the MDM hub we already have?”</p>
+</div>
+<div class="prose" style="margin-bottom:2rem;">
+<p>The wrong answers are “rip it out” (politically and operationally untenable) and “ignore the new architecture” (which is how parallel-stack rot starts). The pattern that works, in roughly this order:</p>
+</div>
+<div class="migration" style="margin-bottom:2rem;">
+<div class="migration-row step-1">
+<div class="migration-label">
+<div class="migration-step">Step</div>
+<div class="migration-num">1</div>
+</div>
+<div class="migration-body">
+<div class="migration-title">Stand up the semantic layer alongside the hub</div>
+<p class="migration-desc">Pick one anchor domain: products and substances is usually the right starting point, given the IDMP-O foundation already exists. Define the ontology in OWL, the value sets in SKOS, the constraints in SHACL. Use R2RML to project the existing MDM hub <em>into</em> the semantic layer, so the hub becomes one source among several rather than the source of truth.</p>
+<div class="migration-tags">
+<span class="migration-tag">OWL ontology</span>
+<span class="migration-tag">SKOS value sets</span>
+<span class="migration-tag">SHACL constraints</span>
+<span class="migration-tag">R2RML mapping</span>
+</div>
+</div>
+</div>
+<div class="migration-row step-2">
+<div class="migration-label">
+<div class="migration-step">Step</div>
+<div class="migration-num">2</div>
+</div>
+<div class="migration-body">
+<div class="migration-title">Make the semantic layer authoritative for new uses</div>
+<p class="migration-desc">New downstream consumers (regulatory submission generators, AI agents, FAIR data products, cross-domain analytics) read from the semantic layer, never the hub directly. This is the moment the architectural center of gravity actually moves.</p>
+<div class="migration-tags">
+<span class="migration-tag">Regulatory submission generators</span>
+<span class="migration-tag">AI agents</span>
+<span class="migration-tag">FAIR data products</span>
+</div>
+</div>
+</div>
+<div class="migration-row step-3">
+<div class="migration-label">
+<div class="migration-step">Step</div>
+<div class="migration-num">3</div>
+</div>
+<div class="migration-body">
+<div class="migration-title">Demote the hub to a write-side cache</div>
+<p class="migration-desc">The hub continues to serve legacy operational systems that need a flat API. But the hub’s <em>content</em> is now derived from the semantic layer. Facts asserted in the graph project down into hub rows, not the other way around. The survivorship rules that used to be the hub’s secret sauce become declarative SHACL constraints, version-controlled and auditable.</p>
+<div class="migration-tags">
+<span class="migration-tag">Legacy system bridge</span>
+<span class="migration-tag">SHACL replaces survivorship rules</span>
+</div>
+</div>
+</div>
+<div class="migration-row step-4">
+<div class="migration-label">
+<div class="migration-step">Step</div>
+<div class="migration-num">4</div>
+</div>
+<div class="migration-body">
+<div class="migration-title">Federate ownership</div>
+<p class="migration-desc">As more domains stand up their own slice of the semantic model, the central team’s job shifts from “owning the master records” to “operating the platform and arbitrating cross-domain alignment.” This is when data mesh principles stop being slogans and start being how the system actually runs.</p>
+<div class="migration-tags">
+<span class="migration-tag">Semantic council</span>
+<span class="migration-tag">Domain ownership</span>
+<span class="migration-tag">Cross-domain invariants</span>
+</div>
+</div>
+</div>
+<div class="migration-row step-5">
+<div class="migration-label">
+<div class="migration-step">Step</div>
+<div class="migration-num">5</div>
+</div>
+<div class="migration-body">
+<div class="migration-title">Project into external standards as views</div>
+<p class="migration-desc">CDISC Define-XML, IDMP submission XML, FDA SPL, EMA eAF. Each becomes a generated artifact, produced by querying the semantic layer through the appropriate shapes. New regulatory standards require a new projection, not a re-platforming. EMA eAF goes mandatory for CAPs on 1 September 2026<sup><a href="#ref-11">11</a></sup>. That is the near-term forcing function.</p>
+<div class="migration-tags">
+<span class="migration-tag">CDISC Define-XML</span>
+<span class="migration-tag">IDMP submission XML</span>
+<span class="migration-tag">FDA SPL</span>
+<span class="migration-tag">EMA eAF (Sep 2026)</span>
+</div>
+</div>
+</div>
+</div>
+<div class="callout blue">
+<p><strong>The economic case</strong> writes itself once a single regulatory submission is materially cheaper to generate. The integration tax in pharma R&amp;D is structurally large and increasingly avoidable: the marginal cost of integrating a new system is now genuinely lower than maintaining a custom hub mapping, particularly with LLMs handling schema-mapping tasks.<sup><a href="#ref-24">24</a></sup></p>
+</div>
+</div>
 </section>
-
 <!-- ══════════════════════════════════════ -->
 <!-- §8, Pitfalls                         -->
 <!-- ══════════════════════════════════════ -->
 <section class="section section-alt" id="pitfalls">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow amber">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow amber">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" x2="12" y1="9" y2="13"></line><line x1="12" x2="12.01" y1="17" y2="17"></line></svg>
         08, Pitfalls
       </div>
-      <h2 class="section-title">Implementation Pitfalls Worth Naming</h2>
-      <p class="section-sub">A few failure modes that consume budget without producing outcomes.</p>
-    </div>
-
-    <div class="pitfall-grid">
-      <div class="pitfall-card">
-        <div class="pitfall-title">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+<h2 class="section-title">Implementation Pitfalls Worth Naming</h2>
+<p class="section-sub">A few failure modes that consume budget without producing outcomes.</p>
+</div>
+<div class="pitfall-grid">
+<div class="pitfall-card">
+<div class="pitfall-title">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" x2="12" y1="9" y2="13"></line><line x1="12" x2="12.01" y1="17" y2="17"></line></svg>
           Treating the ontology as an IT artifact
         </div>
-        <p class="pitfall-desc">An enterprise ontology is <strong>regulated reference data with its own change-control regime</strong>. It needs versioning (SemVer is fine), release notes, deprecation policies, and an explicit governance body. Building it as a JIRA project that &ldquo;the data team owns&rdquo; produces an ontology nobody outside the team trusts. Fund the ontologists; staff a semantic council that includes regulatory, clinical, and commercial domain experts.</p>
-      </div>
-      <div class="pitfall-card">
-        <div class="pitfall-title">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          Conflating &ldquo;semantic layer&rdquo; with &ldquo;BI tool semantic model&rdquo;
+<p class="pitfall-desc">An enterprise ontology is <strong>regulated reference data with its own change-control regime</strong>. It needs versioning (SemVer is fine), release notes, deprecation policies, and an explicit governance body. Building it as a JIRA project that “the data team owns” produces an ontology nobody outside the team trusts. Fund the ontologists; staff a semantic council that includes regulatory, clinical, and commercial domain experts.</p>
+</div>
+<div class="pitfall-card">
+<div class="pitfall-title">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" x2="12" y1="9" y2="13"></line><line x1="12" x2="12.01" y1="17" y2="17"></line></svg>
+          Conflating “semantic layer” with “BI tool semantic model”
         </div>
-        <p class="pitfall-desc">A Power BI semantic model is a semantic layer in the BI-tool-specific sense &mdash; useful, but scoped to a single consumption tool. The enterprise semantic layer is <strong>upstream of every BI tool, every AI agent, every regulatory submission generator</strong>. The two coexist; they are not interchangeable.</p>
-      </div>
-      <div class="pitfall-card">
-        <div class="pitfall-title">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+<p class="pitfall-desc">A Power BI semantic model is a semantic layer in the BI-tool-specific sense: useful, but scoped to a single consumption tool. The enterprise semantic layer is <strong>upstream of every BI tool, every AI agent, every regulatory submission generator</strong>. The two coexist; they are not interchangeable.</p>
+</div>
+<div class="pitfall-card">
+<div class="pitfall-title">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" x2="12" y1="9" y2="13"></line><line x1="12" x2="12.01" y1="17" y2="17"></line></svg>
           Skipping SHACL
         </div>
-        <p class="pitfall-desc">Constraints are the part of the stack that turns a semantic model from an ER diagram into something operationally trustworthy. Without SHACL (or equivalent shape language), <strong>the model is documentation; with it, the model is a contract</strong> enforceable by the platform.</p>
-      </div>
-      <div class="pitfall-card">
-        <div class="pitfall-title">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+<p class="pitfall-desc">Constraints are the part of the stack that turns a semantic model from an ER diagram into something operationally trustworthy. Without SHACL (or equivalent shape language), <strong>the model is documentation; with it, the model is a contract</strong> enforceable by the platform.</p>
+</div>
+<div class="pitfall-card">
+<div class="pitfall-title">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" x2="12" y1="9" y2="13"></line><line x1="12" x2="12.01" y1="17" y2="17"></line></svg>
           Centralizing the council
         </div>
-        <p class="pitfall-desc">Federated governance is the principle. A single central body that adjudicates every change is the anti-pattern. Each domain should be able to evolve its own slice within agreed cross-domain invariants; <strong>the central role is to maintain the invariants and arbitrate when domains disagree</strong>.</p>
-      </div>
-      <div class="pitfall-card">
-        <div class="pitfall-title">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+<p class="pitfall-desc">Federated governance is the principle. A single central body that adjudicates every change is the anti-pattern. Each domain should be able to evolve its own slice within agreed cross-domain invariants; <strong>the central role is to maintain the invariants and arbitrate when domains disagree</strong>.</p>
+</div>
+<div class="pitfall-card">
+<div class="pitfall-title">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" x2="12" y1="9" y2="13"></line><line x1="12" x2="12.01" y1="17" y2="17"></line></svg>
           Underestimating the talent gap
         </div>
-        <p class="pitfall-desc">Ontology engineering is a discipline. Hiring a &ldquo;knowledge graph engineer&rdquo; without a clear distinction between data engineering and semantic engineering produces a team that builds graphs which look right and reason wrong. <strong>The job descriptions need to differentiate; the training pipeline rarely does.</strong></p>
-      </div>
-    </div>
-  </div>
+<p class="pitfall-desc">Ontology engineering is a discipline. Hiring a “knowledge graph engineer” without a clear distinction between data engineering and semantic engineering produces a team that builds graphs which look right and reason wrong. <strong>The job descriptions need to differentiate; the training pipeline rarely does.</strong></p>
+</div>
+</div>
+</div>
 </section>
-
 <!-- ══════════════════════════════════════ -->
 <!-- §9, Next 24 Months                   -->
 <!-- ══════════════════════════════════════ -->
 <section class="section" id="next24">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="13 2 13 9 20 9"/><path d="M21 3L13 11M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.69h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 17z"/></svg>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><polyline points="13 2 13 9 20 9"></polyline><path d="M21 3L13 11M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.69h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 17z"></path></svg>
         09, Looking Ahead
       </div>
-      <h2 class="section-title">Where the Next 24 Months Go</h2>
-      <p class="section-sub">Three things are converging fast enough to make 2026&ndash;2027 the inflection year for this transition in pharma.</p>
-    </div>
-
-    <div class="trend-grid" style="margin-bottom:2rem;">
-      <div class="trend-card">
-        <div class="trend-icon blue">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        </div>
-        <div class="trend-title">Regulatory pressure for machine-processable submissions</div>
-        <p class="trend-desc">CDISC requirements are decade-old. IDMP rollout continues. EMA eAF becomes mandatory for Centrally Authorised Products on <strong>1 September 2026</strong>.<sup><a href="#ref-11">11</a></sup> SPL is already FDA-binding.<sup><a href="#ref-10">10</a></sup> Each is a forcing function for structured, semantically grounded internal data &mdash; and each is materially cheaper to serve from a semantic layer than from a hub plus a translation tier.</p>
-      </div>
-      <div class="trend-card">
-        <div class="trend-icon green">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        </div>
-        <div class="trend-title">Foundation models reshape the mapping economy</div>
-        <p class="trend-desc">Schema mapping, entity resolution, and ontology alignment &mdash; the historic bottlenecks in semantic-layer rollouts &mdash; are exactly the tasks where LLMs match or exceed prior state-of-the-art. The economics of building and maintaining a semantic layer at pharma scale have shifted; the marginal cost of integrating a new system is now genuinely lower than maintaining a custom hub mapping.</p>
-      </div>
-      <div class="trend-card">
-        <div class="trend-icon purple">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><line x1="3" y1="3" x2="12" y2="12"/><line x1="21" y1="3" x2="12" y2="12"/><line x1="12" y1="12" x2="12" y2="21"/></svg>
-        </div>
-        <div class="trend-title">Data mesh moves from talking point to operating model</div>
-        <p class="trend-desc">The &ldquo;data-as-product&rdquo; framing has reached the point where major pharma organizations are restructuring data teams around it. Combined with semantic-layer thinking, this gives the federated ownership model that scales &mdash; without surrendering coherence.</p>
-      </div>
-    </div>
-
-    <div class="callout green">
-      <p><strong>The architectural conclusion:</strong> The master data layer of the next pharma stack is not a hub. It is an ontology, governed as a regulated artifact, expressed in W3C-standard primitives, owned by federated domains, and serving the rest of the enterprise &mdash; including the legacy MDM hub itself &mdash; as a logical, version-controlled view. The hub does not disappear. It just stops being the master.</p>
-    </div>
-  </div>
+<h2 class="section-title">Where the Next 24 Months Go</h2>
+<p class="section-sub">Three things are converging fast enough to make 2026–2027 the inflection year for this transition in pharma.</p>
+</div>
+<div class="trend-grid" style="margin-bottom:2rem;">
+<div class="trend-card">
+<div class="trend-icon blue">
+<svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" x2="8" y1="13" y2="13"></line><line x1="16" x2="8" y1="17" y2="17"></line></svg>
+</div>
+<div class="trend-title">Regulatory pressure for machine-processable submissions</div>
+<p class="trend-desc">CDISC requirements are decade-old. IDMP rollout continues. EMA eAF becomes mandatory for Centrally Authorised Products on <strong>1 September 2026</strong>.<sup><a href="#ref-11">11</a></sup> SPL is already FDA-binding.<sup><a href="#ref-10">10</a></sup> Each is a forcing function for structured, semantically grounded internal data, and each is materially cheaper to serve from a semantic layer than from a hub plus a translation tier.</p>
+</div>
+<div class="trend-card">
+<div class="trend-icon green">
+<svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><rect height="11" rx="2" width="18" x="3" y="11"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+</div>
+<div class="trend-title">Foundation models reshape the mapping economy</div>
+<p class="trend-desc">Schema mapping, entity resolution, and ontology alignment (the historic bottlenecks in semantic-layer rollouts) are exactly the tasks where LLMs match or exceed prior state-of-the-art. The economics of building and maintaining a semantic layer at pharma scale have shifted; the marginal cost of integrating a new system is now genuinely lower than maintaining a custom hub mapping.</p>
+</div>
+<div class="trend-card">
+<div class="trend-icon purple">
+<svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><circle cx="12" cy="12" r="3"></circle><line x1="3" x2="12" y1="3" y2="12"></line><line x1="21" x2="12" y1="3" y2="12"></line><line x1="12" x2="12" y1="12" y2="21"></line></svg>
+</div>
+<div class="trend-title">Data mesh moves from talking point to operating model</div>
+<p class="trend-desc">The “data-as-product” framing has reached the point where major pharma organizations are restructuring data teams around it. Combined with semantic-layer thinking, this gives the federated ownership model that scales: without surrendering coherence.</p>
+</div>
+</div>
+<div class="callout green">
+<p><strong>The architectural conclusion:</strong> The master data layer of the next pharma stack is not a hub. It is an ontology, governed as a regulated artifact, expressed in W3C-standard primitives, owned by federated domains, and serving the rest of the enterprise (including the legacy MDM hub itself) as a logical, version-controlled view. The hub does not disappear. It just stops being the master.</p>
+</div>
+</div>
 </section>
-
 <!-- ══════════════════════════════════════ -->
 <!-- Closing                               -->
 <!-- ══════════════════════════════════════ -->
 <section class="section" style="padding-bottom:5rem;">
-  <div class="container" style="max-width:760px;">
-    <div class="eyebrow" style="margin-bottom:.75rem;">Closing Thought</div>
-    <h2 class="section-title" style="margin-bottom:1.25rem;">Stop Maintaining Translation Tiers. Promote Them.</h2>
-    <div class="prose">
-      <p>Pharma has been pretending for a long time that a row in a hub is the same thing as the meaning of a medicinal product, a clinical study, a substance, or a site. It never was. The semantic layer is not a new technology &mdash; every piece of the stack has been a stable W3C Recommendation for a decade or more, and the production exemplars (Bayer COLID since 2019, Roche EDIS since 2017) have been running long enough to call them proven.</p>
-      <p>What is new is the willingness &mdash; driven by regulatory math, by AI economics, and by the cumulative weight of MDM programs that didn&rsquo;t deliver &mdash; to actually make the semantic layer the master. The teams that get to that architectural state first will spend the rest of the decade integrating new systems by mapping, not by migrating. The teams that don&rsquo;t will keep paying the integration tax.</p>
-      <p><strong>Stop maintaining translation tiers. Promote them.</strong></p>
-    </div>
-    <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--border);display:flex;gap:1rem;flex-wrap:wrap;">
-      <a href="https://alishahmohammadi26.github.io" class="btn btn-primary">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+<div class="container" style="max-width:760px;">
+<div class="eyebrow" style="margin-bottom:.75rem;">Closing Thought</div>
+<h2 class="section-title" style="margin-bottom:1.25rem;">Stop Maintaining Translation Tiers. Promote Them.</h2>
+<div class="prose">
+<p>Pharma has been pretending for a long time that a row in a hub is the same thing as the meaning of a medicinal product, a clinical study, a substance, or a site. It never was. The semantic layer is not a new technology. Every piece of the stack has been a stable W3C Recommendation for a decade or more, and the production exemplars (Bayer COLID since 2019, Roche EDIS since 2017) have been running long enough to call them proven.</p>
+<p>What is new is the willingness: driven by regulatory math, by AI economics, and by the cumulative weight of MDM programs that didn’t deliver. To actually make the semantic layer the master. The teams that get to that architectural state first will spend the rest of the decade integrating new systems by mapping, not by migrating. The teams that don’t will keep paying the integration tax.</p>
+<p><strong>Stop maintaining translation tiers. Promote them.</strong></p>
+</div>
+<div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--border);display:flex;gap:1rem;flex-wrap:wrap;">
+<a class="btn btn-primary" href="https://alishahmohammadi26.github.io">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
         Back to Portfolio
       </a>
-      <a href="https://alishahmohammadi26.github.io/blog/product-mastering-knowledge-graphs-vs-mdm.html" class="btn btn-outline">Related: Product Mastering &amp; KGs &rarr;</a>
-      <a href="https://alishahmohammadi26.github.io/blog/fair-data-principles.html" class="btn btn-outline">Related: FAIR Data Principles &rarr;</a>
-      <a href="https://alishahmohammadi26.github.io/blog/iso-23894-pharma-rd.html" class="btn btn-outline">Related: ISO/IEC 23894 in Pharma R&amp;D &rarr;</a>
-    </div>
-  </div>
+<a class="btn btn-outline" href="https://alishahmohammadi26.github.io/blog/product-mastering-knowledge-graphs-vs-mdm.html">Related: Product Mastering &amp; KGs →</a>
+<a class="btn btn-outline" href="https://alishahmohammadi26.github.io/blog/fair-data-principles.html">Related: FAIR Data Principles →</a>
+<a class="btn btn-outline" href="https://alishahmohammadi26.github.io/blog/iso-23894-pharma-rd.html">Related: ISO/IEC 23894 in Pharma R&amp;D →</a>
+</div>
+</div>
 </section>
-
 <!-- ══════════════════════════════════════ -->
 <!-- References                            -->
 <!-- ══════════════════════════════════════ -->
 <section class="section section-alt" id="references">
-  <div class="container">
-    <div class="section-header">
-      <div class="eyebrow">References</div>
-      <h2 class="section-title">24 References</h2>
-    </div>
-    <ol class="refs-list">
-      <li id="ref-1"><span class="ref-num">1</span>Knight, M. <em>Common Master Data Management (MDM) Pitfalls.</em> Dataversity, 11 July 2025 &mdash; citing a DGIQ Conference presentation attributing the figure to Gartner research. <a href="https://www.dataversity.net/articles/common-master-data-management-mdm-pitfalls/" target="_blank" rel="noopener">dataversity.net</a></li>
-      <li id="ref-2"><span class="ref-num">2</span>IBM. <em>What is a semantic layer?</em> IBM Think Topics. <a href="https://www.ibm.com/think/topics/semantic-layer" target="_blank" rel="noopener">ibm.com</a></li>
-      <li id="ref-3"><span class="ref-num">3</span>Databricks. <em>Semantic Layer Architecture: Components, Design Patterns, and AI Integration.</em> Databricks Blog. <a href="https://www.databricks.com/blog/semantic-layer-architecture-components-design-patterns-and-ai-integration" target="_blank" rel="noopener">databricks.com</a></li>
-      <li id="ref-4"><span class="ref-num">4</span>Gartner. <em>Rethink Semantic Layers to Support the Future of Analytics and AI,</em> 8 April 2025. <a href="https://www.gartner.com/en/documents/6337279" target="_blank" rel="noopener">gartner.com</a></li>
-      <li id="ref-5"><span class="ref-num">5</span>CDISC. <em>Foundational Standards</em> (SDTM, ADaM, CDASH, SEND). <a href="https://www.cdisc.org/standards/foundational" target="_blank" rel="noopener">cdisc.org</a></li>
-      <li id="ref-6"><span class="ref-num">6</span>CDISC. <em>Define-XML.</em> <a href="https://www.cdisc.org/standards/data-exchange/define-xml" target="_blank" rel="noopener">cdisc.org</a></li>
-      <li id="ref-7"><span class="ref-num">7</span>U.S. Food and Drug Administration. <em>Study Data Technical Conformance Guide &mdash; Technical Specifications Document.</em> Docket FDA-2014-D-0092. <a href="https://www.fda.gov/regulatory-information/search-fda-guidance-documents/study-data-technical-conformance-guide-technical-specifications-document" target="_blank" rel="noopener">fda.gov</a></li>
-      <li id="ref-8"><span class="ref-num">8</span>OHDSI. <em>Data Standardization.</em> <a href="https://www.ohdsi.org/data-standardization/" target="_blank" rel="noopener">ohdsi.org</a></li>
-      <li id="ref-9"><span class="ref-num">9</span>Hripcsak, G., Duke, J. D., Shah, N. H., et al. <em>Observational Health Data Sciences and Informatics (OHDSI): Opportunities for Observational Researchers.</em> Studies in Health Technology and Informatics 216:574&ndash;578, 2015. <a href="https://doi.org/10.3233/978-1-61499-564-7-574" target="_blank" rel="noopener">doi.org</a></li>
-      <li id="ref-10"><span class="ref-num">10</span>U.S. Food and Drug Administration. <em>Structured Product Labeling Resources.</em> <a href="https://www.fda.gov/industry/fda-data-standards-advisory-board/structured-product-labeling-resources" target="_blank" rel="noopener">fda.gov</a></li>
-      <li id="ref-11"><span class="ref-num">11</span>European Medicines Agency. <em>EU Electronic Application Forms (eAF).</em> <a href="https://esubmission.ema.europa.eu/eaf/" target="_blank" rel="noopener">ema.europa.eu</a></li>
-      <li id="ref-12"><span class="ref-num">12</span>HL7 International. <em>BRIDG Model</em> (Biomedical Research Integrated Domain Group). <a href="https://confluence.hl7.org/spaces/BRR/pages/58656462/BRIDG+Model" target="_blank" rel="noopener">confluence.hl7.org</a></li>
-      <li id="ref-13"><span class="ref-num">13</span>National Cancer Institute / CBIIT. <em>BRIDG Model Documentation</em> &mdash; note that the model &ldquo;is no longer actively maintained.&rdquo; <a href="https://cbiit.github.io/bridg-model/HTML/" target="_blank" rel="noopener">cbiit.github.io</a></li>
-      <li id="ref-14"><span class="ref-num">14</span>W3C. <em>OWL 2 Web Ontology Language Document Overview (Second Edition).</em> W3C Recommendation, 11 December 2012. <a href="https://www.w3.org/TR/owl2-overview/" target="_blank" rel="noopener">w3.org</a></li>
-      <li id="ref-15"><span class="ref-num">15</span>W3C. <em>SKOS Simple Knowledge Organization System Reference.</em> W3C Recommendation, 18 August 2009. <a href="https://www.w3.org/TR/skos-reference/" target="_blank" rel="noopener">w3.org</a></li>
-      <li id="ref-16"><span class="ref-num">16</span>W3C. <em>Shapes Constraint Language (SHACL).</em> W3C Recommendation, 20 July 2017. <a href="https://www.w3.org/TR/shacl/" target="_blank" rel="noopener">w3.org</a></li>
-      <li id="ref-17"><span class="ref-num">17</span>W3C. <em>R2RML: RDB to RDF Mapping Language.</em> W3C Recommendation, 27 September 2012. <a href="https://www.w3.org/TR/r2rml/" target="_blank" rel="noopener">w3.org</a></li>
-      <li id="ref-18"><span class="ref-num">18</span>Dehghani, Z. <em>How to Move Beyond a Monolithic Data Lake to a Distributed Data Mesh.</em> martinfowler.com, 20 May 2019. <a href="https://martinfowler.com/articles/data-monolith-to-mesh.html" target="_blank" rel="noopener">martinfowler.com</a></li>
-      <li id="ref-19"><span class="ref-num">19</span>Dehghani, Z. <em>Data Mesh Principles and Logical Architecture.</em> martinfowler.com, 3 December 2020. <a href="https://martinfowler.com/articles/data-mesh-principles.html" target="_blank" rel="noopener">martinfowler.com</a></li>
-      <li id="ref-20"><span class="ref-num">20</span>Bayer Group. <em>COLID &mdash; Corporate Linked Data</em> (open-source documentation). <a href="https://bayer-group.github.io/COLID-Documentation/" target="_blank" rel="noopener">bayer-group.github.io</a></li>
-      <li id="ref-21"><span class="ref-num">21</span>Pistoia Alliance FAIR Toolkit. <em>FAIR Data by Design &mdash; Roche EDIS / Roche Dataset Portal Case Study.</em> <a href="https://fairtoolkit.pistoiaalliance.org/use-cases/fair-data-by-design/" target="_blank" rel="noopener">fairtoolkit.pistoiaalliance.org</a></li>
-      <li id="ref-22"><span class="ref-num">22</span>Fern&aacute;ndez, J. D., Lasierra, N. (Roche). <em>Lynx: A FAIR Knowledge Graph Engine for Reference Data Integration.</em> SEMANTiCS 2021 EU Conference. <a href="https://2021-eu.semantics.cc/lynx-fair-knowledge-graph-engine-reference-data-integration-look-service" target="_blank" rel="noopener">semantics.cc</a></li>
-      <li id="ref-23"><span class="ref-num">23</span>Pistoia Alliance. <em>FAIR Implementation Project</em> (FAIR Toolkit, FAIR Maturity Matrix v1.1, March 2025). <a href="https://pistoiaalliance.org/project/fair-implementation-project/" target="_blank" rel="noopener">pistoiaalliance.org</a></li>
-      <li id="ref-24"><span class="ref-num">24</span>Chilukuri, S., Fleming, E., Westra, A. <em>Digital in R&amp;D: The $100 Billion Opportunity.</em> McKinsey &amp; Company. <a href="https://www.mckinsey.de/~/media/McKinsey/Industries/Pharmaceuticals%20and%20Medical%20Products/Our%20Insights/Digital%20in%20R%20and%20D%20The%20100%20billion%20opportunity/Digital-in-R-and-D-The-100-billion-opportunity.pdf" target="_blank" rel="noopener">mckinsey.com</a></li>
-    </ol>
-  </div>
+<div class="container">
+<div class="section-header">
+<div class="eyebrow">References</div>
+<h2 class="section-title">24 References</h2>
+</div>
+<ol class="refs-list">
+<li id="ref-1"><span class="ref-num">1</span>Knight, M. <em>Common Master Data Management (MDM) Pitfalls.</em> Dataversity, 11 July 2025: citing a DGIQ Conference presentation attributing the figure to Gartner research. <a href="https://www.dataversity.net/articles/common-master-data-management-mdm-pitfalls/" rel="noopener" target="_blank">dataversity.net</a></li>
+<li id="ref-2"><span class="ref-num">2</span>IBM. <em>What is a semantic layer?</em> IBM Think Topics. <a href="https://www.ibm.com/think/topics/semantic-layer" rel="noopener" target="_blank">ibm.com</a></li>
+<li id="ref-3"><span class="ref-num">3</span>Databricks. <em>Semantic Layer Architecture: Components, Design Patterns, and AI Integration.</em> Databricks Blog. <a href="https://www.databricks.com/blog/semantic-layer-architecture-components-design-patterns-and-ai-integration" rel="noopener" target="_blank">databricks.com</a></li>
+<li id="ref-4"><span class="ref-num">4</span>Gartner. <em>Rethink Semantic Layers to Support the Future of Analytics and AI,</em> 8 April 2025. <a href="https://www.gartner.com/en/documents/6337279" rel="noopener" target="_blank">gartner.com</a></li>
+<li id="ref-5"><span class="ref-num">5</span>CDISC. <em>Foundational Standards</em> (SDTM, ADaM, CDASH, SEND). <a href="https://www.cdisc.org/standards/foundational" rel="noopener" target="_blank">cdisc.org</a></li>
+<li id="ref-6"><span class="ref-num">6</span>CDISC. <em>Define-XML.</em> <a href="https://www.cdisc.org/standards/data-exchange/define-xml" rel="noopener" target="_blank">cdisc.org</a></li>
+<li id="ref-7"><span class="ref-num">7</span>U.S. Food and Drug Administration. <em>Study Data Technical Conformance Guide: Technical Specifications Document.</em> Docket FDA-2014-D-0092. <a href="https://www.fda.gov/regulatory-information/search-fda-guidance-documents/study-data-technical-conformance-guide-technical-specifications-document" rel="noopener" target="_blank">fda.gov</a></li>
+<li id="ref-8"><span class="ref-num">8</span>OHDSI. <em>Data Standardization.</em> <a href="https://www.ohdsi.org/data-standardization/" rel="noopener" target="_blank">ohdsi.org</a></li>
+<li id="ref-9"><span class="ref-num">9</span>Hripcsak, G., Duke, J. D., Shah, N. H., et al. <em>Observational Health Data Sciences and Informatics (OHDSI): Opportunities for Observational Researchers.</em> Studies in Health Technology and Informatics 216:574–578, 2015. <a href="https://doi.org/10.3233/978-1-61499-564-7-574" rel="noopener" target="_blank">doi.org</a></li>
+<li id="ref-10"><span class="ref-num">10</span>U.S. Food and Drug Administration. <em>Structured Product Labeling Resources.</em> <a href="https://www.fda.gov/industry/fda-data-standards-advisory-board/structured-product-labeling-resources" rel="noopener" target="_blank">fda.gov</a></li>
+<li id="ref-11"><span class="ref-num">11</span>European Medicines Agency. <em>EU Electronic Application Forms (eAF).</em> <a href="https://esubmission.ema.europa.eu/eaf/" rel="noopener" target="_blank">ema.europa.eu</a></li>
+<li id="ref-12"><span class="ref-num">12</span>HL7 International. <em>BRIDG Model</em> (Biomedical Research Integrated Domain Group). <a href="https://confluence.hl7.org/spaces/BRR/pages/58656462/BRIDG+Model" rel="noopener" target="_blank">confluence.hl7.org</a></li>
+<li id="ref-13"><span class="ref-num">13</span>National Cancer Institute / CBIIT. <em>BRIDG Model Documentation</em>. Note that the model “is no longer actively maintained.” <a href="https://cbiit.github.io/bridg-model/HTML/" rel="noopener" target="_blank">cbiit.github.io</a></li>
+<li id="ref-14"><span class="ref-num">14</span>W3C. <em>OWL 2 Web Ontology Language Document Overview (Second Edition).</em> W3C Recommendation, 11 December 2012. <a href="https://www.w3.org/TR/owl2-overview/" rel="noopener" target="_blank">w3.org</a></li>
+<li id="ref-15"><span class="ref-num">15</span>W3C. <em>SKOS Simple Knowledge Organization System Reference.</em> W3C Recommendation, 18 August 2009. <a href="https://www.w3.org/TR/skos-reference/" rel="noopener" target="_blank">w3.org</a></li>
+<li id="ref-16"><span class="ref-num">16</span>W3C. <em>Shapes Constraint Language (SHACL).</em> W3C Recommendation, 20 July 2017. <a href="https://www.w3.org/TR/shacl/" rel="noopener" target="_blank">w3.org</a></li>
+<li id="ref-17"><span class="ref-num">17</span>W3C. <em>R2RML: RDB to RDF Mapping Language.</em> W3C Recommendation, 27 September 2012. <a href="https://www.w3.org/TR/r2rml/" rel="noopener" target="_blank">w3.org</a></li>
+<li id="ref-18"><span class="ref-num">18</span>Dehghani, Z. <em>How to Move Beyond a Monolithic Data Lake to a Distributed Data Mesh.</em> martinfowler.com, 20 May 2019. <a href="https://martinfowler.com/articles/data-monolith-to-mesh.html" rel="noopener" target="_blank">martinfowler.com</a></li>
+<li id="ref-19"><span class="ref-num">19</span>Dehghani, Z. <em>Data Mesh Principles and Logical Architecture.</em> martinfowler.com, 3 December 2020. <a href="https://martinfowler.com/articles/data-mesh-principles.html" rel="noopener" target="_blank">martinfowler.com</a></li>
+<li id="ref-20"><span class="ref-num">20</span>Bayer Group. <em>COLID: Corporate Linked Data</em> (open-source documentation). <a href="https://bayer-group.github.io/COLID-Documentation/" rel="noopener" target="_blank">bayer-group.github.io</a></li>
+<li id="ref-21"><span class="ref-num">21</span>Pistoia Alliance FAIR Toolkit. <em>FAIR Data by Design: Roche EDIS / Roche Dataset Portal Case Study.</em> <a href="https://fairtoolkit.pistoiaalliance.org/use-cases/fair-data-by-design/" rel="noopener" target="_blank">fairtoolkit.pistoiaalliance.org</a></li>
+<li id="ref-22"><span class="ref-num">22</span>Fernández, J. D., Lasierra, N. (Roche). <em>Lynx: A FAIR Knowledge Graph Engine for Reference Data Integration.</em> SEMANTiCS 2021 EU Conference. <a href="https://2021-eu.semantics.cc/lynx-fair-knowledge-graph-engine-reference-data-integration-look-service" rel="noopener" target="_blank">semantics.cc</a></li>
+<li id="ref-23"><span class="ref-num">23</span>Pistoia Alliance. <em>FAIR Implementation Project</em> (FAIR Toolkit, FAIR Maturity Matrix v1.1, March 2025). <a href="https://pistoiaalliance.org/project/fair-implementation-project/" rel="noopener" target="_blank">pistoiaalliance.org</a></li>
+<li id="ref-24"><span class="ref-num">24</span>Chilukuri, S., Fleming, E., Westra, A. <em>Digital in R&amp;D: The $100 Billion Opportunity.</em> McKinsey &amp; Company. <a href="https://www.mckinsey.de/~/media/McKinsey/Industries/Pharmaceuticals%20and%20Medical%20Products/Our%20Insights/Digital%20in%20R%20and%20D%20The%20100%20billion%20opportunity/Digital-in-R-and-D-The-100-billion-opportunity.pdf" rel="noopener" target="_blank">mckinsey.com</a></li>
+</ol>
+</div>
 </section>
-
 <!-- ── Footer ── -->
+<div class="related-reading reveal">
+<p class="rr-label">Related reading</p>
+<div class="rr-grid">
+<a class="rr-card" href="product-mastering-knowledge-graphs-vs-mdm.html"><span class="rr-title">Product Mastering: Why Knowledge Graphs Beat Traditional MDM</span><span class="rr-go">Read article &#8594;</span></a>
+<a class="rr-card" href="fair-data-principles.html"><span class="rr-title">FAIR Data Principles: A Practical Guide</span><span class="rr-go">Read article &#8594;</span></a>
+</div>
+</div>
 <footer class="site-footer">
-  <div class="foot-lead">
-    <p class="foot-name">Ali Shahmohammadi, Ph.D.</p>
-    <p class="foot-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p>
-  </div>
-  <nav class="foot-nav" aria-label="Footer">
-    <a href="../index.html#writing">Writing</a>
-    <a href="../index.html#career">Career</a>
-    <a href="../resume.html">Resume</a>
-    <a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
-    <a href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
-  </nav>
-  <div class="foot-base">
-    <span>&copy; 2026 Ali Shahmohammadi, Ph.D.</span>
-    <a class="to-top" href="#top">Back to top &uarr;</a>
-  </div>
+<div class="foot-lead">
+<p class="foot-name">Ali Shahmohammadi, Ph.D.</p>
+<p class="foot-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p>
+</div>
+<nav aria-label="Footer" class="foot-nav">
+<a href="../index.html#writing">Writing</a>
+<a href="../index.html#career">Career</a>
+<a href="../resume.html">Resume</a>
+<a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
+<a href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a>
+</nav>
+<div class="foot-base">
+<span>© 2026 Ali Shahmohammadi, Ph.D.</span>
+<a class="to-top" href="#top">Back to top ↑</a>
+</div>
 </footer>
-
 <script>
 (function(){
   var header = document.querySelector('.site-header');
@@ -1335,4 +1319,12 @@ code:not(pre code){font-family:var(--font-mono);font-size:.9em;background:var(--
 })();
 </script>
 </body>
+<script>
+(function(){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}
+  });},{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
 </html>

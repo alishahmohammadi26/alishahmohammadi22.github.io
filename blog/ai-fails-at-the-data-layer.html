@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Fails at the Data Layer Before It Fails at the Model Layer | Ali Shahmohammadi</title>
+<meta name="description" content="Why data quality, integration, interoperability, metadata, lineage, and FAIR data practices determine whether AI systems can be trusted, scaled, and reused.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI Fails at the Data Layer Before It Fails at the Model Layer">
+<meta property="og:description" content="A visual guide to the load-bearing data systems beneath reliable AI.">
+<meta property="og:image" content="https://alishahmohammadi26.github.io/assets/images/blog/ai-fails-at-the-data-layer/cover.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+(function(){var t=null;try{t=localStorage.getItem('theme');}catch(e){}if(!t)t=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';document.documentElement.dataset.theme=t;})();
+</script>
+<style>
+:root{
+  --font-display:"STIX Two Text",Georgia,serif;--font-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;--font-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --text-xs:.78rem;--text-sm:.875rem;--text-base:1.0625rem;--text-lg:1.1875rem;--text-xl:clamp(1.35rem,1.15rem + .9vw,1.6rem);--text-2xl:clamp(1.7rem,1.3rem + 1.7vw,2.25rem);--text-3xl:clamp(2.15rem,1.5rem + 2.9vw,3.3rem);
+  --lh-tight:1.14;--lh-snug:1.3;--lh-body:1.72;--sp-1:.25rem;--sp-2:.5rem;--sp-3:.75rem;--sp-4:1rem;--sp-5:1.5rem;--sp-6:2rem;--sp-8:3rem;--sp-10:4.5rem;
+  --measure:72ch;--wrap:78rem;--r-sm:6px;--r:10px;--r-lg:16px;--shadow-1:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.05);--shadow-2:0 12px 36px rgba(16,24,40,.15);
+  --paper:#f8fafb;--surface:#fff;--surface-2:#eef2f4;--line:#e2e7ea;--line-strong:#cfd6da;--navy:#1c2c4c;--ink:#141821;--ink-2:#3f4753;--muted:#69727d;
+  --accent:#16805f;--accent-2:#26986f;--accent-wash:#e6f3ed;--mint:#dcefeb;--mint-2:#eef7f4;--blue:#4c78a8;--blue-wash:#eaf0f7;--gold:#a8752d;--gold-wash:#f7f0e4;--danger:#b23a3a;--danger-wash:#f7ecec;--violet:#6f63a8;--violet-wash:#efedf7;--grid:#e7ecef;
+}
+:root[data-theme="dark"]{
+  --paper:#0d1117;--surface:#141a22;--surface-2:#1b232d;--line:#232c37;--line-strong:#313d4a;--navy:#a9bee3;--ink:#e6ebf0;--ink-2:#aeb8c4;--muted:#7c8794;
+  --accent:#3fb98d;--accent-2:#5fd0a6;--accent-wash:#0f2b22;--mint:#17342c;--mint-2:#10271f;--blue:#79a6d2;--blue-wash:#142333;--gold:#d3a85f;--gold-wash:#2a2114;--danger:#e06a6a;--danger-wash:#2a1616;--violet:#aaa0e2;--violet-wash:#211e36;--grid:#212a34;--shadow-2:0 10px 30px rgba(0,0,0,.5);
+}
+*,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-body);font-size:var(--text-base);line-height:var(--lh-body);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;text-underline-offset:3px}:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}img,svg{max-width:100%;height:auto}strong{font-weight:700}code{font-family:var(--font-mono);font-size:.9em;background:var(--surface-2);color:var(--navy);padding:.1em .35em;border-radius:4px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+.site-header{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:var(--sp-5);padding:var(--sp-3) var(--sp-5);background:color-mix(in srgb,var(--paper) 82%,transparent);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid transparent;transition:border-color .25s,box-shadow .25s}.site-header[data-elevate="true"]{border-bottom-color:var(--line);box-shadow:var(--shadow-1)}.brand{font-family:var(--font-display);font-weight:600;color:var(--navy);font-size:var(--text-lg);letter-spacing:-.01em;white-space:nowrap;flex-shrink:0}.brand:hover{text-decoration:none}.brand .deg{font-style:italic;color:var(--accent);font-weight:500}.site-nav{display:flex;gap:var(--sp-5);margin-left:auto;align-items:center}.site-nav a{font-size:var(--text-sm);font-weight:500;color:var(--ink-2);padding-block:var(--sp-1)}.site-nav a:hover{color:var(--navy);text-decoration:none}.theme-toggle{width:34px;height:34px;border-radius:999px;cursor:pointer;border:1px solid var(--line-strong);background:var(--surface);display:grid;place-items:center}.theme-toggle b{width:14px;height:14px;border-radius:999px;background:var(--navy);box-shadow:inset -4px -4px 0 0 var(--surface)}:root[data-theme="dark"] .theme-toggle b{box-shadow:none;background:var(--accent)}.read-progress{position:absolute;left:0;right:0;bottom:-1px;height:3px;overflow:hidden}.read-progress span{display:block;height:100%;transform:scaleX(0);transform-origin:left;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:transform .08s linear}
+@media(max-width:560px){.site-header{gap:var(--sp-3);padding:var(--sp-3) var(--sp-4)}.site-nav{gap:var(--sp-3)}.site-nav a:nth-child(2),.site-nav a:nth-child(3){display:none}.brand{font-size:1rem}.brand .deg{display:none}}@media(max-width:420px){.site-nav a:first-child{display:none}}
+.article-page{max-width:var(--wrap);margin-inline:auto;padding-inline:var(--sp-5)}
+.hero-shell{padding:var(--sp-8) 0 var(--sp-6)}
+.hero-poster{position:relative;overflow:hidden;isolation:isolate;min-height:35rem;padding:clamp(1.6rem,4.4vw,3.7rem);border-radius:24px;background:linear-gradient(130deg,#d3e9e3 0%,#edf6f3 57%,#fafcfb 100%);box-shadow:var(--shadow-2);border:1px solid rgba(22,128,95,.12);color:#101311;display:flex;flex-direction:column;justify-content:space-between}
+.hero-poster::before{content:"";position:absolute;width:42rem;height:42rem;right:-18rem;bottom:-25rem;border-radius:50%;border:1px solid rgba(22,128,95,.11);box-shadow:0 0 0 4rem rgba(22,128,95,.028),0 0 0 8rem rgba(22,128,95,.018);z-index:-2}.hero-poster::after{content:"DATA";position:absolute;right:-.08em;bottom:-.32em;font-family:var(--font-display);font-size:clamp(9rem,25vw,21rem);font-style:italic;font-weight:700;line-height:.75;letter-spacing:-.09em;color:rgba(22,128,95,.055);z-index:-1;white-space:nowrap;pointer-events:none}
+.hero-name{font-family:var(--font-display);font-size:clamp(1.05rem,2vw,1.58rem);margin:0;color:#161916;position:relative;z-index:2}.hero-name em{font-weight:400}.cover-copy{position:relative;z-index:2;max-width:58rem;margin-top:clamp(5rem,12vw,9rem)}.poster-kicker{font-family:var(--font-mono);font-size:clamp(.65rem,.9vw,.79rem);letter-spacing:.14em;text-transform:uppercase;color:#336756;margin:0 0 var(--sp-4)}.poster-title{font-family:var(--font-display);font-size:clamp(3.35rem,7.35vw,7.1rem);line-height:.91;letter-spacing:-.048em;font-style:italic;font-weight:600;margin:0;max-width:10.7ch;text-wrap:balance}.poster-title span{display:block}.poster-title .green{color:#16805f}.poster-title .black{color:#111411}.cover-footer{display:flex;align-items:center;gap:var(--sp-4);margin-top:var(--sp-5);max-width:39rem}.poster-note{font-family:var(--font-mono);font-size:clamp(.65rem,.82vw,.78rem);letter-spacing:.1em;text-transform:uppercase;color:#2d594a;margin:0;white-space:nowrap}.cover-rule{height:1px;flex:1;background:rgba(45,89,74,.42);min-width:4rem}
+@media(max-width:800px){.hero-poster{min-height:38rem}.cover-copy{margin-top:7rem}.poster-title{font-size:clamp(3.35rem,15vw,6.15rem);max-width:9.8ch}.hero-poster::after{font-size:clamp(9rem,38vw,15rem);right:-.16em;bottom:-.15em}.cover-footer{align-items:flex-start;flex-direction:column;gap:var(--sp-3)}.poster-note{white-space:normal;max-width:28ch}.cover-rule{width:8rem;flex:none}}
+@media(max-width:500px){.article-page{padding-inline:var(--sp-4)}.hero-shell{padding-top:var(--sp-5)}.hero-poster{min-height:34rem;border-radius:16px;padding:1.35rem}.cover-copy{margin-top:5.8rem}.poster-title{font-size:clamp(3rem,17vw,5rem);max-width:9.4ch}.hero-name{font-size:1.05rem}.hero-poster::after{font-size:10rem;bottom:-.06em;right:-.1em}.poster-kicker{max-width:24ch}}
+.article-wrap{max-width:var(--wrap);margin-inline:auto;padding:var(--sp-6) var(--sp-5) var(--sp-10);display:grid;grid-template-columns:minmax(0,1fr) 15rem;gap:var(--sp-8);align-items:start}.article-main{min-width:0;max-width:var(--measure)}.toc-sidebar{position:sticky;top:5rem}.toc-sidebar .t{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:var(--sp-3)}.toc-sidebar a{display:block;font-size:var(--text-sm);color:var(--ink-2);padding:var(--sp-1) 0 var(--sp-1) var(--sp-3);border-left:2px solid var(--line);line-height:1.4}.toc-sidebar a:hover,.toc-sidebar a.active{color:var(--navy);text-decoration:none;border-left-color:var(--accent)}.toc-mini{margin-top:var(--sp-5);padding:var(--sp-4);border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}.toc-mini strong{display:block;font-family:var(--font-mono);font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:var(--sp-2)}.toc-mini p{font-size:var(--text-xs);line-height:1.55;color:var(--muted);margin:0}@media(max-width:980px){.article-wrap{grid-template-columns:1fr}.toc-sidebar{display:none}.article-main{max-width:76ch}}@media(max-width:560px){.article-wrap{padding-inline:var(--sp-4)}}
+.section-label{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:var(--sp-1);display:block}h2.section-h{font-family:var(--font-display);font-weight:600;font-size:var(--text-2xl);line-height:var(--lh-snug);color:var(--navy);margin:var(--sp-8) 0 var(--sp-4);scroll-margin-top:5rem}h3.sub-h{font-size:var(--text-xl);font-weight:600;color:var(--ink);margin:var(--sp-6) 0 var(--sp-3);scroll-margin-top:5rem}h4.mini-h{font-family:var(--font-display);font-size:var(--text-lg);color:var(--navy);margin:var(--sp-4) 0 var(--sp-2)}p.body-text{margin:0 0 var(--sp-4);color:var(--ink)}.lead{font-family:var(--font-display);font-size:1.28rem;line-height:1.64;color:var(--ink-2);margin:0 0 var(--sp-5)}hr.divider{border:0;height:1px;background:var(--line-strong);margin:var(--sp-8) 0}.rule-dots{border:0;height:6px;margin:var(--sp-8) 0;background-image:radial-gradient(var(--grid) 1.6px,transparent 1.7px);background-size:14px 6px;background-position:center}
+.callout{margin:var(--sp-5) 0;padding:var(--sp-4) var(--sp-5);border-left:3px solid var(--accent);border-radius:0 var(--r) var(--r) 0;background:var(--accent-wash)}.callout.warning{border-left-color:var(--danger);background:var(--danger-wash)}.callout.blue{border-left-color:var(--blue);background:var(--blue-wash)}.callout.gold{border-left-color:var(--gold);background:var(--gold-wash)}.callout.violet{border-left-color:var(--violet);background:var(--violet-wash)}.callout strong.label{font-family:var(--font-mono);font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.1em;color:var(--accent);display:block;margin-bottom:var(--sp-1)}.callout.warning strong.label{color:var(--danger)}.callout.blue strong.label{color:var(--blue)}.callout.gold strong.label{color:var(--gold)}.callout.violet strong.label{color:var(--violet)}.callout p{margin:0;color:var(--ink-2)}
+.figure-block{margin:var(--sp-6) 0;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface);padding:var(--sp-5);box-shadow:var(--shadow-1);overflow:hidden}.fig-head{display:flex;justify-content:space-between;align-items:center;gap:var(--sp-3);margin-bottom:var(--sp-4)}.fig-head strong{font-family:var(--font-display);font-size:var(--text-lg);color:var(--navy)}.fig-caption{margin-top:var(--sp-3);font-size:var(--text-sm);color:var(--muted);line-height:1.55}.tiny-button{border:1px solid var(--line-strong);background:var(--surface);color:var(--ink-2);font-family:var(--font-mono);font-size:var(--text-xs);border-radius:999px;padding:6px 10px;cursor:pointer}.tiny-button:hover{border-color:var(--accent);color:var(--accent)}
+.three-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-4);margin:var(--sp-5) 0}.concept-card{border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface);padding:var(--sp-5);position:relative;overflow:hidden}.concept-card::after{content:"";position:absolute;right:-2rem;top:-2rem;width:7rem;height:7rem;border-radius:50%;background:var(--accent-wash)}.concept-card .num{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--accent);position:relative;z-index:1}.concept-card h3{font-family:var(--font-display);font-size:1.45rem;margin:.4rem 0 .5rem;color:var(--navy);position:relative;z-index:1}.concept-card p{font-size:var(--text-sm);line-height:1.6;color:var(--ink-2);margin:0;position:relative;z-index:1}.concept-card .question{display:block;margin-top:var(--sp-3);font-family:var(--font-mono);font-size:var(--text-xs);color:var(--accent)}@media(max-width:760px){.three-grid{grid-template-columns:1fr}}
+.pyramid-shell{position:relative;padding:1rem 4.5rem 1rem 1rem}.pyramid{display:flex;flex-direction:column;align-items:center;gap:4px}.pyramid-layer{height:68px;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 1rem;color:#fff;font-weight:700;line-height:1.15;clip-path:polygon(11% 0,89% 0,100% 100%,0 100%);box-shadow:0 6px 15px rgba(16,24,40,.08)}.pyramid-layer small{display:block;font-weight:500;opacity:.88;font-size:.72rem;margin-top:4px}.p1{width:31%;background:#173c31}.p2{width:44%;background:#1b5b45}.p3{width:57%;background:#187355}.p4{width:70%;background:#168561}.p5{width:84%;background:#289b76}.p6{width:98%;background:#3db18c}.pyramid-arrow{position:absolute;right:.6rem;top:1.3rem;bottom:1.3rem;width:3.3rem;display:flex;flex-direction:column;align-items:center;justify-content:space-between}.pyramid-arrow .line{width:2px;flex:1;background:linear-gradient(var(--accent),var(--line-strong));position:relative}.pyramid-arrow .line::before{content:"";position:absolute;top:-1px;left:50%;transform:translate(-50%,-50%) rotate(45deg);width:10px;height:10px;border-left:2px solid var(--accent);border-top:2px solid var(--accent)}.pyramid-arrow span{writing-mode:vertical-rl;transform:rotate(180deg);font-family:var(--font-mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-top:.6rem}@media(max-width:650px){.pyramid-shell{padding-right:1rem}.pyramid-arrow{display:none}.pyramid-layer{height:76px;font-size:.82rem;padding-inline:.6rem}.pyramid-layer small{font-size:.65rem}.p1{width:47%}.p2{width:58%}.p3{width:68%}.p4{width:78%}.p5{width:89%}.p6{width:100%}}
+.pipeline-svg text{font-family:var(--font-body)}.pipe-box{fill:var(--surface-2);stroke:var(--line-strong);stroke-width:1.5}.pipe-box.emph{fill:var(--accent-wash);stroke:var(--accent)}.pipe-label{fill:var(--navy);font-weight:700;font-size:15px}.pipe-sub{fill:var(--muted);font-size:11px}.pipe-line{stroke:var(--line-strong);stroke-width:4;fill:none;stroke-linecap:round}.pipe-dot{fill:var(--accent)}.gate{fill:var(--surface);stroke:var(--accent);stroke-width:2}.gate-check{stroke:var(--accent);stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.layer-stack{display:grid;gap:var(--sp-3);margin:var(--sp-5) 0}.interop-layer{display:grid;grid-template-columns:3rem 12rem 1fr;gap:var(--sp-4);align-items:center;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:var(--sp-4)}.interop-layer .icon{width:2.6rem;height:2.6rem;border-radius:12px;background:var(--accent-wash);color:var(--accent);display:grid;place-items:center;font-family:var(--font-mono);font-weight:700}.interop-layer strong{color:var(--navy)}.interop-layer p{font-size:var(--text-sm);line-height:1.55;color:var(--ink-2);margin:0}.interop-layer code{white-space:nowrap}@media(max-width:650px){.interop-layer{grid-template-columns:3rem 1fr}.interop-layer p{grid-column:1/-1}.interop-layer strong{align-self:center}}
+.mapping-wrap{overflow-x:auto;margin:var(--sp-5) 0;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}.mapping-table,.data-table{width:100%;border-collapse:collapse;font-size:var(--text-sm);min-width:650px}.mapping-table th,.data-table th{font-family:var(--font-mono);font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:var(--sp-3) var(--sp-4);border-bottom:2px solid var(--line-strong);text-align:left;background:var(--surface-2)}.mapping-table td,.data-table td{padding:var(--sp-3) var(--sp-4);border-bottom:1px solid var(--line);color:var(--ink-2);vertical-align:top}.mapping-table tr:last-child td,.data-table tr:last-child td{border-bottom:none}.mapping-table tbody tr:hover,.data-table tbody tr:hover{background:var(--accent-wash)}
+.pattern-lanes{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);margin:var(--sp-5) 0}.pattern-card{border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface);padding:var(--sp-4)}.pattern-card h4{font-family:var(--font-display);font-size:var(--text-lg);color:var(--navy);margin:0 0 var(--sp-3)}.mini-flow{display:flex;align-items:center;justify-content:center;gap:.45rem;flex-wrap:wrap;margin-bottom:var(--sp-3)}.mini-flow span{border:1px solid var(--line-strong);background:var(--surface-2);border-radius:8px;padding:7px 9px;font-family:var(--font-mono);font-size:.67rem}.mini-flow i{font-style:normal;color:var(--accent);font-weight:700}.pattern-card p{font-size:var(--text-sm);line-height:1.55;color:var(--ink-2);margin:0}@media(max-width:700px){.pattern-lanes{grid-template-columns:1fr}}
+.mesh-compare{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-5);align-items:center}.mesh-panel{border:1px solid var(--line);border-radius:var(--r);background:var(--surface-2);padding:var(--sp-4);text-align:center}.mesh-panel h4{font-family:var(--font-display);color:var(--navy);font-size:var(--text-lg);margin:0 0 var(--sp-3)}.mesh-panel p{font-size:var(--text-sm);color:var(--ink-2);line-height:1.55;margin:var(--sp-3) 0 0}.mesh-svg{width:100%;height:230px}.mesh-line{stroke:var(--line-strong);stroke-width:1.5}.hub-line{stroke:var(--accent);stroke-width:2}.mesh-node{fill:var(--surface);stroke:var(--navy);stroke-width:1.5}.hub-node{fill:var(--accent);stroke:var(--accent)}.mesh-text{font-family:var(--font-mono);font-size:10px;fill:var(--ink-2)}.mesh-controls{margin-top:var(--sp-5);display:grid;grid-template-columns:1fr auto;gap:var(--sp-4);align-items:center;padding:var(--sp-4);border-radius:var(--r);background:var(--accent-wash)}.mesh-controls label{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--accent)}.mesh-controls input{width:100%;accent-color:var(--accent)}.mesh-numbers{display:flex;gap:var(--sp-4);font-family:var(--font-mono);font-size:var(--text-xs);color:var(--ink-2);white-space:nowrap}.mesh-numbers strong{color:var(--accent);font-size:1.1rem}@media(max-width:760px){.mesh-compare{grid-template-columns:1fr}.mesh-controls{grid-template-columns:1fr}.mesh-numbers{justify-content:space-between}.mesh-svg{height:190px}}
+.quality-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-3);margin:var(--sp-5) 0}.quality-card{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:var(--sp-4)}.quality-card strong{display:block;color:var(--navy);font-family:var(--font-display);font-size:1.08rem;margin-bottom:.25rem}.quality-card span{font-size:var(--text-xs);line-height:1.5;color:var(--muted)}@media(max-width:760px){.quality-grid{grid-template-columns:1fr 1fr}}@media(max-width:430px){.quality-grid{grid-template-columns:1fr}}
+.fair-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-3);margin:var(--sp-5) 0}.fair-card{min-height:15rem;border-radius:var(--r-lg);padding:var(--sp-4);color:#fff;position:relative;overflow:hidden}.fair-card::before{content:attr(data-letter);position:absolute;right:-.2rem;bottom:-2.7rem;font-family:var(--font-display);font-size:10rem;font-weight:700;opacity:.14;line-height:1}.fair-card h3{font-family:var(--font-display);font-size:1.55rem;margin:0 0 var(--sp-2);position:relative}.fair-card p{font-size:var(--text-sm);line-height:1.55;margin:0;position:relative}.fair-card ul{margin:var(--sp-3) 0 0;padding-left:1rem;font-size:var(--text-xs);line-height:1.5;position:relative}.fair-f{background:#1c5c48}.fair-a{background:#1d7660}.fair-i{background:#318e72}.fair-r{background:#55a98c}@media(max-width:850px){.fair-grid{grid-template-columns:1fr 1fr}}@media(max-width:500px){.fair-grid{grid-template-columns:1fr}.fair-card{min-height:12rem}}
+.contract{margin:var(--sp-5) 0;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-1)}.contract-head{display:flex;justify-content:space-between;align-items:center;background:#1b2a24;color:#7fd6ae;padding:var(--sp-2) var(--sp-4);font-family:var(--font-mono);font-size:var(--text-xs)}.contract pre{margin:0;padding:var(--sp-5);background:#0e1713;color:#dce9e3;font-family:var(--font-mono);font-size:.82rem;line-height:1.65;overflow-x:auto}.yaml-key{color:#7fd6ae}.yaml-val{color:#f2d69c}.yaml-comment{color:#7d958a}
+.example-board{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);margin:var(--sp-5) 0}.example-side{border:1px solid var(--line);border-radius:var(--r-lg);padding:var(--sp-5);background:var(--surface)}.example-side.bad{border-color:color-mix(in srgb,var(--danger) 35%,var(--line));background:var(--danger-wash)}.example-side.good{border-color:color-mix(in srgb,var(--accent) 40%,var(--line));background:var(--accent-wash)}.example-side h4{font-family:var(--font-display);font-size:var(--text-lg);margin:0 0 var(--sp-3);color:var(--navy)}.example-side ul{margin:0;padding-left:1.15rem;color:var(--ink-2);font-size:var(--text-sm);line-height:1.65}@media(max-width:700px){.example-board{grid-template-columns:1fr}}
+.lifecycle{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-3);margin:var(--sp-5) 0;counter-reset:stage}.life-card{position:relative;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface);padding:var(--sp-5);counter-increment:stage}.life-card::before{content:"0" counter(stage);display:inline-grid;place-items:center;width:2.2rem;height:2.2rem;border-radius:10px;background:var(--accent);color:#fff;font-family:var(--font-mono);font-size:.76rem;font-weight:700;margin-bottom:var(--sp-3)}.life-card:not(:last-child)::after{content:"";position:absolute;right:-.75rem;top:2.2rem;width:1.5rem;height:2px;background:var(--accent)}.life-card h4{font-family:var(--font-display);font-size:1.18rem;color:var(--navy);margin:0 0 var(--sp-2)}.life-card p{font-size:var(--text-xs);line-height:1.55;color:var(--muted);margin:0}@media(max-width:800px){.lifecycle{grid-template-columns:1fr 1fr}.life-card:nth-child(2)::after{display:none}}@media(max-width:480px){.lifecycle{grid-template-columns:1fr}.life-card::after{display:none}}
+.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-3);margin:var(--sp-5) 0}.metric-card{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:var(--sp-4)}.metric-card .metric-title{font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.05em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:var(--sp-2)}.metric-card strong{font-family:var(--font-display);font-size:1.25rem;color:var(--navy);display:block}.metric-card p{font-size:var(--text-xs);color:var(--muted);line-height:1.5;margin:.35rem 0 0}@media(max-width:720px){.metric-grid{grid-template-columns:1fr 1fr}}@media(max-width:450px){.metric-grid{grid-template-columns:1fr}}
+.checklist{margin:var(--sp-5) 0;padding:0;list-style:none;display:grid;gap:var(--sp-3)}.checklist li{display:grid;grid-template-columns:1.6rem 1fr;gap:var(--sp-3);align-items:start;border-bottom:1px solid var(--line);padding-bottom:var(--sp-3);color:var(--ink-2)}.checklist li::before{content:"✓";display:grid;place-items:center;width:1.5rem;height:1.5rem;border-radius:7px;background:var(--accent-wash);color:var(--accent);font-weight:700;font-size:.8rem}.checklist strong{color:var(--ink)}
+.ref-list{display:flex;flex-direction:column;gap:var(--sp-3)}.ref-item{font-size:var(--text-sm);color:var(--ink-2);line-height:1.6}.ref-num{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--accent);margin-right:var(--sp-2)}
+.site-footer{margin-top:var(--sp-10);border-top:1px solid var(--line);background:var(--surface)}.site-footer>*{max-width:var(--wrap);margin-inline:auto;padding-inline:var(--sp-5)}.foot-lead{padding-top:var(--sp-8)}.foot-name{font-family:var(--font-display);font-size:var(--text-lg);color:var(--navy);font-weight:600;margin:0}.foot-role{color:var(--muted);font-size:var(--text-sm);margin:var(--sp-1) 0 0}.foot-nav{display:flex;flex-wrap:wrap;gap:var(--sp-5);padding-top:var(--sp-5)}.foot-nav a{font-size:var(--text-sm);color:var(--ink-2);font-weight:500}.foot-nav a:hover{color:var(--accent)}.foot-base{display:flex;justify-content:space-between;align-items:center;padding-block:var(--sp-5) var(--sp-8);margin-top:var(--sp-5);border-top:1px solid var(--line);color:var(--muted);font-size:var(--text-sm)}.to-top{color:var(--muted)}.to-top:hover{color:var(--accent)}
+</style>
+</head>
+<body id="top">
+<header class="site-header" data-elevate="false">
+  <a class="brand" href="../index.html">Ali Shahmohammadi <span class="deg">Ph.D.</span></a>
+  <nav class="site-nav" aria-label="Primary">
+    <a href="../index.html#writing">Writing</a>
+    <a href="../index.html#career">Career</a>
+    <a href="../resume.html">Resume</a>
+    <a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a>
+  </nav>
+  <button class="theme-toggle" id="themeBtn" type="button" aria-label="Toggle dark mode"><b></b></button>
+  <div class="read-progress" role="presentation"><span id="progress"></span></div>
+</header>
+
+<div class="article-page">
+  <div class="hero-shell">
+    <div class="hero-poster" id="share-card" role="img" aria-label="Editorial cover reading AI fails at the data layer before it fails at the model layer">
+      <p class="hero-name">Ali Shahmohammadi <em>Ph.D.</em></p>
+      <div class="cover-copy">
+        <p class="poster-kicker">AI systems · reliability · data engineering</p>
+        <h1 class="poster-title">
+          <span class="black">AI fails at the</span>
+          <span class="green">data layer</span>
+          <span class="black">before it fails at the model layer</span>
+        </h1>
+        <div class="cover-footer">
+          <p class="poster-note">Data quality · integration · interoperability</p>
+          <span class="cover-rule" aria-hidden="true"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-intro">
+      <div class="hero-series">AI Systems · Data Engineering · Reliability</div>
+      <h1 class="article-title">AI Fails at the Data Layer <em>Before It Fails at the Model Layer</em></h1>
+      <p class="article-sub">The model is the most visible component of an AI system. It is rarely the most load-bearing. Reliable predictions depend on data that can be found, understood, combined, traced, protected, and delivered with the same meaning at training time and at inference time.</p>
+      <div class="article-meta">
+        <span class="meta-pill highlight">Data Quality</span>
+        <span class="meta-pill highlight">Interoperability</span>
+        <span class="meta-pill highlight">Integration</span>
+        <span class="meta-pill">FAIR Data</span>
+        <span class="meta-pill">Aug 2026</span>
+        <span class="meta-pill">17 min read</span>
+        <span class="meta-pill">Beginner–Intermediate</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="article-wrap">
+<main class="article-main">
+  <section id="thesis">
+    <div class="section-label">01 · The Hidden System</div>
+    <h2 class="section-h">The Model Is the Last Consumer in a Long Data Supply Chain</h2>
+
+    <p class="lead">Most teams encounter an AI failure at the model layer: accuracy falls, predictions become unstable, a feature suddenly dominates, or online performance no longer matches validation. But the defect often entered much earlier—when data was created, named, copied, transformed, joined, timestamped, or separated from its context.</p>
+
+    <p class="body-text">The phrase “AI fails at the data layer” is intentionally sharp. Models absolutely can fail because of poor architecture, optimization, evaluation, or deployment. The deeper point is that a technically excellent model cannot recover information that the data system has already corrupted, hidden, delayed, duplicated, or misinterpreted.</p>
+
+    <p class="body-text">Consider a predictive-maintenance model. It may depend on telemetry from sensors, asset identifiers from an equipment registry, work-order history from a maintenance system, production schedules from an ERP platform, and quality measurements from a laboratory system. The model does not know that <code>M-17</code>, <code>0017</code>, and <code>LINE2_MOTOR_17</code> refer to the same machine. It does not know whether a temperature of <code>194</code> is Fahrenheit or Celsius. It does not know whether a timestamp is local time, UTC, or the time a message was received rather than the time the event occurred.</p>
+
+    <p class="body-text">Those are not model questions. They are questions of identity, quality, integration, semantics, lineage, and operating discipline. Unless the data system answers them consistently, the model will learn from an unstable representation of reality.</p>
+
+    <div class="callout">
+      <strong class="label">The central idea</strong>
+      <p>The model sees only the representation delivered to it. Every upstream decision about meaning, timing, mapping, filtering, and quality becomes part of the model—even when that decision is undocumented.</p>
+    </div>
+
+    <div class="figure-block">
+      <div class="fig-head"><strong>From source events to model decisions</strong><button class="tiny-button" id="flowBtn" type="button">Pause animation</button></div>
+      <svg id="flowSvg" class="pipeline-svg" viewBox="0 0 920 360" role="img" aria-labelledby="flowTitle flowDesc">
+        <title id="flowTitle">Animated AI data supply chain</title>
+        <desc id="flowDesc">Data moves from operational sources through quality gates, a canonical model, a feature layer, an AI model, and a decision.</desc>
+        <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="var(--line-strong)"/></marker></defs>
+        <path id="flowPath" class="pipe-line" d="M140 180H780" marker-end="url(#arrow)"/>
+        <rect class="pipe-box" x="20" y="115" width="120" height="130" rx="16"/><text class="pipe-label" x="80" y="146" text-anchor="middle">Sources</text><text class="pipe-sub" x="80" y="172" text-anchor="middle">CRM · ERP</text><text class="pipe-sub" x="80" y="191" text-anchor="middle">sensors · files</text><text class="pipe-sub" x="80" y="210" text-anchor="middle">partner APIs</text>
+        <circle class="gate" cx="205" cy="180" r="24"/><path class="gate-check" d="m194 180 7 7 15-17"/><text class="pipe-sub" x="205" y="224" text-anchor="middle">profile</text>
+        <rect class="pipe-box emph" x="250" y="120" width="135" height="120" rx="16"/><text class="pipe-label" x="317.5" y="151" text-anchor="middle">Quality</text><text class="pipe-sub" x="317.5" y="177" text-anchor="middle">validate</text><text class="pipe-sub" x="317.5" y="196" text-anchor="middle">reconcile</text><text class="pipe-sub" x="317.5" y="215" text-anchor="middle">quarantine</text>
+        <circle class="gate" cx="420" cy="180" r="24"/><path class="gate-check" d="m409 180 7 7 15-17"/><text class="pipe-sub" x="420" y="224" text-anchor="middle">map</text>
+        <rect class="pipe-box emph" x="465" y="120" width="135" height="120" rx="16"/><text class="pipe-label" x="532.5" y="151" text-anchor="middle">Shared meaning</text><text class="pipe-sub" x="532.5" y="177" text-anchor="middle">identifiers</text><text class="pipe-sub" x="532.5" y="196" text-anchor="middle">units · terms</text><text class="pipe-sub" x="532.5" y="215" text-anchor="middle">lineage</text>
+        <circle class="gate" cx="635" cy="180" r="24"/><path class="gate-check" d="m624 180 7 7 15-17"/><text class="pipe-sub" x="635" y="224" text-anchor="middle">serve</text>
+        <rect class="pipe-box" x="680" y="120" width="110" height="120" rx="16"/><text class="pipe-label" x="735" y="154" text-anchor="middle">Features</text><text class="pipe-sub" x="735" y="181" text-anchor="middle">training</text><text class="pipe-sub" x="735" y="200" text-anchor="middle">retrieval</text><text class="pipe-sub" x="735" y="219" text-anchor="middle">inference</text>
+        <rect class="pipe-box" x="820" y="120" width="80" height="120" rx="16"/><text class="pipe-label" x="860" y="160" text-anchor="middle">Model</text><text class="pipe-sub" x="860" y="190" text-anchor="middle">score</text><text class="pipe-sub" x="860" y="209" text-anchor="middle">decide</text>
+        <circle class="pipe-dot" r="7"><animateMotion dur="5.4s" repeatCount="indefinite"><mpath href="#flowPath"/></animateMotion></circle>
+        <circle class="pipe-dot" r="4" opacity=".55"><animateMotion dur="5.4s" begin="-1.8s" repeatCount="indefinite"><mpath href="#flowPath"/></animateMotion></circle>
+        <circle class="pipe-dot" r="4" opacity=".55"><animateMotion dur="5.4s" begin="-3.6s" repeatCount="indefinite"><mpath href="#flowPath"/></animateMotion></circle>
+        <path d="M160 292H760" stroke="var(--accent)" stroke-width="2" stroke-dasharray="8 6"/><text x="460" y="320" text-anchor="middle" class="pipe-sub">metadata, ownership, access rules, quality results, and lineage must travel with the data</text>
+      </svg>
+      <div class="fig-caption">Figure 1. A model consumes the end of a pipeline. The integrity of that pipeline—especially the handoffs—is part of model reliability.</div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section id="three-disciplines">
+    <div class="section-label">02 · Three Disciplines</div>
+    <h2 class="section-h">Quality, Integration, and Interoperability Solve Different Problems</h2>
+
+    <p class="body-text">These terms are often used as though they describe one activity. They do not. A dataset can be high quality but isolated. Two systems can exchange data but disagree about its meaning. An integration pipeline can run successfully while silently converting a legitimate value into the wrong category.</p>
+
+    <div class="three-grid">
+      <article class="concept-card"><span class="num">01</span><h3>Data Quality</h3><p>Determines whether data is fit for a specific use. Quality includes accuracy, completeness, validity, consistency, uniqueness, timeliness, integrity, and traceability.</p><span class="question">Question: Can this data be trusted for this decision?</span></article>
+      <article class="concept-card"><span class="num">02</span><h3>Data Integration</h3><p>Moves, combines, transforms, or virtually presents data from multiple sources so it is available in the required location, format, and timeframe.</p><span class="question">Question: Can the required data be assembled and delivered?</span></article>
+      <article class="concept-card"><span class="num">03</span><h3>Interoperability</h3><p>Allows systems, workflows, and people to exchange data and interpret it consistently enough to act without building a bespoke translation for every interaction.</p><span class="question">Question: Will both sides understand the same thing?</span></article>
+    </div>
+
+    <p class="body-text">The disciplines reinforce one another. Integration creates valuable checkpoints at which quality can be measured. Interoperability reduces the number of custom transformations that can introduce defects. Quality metadata tells downstream users whether integrated data is suitable for their particular purpose.</p>
+
+    <div class="callout warning">
+      <strong class="label">A successful pipeline can still be wrong</strong>
+      <p>A job can complete on time, move every row, pass schema validation, and still deliver incorrect meaning. Technical success is not semantic correctness.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section id="pyramid">
+    <div class="section-label">03 · The AI Reliability Pyramid</div>
+    <h2 class="section-h">The Model Sits Near the Top; the Data System Carries the Weight</h2>
+
+    <p class="body-text">Organizations often invest from the top down: first the use case, then the model, then the feature pipeline, and only later the data foundations. The dependency direction runs the other way. A model can be tuned in days; reliable identifiers, shared definitions, quality controls, lineage, and reusable interfaces may take years to build.</p>
+
+    <div class="figure-block">
+      <div class="fig-head"><strong>The AI reliability pyramid</strong></div>
+      <div class="pyramid-shell" role="img" aria-label="Pyramid showing business value at the top and data quality, metadata, identity, and controls at the foundation">
+        <div class="pyramid">
+          <div class="pyramid-layer p1"><div>Decision &amp; Value<small>action, trust, measurable outcome</small></div></div>
+          <div class="pyramid-layer p2"><div>Model &amp; Evaluation<small>training, validation, monitoring</small></div></div>
+          <div class="pyramid-layer p3"><div>Features, Retrieval &amp; Context<small>consistent training and inference inputs</small></div></div>
+          <div class="pyramid-layer p4"><div>Semantic Interoperability<small>shared identifiers, terms, units, vocabularies</small></div></div>
+          <div class="pyramid-layer p5"><div>Integration, Orchestration &amp; Lineage<small>movement, mapping, timing, provenance</small></div></div>
+          <div class="pyramid-layer p6"><div>Data Quality, Metadata, Ownership &amp; Controls<small>the load-bearing foundation</small></div></div>
+        </div>
+        <div class="pyramid-arrow"><div class="line"></div><span>dependency flows downward</span></div>
+      </div>
+      <div class="fig-caption">Figure 2. The visible intelligence at the top depends on increasingly broad layers of data discipline below it.</div>
+    </div>
+
+    <p class="body-text">This pyramid is not a maturity sequence in which every organization must finish one layer before touching the next. Work is iterative. A small model may expose a critical identity problem; fixing that problem may improve many products. The pyramid is a dependency map: defects near the base propagate upward, while improvements near the base can benefit every model and application above them.</p>
+  </section>
+
+  <hr class="divider">
+
+  <section id="integration">
+    <div class="section-label">04 · Integration as Engineering</div>
+    <h2 class="section-h">Integration Is Not “Move the Data.” It Is Preserve and Transform Meaning.</h2>
+
+    <p class="body-text">At its simplest, integration extracts data from a source, transforms it into a representation the target can use, and loads or presents it to that target. The sequence can be physical or virtual, scheduled or event-driven, and centralized or distributed. But every version contains the same hard questions: what data is selected, what changes, what is retained, what is lost, when it becomes available, and how the result can be traced back.</p>
+
+    <div class="pattern-lanes">
+      <div class="pattern-card"><h4>ETL: transform before loading</h4><div class="mini-flow"><span>Extract</span><i>→</i><span>Transform</span><i>→</i><span>Load</span></div><p>Useful when transformations, validation, masking, or conformance must occur before data enters the target. Physical staging can support restartability and an audit trail, but adds storage and latency.</p></div>
+      <div class="pattern-card"><h4>ELT: load before transforming</h4><div class="mini-flow"><span>Extract</span><i>→</i><span>Load</span><i>→</i><span>Transform</span></div><p>Useful when the target platform has strong processing capability and preserving raw data is valuable. It shifts more responsibility to target-side governance, transformation control, and versioning.</p></div>
+      <div class="pattern-card"><h4>Batch: move on a schedule</h4><div class="mini-flow"><span>Source</span><i>→</i><span>Snapshot</span><i>→</i><span>Target</span></div><p>Appropriate when bounded latency is acceptable, high volumes are processed together, or source-system impact must be controlled during off-peak periods.</p></div>
+      <div class="pattern-card"><h4>Event-driven: move on change</h4><div class="mini-flow"><span>Change</span><i>→</i><span>Event</span><i>→</i><span>Subscribers</span></div><p>Appropriate when operational decisions depend on fresh data. It requires careful treatment of ordering, duplication, late events, idempotency, and recovery.</p></div>
+    </div>
+
+    <h3 class="sub-h">The source-to-target mapping is a model contract</h3>
+    <p class="body-text">Almost every integration maps a source structure to a target structure. A serious mapping specifies formats, intermediate stages, transformation rules, lookups, calculations, defaults, exception handling, and the population logic for every target attribute. It should also explain why the mapping is correct in business terms.</p>
+
+    <div class="mapping-wrap">
+      <table class="mapping-table" aria-label="Example canonical mapping">
+        <thead><tr><th>Source</th><th>Source representation</th><th>Transformation rule</th><th>Canonical representation</th><th>Model feature</th></tr></thead>
+        <tbody>
+          <tr><td>CRM</td><td><code>cust_status = 1</code></td><td>Map documented active code</td><td><code>customer.lifecycle_status = active</code></td><td><code>is_active_customer = 1</code></td></tr>
+          <tr><td>Billing</td><td><code>account_state = "A"</code></td><td>Confirm account is not suspended</td><td><code>customer.lifecycle_status = active</code></td><td><code>is_active_customer = 1</code></td></tr>
+          <tr><td>Support</td><td><code>closed_at IS NULL</code></td><td>Do not infer customer status; represents case state</td><td><code>support_case.status = open</code></td><td><code>open_case_count += 1</code></td></tr>
+          <tr><td>Web events</td><td><code>status = "active"</code></td><td>Session status, not customer status</td><td><code>session.status = active</code></td><td><code>recent_session_active = 1</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="body-text">Without a shared model, identical labels become accidental joins and different labels become unnecessary duplication. The model layer then receives features whose names look stable while their definitions drift across sources.</p>
+
+    <h3 class="sub-h">Persistent and transient structures both need design</h3>
+    <p class="body-text">Teams naturally model data that will live in a warehouse, lakehouse, master-data hub, or feature store. They often neglect the structures that exist only in motion: API payloads, event messages, file layouts, staging tables, queue records, and canonical messages. Those transient structures are precisely where meaning crosses boundaries. They deserve the same naming discipline, versioning, documentation, and review as persistent tables.</p>
+  </section>
+
+  <hr class="divider">
+
+  <section id="interoperability">
+    <div class="section-label">05 · Interoperability</div>
+    <h2 class="section-h">Connectivity Is Not Understanding</h2>
+
+    <p class="lead">An HTTP 200 response proves that two systems communicated. It does not prove that they agreed on the entity, the unit, the time, the definition, or the permitted use.</p>
+
+    <p class="body-text">Interoperability has layers. A solution can succeed at one layer and fail at the next. Thinking in layers helps teams diagnose why an interface “works” yet downstream users still reconcile totals by hand.</p>
+
+    <div class="layer-stack">
+      <div class="interop-layer"><div class="icon">01</div><strong>Technical</strong><p>Can systems connect and exchange bytes through files, databases, APIs, queues, streams, or services? This includes protocols, authentication, availability, throughput, and error handling.</p></div>
+      <div class="interop-layer"><div class="icon">02</div><strong>Structural</strong><p>Can both sides parse the representation? They must agree on schema, field types, message shape, encoding, cardinality, optionality, and version behavior.</p></div>
+      <div class="interop-layer"><div class="icon">03</div><strong>Semantic</strong><p>Do the values mean the same thing? Shared identifiers, definitions, units, code sets, reference data, taxonomies, and explicit relationships are essential.</p></div>
+      <div class="interop-layer"><div class="icon">04</div><strong>Operational</strong><p>Can the exchange be relied on in practice? Ownership, service levels, permissible use, retention, change approval, incident response, and recovery determine whether it is sustainable.</p></div>
+    </div>
+
+    <p class="body-text">Semantic interoperability is where many AI initiatives become fragile. A model may combine clinical events, customer activities, laboratory measurements, or equipment signals that are structurally compatible but conceptually different. A timestamp may refer to event time, processing time, or publication time. “Revenue” may mean booked, billed, recognized, collected, or forecast revenue. “Failure” may mean an alarm, a maintenance intervention, a shutdown, or a confirmed component defect.</p>
+
+    <div class="callout blue"><strong class="label">Canonical does not mean universal</strong><p>A canonical model is a deliberately shared representation for a defined exchange community. It reduces repeated translation, but it still requires scope, ownership, versioning, and mappings from local meanings.</p></div>
+  </section>
+
+  <hr class="divider">
+
+  <section id="interfaces">
+    <div class="section-label">06 · Interface Complexity</div>
+    <h2 class="section-h">Point-to-Point Integration Turns Every New System into a Multiplier</h2>
+
+    <p class="body-text">When every system connects directly to every other system, each pair can require its own schema, transformation, security configuration, monitoring, and change process. With <em>n</em> systems, a fully connected undirected mesh can require up to <code>n(n−1)/2</code> pairwise connections. The problem is not only the number of interfaces; it is the number of places where meaning can diverge.</p>
+
+    <div class="figure-block">
+      <div class="fig-head"><strong>Custom mesh versus shared exchange layer</strong></div>
+      <div class="mesh-compare">
+        <div class="mesh-panel"><h4>Point-to-point mesh</h4><svg class="mesh-svg" viewBox="0 0 320 230" aria-hidden="true">
+          <line class="mesh-line" x1="160" y1="22" x2="270" y2="72"/><line class="mesh-line" x1="160" y1="22" x2="288" y2="165"/><line class="mesh-line" x1="160" y1="22" x2="205" y2="205"/><line class="mesh-line" x1="160" y1="22" x2="70" y2="205"/><line class="mesh-line" x1="160" y1="22" x2="28" y2="130"/><line class="mesh-line" x1="270" y1="72" x2="288" y2="165"/><line class="mesh-line" x1="270" y1="72" x2="205" y2="205"/><line class="mesh-line" x1="270" y1="72" x2="70" y2="205"/><line class="mesh-line" x1="270" y1="72" x2="28" y2="130"/><line class="mesh-line" x1="288" y1="165" x2="205" y2="205"/><line class="mesh-line" x1="288" y1="165" x2="70" y2="205"/><line class="mesh-line" x1="288" y1="165" x2="28" y2="130"/><line class="mesh-line" x1="205" y1="205" x2="70" y2="205"/><line class="mesh-line" x1="205" y1="205" x2="28" y2="130"/><line class="mesh-line" x1="70" y1="205" x2="28" y2="130"/>
+          <circle class="mesh-node" cx="160" cy="22" r="18"/><circle class="mesh-node" cx="270" cy="72" r="18"/><circle class="mesh-node" cx="288" cy="165" r="18"/><circle class="mesh-node" cx="205" cy="205" r="18"/><circle class="mesh-node" cx="70" cy="205" r="18"/><circle class="mesh-node" cx="28" cy="130" r="18"/><text class="mesh-text" x="160" y="26" text-anchor="middle">A</text><text class="mesh-text" x="270" y="76" text-anchor="middle">B</text><text class="mesh-text" x="288" y="169" text-anchor="middle">C</text><text class="mesh-text" x="205" y="209" text-anchor="middle">D</text><text class="mesh-text" x="70" y="209" text-anchor="middle">E</text><text class="mesh-text" x="28" y="134" text-anchor="middle">F</text>
+        </svg><p>Every pair negotiates its own representation. Local changes trigger many downstream changes.</p></div>
+        <div class="mesh-panel"><h4>Hub, canonical model, or event layer</h4><svg class="mesh-svg" viewBox="0 0 320 230" aria-hidden="true">
+          <line class="hub-line" x1="160" y1="112" x2="160" y2="25"/><line class="hub-line" x1="160" y1="112" x2="270" y2="72"/><line class="hub-line" x1="160" y1="112" x2="288" y2="165"/><line class="hub-line" x1="160" y1="112" x2="205" y2="205"/><line class="hub-line" x1="160" y1="112" x2="70" y2="205"/><line class="hub-line" x1="160" y1="112" x2="28" y2="130"/>
+          <circle class="hub-node" cx="160" cy="112" r="36"/><text x="160" y="108" text-anchor="middle" fill="#fff" font-family="var(--font-mono)" font-size="10">SHARED</text><text x="160" y="122" text-anchor="middle" fill="#fff" font-family="var(--font-mono)" font-size="10">MODEL</text><circle class="mesh-node" cx="160" cy="25" r="18"/><circle class="mesh-node" cx="270" cy="72" r="18"/><circle class="mesh-node" cx="288" cy="165" r="18"/><circle class="mesh-node" cx="205" cy="205" r="18"/><circle class="mesh-node" cx="70" cy="205" r="18"/><circle class="mesh-node" cx="28" cy="130" r="18"/><text class="mesh-text" x="160" y="29" text-anchor="middle">A</text><text class="mesh-text" x="270" y="76" text-anchor="middle">B</text><text class="mesh-text" x="288" y="169" text-anchor="middle">C</text><text class="mesh-text" x="205" y="209" text-anchor="middle">D</text><text class="mesh-text" x="70" y="209" text-anchor="middle">E</text><text class="mesh-text" x="28" y="134" text-anchor="middle">F</text>
+        </svg><p>Each system maps to a shared exchange pattern. Reuse and loose coupling reduce bespoke interfaces.</p></div>
+      </div>
+      <div class="mesh-controls"><div><label for="systemRange">Number of systems: <strong id="systemCount">10</strong></label><input id="systemRange" type="range" min="3" max="30" value="10"></div><div class="mesh-numbers"><span>pairwise: <strong id="pairCount">45</strong></span><span>hub mappings: <strong id="hubCount">10</strong></span></div></div>
+      <div class="fig-caption">Figure 3. A shared exchange model does not remove integration work; it concentrates and governs it so every new connection does not reinvent the same semantics.</div>
+    </div>
+
+    <p class="body-text">Hub-and-spoke, publish-subscribe, enterprise service buses, APIs, data services, and event platforms are different architectural responses to this complexity. The most important design principles are broader than any tool: keep applications loosely coupled, minimize unnecessary interfaces, reuse services, and prefer standard or canonical exchange patterns over one-off messages.</p>
+  </section>
+
+  <hr class="divider">
+
+  <section id="quality">
+    <div class="section-label">07 · Data Quality at Runtime</div>
+    <h2 class="section-h">Quality Is Not a Cleanup Step Before Training</h2>
+
+    <p class="body-text">Data quality is often treated as a preprocessing task: clean the training set, build the model, and move on. Production systems make that approach obsolete. Data continues to arrive, source applications change, code sets evolve, sensors drift, business rules are reinterpreted, and late-arriving records alter previously computed features. Quality must therefore be designed and monitored throughout the data flow.</p>
+
+    <div class="quality-grid">
+      <div class="quality-card"><strong>Accuracy</strong><span>Does the value correctly represent the real-world object or event?</span></div>
+      <div class="quality-card"><strong>Completeness</strong><span>Are required records and attributes present at the needed level?</span></div>
+      <div class="quality-card"><strong>Validity</strong><span>Does the value conform to its allowed format, domain, range, and rule?</span></div>
+      <div class="quality-card"><strong>Consistency</strong><span>Do equivalent facts agree across systems, records, and time?</span></div>
+      <div class="quality-card"><strong>Uniqueness</strong><span>Are entities and events represented once when the use requires one record?</span></div>
+      <div class="quality-card"><strong>Timeliness</strong><span>Is the data current and available early enough for the decision?</span></div>
+      <div class="quality-card"><strong>Integrity</strong><span>Are relationships and dependencies preserved, such as orders linked to valid customers?</span></div>
+      <div class="quality-card"><strong>Traceability</strong><span>Can users identify origin, transformations, quality results, and responsible owners?</span></div>
+    </div>
+
+    <h3 class="sub-h">Integration points are quality-control points</h3>
+    <p class="body-text">Movement is a common source of defects: truncation, encoding changes, default values, join loss, duplicate delivery, incorrect lookups, changed units, missing metadata, and altered precision. The same integration boundaries are therefore ideal places to profile, validate, reconcile, and isolate bad data before it propagates through the full value chain.</p>
+
+    <p class="body-text">A robust pipeline does not merely reject invalid rows. It records what failed, why it failed, where the record originated, what rule was applied, whether the source or target is accountable, and how the issue affects downstream products. Those results are quality metadata. They give model owners evidence about whether a dataset is fit for a specific purpose instead of forcing every team to recheck the same data.</p>
+
+    <div class="mapping-wrap">
+      <table class="data-table" aria-label="Model symptoms and upstream data causes">
+        <thead><tr><th>Model symptom</th><th>Likely upstream cause</th><th>Why retraining alone will not fix it</th><th>Better control</th></tr></thead>
+        <tbody>
+          <tr><td>Accuracy drops immediately after a release</td><td>Schema or mapping drift changed feature meaning</td><td>The model is learning or scoring against a different representation</td><td>Versioned contracts, mapping approval, canary quality checks</td></tr>
+          <tr><td>Offline evaluation is strong; online results are weak</td><td>Training-serving skew, latency, or time-window mismatch</td><td>The production feature set is not the validated feature set</td><td>Shared feature definitions, event-time logic, freshness SLOs</td></tr>
+          <tr><td>Feature importance changes without business explanation</td><td>Default-value expansion, code-set change, or join behavior</td><td>Retraining absorbs the defect and may hide it</td><td>Distribution monitoring plus semantic change review</td></tr>
+          <tr><td>Predictions differ across customer channels</td><td>Identity resolution or duplicate master records</td><td>Each channel is presenting a different entity history</td><td>Canonical identifiers, match rules, survivorship rules</td></tr>
+          <tr><td>Validation is excellent but production fails</td><td>Temporal leakage or post-outcome data included in training</td><td>The validation set reproduces the same leakage</td><td>Forward lineage, event-time cutoffs, label governance</td></tr>
+          <tr><td>Performance varies sharply by population</td><td>Coverage gaps, biased joins, selective missingness</td><td>Global metrics conceal unequal data availability</td><td>Segmented quality metrics and join-loss analysis</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section id="fair">
+    <div class="section-label">08 · FAIR Principles</div>
+    <h2 class="section-h">FAIR Turns Data Reuse into a Design Requirement</h2>
+
+    <p class="body-text">The FAIR principles—Findable, Accessible, Interoperable, and Reusable—were introduced to improve the stewardship of digital assets, with a strong emphasis on machine-actionability. They are especially useful for AI because model development depends on automated discovery, access, combination, and reuse across datasets, metadata, workflows, and infrastructure.</p>
+
+    <p class="body-text">FAIR does not mean that every dataset must be public. Accessible data can require authentication and authorization. The point is that access conditions should be explicit and implemented through standard mechanisms, while metadata remains sufficient for discovery and understanding.</p>
+
+    <div class="fair-grid">
+      <article class="fair-card fair-f" data-letter="F"><h3>Findable</h3><p>People and machines can discover the dataset and identify the exact version.</p><ul><li>persistent identifiers</li><li>rich searchable metadata</li><li>catalog registration</li><li>clear dataset-to-metadata links</li></ul></article>
+      <article class="fair-card fair-a" data-letter="A"><h3>Accessible</h3><p>Users know how to retrieve data and what controls apply.</p><ul><li>standard protocols</li><li>authentication when needed</li><li>authorization rules</li><li>metadata survives data retirement</li></ul></article>
+      <article class="fair-card fair-i" data-letter="I"><h3>Interoperable</h3><p>Data and metadata use shared representations that can be combined by systems and workflows.</p><ul><li>formal knowledge representation</li><li>shared vocabularies</li><li>qualified references</li><li>explicit relationships</li></ul></article>
+      <article class="fair-card fair-r" data-letter="R"><h3>Reusable</h3><p>Future users can judge suitability and reproduce the intended use.</p><ul><li>provenance and quality</li><li>usage rights and license</li><li>domain standards</li><li>accurate, relevant attributes</li></ul></article>
+    </div>
+
+    <h3 class="sub-h">A FAIR input contract for the model layer</h3>
+    <p class="body-text">A model registry can record weights and metrics while still leaving the data supply chain opaque. A stronger contract connects each model version to the data and semantics that produced it.</p>
+
+    <div class="contract">
+      <div class="contract-head"><span>model-input-contract.yaml</span><span>machine-readable context</span></div>
+<pre><span class="yaml-key">dataset_id:</span> <span class="yaml-val">urn:asset-health:training-set</span>
+<span class="yaml-key">dataset_version:</span> <span class="yaml-val">2026-08-14.3</span>
+<span class="yaml-key">schema:</span> <span class="yaml-val">asset-health-schema@2.4</span>
+<span class="yaml-key">semantic_model:</span> <span class="yaml-val">manufacturing-assets@1.8</span>
+<span class="yaml-key">feature_definitions:</span> <span class="yaml-val">feature-set@7.1</span>
+<span class="yaml-key">quality_profile:</span> <span class="yaml-val">dq-report:7f9a...</span>
+<span class="yaml-key">lineage:</span> <span class="yaml-val">lineage-graph:4cc2...</span>
+<span class="yaml-key">event_time_policy:</span> <span class="yaml-val">observed_at_utc</span>
+<span class="yaml-key">freshness_slo:</span> <span class="yaml-val">15 minutes</span>
+<span class="yaml-key">permitted_use:</span> <span class="yaml-val">predictive-maintenance</span>
+<span class="yaml-key">owner:</span> <span class="yaml-val">asset-reliability-team</span>
+<span class="yaml-comment"># The model is reproducible only when its data context is reproducible.</span></pre>
+    </div>
+
+    <div class="callout violet"><strong class="label">FAIR is not a storage format</strong><p>It is a set of design principles. CSV, Parquet, JSON, relational tables, knowledge graphs, APIs, and event streams can all participate in a FAIR ecosystem when identifiers, metadata, access, semantics, provenance, and reuse conditions are managed deliberately.</p></div>
+  </section>
+
+  <hr class="divider">
+
+  <section id="example">
+    <div class="section-label">09 · Worked Example</div>
+    <h2 class="section-h">Predictive Maintenance: One Temperature Reading, Four Integration Problems</h2>
+
+    <p class="body-text">Imagine a model that predicts motor failure forty-eight hours in advance. The raw ingredients appear straightforward: vibration, temperature, current draw, maintenance history, production load, and prior failures. The integration work determines whether those ingredients describe the same machine at the same time under the same definition of failure.</p>
+
+    <div class="example-board">
+      <div class="example-side bad"><h4>What the model receives without discipline</h4><ul><li><code>M-17</code>, <code>0017</code>, and <code>LINE2_MOTOR_17</code> treated as separate assets</li><li>temperature values mixed between Fahrenheit and Celsius</li><li>sensor time in local time, work orders in UTC, ERP records by shift date</li><li>planned maintenance labeled as failure in one system</li><li>duplicate events delivered after message retries</li><li>maintenance completion data included in the training window, leaking the outcome</li></ul></div>
+      <div class="example-side good"><h4>What the model receives with discipline</h4><ul><li>one governed asset identifier with documented crosswalks</li><li>all temperatures normalized to Celsius while preserving source values and units</li><li>event time, processing time, and source timezone recorded separately</li><li>a shared failure taxonomy distinguishes alarm, shutdown, inspection, and confirmed defect</li><li>idempotent event keys prevent duplicate feature updates</li><li>forward lineage and event-time cutoffs prevent post-outcome leakage</li></ul></div>
+    </div>
+
+    <p class="body-text">The algorithm may be identical in both cases. The second system is more reliable because its data has a coherent identity, shared semantics, measurable quality, and traceable transformation history. This is why integration architecture is part of model architecture.</p>
+  </section>
+
+  <hr class="divider">
+
+  <section id="operating-model">
+    <div class="section-label">10 · Operating Discipline</div>
+    <h2 class="section-h">A Repeatable Lifecycle for Integration and Interoperability</h2>
+
+    <p class="body-text">Reliable data exchange is developed through a lifecycle rather than a one-time interface project. The work starts with business purpose and data discovery, continues through modeling and mapping, and remains operational through monitoring, metadata maintenance, and controlled change.</p>
+
+    <div class="lifecycle">
+      <article class="life-card"><h4>Discover &amp; define</h4><p>Clarify the decision, consumers, timing, retention, security, and acceptable use. Discover sources, document lineage, profile actual contents, and harvest business rules.</p></article>
+      <article class="life-card"><h4>Model &amp; map</h4><p>Select interaction patterns. Model hubs, interfaces, messages, APIs, events, and canonical structures. Specify source-to-target rules and orchestration.</p></article>
+      <article class="life-card"><h4>Build &amp; verify</h4><p>Develop services and flows, migration and publication approaches, error handling, replay, tests, quality gates, and operational recovery procedures.</p></article>
+      <article class="life-card"><h4>Operate &amp; evolve</h4><p>Monitor availability, latency, volume, quality, and cost. Maintain metadata and lineage. Govern changes to schemas, rules, services, and permitted uses.</p></article>
+    </div>
+
+    <h3 class="sub-h">Business accountability is not optional</h3>
+    <p class="body-text">Transformation rules encode business meaning. Subject-matter experts should therefore review mappings, canonical models, labels, thresholds, and changes—not merely approve a technical interface after it is built. A technically convenient mapping can create a business error that remains invisible until a decision is made from it.</p>
+
+    <h3 class="sub-h">Data-sharing agreements make interoperability operational</h3>
+    <p class="body-text">Before data crosses team or organizational boundaries, the parties should agree on purpose, responsibilities, permitted use, restrictions, quality expectations, availability, response times, retention, security, incident handling, and change notification. These agreements matter most when data is regulated, personal, commercially sensitive, or operationally critical.</p>
+
+    <p class="body-text">Lineage enforces those agreements. To honor a restriction on use or deletion, an organization must know where the data moved, where it persists, what it was combined with, and which products depend on it. Forward lineage shows where data is used; backward lineage shows where it came from. Both are essential for impact analysis and controlled change.</p>
+  </section>
+
+  <hr class="divider">
+
+  <section id="metrics">
+    <div class="section-label">11 · Metrics</div>
+    <h2 class="section-h">Measure the Data System, Not Only the Model</h2>
+
+    <p class="body-text">Model metrics such as precision, recall, calibration, and drift describe only the final consumer. Integration metrics reveal whether the underlying supply chain is available, fresh, comprehensible, and maintainable.</p>
+
+    <div class="metric-grid">
+      <div class="metric-card"><span class="metric-title">Availability</span><strong>Can consumers get the data?</strong><p>Requested dataset availability, service uptime, successful delivery rate, recovery time.</p></div>
+      <div class="metric-card"><span class="metric-title">Volume</span><strong>What is moving?</strong><p>Records transported, transformed, rejected, quarantined, replayed, and consumed.</p></div>
+      <div class="metric-card"><span class="metric-title">Speed</span><strong>When does it arrive?</strong><p>Transmission time, source-to-availability latency, event-to-action latency, time to onboard a source.</p></div>
+      <div class="metric-card"><span class="metric-title">Quality</span><strong>What is fit for use?</strong><p>Rule conformance, missingness, join loss, duplicate rate, reconciliation variance, quality by population.</p></div>
+      <div class="metric-card"><span class="metric-title">Complexity &amp; cost</span><strong>Can it be sustained?</strong><p>Interface count, technology count, incident effort, cost to develop and operate, change lead time.</p></div>
+      <div class="metric-card"><span class="metric-title">Reuse</span><strong>Are shared assets working?</strong><p>Systems using standard services, canonical mappings reused, duplicated pipelines retired.</p></div>
+      <div class="metric-card"><span class="metric-title">Lineage</span><strong>Can change be understood?</strong><p>Coverage of sources, transformations, targets, model dependencies, and permitted-use tags.</p></div>
+      <div class="metric-card"><span class="metric-title">Semantic stability</span><strong>Did meaning change?</strong><p>Code-set changes, definition changes, unit changes, schema compatibility, unresolved mapping exceptions.</p></div>
+      <div class="metric-card"><span class="metric-title">Model impact</span><strong>Does data health explain outcomes?</strong><p>Performance correlated with freshness, quality incidents, source versions, and population coverage.</p></div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section id="checklist">
+    <div class="section-label">12 · Practitioner Checklist</div>
+    <h2 class="section-h">Twelve Questions to Ask Before You Trust a Model</h2>
+
+    <ul class="checklist">
+      <li><span><strong>Identity:</strong> Can the same customer, asset, product, location, or event be resolved consistently across every source?</span></li>
+      <li><span><strong>Meaning:</strong> Are feature definitions, labels, units, code sets, populations, and time concepts explicit?</span></li>
+      <li><span><strong>Lineage:</strong> Can every critical feature be traced backward to origin and forward to models and decisions?</span></li>
+      <li><span><strong>Quality:</strong> Are quality expectations defined for the intended use, measured by population, and available as metadata?</span></li>
+      <li><span><strong>Timing:</strong> Are event time, processing time, freshness, late arrivals, time zones, and historical cutoffs handled deliberately?</span></li>
+      <li><span><strong>Mapping:</strong> Are source-to-target transformations documented, versioned, tested, and approved by business experts?</span></li>
+      <li><span><strong>Change:</strong> Will schema, vocabulary, rule, or source changes be detected before they silently alter features?</span></li>
+      <li><span><strong>Training-serving consistency:</strong> Does inference use the same definitions and transformation logic validated during training?</span></li>
+      <li><span><strong>Access and use:</strong> Are permissions, permitted purposes, licenses, retention, and sharing restrictions machine-readable where possible?</span></li>
+      <li><span><strong>Recovery:</strong> Can the pipeline restart, replay, reconcile, and prove what happened after failure?</span></li>
+      <li><span><strong>Reuse:</strong> Has the team searched for an existing service, mapping, identifier, vocabulary, or canonical model before creating another?</span></li>
+      <li><span><strong>Accountability:</strong> Is there an owner who can decide what the data means, what quality is acceptable, and how issues are resolved?</span></li>
+    </ul>
+  </section>
+
+  <hr class="divider">
+
+  <section id="conclusion">
+    <div class="section-label">Conclusion</div>
+    <h2 class="section-h">Treat the Data Layer as Part of the Model</h2>
+
+    <p class="lead">The most sophisticated model cannot distinguish a real pattern from a broken representation unless the data system preserves the difference.</p>
+
+    <p class="body-text">Reliable AI is not produced by models alone. It is produced by a system that makes data available in the required timeframe, preserves quality and context during movement, gives different systems a shared basis for interpretation, records lineage and permitted use, and exposes changes before they become silent model behavior.</p>
+
+    <p class="body-text">Data quality asks whether the representation is fit for the decision. Integration delivers the required pieces. Interoperability ensures those pieces retain compatible meaning. FAIR principles make discovery, access, combination, and reuse explicit. Together, these disciplines turn a model from an isolated experiment into an accountable component of an operational system.</p>
+
+    <div class="callout"><strong class="label">The final test</strong><p>Do not ask only, “How accurate is the model?” Ask, “What chain of data, meaning, transformation, and control makes this prediction possible—and can we prove that chain still works?”</p></div>
+  </section>
+
+  <hr class="divider">
+
+  <section id="references">
+    <div class="section-label">References &amp; Further Reading</div>
+    <h2 class="section-h">Primary Principles and Practical Foundations</h2>
+    <div class="ref-list">
+      <div class="ref-item"><span class="ref-num">[1]</span><strong>Wilkinson, M. D., et al.</strong> (2016). “The FAIR Guiding Principles for scientific data management and stewardship.” <em>Scientific Data</em>, 3, 160018. <a href="https://doi.org/10.1038/sdata.2016.18" target="_blank" rel="noopener">DOI</a>.</div>
+      <div class="ref-item"><span class="ref-num">[2]</span><strong>GO FAIR.</strong> “FAIR Principles.” Detailed guidance for Findability, Accessibility, Interoperability, and Reusability. <a href="https://www.go-fair.org/fair-principles/" target="_blank" rel="noopener">Official overview</a>.</div>
+      <div class="ref-item"><span class="ref-num">[3]</span><strong>World Wide Web Consortium.</strong> (2017). <em>Data on the Web Best Practices</em>. Guidance on metadata, provenance, quality, identifiers, formats, vocabularies, APIs, access, preservation, and reuse. <a href="https://www.w3.org/TR/dwbp/" target="_blank" rel="noopener">W3C Recommendation</a>.</div>
+      <div class="ref-item"><span class="ref-num">[4]</span><strong>Doan, A., Halevy, A., &amp; Ives, Z.</strong> (2012). <em>Principles of Data Integration</em>. Morgan Kaufmann.</div>
+      <div class="ref-item"><span class="ref-num">[5]</span><strong>Batini, C., &amp; Scannapieco, M.</strong> (2006). <em>Data Quality: Concepts, Methodologies and Techniques</em>. Springer.</div>
+      <div class="ref-item"><span class="ref-num">[6]</span><strong>Olson, J. E.</strong> (2003). <em>Data Quality: The Accuracy Dimension</em>. Morgan Kaufmann.</div>
+    </div>
+  </section>
+</main>
+
+<aside class="toc-sidebar" aria-label="Table of contents">
+  <div class="t">On this page</div>
+  <a href="#thesis">The hidden system</a>
+  <a href="#three-disciplines">Three disciplines</a>
+  <a href="#pyramid">Reliability pyramid</a>
+  <a href="#integration">Integration engineering</a>
+  <a href="#interoperability">Interoperability</a>
+  <a href="#interfaces">Interface complexity</a>
+  <a href="#quality">Quality at runtime</a>
+  <a href="#fair">FAIR principles</a>
+  <a href="#example">Worked example</a>
+  <a href="#operating-model">Operating discipline</a>
+  <a href="#metrics">Metrics</a>
+  <a href="#checklist">Checklist</a>
+  <a href="#conclusion">Conclusion</a>
+  <a href="#references">References</a>
+  <div class="toc-mini"><strong>Core thesis</strong><p>The model is a consumer of integrated representations. Data movement, semantics, quality, and lineage are therefore part of model engineering.</p></div>
+</aside>
+</div>
+
+<footer class="site-footer">
+  <div class="foot-lead"><p class="foot-name">Ali Shahmohammadi, Ph.D.</p><p class="foot-role">Associate Director, Applied AI Engineering &amp; Scientific Data</p></div>
+  <nav class="foot-nav" aria-label="Footer"><a href="../index.html#writing">Writing</a><a href="../index.html#career">Career</a><a href="../resume.html">Resume</a><a href="https://github.com/alishahmohammadi26" rel="me">GitHub</a><a href="https://linkedin.com/in/alishahmohammadi" rel="me">LinkedIn</a></nav>
+  <div class="foot-base"><span>&copy; 2026 Ali Shahmohammadi, Ph.D.</span><a class="to-top" href="#top">Back to top &uarr;</a></div>
+</footer>
+
+<script>
+(function(){
+  var header=document.querySelector('.site-header'),bar=document.getElementById('progress');
+  function onScroll(){var y=window.scrollY||0;header.dataset.elevate=y>8?'true':'false';var h=document.documentElement.scrollHeight-innerHeight;if(bar)bar.style.transform='scaleX('+(h>0?Math.min(y/h,1):0)+')';}
+  addEventListener('scroll',onScroll,{passive:true});onScroll();
+  document.getElementById('themeBtn').addEventListener('click',function(){var n=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=n;try{localStorage.setItem('theme',n);}catch(e){}});
+  var links=[].slice.call(document.querySelectorAll('.toc-sidebar a')),sections=links.map(function(a){return document.querySelector(a.getAttribute('href'));}).filter(Boolean);
+  if('IntersectionObserver' in window){var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id);});}});},{rootMargin:'-18% 0px -70% 0px',threshold:0});sections.forEach(function(s){obs.observe(s);});}
+  var flow=document.getElementById('flowSvg'),flowBtn=document.getElementById('flowBtn'),flowPaused=false;
+  function pauseFlow(){if(flow&&flow.pauseAnimations)flow.pauseAnimations();flowPaused=true;if(flowBtn)flowBtn.textContent='Play animation';}
+  function playFlow(){if(flow&&flow.unpauseAnimations)flow.unpauseAnimations();flowPaused=false;if(flowBtn)flowBtn.textContent='Pause animation';}
+  if(flowBtn)flowBtn.addEventListener('click',function(){flowPaused?playFlow():pauseFlow();});
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)pauseFlow();
+  var range=document.getElementById('systemRange'),sc=document.getElementById('systemCount'),pc=document.getElementById('pairCount'),hc=document.getElementById('hubCount');
+  function updateMesh(){var n=Number(range.value);sc.textContent=n;pc.textContent=(n*(n-1)/2).toLocaleString();hc.textContent=n.toLocaleString();}
+  if(range){range.addEventListener('input',updateMesh);updateMesh();}
+})();
+</script>
+</body>
+</html>
